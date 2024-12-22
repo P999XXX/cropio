@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Linkedin, Mail } from "lucide-react";
+import { Google, Linkedin } from "lucide-react";
 
 interface AuthProvidersProps {
   onGoogleSignUp: () => void;
@@ -8,10 +8,10 @@ interface AuthProvidersProps {
 
 const AuthProviders = ({ onGoogleSignUp, onLinkedInSignUp }: AuthProvidersProps) => {
   return (
-    <div className="grid gap-4">
-      <div className="grid grid-cols-2 gap-4">
+    <div className="space-y-4">
+      <div className="flex flex-col gap-4">
         <Button variant="outline" onClick={onGoogleSignUp} className="w-full">
-          <Mail className="mr-2 h-4 w-4" />
+          <Google className="mr-2 h-4 w-4" />
           Google
         </Button>
         <Button variant="outline" onClick={onLinkedInSignUp} className="w-full">

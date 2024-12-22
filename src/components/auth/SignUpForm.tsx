@@ -8,16 +8,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { ShoppingCart, Truck } from "lucide-react";
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -59,19 +54,48 @@ const SignUpForm = ({ onSubmit, isLoading }: SignUpFormProps) => {
           control={form.control}
           name="role"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="space-y-3">
               <FormLabel>I am a</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select your role" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="buyer">Buyer</SelectItem>
-                  <SelectItem value="supplier">Supplier</SelectItem>
-                </SelectContent>
-              </Select>
+              <FormControl>
+                <RadioGroup
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                  className="grid grid-cols-2 gap-4"
+                >
+                  <FormItem>
+                    <FormControl>
+                      <RadioGroupItem
+                        value="buyer"
+                        className="peer sr-only"
+                        id="buyer"
+                      />
+                    </FormControl>
+                    <label
+                      htmlFor="buyer"
+                      className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-transparent p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                    >
+                      <ShoppingCart className="mb-3 h-6 w-6" />
+                      <span className="text-sm font-medium">Buyer</span>
+                    </label>
+                  </FormItem>
+                  <FormItem>
+                    <FormControl>
+                      <RadioGroupItem
+                        value="supplier"
+                        className="peer sr-only"
+                        id="supplier"
+                      />
+                    </FormControl>
+                    <label
+                      htmlFor="supplier"
+                      className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-transparent p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                    >
+                      <Truck className="mb-3 h-6 w-6" />
+                      <span className="text-sm font-medium">Supplier</span>
+                    </label>
+                  </FormItem>
+                </RadioGroup>
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
