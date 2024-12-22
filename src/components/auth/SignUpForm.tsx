@@ -14,7 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ShoppingCart, Truck } from "lucide-react";
 
-const formSchema = z.object({
+const stepTwoSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z
     .string()
@@ -28,28 +28,50 @@ const formSchema = z.object({
   path: ["confirmPassword"],
 });
 
-export type SignUpFormData = z.infer<typeof formSchema>;
+const stepOneSchema = z.object({
+  role: z.enum(["buyer", "supplier"]),
+});
+
+export type SignUpFormData = z.infer<typeof stepTwoSchema>;
 
 interface SignUpFormProps {
   onSubmit: (values: SignUpFormData) => Promise<void>;
   isLoading: boolean;
+  step: 1 | 2;
+  onRoleSelect?: (role: "buyer" | "supplier") => void;
+  initialRole?: "buyer" | "supplier";
 }
 
-const SignUpForm = ({ onSubmit, isLoading }: SignUpFormProps) => {
+const SignUpForm = ({
+  onSubmit,
+  isLoading,
+  step,
+  onRoleSelect,
+  initialRole,
+}: SignUpFormProps) => {
   const form = useForm<SignUpFormData>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(step === 1 ? stepOneSchema : stepTwoSchema),
     defaultValues: {
       email: "",
       password: "",
       confirmPassword: "",
-      role: "buyer",
+      role: initialRole || "buyer",
       companyName: "",
     },
   });
 
+  const handleStepOne = (data: { role: "buyer" | "supplier" }) => {
+    if (onRoleSelect) {
+      onRoleSelect(data.role);
+    }
+  };
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form
+        onSubmit={form.handleSubmit(step === 1 ? handleStepOne : onSubmit)}
+        className="space-y-4"
+      >
         <FormField
           control={form.control}
           name="role"
@@ -100,64 +122,78 @@ const SignUpForm = ({ onSubmit, isLoading }: SignUpFormProps) => {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="companyName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Company Name</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter company name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter your email" type="email" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter your password" type="password" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="confirmPassword"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Confirm Password</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Confirm your password"
-                  type="password"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+
+        {step === 2 && (
+          <>
+            <FormField
+              control={form.control}
+              name="companyName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Company Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter company name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter your email" type="email" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter your password"
+                      type="password"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confirm Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Confirm your password"
+                      type="password"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </>
+        )}
+
         <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? "Creating account..." : "Create account"}
+          {step === 1
+            ? "Continue"
+            : isLoading
+            ? "Creating account..."
+            : "Create account"}
         </Button>
       </form>
     </Form>

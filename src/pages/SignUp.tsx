@@ -16,6 +16,8 @@ import SignUpForm, { SignUpFormData } from "@/components/auth/SignUpForm";
 
 const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [step, setStep] = useState(1);
+  const [role, setRole] = useState<"buyer" | "supplier">("buyer");
   const navigate = useNavigate();
 
   const handleSignUp = async (values: SignUpFormData) => {
@@ -86,6 +88,11 @@ const SignUp = () => {
     }
   };
 
+  const handleRoleSelect = (selectedRole: "buyer" | "supplier") => {
+    setRole(selectedRole);
+    setStep(2);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -95,26 +102,44 @@ const SignUp = () => {
             <CardHeader>
               <CardTitle>Create an Account</CardTitle>
               <CardDescription>
-                Join cropio as a buyer or supplier
+                {step === 1
+                  ? "Choose your role to get started"
+                  : "Complete your registration"}
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid gap-4">
-                <SignUpForm onSubmit={handleSignUp} isLoading={isLoading} />
-                <div className="relative">
-                  <div className="absolute inset-0 flex items-center">
-                    <span className="w-full border-t" />
-                  </div>
-                  <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-background px-2 text-muted-foreground">
-                      Or continue with
-                    </span>
-                  </div>
-                </div>
-                <AuthProviders
-                  onGoogleSignUp={handleGoogleSignUp}
-                  onLinkedInSignUp={handleLinkedInSignUp}
-                />
+                {step === 1 ? (
+                  <>
+                    <SignUpForm
+                      onSubmit={() => {}}
+                      isLoading={false}
+                      step={1}
+                      onRoleSelect={handleRoleSelect}
+                    />
+                    <div className="relative">
+                      <div className="absolute inset-0 flex items-center">
+                        <span className="w-full border-t" />
+                      </div>
+                      <div className="relative flex justify-center text-xs uppercase">
+                        <span className="bg-background px-2 text-muted-foreground">
+                          Or continue with
+                        </span>
+                      </div>
+                    </div>
+                    <AuthProviders
+                      onGoogleSignUp={handleGoogleSignUp}
+                      onLinkedInSignUp={handleLinkedInSignUp}
+                    />
+                  </>
+                ) : (
+                  <SignUpForm
+                    onSubmit={handleSignUp}
+                    isLoading={isLoading}
+                    step={2}
+                    initialRole={role}
+                  />
+                )}
               </div>
             </CardContent>
             <CardFooter className="flex flex-col space-y-4">
