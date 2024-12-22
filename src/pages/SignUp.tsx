@@ -187,7 +187,7 @@ const SignUp = () => {
       </div>
 
       <Dialog open={showThankYouDialog} onOpenChange={handleDialogClose}>
-        <DialogContent className="sm:max-w-md mx-2.5 sm:mx-auto">
+        <DialogContent className="mx-4 sm:mx-auto sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Thank you for signing up!</DialogTitle>
             <DialogDescription className="pt-4 space-y-3">
