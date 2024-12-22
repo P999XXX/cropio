@@ -11,8 +11,8 @@ import {
 import { toast } from "sonner";
 import Navbar from "@/components/Navbar";
 import { supabase } from "@/integrations/supabase/client";
-import AuthProviders from "@/components/auth/AuthProviders";
-import SignUpForm, { SignUpFormData } from "@/components/auth/SignUpForm";
+import StepOneForm from "@/components/auth/StepOneForm";
+import StepTwoForm, { StepTwoFormData } from "@/components/auth/StepTwoForm";
 
 const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -20,7 +20,7 @@ const SignUp = () => {
   const [role, setRole] = useState<"buyer" | "supplier">("buyer");
   const navigate = useNavigate();
 
-  const handleSignUp = async (values: SignUpFormData) => {
+  const handleSignUp = async (values: StepTwoFormData) => {
     setIsLoading(true);
     try {
       const { data: authData, error: signUpError } = await supabase.auth.signUp({
@@ -28,7 +28,7 @@ const SignUp = () => {
         password: values.password,
         options: {
           data: {
-            role: values.role,
+            role: role,
             company_name: values.companyName,
           },
         },
@@ -40,7 +40,7 @@ const SignUp = () => {
         const { error: profileError } = await supabase
           .from("profiles")
           .update({
-            role: values.role,
+            role: role,
             company_name: values.companyName,
           })
           .eq("id", authData.user.id);
@@ -110,35 +110,13 @@ const SignUp = () => {
             <CardContent>
               <div className="grid gap-4">
                 {step === 1 ? (
-                  <>
-                    <SignUpForm
-                      onSubmit={() => {}}
-                      isLoading={false}
-                      step={1}
-                      onRoleSelect={handleRoleSelect}
-                    />
-                    <div className="relative">
-                      <div className="absolute inset-0 flex items-center">
-                        <span className="w-full border-t" />
-                      </div>
-                      <div className="relative flex justify-center text-xs uppercase">
-                        <span className="bg-background px-2 text-muted-foreground">
-                          Or continue with
-                        </span>
-                      </div>
-                    </div>
-                    <AuthProviders
-                      onGoogleSignUp={handleGoogleSignUp}
-                      onLinkedInSignUp={handleLinkedInSignUp}
-                    />
-                  </>
-                ) : (
-                  <SignUpForm
-                    onSubmit={handleSignUp}
-                    isLoading={isLoading}
-                    step={2}
-                    initialRole={role}
+                  <StepOneForm
+                    onSubmit={handleRoleSelect}
+                    onGoogleSignUp={handleGoogleSignUp}
+                    onLinkedInSignUp={handleLinkedInSignUp}
                   />
+                ) : (
+                  <StepTwoForm onSubmit={handleSignUp} isLoading={isLoading} />
                 )}
               </div>
             </CardContent>
