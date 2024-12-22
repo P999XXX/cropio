@@ -21,6 +21,29 @@ const SignUp = () => {
   const [role, setRole] = useState<"buyer" | "supplier">("buyer");
   const navigate = useNavigate();
 
+  const sendWelcomeEmail = async (email: string, companyName: string) => {
+    try {
+      const response = await fetch(
+        "https://perkzwevnbmhbbdwwwaj.supabase.co/functions/v1/send-welcome-email",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${supabase.auth.session()?.access_token}`,
+          },
+          body: JSON.stringify({ email, companyName }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to send welcome email");
+      }
+    } catch (error) {
+      console.error("Error sending welcome email:", error);
+      // Don't throw the error as this is not critical for signup
+    }
+  };
+
   const handleSignUp = async (values: StepTwoFormData) => {
     setIsLoading(true);
     try {
@@ -37,7 +60,10 @@ const SignUp = () => {
 
       if (error) throw error;
 
-      toast.success("Account created successfully!");
+      // Send welcome email
+      await sendWelcomeEmail(values.email, values.companyName);
+
+      toast.success("Account created successfully! Please check your email.");
       navigate("/");
     } catch (error: any) {
       console.error("Signup error:", error);
