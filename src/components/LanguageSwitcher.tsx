@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, createContext, useContext, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -7,6 +7,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Globe } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
+
+export const LanguageContext = createContext({
+  currentLanguage: "en",
+  setLanguage: (lang: string) => {},
+});
+
+export const useLanguage = () => useContext(LanguageContext);
 
 const languages = [
   { code: "en", name: "English", flag: "🇬🇧" },
@@ -16,15 +24,39 @@ const languages = [
 
 export const LanguageSwitcher = () => {
   const [selectedLang, setSelectedLang] = useState("en");
+  const { toast } = useToast();
 
   const handleLanguageChange = async (langCode: string) => {
-    setSelectedLang(langCode);
-    // Here you would typically update your app's translation context
-    // For now, we'll just log the change
-    console.log(`Language changed to ${langCode}`);
+    try {
+      setSelectedLang(langCode);
+      // Store the selected language in localStorage
+      localStorage.setItem("preferredLanguage", langCode);
+      
+      // Show success toast
+      toast({
+        title: "Language Changed",
+        description: `Successfully switched to ${languages.find(l => l.code === langCode)?.name}`,
+      });
+
+      // Reload the page to apply translations
+      window.location.reload();
+    } catch (error) {
+      console.error("Error changing language:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to change language. Please try again.",
+      });
+    }
   };
 
-  const currentLang = languages.find((lang) => lang.code === selectedLang);
+  // Initialize language from localStorage
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem("preferredLanguage");
+    if (savedLanguage) {
+      setSelectedLang(savedLanguage);
+    }
+  }, []);
 
   return (
     <DropdownMenu>
