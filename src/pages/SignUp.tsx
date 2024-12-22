@@ -121,8 +121,8 @@ const SignUp = () => {
       <div className="container mx-auto px-4 pt-16 flex items-center justify-center min-h-[calc(100vh-64px)]">
         <div className="max-w-md w-full space-y-3 my-8">
           <div className="flex items-center justify-center gap-0.5">
-            <Leaf className="h-3.5 w-3.5 text-muted-foreground" />
-            <h1 className="text-base font-medium text-muted-foreground">Let's change agri business together!</h1>
+            <Leaf className="h-3 w-3 text-muted-foreground/70" />
+            <h1 className="text-sm text-muted-foreground/70">Let's change agri business together!</h1>
           </div>
           <Card className="bg-white/50 backdrop-blur-sm">
             <CardHeader className="pb-4">
