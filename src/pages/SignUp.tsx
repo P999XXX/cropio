@@ -24,22 +24,28 @@ const SignUp = () => {
 
   const sendWelcomeEmail = async (email: string, companyName: string) => {
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      // Get the latest session
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
       
+      if (sessionError || !session) {
+        console.error("Session error:", sessionError);
+        return;
+      }
+
       const response = await fetch(
         "https://perkzwevnbmhbbdwwwaj.supabase.co/functions/v1/send-welcome-email",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${session?.access_token}`,
+            Authorization: `Bearer ${session.access_token}`,
           },
           body: JSON.stringify({ email, companyName }),
         }
       );
 
       if (!response.ok) {
-        throw new Error("Failed to send welcome email");
+        throw new Error(`Failed to send welcome email: ${await response.text()}`);
       }
     } catch (error) {
       console.error("Error sending welcome email:", error);
@@ -50,7 +56,7 @@ const SignUp = () => {
   const handleSignUp = async (values: StepTwoFormData) => {
     setIsLoading(true);
     try {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email: values.email,
         password: values.password,
         options: {
@@ -63,8 +69,13 @@ const SignUp = () => {
 
       if (error) throw error;
 
-      // Send welcome email
-      await sendWelcomeEmail(values.email, values.companyName);
+      // Wait a moment for the session to be established
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // Send welcome email only if signup was successful
+      if (data.user) {
+        await sendWelcomeEmail(values.email, values.companyName);
+      }
 
       toast.success("Account created successfully! Please check your email.");
       navigate("/");
