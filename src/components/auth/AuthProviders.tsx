@@ -29,7 +29,7 @@ const AuthProviders = ({
         className="w-full"
       >
         <Chrome className="mr-2 h-4 w-4" />
-        Sign Up with Google
+        <span className="font-normal">Sign Up with <span className="font-medium">Google</span></span>
       </Button>
       <Button 
         variant="outline" 
@@ -37,7 +37,7 @@ const AuthProviders = ({
         className="w-full"
       >
         <Linkedin className="mr-2 h-4 w-4" />
-        Sign Up with LinkedIn
+        <span className="font-normal">Sign Up with <span className="font-medium">LinkedIn</span></span>
       </Button>
     </div>
   );
