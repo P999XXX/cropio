@@ -4,7 +4,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
@@ -50,7 +49,6 @@ const StepOneForm = ({
           name="role"
           render={({ field }) => (
             <FormItem className="space-y-3">
-              <FormLabel>Choose your account type</FormLabel>
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}
