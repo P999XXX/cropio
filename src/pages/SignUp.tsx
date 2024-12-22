@@ -13,7 +13,6 @@ import Navbar from "@/components/Navbar";
 import { supabase } from "@/integrations/supabase/client";
 import StepOneForm from "@/components/auth/StepOneForm";
 import StepTwoForm, { StepTwoFormData } from "@/components/auth/StepTwoForm";
-import { Leaf } from "lucide-react";
 
 const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -99,10 +98,6 @@ const SignUp = () => {
       <Navbar />
       <div className="container mx-auto px-4 pt-24 pb-8">
         <div className="max-w-md mx-auto space-y-6">
-          <div className="flex items-center justify-center gap-2 mb-6">
-            <Leaf className="h-6 w-6" />
-            <h1 className="text-2xl font-semibold text-center">Let's change agri business together!</h1>
-          </div>
           <Card>
             <CardHeader>
               <CardTitle>Create an Account</CardTitle>
