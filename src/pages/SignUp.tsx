@@ -23,13 +23,15 @@ const SignUp = () => {
 
   const sendWelcomeEmail = async (email: string, companyName: string) => {
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      
       const response = await fetch(
         "https://perkzwevnbmhbbdwwwaj.supabase.co/functions/v1/send-welcome-email",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${supabase.auth.session()?.access_token}`,
+            Authorization: `Bearer ${session?.access_token}`,
           },
           body: JSON.stringify({ email, companyName }),
         }
