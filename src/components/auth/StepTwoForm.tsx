@@ -74,7 +74,7 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
               <FormControl>
                 <Input placeholder="Enter company name" {...field} />
               </FormControl>
-              <FormMessage />
+              <FormMessage className="text-xs text-red-500" />
             </FormItem>
           )}
         />
@@ -87,7 +87,7 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
               <FormControl>
                 <Input placeholder="Enter your email" type="email" {...field} />
               </FormControl>
-              <FormMessage />
+              <FormMessage className="text-xs text-red-500" />
             </FormItem>
           )}
         />
@@ -97,7 +97,7 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Password</FormLabel>
-              <FormDescription>
+              <FormDescription className="text-xs">
                 Password must contain at least 8 characters, including uppercase, lowercase, and numbers
               </FormDescription>
               <FormControl>
@@ -120,7 +120,7 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
                   </button>
                 </div>
               </FormControl>
-              <FormMessage />
+              <FormMessage className="text-xs text-red-500" />
             </FormItem>
           )}
         />
@@ -150,7 +150,7 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
                   </button>
                 </div>
               </FormControl>
-              <FormMessage />
+              <FormMessage className="text-xs text-red-500" />
             </FormItem>
           )}
         />
@@ -167,10 +167,10 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
                 />
               </FormControl>
               <div className="space-y-1 leading-none">
-                <FormLabel>
+                <div className="text-sm font-normal">
                   I accept the <a href="/terms" className="text-primary hover:underline">terms and conditions</a>
-                </FormLabel>
-                <FormMessage />
+                </div>
+                <FormMessage className="text-xs text-red-500" />
               </div>
             </FormItem>
           )}
@@ -188,10 +188,10 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
                 />
               </FormControl>
               <div className="space-y-1 leading-none">
-                <FormLabel>
+                <div className="text-sm font-normal">
                   I accept the <a href="/privacy" className="text-primary hover:underline">privacy policy</a>
-                </FormLabel>
-                <FormMessage />
+                </div>
+                <FormMessage className="text-xs text-red-500" />
               </div>
             </FormItem>
           )}
