@@ -117,11 +117,11 @@ const SignUp = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <div className="container mx-auto px-4 pt-24 pb-8">
-        <div className="max-w-md mx-auto space-y-6">
-          <div className="flex items-center justify-center gap-2 mb-6">
-            <Leaf className="h-6 w-6" />
-            <h1 className="text-2xl font-semibold text-center">Let's change agri business together!</h1>
+      <div className="container mx-auto px-4 pt-16 pb-8">
+        <div className="max-w-md mx-auto space-y-4">
+          <div className="flex items-center justify-center gap-1 mb-4">
+            <Leaf className="h-5 w-5" />
+            <h1 className="text-xl font-semibold text-center">Let's change agri business together!</h1>
           </div>
           <Card>
             <CardHeader>
