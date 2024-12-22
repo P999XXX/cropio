@@ -1,39 +1,43 @@
 import { Button } from "@/components/ui/button";
 import { Chrome, Linkedin } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 interface AuthProvidersProps {
-  onProviderClick: (provider: "google" | "linkedin") => void;
+  onGoogleSignUp: () => void;
+  onLinkedInSignUp: () => void;
+  selectedRole?: "buyer" | "supplier";
 }
 
-const AuthProviders = ({ onProviderClick }: AuthProvidersProps) => {
-  const handleProviderClick = async (provider: "google" | "linkedin") => {
-    try {
-      onProviderClick(provider);
-    } catch (error: any) {
-      console.error(`${provider} signup error:`, error);
-      toast.error(`Failed to sign up with ${provider}`);
+const AuthProviders = ({ 
+  onGoogleSignUp, 
+  onLinkedInSignUp, 
+  selectedRole 
+}: AuthProvidersProps) => {
+  const handleSocialSignUp = (handler: () => void) => {
+    if (!selectedRole) {
+      toast.error("Please select your account type first");
+      return;
     }
+    handler();
   };
 
   return (
-    <div className="flex flex-col space-y-3">
+    <div className="flex flex-col gap-4">
       <Button 
         variant="outline" 
-        onClick={() => handleProviderClick("google")}
+        onClick={() => handleSocialSignUp(onGoogleSignUp)} 
         className="w-full"
       >
         <Chrome className="mr-2 h-4 w-4" />
-        <span className="font-normal">Sign up to <span className="font-medium">cropio</span> with <span className="font-medium">Google</span></span>
+        <span className="font-normal">Sign Up with <span className="font-medium">Google</span></span>
       </Button>
       <Button 
         variant="outline" 
-        onClick={() => handleProviderClick("linkedin")}
+        onClick={() => handleSocialSignUp(onLinkedInSignUp)} 
         className="w-full"
       >
         <Linkedin className="mr-2 h-4 w-4" />
-        <span className="font-normal">Sign up to <span className="font-medium">cropio</span> with <span className="font-medium">LinkedIn</span></span>
+        <span className="font-normal">Sign Up with <span className="font-medium">LinkedIn</span></span>
       </Button>
     </div>
   );
