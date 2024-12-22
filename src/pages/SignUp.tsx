@@ -99,8 +99,8 @@ const SignUp = () => {
       <Navbar />
       <div className="container mx-auto px-4 pt-24 pb-8">
         <div className="max-w-md mx-auto space-y-6">
-          <div className="text-center mb-6">
-            <h1 className="text-2xl font-semibold flex items-center justify-center gap-2">
+          <div className="text-center mb-8">
+            <h1 className="text-2xl font-bold flex items-center justify-center gap-2">
               <Leaf className="h-6 w-6" />
               Let's change agri business together!
             </h1>
