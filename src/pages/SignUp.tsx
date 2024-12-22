@@ -124,7 +124,7 @@ const SignUp = () => {
             <Leaf className="h-3.5 w-3.5 text-muted-foreground" />
             <h1 className="text-base font-medium text-muted-foreground">Let's change agri business together!</h1>
           </div>
-          <Card className="bg-white/50 backdrop-blur-sm">
+          <Card>
             <CardHeader className="pb-4">
               <CardTitle className="text-base">Create an Account</CardTitle>
               <CardDescription>
