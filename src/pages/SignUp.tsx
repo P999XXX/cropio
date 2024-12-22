@@ -118,15 +118,15 @@ const SignUp = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <div className="container mx-auto px-4 pt-24 pb-8">
-        <div className="max-w-md mx-auto space-y-4">
-          <div className="flex items-center justify-center gap-0.5 mb-2">
-            <Leaf className="h-4 w-4" />
-            <h1 className="text-lg font-semibold text-center">Let's change agri business together!</h1>
+      <div className="container mx-auto px-4 pt-20 pb-8">
+        <div className="max-w-md mx-auto space-y-3">
+          <div className="flex items-center justify-center gap-0.5">
+            <Leaf className="h-3.5 w-3.5 text-muted-foreground" />
+            <h1 className="text-base font-medium text-muted-foreground">Let's change agri business together!</h1>
           </div>
-          <Card>
-            <CardHeader>
-              <CardTitle>Create an Account</CardTitle>
+          <Card className="bg-white/50 backdrop-blur-sm">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-base">Create an Account</CardTitle>
               <CardDescription>
                 {step === 1
                   ? "Choose your role to get started"
