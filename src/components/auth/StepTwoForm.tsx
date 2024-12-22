@@ -14,6 +14,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const passwordSchema = z
   .string()
@@ -27,6 +28,12 @@ const stepTwoSchema = z.object({
   password: passwordSchema,
   confirmPassword: z.string(),
   companyName: z.string().min(2, "Company name must be at least 2 characters"),
+  acceptTerms: z.boolean().refine((val) => val === true, {
+    message: "You must accept the terms and conditions",
+  }),
+  acceptPrivacy: z.boolean().refine((val) => val === true, {
+    message: "You must accept the privacy policy",
+  }),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match",
   path: ["confirmPassword"],
@@ -50,6 +57,8 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
       password: "",
       confirmPassword: "",
       companyName: "",
+      acceptTerms: false,
+      acceptPrivacy: false,
     },
   });
 
@@ -142,6 +151,48 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
                 </div>
               </FormControl>
               <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="acceptTerms"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+              <FormControl>
+                <Checkbox
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+              <div className="space-y-1 leading-none">
+                <FormLabel>
+                  I accept the <a href="/terms" className="text-primary hover:underline">terms and conditions</a>
+                </FormLabel>
+                <FormMessage />
+              </div>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="acceptPrivacy"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+              <FormControl>
+                <Checkbox
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+              <div className="space-y-1 leading-none">
+                <FormLabel>
+                  I accept the <a href="/privacy" className="text-primary hover:underline">privacy policy</a>
+                </FormLabel>
+                <FormMessage />
+              </div>
             </FormItem>
           )}
         />
