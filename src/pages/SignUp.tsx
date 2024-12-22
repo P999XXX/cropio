@@ -27,15 +27,12 @@ const SignUp = () => {
       const { data: authData, error: signUpError } = await supabase.auth.signUp({
         email: values.email,
         password: values.password,
-        options: {
-          data: {
-            role: role,
-            company_name: values.companyName,
-          },
-        },
       });
 
-      if (signUpError) throw signUpError;
+      if (signUpError) {
+        console.error("Signup error:", signUpError);
+        throw signUpError;
+      }
 
       if (authData.user) {
         const { error: profileError } = await supabase
@@ -46,14 +43,17 @@ const SignUp = () => {
           })
           .eq("id", authData.user.id);
 
-        if (profileError) throw profileError;
+        if (profileError) {
+          console.error("Profile update error:", profileError);
+          throw profileError;
+        }
 
         toast.success("Account created successfully!");
         navigate("/");
       }
-    } catch (error) {
-      console.error("Signup error:", error);
-      toast.error("Something went wrong. Please try again.");
+    } catch (error: any) {
+      console.error("Error details:", error);
+      toast.error(error.message || "Something went wrong. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -65,10 +65,14 @@ const SignUp = () => {
         provider: "google",
         options: {
           redirectTo: `${window.location.origin}/`,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
         },
       });
       if (error) throw error;
-    } catch (error) {
+    } catch (error: any) {
       console.error("Google signup error:", error);
       toast.error("Failed to sign up with Google");
     }
@@ -83,7 +87,7 @@ const SignUp = () => {
         },
       });
       if (error) throw error;
-    } catch (error) {
+    } catch (error: any) {
       console.error("LinkedIn signup error:", error);
       toast.error("Failed to sign up with LinkedIn");
     }
