@@ -114,6 +114,7 @@ const StepOneForm = ({
         <AuthProviders
           onGoogleSignUp={onGoogleSignUp}
           onLinkedInSignUp={onLinkedInSignUp}
+          selectedRole={form.watch("role")}
         />
       </form>
     </Form>
