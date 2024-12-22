@@ -2,13 +2,13 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, Sun, Moon } from "lucide-react";
 import { Toggle } from "@/components/ui/toggle";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
-    // Initialize dark mode state based on HTML class
     setIsDark(document.documentElement.classList.contains('dark'));
   }, []);
 
@@ -41,7 +41,7 @@ const Navbar = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-4">
             {navItems.map((item) => (
               <Link
                 key={item.name}
@@ -51,12 +51,12 @@ const Navbar = () => {
                 {item.name}
               </Link>
             ))}
+            <LanguageSwitcher />
             <Toggle
               variant="outline"
               size="sm"
               pressed={isDark}
               onPressedChange={toggleDarkMode}
-              className="ml-4"
               aria-label="Toggle dark mode"
             >
               {isDark ? (
@@ -75,6 +75,7 @@ const Navbar = () => {
 
           {/* Mobile menu button */}
           <div className="md:hidden flex items-center space-x-2">
+            <LanguageSwitcher />
             <Toggle
               variant="outline"
               size="sm"
