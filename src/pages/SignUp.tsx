@@ -120,9 +120,9 @@ const SignUp = () => {
       <Navbar />
       <div className="container mx-auto px-4 pt-24 pb-8">
         <div className="max-w-md mx-auto space-y-4">
-          <div className="flex items-center justify-center gap-1 mb-4">
-            <Leaf className="h-5 w-5" />
-            <h1 className="text-xl font-semibold text-center">Let's change agri business together!</h1>
+          <div className="flex items-center justify-center gap-0.5 mb-2">
+            <Leaf className="h-4 w-4" />
+            <h1 className="text-lg font-semibold text-center">Let's change agri business together!</h1>
           </div>
           <Card>
             <CardHeader>
