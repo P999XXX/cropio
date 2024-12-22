@@ -126,7 +126,7 @@ const SignUp = () => {
           </div>
           <Card>
             <CardHeader className="pb-4">
-              <CardTitle className="text-base">Create an Account</CardTitle>
+              <CardTitle className="text-2xl font-semibold">Create an Account</CardTitle>
               <CardDescription>
                 {step === 1
                   ? "Choose your role to get started"
