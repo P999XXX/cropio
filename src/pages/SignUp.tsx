@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Card,
   CardContent,
@@ -24,35 +24,23 @@ const SignUp = () => {
   const handleSignUp = async (values: StepTwoFormData) => {
     setIsLoading(true);
     try {
-      const { data: authData, error: signUpError } = await supabase.auth.signUp({
+      const { error } = await supabase.auth.signUp({
         email: values.email,
         password: values.password,
+        options: {
+          data: {
+            company_name: values.companyName,
+            role: role,
+          },
+        },
       });
 
-      if (signUpError) {
-        console.error("Signup error:", signUpError);
-        throw signUpError;
-      }
+      if (error) throw error;
 
-      if (authData.user) {
-        const { error: profileError } = await supabase
-          .from("profiles")
-          .update({
-            role: role,
-            company_name: values.companyName,
-          })
-          .eq("id", authData.user.id);
-
-        if (profileError) {
-          console.error("Profile update error:", profileError);
-          throw profileError;
-        }
-
-        toast.success("Account created successfully!");
-        navigate("/");
-      }
+      toast.success("Account created successfully!");
+      navigate("/");
     } catch (error: any) {
-      console.error("Error details:", error);
+      console.error("Signup error:", error);
       toast.error(error.message || "Something went wrong. Please try again.");
     } finally {
       setIsLoading(false);
@@ -132,12 +120,12 @@ const SignUp = () => {
             <CardFooter className="flex flex-col space-y-4">
               <div className="text-sm text-center text-muted-foreground">
                 Already have an account?{" "}
-                <Link
-                  to="/signin"
+                <a
+                  href="/signin"
                   className="text-primary hover:underline font-medium"
                 >
                   Sign in
-                </Link>
+                </a>
               </div>
             </CardFooter>
           </Card>
