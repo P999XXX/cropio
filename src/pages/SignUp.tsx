@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Toaster } from "@/components/ui/toaster";
+import { Leaf } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -13,7 +13,8 @@ import Navbar from "@/components/Navbar";
 import { supabase } from "@/integrations/supabase/client";
 import StepOneForm from "@/components/auth/StepOneForm";
 import StepTwoForm, { StepTwoFormData } from "@/components/auth/StepTwoForm";
-import { Leaf } from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -117,7 +118,7 @@ const SignUp = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <div className="container mx-auto px-4 pt-16 pb-8">
+      <div className="container mx-auto px-4 pt-24 pb-8">
         <div className="max-w-md mx-auto space-y-4">
           <div className="flex items-center justify-center gap-1 mb-4">
             <Leaf className="h-5 w-5" />
