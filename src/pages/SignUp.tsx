@@ -100,11 +100,21 @@ const SignUp = () => {
             </CardHeader>
             <CardContent>
               <div className="grid gap-4">
+                <SignUpForm onSubmit={handleSignUp} isLoading={isLoading} />
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <span className="w-full border-t" />
+                  </div>
+                  <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-background px-2 text-muted-foreground">
+                      Or continue with
+                    </span>
+                  </div>
+                </div>
                 <AuthProviders
                   onGoogleSignUp={handleGoogleSignUp}
                   onLinkedInSignUp={handleLinkedInSignUp}
                 />
-                <SignUpForm onSubmit={handleSignUp} isLoading={isLoading} />
               </div>
             </CardContent>
             <CardFooter className="flex flex-col space-y-4">
