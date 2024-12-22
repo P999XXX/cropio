@@ -15,7 +15,7 @@ const AuthProviders = ({ onGoogleSignUp, onLinkedInSignUp }: AuthProvidersProps)
       </Button>
       <Button variant="outline" onClick={onLinkedInSignUp} className="w-full">
         <Linkedin className="mr-2 h-4 w-4" />
-        LinkedIn
+        Sign Up with LinkedIn
       </Button>
     </div>
   );
