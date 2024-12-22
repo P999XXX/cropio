@@ -118,8 +118,8 @@ const SignUp = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <div className="container mx-auto px-4 flex items-center justify-center min-h-[calc(100vh-64px)]">
-        <div className="max-w-md w-full space-y-3">
+      <div className="container mx-auto px-4 pt-16 flex items-center justify-center min-h-[calc(100vh-64px)]">
+        <div className="max-w-md w-full space-y-3 my-8">
           <div className="flex items-center justify-center gap-0.5">
             <Leaf className="h-3.5 w-3.5 text-muted-foreground" />
             <h1 className="text-base font-medium text-muted-foreground">Let's change agri business together!</h1>
