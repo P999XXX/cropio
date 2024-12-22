@@ -6,15 +6,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
-import { Checkbox } from "@/components/ui/checkbox";
+import PasswordInput from "./PasswordInput";
+import AgreementCheckbox from "./AgreementCheckbox";
 
 const passwordSchema = z
   .string()
@@ -47,9 +45,6 @@ interface StepTwoFormProps {
 }
 
 const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
   const form = useForm<StepTwoFormData>({
     resolver: zodResolver(stepTwoSchema),
     defaultValues: {
@@ -78,6 +73,7 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="email"
@@ -91,110 +87,32 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
+
+        <PasswordInput
+          form={form}
           name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormDescription className="text-xs">
-                Password must contain at least 8 characters, including uppercase, lowercase, and numbers
-              </FormDescription>
-              <FormControl>
-                <div className="relative">
-                  <Input
-                    placeholder="Enter your password"
-                    type={showPassword ? "text" : "password"}
-                    {...field}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                  >
-                    {showPassword ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
-                  </button>
-                </div>
-              </FormControl>
-              <FormMessage className="text-xs text-red-500" />
-            </FormItem>
-          )}
+          label="Password"
+          description="Password must contain at least 8 characters, including uppercase, lowercase, and numbers"
         />
-        <FormField
-          control={form.control}
+
+        <PasswordInput
+          form={form}
           name="confirmPassword"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Confirm Password</FormLabel>
-              <FormControl>
-                <div className="relative">
-                  <Input
-                    placeholder="Confirm your password"
-                    type={showConfirmPassword ? "text" : "password"}
-                    {...field}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                  >
-                    {showConfirmPassword ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
-                  </button>
-                </div>
-              </FormControl>
-              <FormMessage className="text-xs text-red-500" />
-            </FormItem>
-          )}
+          label="Confirm Password"
         />
 
-        <FormField
-          control={form.control}
+        <AgreementCheckbox
+          form={form}
           name="acceptTerms"
-          render={({ field }) => (
-            <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-              <FormControl>
-                <Checkbox
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
-              </FormControl>
-              <div className="space-y-1 leading-none">
-                <div className="text-sm font-normal">
-                  I accept the <a href="/terms" className="text-primary hover:underline">terms and conditions</a>
-                </div>
-                <FormMessage className="text-xs text-red-500" />
-              </div>
-            </FormItem>
-          )}
+          linkText="terms and conditions"
+          linkHref="/terms"
         />
 
-        <FormField
-          control={form.control}
+        <AgreementCheckbox
+          form={form}
           name="acceptPrivacy"
-          render={({ field }) => (
-            <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-              <FormControl>
-                <Checkbox
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
-              </FormControl>
-              <div className="space-y-1 leading-none">
-                <div className="text-sm font-normal">
-                  I accept the <a href="/privacy" className="text-primary hover:underline">privacy policy</a>
-                </div>
-                <FormMessage className="text-xs text-red-500" />
-              </div>
-            </FormItem>
-          )}
+          linkText="privacy policy"
+          linkHref="/privacy"
         />
 
         <Button type="submit" className="w-full" disabled={isLoading}>
