@@ -15,11 +15,20 @@ import StepOneForm from "@/components/auth/StepOneForm";
 import StepTwoForm, { StepTwoFormData } from "@/components/auth/StepTwoForm";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState(1);
   const [role, setRole] = useState<"buyer" | "supplier">("buyer");
+  const [showThankYouDialog, setShowThankYouDialog] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
   const navigate = useNavigate();
 
   const sendWelcomeEmail = async (email: string, companyName: string) => {
@@ -77,8 +86,8 @@ const SignUp = () => {
         await sendWelcomeEmail(values.email, values.companyName);
       }
 
-      toast.success("Account created successfully! Please check your email.");
-      navigate("/");
+      setUserEmail(values.email);
+      setShowThankYouDialog(true);
     } catch (error: any) {
       console.error("Signup error:", error);
       toast.error(error.message || "Something went wrong. Please try again.");
@@ -126,6 +135,11 @@ const SignUp = () => {
     setStep(2);
   };
 
+  const handleDialogClose = () => {
+    setShowThankYouDialog(false);
+    navigate("/");
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -171,6 +185,23 @@ const SignUp = () => {
           </Card>
         </div>
       </div>
+
+      <Dialog open={showThankYouDialog} onOpenChange={handleDialogClose}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Thank you for signing up!</DialogTitle>
+            <DialogDescription className="pt-4 space-y-3">
+              <p>
+                We've sent a confirmation email to <span className="font-medium">{userEmail}</span>.
+              </p>
+              <p>
+                Please check your inbox and click the verification link to activate your account.
+                If you don't see the email, please check your spam folder.
+              </p>
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
