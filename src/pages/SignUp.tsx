@@ -96,7 +96,7 @@ const SignUp = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 pt-24 pb-8">
         <div className="max-w-md mx-auto space-y-6">
           <Card>
             <CardHeader>
