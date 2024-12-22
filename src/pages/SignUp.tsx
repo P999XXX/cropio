@@ -1,5 +1,5 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Leaf } from "lucide-react";
+import { toast } from "sonner";
+import Navbar from "@/components/Navbar";
 import {
   Card,
   CardContent,
@@ -8,20 +8,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { toast } from "sonner";
-import Navbar from "@/components/Navbar";
 import { supabase } from "@/integrations/supabase/client";
 import StepOneForm from "@/components/auth/StepOneForm";
 import StepTwoForm, { StepTwoFormData } from "@/components/auth/StepTwoForm";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import ThankYouDialog from "@/components/auth/ThankYouDialog";
+import SignUpHeader from "@/components/auth/SignUpHeader";
 
 const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -33,7 +26,6 @@ const SignUp = () => {
 
   const sendWelcomeEmail = async (email: string, companyName: string) => {
     try {
-      // Get the latest session
       const { data: { session }, error: sessionError } = await supabase.auth.getSession();
       
       if (sessionError || !session) {
@@ -58,7 +50,6 @@ const SignUp = () => {
       }
     } catch (error) {
       console.error("Error sending welcome email:", error);
-      // Don't throw the error as this is not critical for signup
     }
   };
 
@@ -78,10 +69,8 @@ const SignUp = () => {
 
       if (error) throw error;
 
-      // Wait a moment for the session to be established
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      // Send welcome email only if signup was successful
       if (data.user) {
         await sendWelcomeEmail(values.email, values.companyName);
       }
@@ -145,13 +134,12 @@ const SignUp = () => {
       <Navbar />
       <div className="container mx-auto px-4 pt-16 flex items-center justify-center min-h-[calc(100vh-64px)]">
         <div className="max-w-md w-full space-y-3 my-8">
-          <div className="flex items-center justify-center gap-0.5">
-            <Leaf className="h-3.5 w-3.5 text-muted-foreground" />
-            <h1 className="text-base font-medium text-muted-foreground">Let's change agri business together!</h1>
-          </div>
+          <SignUpHeader />
           <Card>
             <CardHeader className="pb-4">
-              <CardTitle className="text-2xl font-semibold">Create an Account</CardTitle>
+              <CardTitle className="text-2xl font-semibold">
+                Create an Account
+              </CardTitle>
               <CardDescription>
                 {step === 1
                   ? "Choose your role to get started"
@@ -174,10 +162,7 @@ const SignUp = () => {
             <CardFooter className="flex flex-col space-y-4">
               <div className="text-sm text-center text-muted-foreground">
                 Already have an account?{" "}
-                <a
-                  href="/signin"
-                  className="text-primary hover:underline font-medium"
-                >
+                <a href="/signin" className="text-primary hover:underline font-medium">
                   Sign in
                 </a>
               </div>
@@ -186,22 +171,11 @@ const SignUp = () => {
         </div>
       </div>
 
-      <Dialog open={showThankYouDialog} onOpenChange={handleDialogClose}>
-        <DialogContent className="fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] mx-4 sm:mx-auto sm:rounded-lg">
-          <DialogHeader>
-            <DialogTitle>Thank you for signing up!</DialogTitle>
-            <DialogDescription className="pt-4 space-y-3">
-              <p>
-                We've sent a confirmation email to <span className="font-medium">{userEmail}</span>.
-              </p>
-              <p>
-                Please check your inbox and click the verification link to activate your account.
-                If you don't see the email, please check your spam folder.
-              </p>
-            </DialogDescription>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog>
+      <ThankYouDialog
+        open={showThankYouDialog}
+        onOpenChange={handleDialogClose}
+        userEmail={userEmail}
+      />
     </div>
   );
 };
