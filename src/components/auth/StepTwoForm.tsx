@@ -6,18 +6,25 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
+
+const passwordSchema = z
+  .string()
+  .min(8, "Password must be at least 8 characters")
+  .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+  .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+  .regex(/[0-9]/, "Password must contain at least one number");
 
 const stepTwoSchema = z.object({
   email: z.string().email("Invalid email address"),
-  password: z
-    .string()
-    .min(8, "Password must be at least 8 characters")
-    .max(100, "Password must be less than 100 characters"),
+  password: passwordSchema,
   confirmPassword: z.string(),
   companyName: z.string().min(2, "Company name must be at least 2 characters"),
 }).refine((data) => data.password === data.confirmPassword, {
@@ -33,6 +40,9 @@ interface StepTwoFormProps {
 }
 
 const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const form = useForm<StepTwoFormData>({
     resolver: zodResolver(stepTwoSchema),
     defaultValues: {
@@ -78,12 +88,28 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Password</FormLabel>
+              <FormDescription>
+                Password must contain at least 8 characters, including uppercase, lowercase, and numbers
+              </FormDescription>
               <FormControl>
-                <Input
-                  placeholder="Enter your password"
-                  type="password"
-                  {...field}
-                />
+                <div className="relative">
+                  <Input
+                    placeholder="Enter your password"
+                    type={showPassword ? "text" : "password"}
+                    {...field}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -96,11 +122,24 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
             <FormItem>
               <FormLabel>Confirm Password</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="Confirm your password"
-                  type="password"
-                  {...field}
-                />
+                <div className="relative">
+                  <Input
+                    placeholder="Confirm your password"
+                    type={showConfirmPassword ? "text" : "password"}
+                    {...field}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  >
+                    {showConfirmPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
