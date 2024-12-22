@@ -50,7 +50,7 @@ const StepOneForm = ({
           name="role"
           render={({ field }) => (
             <FormItem className="space-y-3">
-              <FormLabel>I am a</FormLabel>
+              <FormLabel>Choose your account type</FormLabel>
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}
