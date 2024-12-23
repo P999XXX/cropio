@@ -18,6 +18,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff } from "lucide-react";
+import AuthProviders from "@/components/auth/AuthProviders";
 
 const signInSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -110,22 +111,10 @@ const SignIn = () => {
             </CardHeader>
             <CardContent>
               <div className="grid gap-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <Button
-                    variant="outline"
-                    onClick={handleGoogleSignIn}
-                    className="w-full"
-                  >
-                    Google
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={handleLinkedInSignIn}
-                    className="w-full"
-                  >
-                    LinkedIn
-                  </Button>
-                </div>
+                <AuthProviders 
+                  onGoogleSignUp={handleGoogleSignIn}
+                  onLinkedInSignUp={handleLinkedInSignIn}
+                />
 
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center">
