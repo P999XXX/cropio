@@ -101,11 +101,11 @@ const Navbar = () => {
 
       {/* Mobile Navigation */}
       <div
-        className={`md:hidden fixed inset-x-0 top-16 transform ${
-          isOpen ? "animate-slide-in" : "-translate-y-full"
-        } transition-transform duration-300 ease-in-out`}
+        className={`md:hidden fixed inset-x-0 top-16 bg-background transform transition-transform duration-300 ease-in-out ${
+          isOpen ? "translate-y-0" : "-translate-y-full"
+        }`}
       >
-        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-background shadow-lg">
+        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 shadow-lg">
           {navItems.map((item) => (
             <Link
               key={item.name}
