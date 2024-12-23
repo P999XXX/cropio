@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import Index from "./pages/Index";
 import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
+import ResetPassword from "./pages/ResetPassword";
 
 const queryClient = new QueryClient();
 
@@ -37,22 +38,28 @@ const App = () => {
       }
     };
 
-    // Handle email confirmation redirects
-    const handleEmailConfirmation = async () => {
+    // Handle email confirmation and password reset redirects
+    const handleAuthRedirects = async () => {
       const { hash } = window.location;
-      if (hash && hash.includes('type=email_confirmation')) {
-        try {
-          const { error } = await supabase.auth.getSession();
-          if (!error) {
-            window.location.href = '/signin';
+      if (hash) {
+        if (hash.includes('type=email_confirmation')) {
+          try {
+            const { error } = await supabase.auth.getSession();
+            if (!error) {
+              window.location.href = '/signin';
+            }
+          } catch (error) {
+            console.error('Error handling email confirmation:', error);
           }
-        } catch (error) {
-          console.error('Error handling email confirmation:', error);
+        } else if (hash.includes('type=recovery')) {
+          // Remove the hash to prevent issues with the reset password form
+          window.location.hash = '';
+          window.location.href = '/reset-password';
         }
       }
     };
 
-    handleEmailConfirmation();
+    handleAuthRedirects();
     darkModeMediaQuery.addEventListener('change', handleDarkModeChange);
 
     return () => {
@@ -71,6 +78,7 @@ const App = () => {
               <Route path="/" element={<Index />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/signin" element={<SignIn />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
             </Routes>
           </BrowserRouter>
         </TooltipProvider>
