@@ -73,8 +73,8 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden flex items-center space-x-2">
+          {/* Mobile menu button and controls */}
+          <div className="flex md:hidden items-center space-x-2">
             <LanguageSwitcher />
             <Toggle
               variant="outline"
