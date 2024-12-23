@@ -184,6 +184,7 @@ const SignIn = () => {
               <AuthProviders 
                 onGoogleSignUp={handleGoogleSignIn}
                 onLinkedInSignUp={handleLinkedInSignIn}
+                variant="signin"
               />
             </CardContent>
             <CardFooter className="flex flex-col space-y-4">

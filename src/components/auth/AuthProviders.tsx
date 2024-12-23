@@ -6,20 +6,24 @@ interface AuthProvidersProps {
   onGoogleSignUp: () => void;
   onLinkedInSignUp: () => void;
   selectedRole?: "buyer" | "supplier";
+  variant?: "signup" | "signin";
 }
 
 const AuthProviders = ({ 
   onGoogleSignUp, 
   onLinkedInSignUp, 
-  selectedRole 
+  selectedRole,
+  variant = "signup"
 }: AuthProvidersProps) => {
   const handleSocialSignUp = (handler: () => void) => {
-    if (!selectedRole) {
+    if (variant === "signup" && !selectedRole) {
       toast.error("Please select your account type first");
       return;
     }
     handler();
   };
+
+  const buttonText = variant === "signup" ? "Sign Up" : "Sign In";
 
   return (
     <div className="flex flex-col gap-4">
@@ -29,7 +33,7 @@ const AuthProviders = ({
         className="w-full"
       >
         <Chrome className="mr-2 h-4 w-4" />
-        <span className="font-normal">Sign Up with <span className="font-medium">Google</span></span>
+        <span className="font-normal">{buttonText} with <span className="font-medium">Google</span></span>
       </Button>
       <Button 
         variant="outline" 
@@ -37,7 +41,7 @@ const AuthProviders = ({
         className="w-full"
       >
         <Linkedin className="mr-2 h-4 w-4" />
-        <span className="font-normal">Sign Up with <span className="font-medium">LinkedIn</span></span>
+        <span className="font-normal">{buttonText} with <span className="font-medium">LinkedIn</span></span>
       </Button>
     </div>
   );
