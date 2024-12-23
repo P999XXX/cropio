@@ -34,7 +34,6 @@ const Navbar = () => {
     <nav className="fixed top-0 w-full bg-background border-b border-border z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
-          {/* Logo */}
           <div className="flex items-center">
             <Link to="/" className="flex items-center">
               <span className="text-2xl font-bold text-primary">cropio</span>
@@ -74,8 +73,8 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Mobile Controls */}
-          <div className="flex md:hidden items-center space-x-2">
+          {/* Mobile menu button */}
+          <div className="md:hidden flex items-center space-x-2">
             <LanguageSwitcher />
             <Toggle
               variant="outline"
@@ -100,32 +99,30 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Navigation Menu */}
-      <div
-        className={`fixed inset-x-0 top-16 bg-background transform transition-transform duration-300 ease-in-out ${
-          isOpen ? "translate-y-0" : "-translate-y-full"
-        }`}
-      >
-        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 shadow-lg">
-          {navItems.map((item) => (
+      {/* Mobile Navigation */}
+      {isOpen && (
+        <div className="md:hidden animate-slide-in">
+          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-background shadow-lg">
+            {navItems.map((item) => (
+              <Link
+                key={item.name}
+                to={item.path}
+                className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:text-primary hover:bg-secondary"
+                onClick={() => setIsOpen(false)}
+              >
+                {item.name}
+              </Link>
+            ))}
             <Link
-              key={item.name}
-              to={item.path}
-              className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:text-primary hover:bg-secondary"
+              to="/signin"
+              className="block w-full text-center px-3 py-2 rounded-md text-base font-medium text-white bg-primary hover:bg-primary-hover"
               onClick={() => setIsOpen(false)}
             >
-              {item.name}
+              Sign In
             </Link>
-          ))}
-          <Link
-            to="/signin"
-            className="block w-full text-center px-3 py-2 rounded-md text-base font-medium text-white bg-primary hover:bg-primary-hover"
-            onClick={() => setIsOpen(false)}
-          >
-            Sign In
-          </Link>
+          </div>
         </div>
-      </div>
+      )}
     </nav>
   );
 };
