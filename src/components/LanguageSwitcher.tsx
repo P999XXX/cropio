@@ -29,16 +29,13 @@ export const LanguageSwitcher = () => {
   const handleLanguageChange = async (langCode: string) => {
     try {
       setSelectedLang(langCode);
-      // Store the selected language in localStorage
       localStorage.setItem("preferredLanguage", langCode);
       
-      // Show success toast
       toast({
         title: "Language Changed",
         description: `Successfully switched to ${languages.find(l => l.code === langCode)?.name}`,
       });
 
-      // Reload the page to apply translations
       window.location.reload();
     } catch (error) {
       console.error("Error changing language:", error);
@@ -50,7 +47,6 @@ export const LanguageSwitcher = () => {
     }
   };
 
-  // Initialize language from localStorage
   useEffect(() => {
     const savedLanguage = localStorage.getItem("preferredLanguage");
     if (savedLanguage) {
@@ -66,12 +62,12 @@ export const LanguageSwitcher = () => {
           <span className="sr-only">Toggle language</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className="bg-background border shadow-lg">
         {languages.map((lang) => (
           <DropdownMenuItem
             key={lang.code}
             onClick={() => handleLanguageChange(lang.code)}
-            className="cursor-pointer"
+            className="cursor-pointer hover:bg-muted"
           >
             <span className="mr-2">{lang.flag}</span>
             {lang.name}
