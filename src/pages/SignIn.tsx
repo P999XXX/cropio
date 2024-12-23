@@ -13,17 +13,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthProviders from "@/components/auth/AuthProviders";
 import SignInForm, { SignInFormData } from "@/components/auth/SignInForm";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import ForgotPasswordDialog from "@/components/auth/ForgotPasswordDialog";
 
 const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -167,40 +157,14 @@ const SignIn = () => {
         </div>
       </div>
 
-      <Dialog open={showResetDialog} onOpenChange={setShowResetDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Reset Password</DialogTitle>
-            <DialogDescription>
-              Enter your email address and we'll send you instructions to reset your password.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="reset-email">Email</Label>
-              <Input
-                id="reset-email"
-                type="email"
-                placeholder="Enter your email"
-                value={resetEmail}
-                onChange={(e) => setResetEmail(e.target.value)}
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setShowResetDialog(false)}
-              disabled={isResetting}
-            >
-              Cancel
-            </Button>
-            <Button onClick={handleResetPassword} disabled={isResetting}>
-              {isResetting ? "Sending..." : "Send Instructions"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <ForgotPasswordDialog
+        open={showResetDialog}
+        onOpenChange={setShowResetDialog}
+        onSubmit={handleResetPassword}
+        email={resetEmail}
+        onEmailChange={setResetEmail}
+        isResetting={isResetting}
+      />
     </div>
   );
 };
