@@ -18,6 +18,10 @@ export default {
       },
     },
     extend: {
+      fontSize: {
+        // Reducing base font size by 1px
+        base: ['15px', '24px'], // Default was 16px
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
