@@ -23,7 +23,7 @@ const AuthProviders = ({
     handler();
   };
 
-  const buttonText = variant === "signup" ? "Sign Up" : "Sign In";
+  const buttonText = variant === "signup" ? "Sign up" : "Sign in";
 
   return (
     <div className="flex flex-col gap-4">
