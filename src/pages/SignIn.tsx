@@ -13,9 +13,23 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthProviders from "@/components/auth/AuthProviders";
 import SignInForm, { SignInFormData } from "@/components/auth/SignInForm";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [showResetDialog, setShowResetDialog] = useState(false);
+  const [resetEmail, setResetEmail] = useState("");
+  const [isResetting, setIsResetting] = useState(false);
   const navigate = useNavigate();
 
   const handleSignIn = async (values: SignInFormData) => {
@@ -35,6 +49,31 @@ const SignIn = () => {
       toast.error(error.message || "Failed to sign in");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleResetPassword = async () => {
+    if (!resetEmail) {
+      toast.error("Please enter your email address");
+      return;
+    }
+
+    setIsResetting(true);
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
+        redirectTo: `${window.location.origin}/signin`,
+      });
+
+      if (error) throw error;
+
+      toast.success("Password reset instructions sent to your email");
+      setShowResetDialog(false);
+      setResetEmail("");
+    } catch (error: any) {
+      console.error("Reset password error:", error);
+      toast.error(error.message || "Failed to send reset instructions");
+    } finally {
+      setIsResetting(false);
     }
   };
 
@@ -89,6 +128,15 @@ const SignIn = () => {
             </CardHeader>
             <CardContent>
               <SignInForm onSubmit={handleSignIn} isLoading={isLoading} />
+              
+              <div className="mt-2 text-center">
+                <button
+                  onClick={() => setShowResetDialog(true)}
+                  className="text-sm text-primary hover:underline"
+                >
+                  Forgot your password?
+                </button>
+              </div>
 
               <div className="relative my-4">
                 <div className="absolute inset-0 flex items-center">
@@ -118,6 +166,41 @@ const SignIn = () => {
           </Card>
         </div>
       </div>
+
+      <Dialog open={showResetDialog} onOpenChange={setShowResetDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Reset Password</DialogTitle>
+            <DialogDescription>
+              Enter your email address and we'll send you instructions to reset your password.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="reset-email">Email</Label>
+              <Input
+                id="reset-email"
+                type="email"
+                placeholder="Enter your email"
+                value={resetEmail}
+                onChange={(e) => setResetEmail(e.target.value)}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setShowResetDialog(false)}
+              disabled={isResetting}
+            >
+              Cancel
+            </Button>
+            <Button onClick={handleResetPassword} disabled={isResetting}>
+              {isResetting ? "Sending..." : "Send Instructions"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
