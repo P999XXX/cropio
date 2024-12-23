@@ -133,8 +133,12 @@ const SignUp = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
       <div className="container mx-auto px-4 pt-16 flex items-center justify-center min-h-[calc(100vh-64px)]">
-        <div className="max-w-md w-full space-y-3 my-8">
-          <SignUpHeader />
+        <div className="max-w-md w-full space-y-6 my-8">
+          <div className="text-center space-y-2">
+            <h1 className="text-3xl font-bold">Register for Free</h1>
+            <SignUpHeader />
+          </div>
+
           <Card>
             <CardHeader className="pb-4">
               <CardTitle className="text-2xl font-semibold">
