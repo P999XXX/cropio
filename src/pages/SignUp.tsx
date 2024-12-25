@@ -63,6 +63,8 @@ const SignUp = () => {
           data: {
             company_name: values.companyName,
             role: role,
+            first_name: values.firstName,
+            last_name: values.lastName,
           },
         },
       });
