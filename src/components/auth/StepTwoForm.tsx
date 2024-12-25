@@ -64,7 +64,21 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <div className="grid grid-cols-2 gap-4">
+        <FormField
+          control={form.control}
+          name="companyName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Company Name</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter company name" {...field} />
+              </FormControl>
+              <FormMessage className="text-xs text-red-500" />
+            </FormItem>
+          )}
+        />
+
+        <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
           <FormField
             control={form.control}
             name="firstName"
@@ -93,20 +107,6 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
             )}
           />
         </div>
-
-        <FormField
-          control={form.control}
-          name="companyName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Company Name</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter company name" {...field} />
-              </FormControl>
-              <FormMessage className="text-xs text-red-500" />
-            </FormItem>
-          )}
-        />
 
         <FormField
           control={form.control}
