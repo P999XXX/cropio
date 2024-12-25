@@ -36,7 +36,7 @@ const PhoneInput = ({ form }: PhoneInputProps) => {
                     <SelectValue placeholder="Code" />
                   </SelectTrigger>
                 </FormControl>
-                <SelectContent>
+                <SelectContent className="bg-white dark:bg-gray-800 min-w-[120px]">
                   <SelectItem value="+49">+49 (DE)</SelectItem>
                   <SelectItem value="+43">+43 (AT)</SelectItem>
                   <SelectItem value="+41">+41 (CH)</SelectItem>
