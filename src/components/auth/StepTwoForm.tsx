@@ -8,18 +8,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import PasswordInput from "./PasswordInput";
 import AgreementCheckbox from "./AgreementCheckbox";
+import PhoneInput from "./PhoneInput";
 
 const passwordSchema = z
   .string()
@@ -119,45 +113,7 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
           />
         </div>
 
-        <div className="grid md:grid-cols-3 grid-cols-1 gap-4">
-          <FormField
-            control={form.control}
-            name="countryCode"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Country Code</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select country code" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="+49">+49 (DE)</SelectItem>
-                    <SelectItem value="+43">+43 (AT)</SelectItem>
-                    <SelectItem value="+41">+41 (CH)</SelectItem>
-                    <SelectItem value="+44">+44 (UK)</SelectItem>
-                    <SelectItem value="+1">+1 (US/CA)</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage className="text-xs text-red-500" />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="phoneNumber"
-            render={({ field }) => (
-              <FormItem className="col-span-2">
-                <FormLabel>Phone Number</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter phone number" type="tel" {...field} />
-                </FormControl>
-                <FormMessage className="text-xs text-red-500" />
-              </FormItem>
-            )}
-          />
-        </div>
+        <PhoneInput form={form} />
 
         <FormField
           control={form.control}
