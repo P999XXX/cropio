@@ -22,8 +22,8 @@ import {
   CreditCard,
   Settings,
   Headset,
-  MoreVertical,
-  MoreHorizontal,
+  Menu,
+  X,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -55,7 +55,7 @@ const DashboardSidebar = () => {
     >
       <SidebarHeader className="px-2 mb-6">
         <SidebarTrigger 
-          icon={isExpanded ? MoreHorizontal : MoreVertical} 
+          icon={isExpanded ? X : Menu}
           className="h-8 w-8 flex items-center justify-center bg-muted hover:bg-muted/80 text-muted-foreground hover:text-muted-foreground"
         />
       </SidebarHeader>
