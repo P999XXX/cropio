@@ -49,9 +49,9 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            {isDashboard ? (
+            {isDashboard && (
               <SidebarTrigger className="md:hidden mr-2" />
-            ) : null}
+            )}
             <Link to="/" className="flex items-center">
               <span className="text-2xl font-geologica font-extrabold">
                 cropio<span className="text-primary">.app</span>
