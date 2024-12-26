@@ -4,22 +4,18 @@ import {
   FormItem,
 } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
-import { UseFormReturn, Path } from "react-hook-form";
+import { UseFormReturn } from "react-hook-form";
+import { StepTwoFormData } from "./StepTwoForm";
 import FormErrorMessage from "@/components/forms/FormErrorMessage";
 
-interface AgreementCheckboxProps<T> {
-  form: UseFormReturn<T>;
-  name: Path<T>;
+interface AgreementCheckboxProps {
+  form: UseFormReturn<StepTwoFormData>;
+  name: "acceptTerms" | "acceptPrivacy";
   linkText: string;
   linkHref: string;
 }
 
-const AgreementCheckbox = <T extends Record<string, any>>({ 
-  form, 
-  name, 
-  linkText, 
-  linkHref 
-}: AgreementCheckboxProps<T>) => {
+const AgreementCheckbox = ({ form, name, linkText, linkHref }: AgreementCheckboxProps) => {
   return (
     <FormField
       control={form.control}
@@ -36,7 +32,7 @@ const AgreementCheckbox = <T extends Record<string, any>>({
             <div className="text-sm font-normal">
               I accept the <a href={linkHref} className="agreement-link">{linkText}</a>
             </div>
-            <FormErrorMessage message={form.formState.errors[name]?.message as string} />
+            <FormErrorMessage message={form.formState.errors[name]?.message} />
           </div>
         </FormItem>
       )}

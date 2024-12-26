@@ -8,24 +8,19 @@ import {
   FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { UseFormReturn, Path } from "react-hook-form";
+import { UseFormReturn } from "react-hook-form";
+import { StepTwoFormData } from "./StepTwoForm";
 import FormErrorMessage from "@/components/forms/FormErrorMessage";
 
-interface PasswordInputProps<T> {
-  form: UseFormReturn<T>;
-  name: Path<T>;
+interface PasswordInputProps {
+  form: UseFormReturn<StepTwoFormData>;
+  name: "password" | "confirmPassword";
   label: string;
   description?: string;
   className?: string;
 }
 
-const PasswordInput = <T extends Record<string, any>>({ 
-  form, 
-  name, 
-  label, 
-  description, 
-  className 
-}: PasswordInputProps<T>) => {
+const PasswordInput = ({ form, name, label, description, className }: PasswordInputProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -41,7 +36,7 @@ const PasswordInput = <T extends Record<string, any>>({
           <FormControl>
             <div className="relative">
               <Input
-                placeholder={`${String(name) === "password" ? "Enter" : "Confirm"} your password`}
+                placeholder={`${name === "password" ? "Enter" : "Confirm"} your password`}
                 type={showPassword ? "text" : "password"}
                 className={className}
                 {...field}
@@ -59,7 +54,7 @@ const PasswordInput = <T extends Record<string, any>>({
               </button>
             </div>
           </FormControl>
-          <FormErrorMessage message={form.formState.errors[name]?.message as string} />
+          <FormErrorMessage message={form.formState.errors[name]?.message} />
         </FormItem>
       )}
     />

@@ -1,3 +1,7 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 import {
   Card,
@@ -10,19 +14,65 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import StepOneForm from "@/components/auth/StepOneForm";
 import StepTwoForm from "@/components/auth/StepTwoForm";
 import StepThreeForm from "@/components/auth/StepThreeForm";
-import SignUpContainer, { useSignUpState } from "@/components/auth/SignUpContainer";
+import ThankYouDialog from "@/components/auth/ThankYouDialog";
+import { StepTwoFormData } from "@/components/auth/StepTwoForm";
+import { StepThreeFormData } from "@/components/auth/StepThreeForm";
 
-const SignUpContent = () => {
-  const {
-    isLoading,
-    currentStep,
-    handleStepOne,
-    handleBack,
-    handleStepTwo,
-    handleStepThree,
-  } = useSignUpState();
-  
+const SignUp = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
+  const [selectedRole, setSelectedRole] = useState<"buyer" | "supplier">("buyer");
+  const [showThankYou, setShowThankYou] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
+  const [stepTwoData, setStepTwoData] = useState<Partial<StepTwoFormData>>({});
+  const navigate = useNavigate();
   const isMobile = useIsMobile();
+
+  const handleStepOne = (role: "buyer" | "supplier") => {
+    setSelectedRole(role);
+    setCurrentStep(2);
+  };
+
+  const handleBack = () => {
+    if (currentStep === 3) {
+      setCurrentStep(2);
+    } else {
+      setCurrentStep(1);
+    }
+  };
+
+  const handleStepTwo = async (values: StepTwoFormData) => {
+    setStepTwoData(values);
+    setCurrentStep(3);
+  };
+
+  const handleStepThree = async (values: StepThreeFormData) => {
+    setIsLoading(true);
+    try {
+      const { error } = await supabase.auth.signUp({
+        email: stepTwoData.email!,
+        password: stepTwoData.password!,
+        options: {
+          data: {
+            first_name: stepTwoData.firstName,
+            last_name: stepTwoData.lastName,
+            company_name: stepTwoData.companyName,
+            role: selectedRole,
+          },
+        },
+      });
+
+      if (error) throw error;
+
+      setUserEmail(stepTwoData.email!);
+      setShowThankYou(true);
+    } catch (error: any) {
+      console.error("Sign up error:", error);
+      toast.error(error.message || "Failed to sign up");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleGoogleSignUp = async () => {
     try {
@@ -142,23 +192,20 @@ const SignUpContent = () => {
     </>
   );
 
-  return <FormContent />;
-};
-
-const SignUp = () => {
-  const isMobile = useIsMobile();
-
   return (
-    <SignUpContainer>
-      <div className="min-h-screen bg-background">
-        <Navbar />
-        <div className={`container mx-auto px-4 ${isMobile ? 'pt-12' : 'pt-20'} flex items-${isMobile ? 'start' : 'center'} justify-center min-h-[calc(100vh-64px)]`}>
-          <div className={`max-w-md w-full ${isMobile ? 'mt-8' : 'my-8'}`}>
-            <SignUpContent />
-          </div>
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      <div className={`container mx-auto px-4 ${isMobile ? 'pt-12' : 'pt-20'} flex items-${isMobile ? 'start' : 'center'} justify-center min-h-[calc(100vh-64px)]`}>
+        <div className={`max-w-md w-full ${isMobile ? 'mt-8' : 'my-8'}`}>
+          <FormContent />
         </div>
       </div>
-    </SignUpContainer>
+      <ThankYouDialog
+        open={showThankYou}
+        onOpenChange={setShowThankYou}
+        userEmail={userEmail}
+      />
+    </div>
   );
 };
 
