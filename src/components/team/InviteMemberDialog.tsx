@@ -28,16 +28,16 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 const inviteSchema = z.object({
-  email: z.string().email("Invalid email address"),
+  email: z.string().email("Ungültige E-Mail-Adresse"),
   role: z.enum(["admin", "member"], {
-    required_error: "Please select a role",
+    required_error: "Bitte wählen Sie eine Rolle aus",
   }),
 });
 
 interface InviteMemberDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onInvite: (email: string, role: 'admin' | 'member') => void;
+  onInvite: (email: string, role: 'admin' | 'member') => Promise<void>;
 }
 
 const InviteMemberDialog = ({
@@ -60,6 +60,8 @@ const InviteMemberDialog = ({
     try {
       await onInvite(values.email, values.role);
       form.reset();
+    } catch (error) {
+      console.error('Error in invite dialog:', error);
     } finally {
       setIsSubmitting(false);
     }
@@ -69,9 +71,9 @@ const InviteMemberDialog = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Invite Team Member</DialogTitle>
+          <DialogTitle>Teammitglied einladen</DialogTitle>
           <DialogDescription>
-            Send an invitation to join your team
+            Senden Sie eine Einladung zum Beitritt zu Ihrem Team
           </DialogDescription>
         </DialogHeader>
 
@@ -82,9 +84,9 @@ const InviteMemberDialog = ({
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>E-Mail</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter email address" {...field} />
+                    <Input placeholder="E-Mail-Adresse eingeben" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -96,19 +98,19 @@ const InviteMemberDialog = ({
               name="role"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Role</FormLabel>
+                  <FormLabel>Rolle</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a role" />
+                        <SelectValue placeholder="Rolle auswählen" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="member">Member</SelectItem>
-                      <SelectItem value="admin">Admin</SelectItem>
+                      <SelectItem value="member">Mitglied</SelectItem>
+                      <SelectItem value="admin">Administrator</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -122,10 +124,10 @@ const InviteMemberDialog = ({
                 variant="outline"
                 onClick={() => onOpenChange(false)}
               >
-                Cancel
+                Abbrechen
               </Button>
               <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? "Sending..." : "Send Invitation"}
+                {isSubmitting ? "Wird gesendet..." : "Einladung senden"}
               </Button>
             </div>
           </form>

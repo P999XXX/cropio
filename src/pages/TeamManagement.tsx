@@ -11,48 +11,43 @@ import { UserPlus } from "lucide-react";
 const TeamManagement = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [teamMembers, setTeamMembers] = useState<any[]>([]);
-  const [pendingInvites, setPendingInvites] = useState<any[]>([]);
   const [showInviteDialog, setShowInviteDialog] = useState(false);
   const [userTeam, setUserTeam] = useState<any>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        navigate('/signin');
-        return;
-      }
-      fetchTeamData();
-    };
+    checkAuthAndFetchData();
+  }, []);
 
-    checkAuth();
-  }, [navigate]);
+  const checkAuthAndFetchData = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      navigate('/signin');
+      return;
+    }
+    fetchTeamData(session.user.id);
+  };
 
-  const fetchTeamData = async () => {
+  const fetchTeamData = async (userId: string) => {
     try {
       setIsLoading(true);
       
-      // Get current user's session
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        throw new Error("No authenticated session");
-      }
-
       // Fetch user's team
       const { data: teamData, error: teamError } = await supabase
         .from('teams')
         .select('*')
-        .eq('created_by', session.user.id)
+        .eq('created_by', userId)
         .single();
 
       if (teamError) {
         console.error('Error fetching team:', teamError);
-        throw teamError;
+        toast.error('Fehler beim Laden des Teams');
+        return;
       }
 
       if (!teamData) {
-        throw new Error("No team found for user");
+        toast.error('Kein Team gefunden');
+        return;
       }
 
       setUserTeam(teamData);
@@ -66,22 +61,16 @@ const TeamManagement = () => {
         `)
         .eq('team_id', teamData.id);
 
-      if (membersError) throw membersError;
-      setTeamMembers(members);
+      if (membersError) {
+        console.error('Error fetching members:', membersError);
+        toast.error('Fehler beim Laden der Teammitglieder');
+        return;
+      }
 
-      // Fetch pending invites
-      const { data: invites, error: invitesError } = await supabase
-        .from('team_invites')
-        .select('*')
-        .eq('team_id', teamData.id)
-        .eq('status', 'pending');
-
-      if (invitesError) throw invitesError;
-      setPendingInvites(invites);
-
+      setTeamMembers(members || []);
     } catch (error: any) {
       console.error('Error fetching team data:', error);
-      toast.error(error.message);
+      toast.error('Ein Fehler ist aufgetreten');
     } finally {
       setIsLoading(false);
     }
@@ -89,13 +78,15 @@ const TeamManagement = () => {
 
   const handleInviteMember = async (email: string, role: 'admin' | 'member') => {
     try {
-      if (!userTeam) {
-        throw new Error("No team found");
-      }
-
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
-        throw new Error("No authenticated session");
+        toast.error('Bitte melden Sie sich an');
+        return;
+      }
+
+      if (!userTeam) {
+        toast.error('Kein Team gefunden');
+        return;
       }
 
       const { error } = await supabase
@@ -104,17 +95,22 @@ const TeamManagement = () => {
           team_id: userTeam.id,
           email,
           role,
-          invited_by: session.user.id
+          invited_by: session.user.id,
+          status: 'pending'
         });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error inviting member:', error);
+        toast.error('Fehler beim Einladen des Mitglieds');
+        return;
+      }
 
-      toast.success('Invitation sent successfully!');
+      toast.success('Einladung erfolgreich gesendet');
       setShowInviteDialog(false);
-      fetchTeamData(); // Refresh the data
+      fetchTeamData(session.user.id);
     } catch (error: any) {
       console.error('Error inviting member:', error);
-      toast.error(error.message);
+      toast.error('Fehler beim Einladen des Mitglieds');
     }
   };
 
@@ -134,7 +130,7 @@ const TeamManagement = () => {
           <div>
             <h1 className="text-2xl font-bold">Team Management</h1>
             <p className="text-muted-foreground">
-              Manage your team members and invitations
+              Verwalten Sie Ihre Teammitglieder und Einladungen
             </p>
           </div>
           <Button
@@ -142,14 +138,14 @@ const TeamManagement = () => {
             className="flex items-center gap-2"
           >
             <UserPlus className="h-4 w-4" />
-            Invite Member
+            Mitglied einladen
           </Button>
         </div>
 
         <div className="space-y-6">
           <TeamMembersList
             members={teamMembers}
-            onRemoveMember={fetchTeamData}
+            onRemoveMember={() => checkAuthAndFetchData()}
           />
         </div>
 
