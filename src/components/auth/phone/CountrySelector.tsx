@@ -24,8 +24,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useState } from "react";
-import { Search } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 interface CountrySelectorProps {
   form: UseFormReturn<StepTwoFormData>;
@@ -72,7 +73,17 @@ const CountrySelector = ({ form, onCountryChange, selectedCountry }: CountrySele
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
               <DialogContent className="h-[100dvh] max-w-full p-0 gap-0">
                 <DialogHeader className="px-4 py-2 border-b sticky top-0 bg-background z-10">
-                  <DialogTitle>Select Country</DialogTitle>
+                  <div className="flex items-center justify-between">
+                    <DialogTitle>Select Country</DialogTitle>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => setIsOpen(false)}
+                      className="h-8 w-8"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
                   <div className="relative">
                     <Input
                       placeholder="Search countries..."
