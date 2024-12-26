@@ -8,11 +8,28 @@ import InviteMemberDialog from "@/components/team/InviteMemberDialog";
 import { Button } from "@/components/ui/button";
 import { UserPlus } from "lucide-react";
 
+interface TeamMember {
+  id: string;
+  role: string;
+  profile: {
+    id: string;
+    first_name: string | null;
+    last_name: string | null;
+    email: string;
+  };
+}
+
+interface Team {
+  id: string;
+  name: string;
+  created_at: string;
+}
+
 const TeamManagement = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [teamMembers, setTeamMembers] = useState<any[]>([]);
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [showInviteDialog, setShowInviteDialog] = useState(false);
-  const [userTeam, setUserTeam] = useState<any>(null);
+  const [userTeam, setUserTeam] = useState<Team | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,15 +39,15 @@ const TeamManagement = () => {
   const checkAuthAndFetchData = async () => {
     try {
       const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-      console.log("Session check:", { hasSession: !!session, sessionError });
-
+      
+      if (sessionError) throw sessionError;
+      
       if (!session) {
         console.log("No session found, redirecting to signin");
         navigate('/signin');
         return;
       }
 
-      console.log("User ID:", session.user.id);
       await fetchTeamData(session.user.id);
     } catch (error) {
       console.error('Auth check error:', error);
