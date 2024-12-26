@@ -11,6 +11,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import AuthProviders from "./AuthProviders";
+import { AlertCircle } from "lucide-react";
 
 const stepOneSchema = z.object({
   role: z.enum(["buyer", "supplier"], {
@@ -107,7 +108,14 @@ const StepOneForm = ({
                   </FormItem>
                 </RadioGroup>
               </FormControl>
-              <FormMessage className="text-center" />
+              <div className="text-center text-sm text-destructive flex items-center justify-center gap-x-1">
+                {form.formState.errors.role && (
+                  <>
+                    <AlertCircle className="h-3.5 w-3.5" />
+                    <FormMessage />
+                  </>
+                )}
+              </div>
             </FormItem>
           )}
         />
