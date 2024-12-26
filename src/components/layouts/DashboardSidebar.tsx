@@ -59,7 +59,7 @@ const DashboardSidebar = () => {
         <div className="flex justify-between items-center w-full">
           <SidebarTrigger 
             icon={!isExpanded ? ChevronRight : undefined}
-            className={`h-8 w-8 flex items-center justify-center bg-muted hover:bg-muted/80 text-muted-foreground hover:text-muted-foreground ${isExpanded ? 'hidden' : ''}`}
+            className={`h-8 w-8 flex items-center justify-center text-muted-foreground ${isExpanded ? 'hidden' : ''}`}
           />
           {isExpanded && (
             <div className="flex items-center justify-between w-full">
@@ -68,7 +68,7 @@ const DashboardSidebar = () => {
               </span>
               <SidebarTrigger 
                 icon={ChevronLeft}
-                className="h-8 w-8 flex items-center justify-center bg-muted hover:bg-muted/80 text-muted-foreground hover:text-muted-foreground"
+                className="h-8 w-8 flex items-center justify-center text-muted-foreground"
               />
             </div>
           )}
@@ -84,7 +84,7 @@ const DashboardSidebar = () => {
                   <SidebarMenuButton 
                     asChild 
                     tooltip={item.label}
-                    className="hover:bg-muted group-data-[collapsible=icon]:px-2 group-data-[collapsible=icon]:justify-center"
+                    className="hover:bg-transparent group-data-[collapsible=icon]:px-2 group-data-[collapsible=icon]:justify-center"
                   >
                     <Link to={item.path} className="flex items-center gap-3">
                       <item.icon className="h-4 w-4 transition-all duration-300 ease-in-out opacity-100" />
@@ -107,7 +107,7 @@ const DashboardSidebar = () => {
                   <SidebarMenuButton 
                     asChild 
                     tooltip={item.label}
-                    className="hover:bg-muted group-data-[collapsible=icon]:px-2 group-data-[collapsible=icon]:justify-center"
+                    className="hover:bg-transparent group-data-[collapsible=icon]:px-2 group-data-[collapsible=icon]:justify-center"
                   >
                     <Link to={item.path} className="flex items-center gap-3">
                       <item.icon className="h-4 w-4 transition-all duration-300 ease-in-out opacity-100" />
