@@ -96,6 +96,10 @@
   }
 
   .form-error {
-    @apply text-destructive text-xs mt-1;
+    @apply text-destructive text-[11px] mt-1 flex items-center gap-1;
+  }
+
+  .agreement-link {
+    @apply text-primary hover:underline font-semibold;
   }
 }

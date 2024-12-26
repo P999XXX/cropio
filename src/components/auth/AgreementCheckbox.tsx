@@ -7,6 +7,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { UseFormReturn } from "react-hook-form";
 import { StepTwoFormData } from "./StepTwoForm";
+import { AlertTriangle } from "lucide-react";
 
 interface AgreementCheckboxProps {
   form: UseFormReturn<StepTwoFormData>;
@@ -30,9 +31,16 @@ const AgreementCheckbox = ({ form, name, linkText, linkHref }: AgreementCheckbox
           </FormControl>
           <div className="space-y-1 leading-none">
             <div className="text-sm font-normal">
-              I accept the <a href={linkHref} className="text-primary hover:underline">{linkText}</a>
+              I accept the <a href={linkHref} className="agreement-link">{linkText}</a>
             </div>
-            <FormMessage className="text-xs text-red-500" />
+            <FormMessage className="text-[11px] text-destructive flex items-center gap-1">
+              {field.value === false && (
+                <>
+                  <AlertTriangle className="h-3 w-3" />
+                  <span>{form.formState.errors[name]?.message}</span>
+                </>
+              )}
+            </FormMessage>
           </div>
         </FormItem>
       )}
