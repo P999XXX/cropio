@@ -1,11 +1,8 @@
 import {
-  FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -18,81 +15,12 @@ import { StepTwoFormData } from "./StepTwoForm";
 import { countries } from "./phone/countries";
 import CountryDisplay from "./phone/CountryDisplay";
 import { useEffect, useState } from "react";
-import { parsePhoneNumberFromString, AsYouType, CountryCode } from 'libphonenumber-js';
+import { CountryCode } from 'libphonenumber-js';
+import PhoneNumberInput from "./phone/PhoneNumberInput";
 
 interface PhoneInputProps {
   form: UseFormReturn<StepTwoFormData>;
 }
-
-const countryToDigits: { [key: string]: number } = {
-  "DE": 11, // Germany
-  "AT": 10, // Austria
-  "CH": 9,  // Switzerland
-  "GB": 10, // Great Britain
-  "US": 10, // USA
-  "FR": 9,  // France
-  "IT": 10, // Italy
-  "ES": 9,  // Spain
-  "NL": 9,  // Netherlands
-  "BE": 9,  // Belgium
-  "DK": 8,  // Denmark
-  "SE": 9,  // Sweden
-  "NO": 8,  // Norway
-  "FI": 9,  // Finland
-  "PL": 9,  // Poland
-  "CZ": 9,  // Czech Republic
-  "HU": 9,  // Hungary
-  "GR": 10, // Greece
-  "PT": 9,  // Portugal
-  "IE": 9,  // Ireland
-  "LU": 9,  // Luxembourg
-  "RO": 9,  // Romania
-  "SK": 9,  // Slovakia
-  "SI": 8,  // Slovenia
-  "HR": 9,  // Croatia
-  "BG": 9,  // Bulgaria
-  "IS": 7,  // Iceland
-  "MT": 8,  // Malta
-  "CY": 8,  // Cyprus
-  "EE": 8,  // Estonia
-  "LV": 8,  // Latvia
-  "LT": 8,  // Lithuania
-};
-
-const countryToExample: { [key: string]: string } = {
-  "DE": "1511234567", // Germany
-  "AT": "664123456", // Austria
-  "CH": "791234567", // Switzerland
-  "GB": "7911123456", // Great Britain
-  "US": "2125550123", // USA
-  "FR": "612345678", // France
-  "IT": "3123456789", // Italy
-  "ES": "612345678", // Spain
-  "NL": "612345678", // Netherlands
-  "BE": "470123456", // Belgium
-  "DK": "20123456", // Denmark
-  "SE": "701234567", // Sweden
-  "NO": "41234567", // Norway
-  "FI": "401234567", // Finland
-  "PL": "512345678", // Poland
-  "CZ": "601234567", // Czech Republic
-  "HU": "201234567", // Hungary
-  "GR": "6912345678", // Greece
-  "PT": "912345678", // Portugal
-  "IE": "871234567", // Ireland
-  "LU": "621234567", // Luxembourg
-  "RO": "712345678", // Romania
-  "SK": "912345678", // Slovakia
-  "SI": "31234567", // Slovenia
-  "HR": "911234567", // Croatia
-  "BG": "897123456", // Bulgaria
-  "IS": "6123456", // Iceland
-  "MT": "21234567", // Malta
-  "CY": "96123456", // Cyprus
-  "EE": "51234567", // Estonia
-  "LV": "21234567", // Latvia
-  "LT": "61234567", // Lithuania
-};
 
 const PhoneInput = ({ form }: PhoneInputProps) => {
   const [userCountry, setUserCountry] = useState<CountryCode>("DE");
@@ -117,21 +45,6 @@ const PhoneInput = ({ form }: PhoneInputProps) => {
     (country) => country.value === form.watch("countryCode")
   );
 
-  const handlePhoneNumberChange = (value: string) => {
-    if (selectedCountry) {
-      // Remove any non-digit characters
-      const digitsOnly = value.replace(/\D/g, '');
-      const maxDigits = countryToDigits[selectedCountry.country] || 10;
-      
-      // Limit the input to the maximum number of digits for the selected country
-      const limitedDigits = digitsOnly.slice(0, maxDigits);
-      
-      const formatter = new AsYouType(selectedCountry.country as CountryCode);
-      const formattedNumber = formatter.input(limitedDigits);
-      form.setValue('phoneNumber', formattedNumber);
-    }
-  };
-
   return (
     <div className="space-y-2">
       <FormLabel>Phone Number</FormLabel>
@@ -147,24 +60,21 @@ const PhoneInput = ({ form }: PhoneInputProps) => {
                   const country = countries.find(c => c.value === value);
                   if (country) {
                     setUserCountry(country.country as CountryCode);
-                    // Clear phone number when country changes
                     form.setValue('phoneNumber', '');
                   }
                 }} 
                 value={field.value}
               >
-                <FormControl>
-                  <SelectTrigger className="h-10">
-                    <SelectValue>
-                      {selectedCountry && (
-                        <CountryDisplay 
-                          country={selectedCountry} 
-                          showLabel={false}
-                        />
-                      )}
-                    </SelectValue>
-                  </SelectTrigger>
-                </FormControl>
+                <SelectTrigger className="h-10">
+                  <SelectValue>
+                    {selectedCountry && (
+                      <CountryDisplay 
+                        country={selectedCountry} 
+                        showLabel={false}
+                      />
+                    )}
+                  </SelectValue>
+                </SelectTrigger>
                 <SelectContent className="bg-background min-w-[200px]">
                   {countries.map((country) => (
                     <SelectItem key={country.value} value={country.value}>
@@ -180,18 +90,11 @@ const PhoneInput = ({ form }: PhoneInputProps) => {
         <FormField
           control={form.control}
           name="phoneNumber"
-          render={({ field }) => (
-            <FormItem className="flex-1">
-              <FormControl>
-                <Input 
-                  placeholder={`Example: ${countryToExample[userCountry] || '1234567890'}`}
-                  type="tel"
-                  {...field}
-                  onChange={(e) => handlePhoneNumberChange(e.target.value)}
-                />
-              </FormControl>
-              <FormMessage className="text-xs text-destructive" />
-            </FormItem>
+          render={() => (
+            <PhoneNumberInput 
+              form={form}
+              selectedCountry={userCountry}
+            />
           )}
         />
       </div>
