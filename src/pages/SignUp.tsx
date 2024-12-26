@@ -99,7 +99,7 @@ const SignUp = () => {
     <>
       <div className={`space-y-2 ${isMobile ? 'text-left' : 'text-center'} mb-6`}>
         <h1 className="text-2xl md:text-3xl font-bold">Register for Free!</h1>
-        <p className="text-muted-foreground">
+        <p className="text-[14px] text-muted-foreground">
           {currentStep === 1 ? "Choose Your Role" : "Complete Your Profile"}
         </p>
       </div>
@@ -129,7 +129,7 @@ const SignUp = () => {
       ) : (
         <Card className="md:min-w-[500px]">
           <CardHeader className="pb-2">
-            <CardDescription>
+            <CardDescription className="text-[14px]">
               {currentStep === 1
                 ? "Select how you'll use the platform"
                 : "Enter your details to create an account"}
