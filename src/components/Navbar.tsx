@@ -11,8 +11,16 @@ const Navbar = () => {
   const [isDark, setIsDark] = useState(false);
   const location = useLocation();
   const isDashboard = location.pathname.startsWith('/dashboard');
-  const { state } = useSidebar();
-  const isSidebarExpanded = state === "expanded";
+  
+  // Only use sidebar context if we're in dashboard
+  let sidebarState;
+  try {
+    const { state } = useSidebar();
+    sidebarState = state;
+  } catch {
+    // Not within SidebarProvider (non-dashboard routes)
+    sidebarState = null;
+  }
 
   useEffect(() => {
     const theme = localStorage.getItem("theme");
