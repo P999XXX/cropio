@@ -3,16 +3,30 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { LanguageContext } from "@/components/LanguageSwitcher";
 import { supabase } from "@/integrations/supabase/client";
-import Index from "./pages/Index";
-import SignUp from "./pages/SignUp";
-import SignIn from "./pages/SignIn";
-import ResetPassword from "./pages/ResetPassword";
-import Components from "./pages/Components";
+import { lazy } from "react";
 
-const queryClient = new QueryClient();
+// Lazy load route components
+const Index = lazy(() => import("./pages/Index"));
+const SignUp = lazy(() => import("./pages/SignUp"));
+const SignIn = lazy(() => import("./pages/SignIn"));
+const ResetPassword = lazy(() => import("./pages/ResetPassword"));
+const Components = lazy(() => import("./pages/Components"));
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 60000, // 1 minute
+      cacheTime: 300000, // 5 minutes
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
+
+// ... keep existing code (AppContent component definition)
 
 const AppContent = () => {
   const navigate = useNavigate();
@@ -115,13 +129,19 @@ const AppContent = () => {
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/components" element={<Components />} />
-        </Routes>
+        <Suspense fallback={
+          <div className="flex items-center justify-center min-h-screen">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          </div>
+        }>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/components" element={<Components />} />
+          </Routes>
+        </Suspense>
       </TooltipProvider>
     </LanguageContext.Provider>
   );
