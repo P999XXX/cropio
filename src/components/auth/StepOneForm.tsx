@@ -66,11 +66,11 @@ const StepOneForm = ({
                       htmlFor="supplier"
                       className="flex flex-col items-center justify-between rounded-md border-2 border-gray-300 bg-transparent p-2 hover:border-primary hover:bg-transparent peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary w-full"
                     >
-                      <div className="mb-3 h-20 w-20 rounded-full bg-gray-100 flex items-center justify-center group-data-[state=checked]:bg-[#F2FCE2] peer-data-[state=checked]:bg-[#F2FCE2]">
+                      <div className="mb-3 h-24 w-24 flex items-center justify-center">
                         <img 
                           src="/lovable-uploads/0aaa1e70-1712-4d31-a2b1-af6c7d6d14df.png" 
                           alt="Supplier" 
-                          className="h-10 w-10"
+                          className="h-16 w-16"
                         />
                       </div>
                       <span className="text-sm font-medium">Supplier</span>
@@ -88,11 +88,11 @@ const StepOneForm = ({
                       htmlFor="buyer"
                       className="flex flex-col items-center justify-between rounded-md border-2 border-gray-300 bg-transparent p-2 hover:border-primary hover:bg-transparent peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary w-full"
                     >
-                      <div className="mb-3 h-20 w-20 rounded-full bg-gray-100 flex items-center justify-center group-data-[state=checked]:bg-[#F2FCE2] peer-data-[state=checked]:bg-[#F2FCE2]">
+                      <div className="mb-3 h-24 w-24 flex items-center justify-center">
                         <img 
                           src="/lovable-uploads/977f591c-307c-470a-a365-6a048c8b3e26.png" 
                           alt="Buyer" 
-                          className="h-10 w-10"
+                          className="h-16 w-16"
                         />
                       </div>
                       <span className="text-sm font-medium">Buyer</span>
