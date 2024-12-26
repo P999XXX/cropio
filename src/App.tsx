@@ -55,51 +55,48 @@ const AppContent = () => {
 
     // Handle email confirmation and password reset redirects
     const handleAuthRedirects = async () => {
-      console.log("Handling auth redirects");
+      console.log("=== Starting auth redirect handling ===");
+      console.log("Current URL:", window.location.href);
       
       // Get current URL parameters
       const url = new URL(window.location.href);
-      const type = url.searchParams.get('type');
-      const hash = url.hash;
+      const searchParams = new URLSearchParams(url.search);
+      const hashParams = new URLSearchParams(url.hash.replace('#', ''));
       
-      console.log("URL info:", {
-        href: url.href,
-        type,
-        hash,
-        pathname: url.pathname
-      });
-
-      // Check for recovery type in hash (old style)
-      if (hash) {
-        const hashParams = new URLSearchParams(hash.substring(1));
-        const hashType = hashParams.get('type');
-        console.log("Hash type:", hashType);
-        
-        if (hashType === 'recovery') {
-          console.log("Hash recovery detected - redirecting to reset-password");
-          navigate('/reset-password');
-          return;
-        }
+      // Log all parameters for debugging
+      console.log("Search params:", Object.fromEntries(searchParams.entries()));
+      console.log("Hash params:", Object.fromEntries(hashParams.entries()));
+      
+      // Check for recovery in both hash and search params
+      const isHashRecovery = hashParams.get('type') === 'recovery';
+      const isSearchRecovery = searchParams.get('type') === 'recovery';
+      
+      console.log("Recovery check:", { isHashRecovery, isSearchRecovery });
+      
+      // Handle recovery redirects
+      if (isHashRecovery || isSearchRecovery) {
+        console.log("Recovery detected - redirecting to reset-password");
+        navigate('/reset-password', { replace: true });
+        return;
       }
-
-      // Check for recovery type in search params (new style)
+      
+      // Handle email confirmation
       if (url.pathname.includes('/auth/callback')) {
+        const type = searchParams.get('type');
         console.log("Auth callback detected, type:", type);
-        
-        if (type === 'recovery') {
-          console.log("Search params recovery detected - redirecting to reset-password");
-          navigate('/reset-password');
-          return;
-        }
         
         if (type === 'email_confirmation') {
           console.log("Email confirmation detected");
           const { data: { session }, error } = await supabase.auth.getSession();
+          console.log("Session check:", { session, error });
+          
           if (!error && session) {
-            navigate('/signin');
+            navigate('/signin', { replace: true });
           }
         }
       }
+      
+      console.log("=== Auth redirect handling complete ===");
     };
 
     handleAuthRedirects();
