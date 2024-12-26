@@ -55,35 +55,39 @@ const AppContent = () => {
 
     // Handle email confirmation and password reset redirects
     const handleAuthRedirects = async () => {
-      const { hash, pathname } = window.location;
+      const { hash, pathname, search } = window.location;
       
       // Handle hash-based redirects (old style)
       if (hash) {
         const hashParams = new URLSearchParams(hash.substring(1));
         const type = hashParams.get('type');
         
+        if (type === 'recovery') {
+          navigate('/reset-password');
+          return;
+        }
+        
         if (type === 'email_confirmation') {
           const { data: { session }, error } = await supabase.auth.getSession();
           if (!error && session) {
             navigate('/signin');
           }
-        } else if (type === 'recovery') {
-          navigate('/reset-password');
         }
       }
       
       // Handle pathname-based redirects (new style)
       if (pathname.includes('/auth/callback')) {
+        const params = new URLSearchParams(search);
+        const type = params.get('type');
+        
+        if (type === 'recovery') {
+          navigate('/reset-password');
+          return;
+        }
+        
         const { data: { session }, error } = await supabase.auth.getSession();
         if (!error && session) {
-          const params = new URLSearchParams(window.location.search);
-          const type = params.get('type');
-          
-          if (type === 'recovery') {
-            navigate('/reset-password');
-          } else {
-            navigate('/signin');
-          }
+          navigate('/signin');
         }
       }
     };
