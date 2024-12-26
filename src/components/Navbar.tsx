@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Sun, Moon } from "lucide-react";
 import { Toggle } from "@/components/ui/toggle";
-import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Sidebar, SidebarTrigger } from "@/components/ui/sidebar";
 import LanguageSwitcher from "./LanguageSwitcher";
 
 const Navbar = () => {
