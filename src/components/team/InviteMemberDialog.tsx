@@ -28,9 +28,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 const inviteSchema = z.object({
-  email: z.string().email("Ungültige E-Mail-Adresse"),
+  email: z.string().email("Invalid email address"),
   role: z.enum(["admin", "member"], {
-    required_error: "Bitte wählen Sie eine Rolle aus",
+    required_error: "Please select a role",
   }),
 });
 
@@ -71,9 +71,9 @@ const InviteMemberDialog = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Teammitglied einladen</DialogTitle>
+          <DialogTitle>Invite Team Member</DialogTitle>
           <DialogDescription>
-            Senden Sie eine Einladung zum Beitritt zu Ihrem Team
+            Send an invitation to join your team
           </DialogDescription>
         </DialogHeader>
 
@@ -84,9 +84,9 @@ const InviteMemberDialog = ({
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>E-Mail</FormLabel>
+                  <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="E-Mail-Adresse eingeben" {...field} />
+                    <Input placeholder="Enter email address" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -98,18 +98,18 @@ const InviteMemberDialog = ({
               name="role"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Rolle</FormLabel>
+                  <FormLabel>Role</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Rolle auswählen" />
+                        <SelectValue placeholder="Select role" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="member">Mitglied</SelectItem>
+                      <SelectItem value="member">Member</SelectItem>
                       <SelectItem value="admin">Administrator</SelectItem>
                     </SelectContent>
                   </Select>
@@ -124,10 +124,10 @@ const InviteMemberDialog = ({
                 variant="outline"
                 onClick={() => onOpenChange(false)}
               >
-                Abbrechen
+                Cancel
               </Button>
               <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? "Wird gesendet..." : "Einladung senden"}
+                {isSubmitting ? "Sending..." : "Send Invitation"}
               </Button>
             </div>
           </form>

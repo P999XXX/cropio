@@ -20,17 +20,24 @@ const TeamManagement = () => {
   }, []);
 
   const checkAuthAndFetchData = async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        navigate('/signin');
+        return;
+      }
+      await fetchTeamData(session.user.id);
+    } catch (error) {
+      console.error('Auth check error:', error);
+      toast.error('Authentication error. Please sign in again.');
       navigate('/signin');
-      return;
     }
-    fetchTeamData(session.user.id);
   };
 
   const fetchTeamData = async (userId: string) => {
     try {
       setIsLoading(true);
+      console.log('Fetching team data for user:', userId);
       
       // Fetch user's team
       const { data: teamData, error: teamError } = await supabase
@@ -41,15 +48,17 @@ const TeamManagement = () => {
 
       if (teamError) {
         console.error('Error fetching team:', teamError);
-        toast.error('Fehler beim Laden des Teams');
+        toast.error('Error loading team data');
         return;
       }
 
       if (!teamData) {
-        toast.error('Kein Team gefunden');
+        console.log('No team found for user');
+        toast.error('No team found');
         return;
       }
 
+      console.log('Team data found:', teamData);
       setUserTeam(teamData);
 
       // Fetch team members with their profiles
@@ -63,14 +72,15 @@ const TeamManagement = () => {
 
       if (membersError) {
         console.error('Error fetching members:', membersError);
-        toast.error('Fehler beim Laden der Teammitglieder');
+        toast.error('Error loading team members');
         return;
       }
 
+      console.log('Team members loaded:', members);
       setTeamMembers(members || []);
     } catch (error: any) {
-      console.error('Error fetching team data:', error);
-      toast.error('Ein Fehler ist aufgetreten');
+      console.error('Error in fetchTeamData:', error);
+      toast.error('An error occurred while loading team data');
     } finally {
       setIsLoading(false);
     }
@@ -80,14 +90,16 @@ const TeamManagement = () => {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
-        toast.error('Bitte melden Sie sich an');
+        toast.error('Please sign in to invite team members');
         return;
       }
 
       if (!userTeam) {
-        toast.error('Kein Team gefunden');
+        toast.error('No team found');
         return;
       }
+
+      console.log('Sending invite:', { email, role, teamId: userTeam.id });
 
       const { error } = await supabase
         .from('team_invites')
@@ -101,16 +113,16 @@ const TeamManagement = () => {
 
       if (error) {
         console.error('Error inviting member:', error);
-        toast.error('Fehler beim Einladen des Mitglieds');
+        toast.error('Error sending invitation');
         return;
       }
 
-      toast.success('Einladung erfolgreich gesendet');
+      toast.success('Invitation sent successfully');
       setShowInviteDialog(false);
-      fetchTeamData(session.user.id);
+      await fetchTeamData(session.user.id);
     } catch (error: any) {
-      console.error('Error inviting member:', error);
-      toast.error('Fehler beim Einladen des Mitglieds');
+      console.error('Error in handleInviteMember:', error);
+      toast.error('Error sending invitation');
     }
   };
 
@@ -130,7 +142,7 @@ const TeamManagement = () => {
           <div>
             <h1 className="text-2xl font-bold">Team Management</h1>
             <p className="text-muted-foreground">
-              Verwalten Sie Ihre Teammitglieder und Einladungen
+              Manage your team members and invitations
             </p>
           </div>
           <Button
@@ -138,7 +150,7 @@ const TeamManagement = () => {
             className="flex items-center gap-2"
           >
             <UserPlus className="h-4 w-4" />
-            Mitglied einladen
+            Invite Member
           </Button>
         </div>
 
