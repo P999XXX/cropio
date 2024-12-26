@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -14,8 +14,28 @@ const SignIn = () => {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
   const [isResetting, setIsResetting] = useState(false);
+  const [firstName, setFirstName] = useState("");
   const navigate = useNavigate();
   const isMobile = useIsMobile();
+
+  useEffect(() => {
+    const getFirstName = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('first_name')
+          .eq('id', session.user.id)
+          .single();
+        
+        if (profile?.first_name) {
+          setFirstName(profile.first_name);
+        }
+      }
+    };
+    
+    getFirstName();
+  }, []);
 
   const handleSignIn = async (values: SignInFormData) => {
     setIsLoading(true);
@@ -98,9 +118,11 @@ const SignIn = () => {
       <div className={`container mx-auto px-4 pt-20 flex items-${isMobile ? 'start' : 'center'} justify-center min-h-[calc(100vh-64px)]`}>
         <div className="max-w-md w-full">
           <div className={`space-y-2 ${isMobile ? 'text-left' : 'text-center'} mb-6`}>
-            <h1 className="text-2xl md:text-3xl font-extrabold">Sign In</h1>
+            <h1 className="text-2xl md:text-3xl font-extrabold">
+              {firstName ? `Welcome ${firstName}!` : "Welcome Back!"}
+            </h1>
             <p className="text-[14px] text-muted-foreground">
-              Welcome back! Please sign in to continue
+              Please sign in to continue
             </p>
           </div>
 

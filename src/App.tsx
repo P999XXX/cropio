@@ -34,7 +34,6 @@ const App = () => {
     // Check for saved theme preference
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme) {
-      // Apply saved theme preference
       if (savedTheme === 'dark') {
         document.documentElement.classList.add('dark');
         updateThemeColors(true);
@@ -43,7 +42,6 @@ const App = () => {
         updateThemeColors(false);
       }
     } else {
-      // If no saved preference, use system preference
       if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
         document.documentElement.classList.add('dark');
         updateThemeColors(true);
@@ -56,27 +54,23 @@ const App = () => {
 
     // Handle email confirmation and password reset redirects
     const handleAuthRedirects = async () => {
-      const { hash } = window.location;
+      const { hash, pathname } = window.location;
+      
+      // Handle hash-based redirects (old style)
       if (hash) {
         const hashParams = new URLSearchParams(hash.substring(1));
         const type = hashParams.get('type');
         
         if (type === 'email_confirmation') {
-          try {
-            const { error } = await supabase.auth.getSession();
-            if (!error) {
-              // Clear the hash and redirect to signin
-              window.location.hash = '';
-              window.location.href = '/signin';
-            }
-          } catch (error) {
-            console.error('Error handling email confirmation:', error);
-          }
+          window.location.href = '/signin';
         } else if (type === 'recovery') {
-          // Remove the hash to prevent issues with the reset password form
-          window.location.hash = '';
           window.location.href = '/reset-password';
         }
+      }
+      
+      // Handle pathname-based redirects (new style)
+      if (pathname.includes('/auth/callback')) {
+        window.location.href = '/signin';
       }
     };
 
