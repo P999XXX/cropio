@@ -21,6 +21,7 @@ import {
   ArrowLeftRight,
   CreditCard,
   Settings,
+  HelpCircle,
   Headset,
   Menu,
   X,
@@ -40,6 +41,7 @@ const mainMenuItems = [
 
 const bottomMenuItems = [
   { icon: Settings, label: "Settings", path: "/dashboard/settings" },
+  { icon: HelpCircle, label: "FAQ", path: "/dashboard/faq" },
   { icon: Headset, label: "Support", path: "/dashboard/support" },
 ];
 
