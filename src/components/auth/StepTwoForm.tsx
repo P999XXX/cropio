@@ -42,10 +42,10 @@ export type StepTwoFormData = z.infer<typeof stepTwoSchema>;
 interface StepTwoFormProps {
   onSubmit: (values: StepTwoFormData) => Promise<void>;
   isLoading: boolean;
+  onBack: () => void;
 }
 
-const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
-  const navigate = useNavigate();
+const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
   const form = useForm<StepTwoFormData>({
     resolver: zodResolver(stepTwoSchema),
     defaultValues: {
@@ -64,7 +64,7 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
 
   const handleBack = (e: React.MouseEvent) => {
     e.preventDefault();
-    navigate(-1);
+    onBack();
   };
 
   return (

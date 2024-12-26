@@ -29,6 +29,10 @@ const SignUp = () => {
     setCurrentStep(2);
   };
 
+  const handleBack = () => {
+    setCurrentStep(1);
+  };
+
   const handleGoogleSignUp = async () => {
     try {
       const { error } = await supabase.auth.signInWithOAuth({
@@ -109,7 +113,11 @@ const SignUp = () => {
               onLinkedInSignUp={handleLinkedInSignUp}
             />
           ) : (
-            <StepTwoForm onSubmit={handleStepTwo} isLoading={isLoading} />
+            <StepTwoForm 
+              onSubmit={handleStepTwo} 
+              isLoading={isLoading}
+              onBack={handleBack}
+            />
           )}
           <div className="text-sm text-center w-full text-muted-foreground mt-6">
             Already have an account?{" "}
@@ -135,7 +143,11 @@ const SignUp = () => {
                 onLinkedInSignUp={handleLinkedInSignUp}
               />
             ) : (
-              <StepTwoForm onSubmit={handleStepTwo} isLoading={isLoading} />
+              <StepTwoForm 
+                onSubmit={handleStepTwo} 
+                isLoading={isLoading}
+                onBack={handleBack}
+              />
             )}
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
