@@ -137,7 +137,7 @@ const SignUp = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
       <div className={`container mx-auto px-4 ${isMobile ? 'pt-8' : 'pt-16'} flex items-${isMobile ? 'start' : 'center'} justify-center min-h-[calc(100vh-64px)]`}>
-        <div className="max-w-md w-full space-y-6 my-8">
+        <div className={`max-w-md w-full space-y-6 ${isMobile ? 'mt-8' : 'my-8'}`}>
           <div className="text-left space-y-2">
             <h1 className="text-3xl font-bold">Register for Free</h1>
             <SignUpHeader />
