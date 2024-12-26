@@ -76,7 +76,14 @@ const AppContent = () => {
       if (pathname.includes('/auth/callback')) {
         const { data: { session }, error } = await supabase.auth.getSession();
         if (!error && session) {
-          navigate('/reset-password');
+          const params = new URLSearchParams(window.location.search);
+          const type = params.get('type');
+          
+          if (type === 'recovery') {
+            navigate('/reset-password');
+          } else {
+            navigate('/signin');
+          }
         }
       }
     };
