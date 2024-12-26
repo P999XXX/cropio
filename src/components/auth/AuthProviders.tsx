@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Google, Linkedin } from "lucide-react";
+import { Mail, Linkedin } from "lucide-react";
 import { toast } from "sonner";
 
 interface AuthProvidersProps {
@@ -32,7 +32,7 @@ const AuthProviders = ({
         onClick={() => handleSocialSignUp(onGoogleSignUp)} 
         className="w-full"
       >
-        <Google className="mr-2 h-4 w-4" />
+        <Mail className="mr-2 h-4 w-4" />
         <span className="font-normal">{buttonText} with <span className="font-medium">Google</span></span>
       </Button>
       <Button 
