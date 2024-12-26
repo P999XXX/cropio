@@ -61,7 +61,7 @@ const DashboardSidebar = () => {
           />
           {isExpanded && (
             <div className="flex items-center justify-between w-full">
-              <span className="text-2xl font-geologica font-extrabold md:hidden">
+              <span className="text-2xl font-geologica font-extrabold">
                 cropio<span className="text-primary">.app</span>
               </span>
               <SidebarTrigger 
