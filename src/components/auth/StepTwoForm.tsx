@@ -60,78 +60,87 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
   });
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <FormInput
-          form={form}
-          name="companyName"
-          label="Company Name"
-          placeholder="Enter company name"
-          className="text-xs md:text-sm"
-        />
+    <div className="space-y-6">
+      <div className="space-y-2">
+        <h2 className="text-2xl font-semibold">Complete Your Profile</h2>
+        <p className="text-sm text-muted-foreground">
+          Enter your details to create an account
+        </p>
+      </div>
 
-        <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormInput
             form={form}
-            name="firstName"
-            label="First Name"
-            placeholder="Enter first name"
+            name="companyName"
+            label="Company Name"
+            placeholder="Enter company name"
             className="text-xs md:text-sm"
           />
+
+          <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
+            <FormInput
+              form={form}
+              name="firstName"
+              label="First Name"
+              placeholder="Enter first name"
+              className="text-xs md:text-sm"
+            />
+            <FormInput
+              form={form}
+              name="lastName"
+              label="Last Name"
+              placeholder="Enter last name"
+              className="text-xs md:text-sm"
+            />
+          </div>
+
+          <PhoneInput form={form} />
+
           <FormInput
             form={form}
-            name="lastName"
-            label="Last Name"
-            placeholder="Enter last name"
+            name="email"
+            label="Email"
+            type="email"
+            placeholder="Enter your email"
             className="text-xs md:text-sm"
           />
-        </div>
 
-        <PhoneInput form={form} />
+          <PasswordInput
+            form={form}
+            name="password"
+            label="Password"
+            description="Password must contain at least 8 characters, including uppercase, lowercase, and numbers"
+            className="text-xs md:text-sm"
+          />
 
-        <FormInput
-          form={form}
-          name="email"
-          label="Email"
-          type="email"
-          placeholder="Enter your email"
-          className="text-xs md:text-sm"
-        />
+          <PasswordInput
+            form={form}
+            name="confirmPassword"
+            label="Confirm Password"
+            className="text-xs md:text-sm"
+          />
 
-        <PasswordInput
-          form={form}
-          name="password"
-          label="Password"
-          description="Password must contain at least 8 characters, including uppercase, lowercase, and numbers"
-          className="text-xs md:text-sm"
-        />
+          <AgreementCheckbox
+            form={form}
+            name="acceptTerms"
+            linkText="terms and conditions"
+            linkHref="/terms"
+          />
 
-        <PasswordInput
-          form={form}
-          name="confirmPassword"
-          label="Confirm Password"
-          className="text-xs md:text-sm"
-        />
+          <AgreementCheckbox
+            form={form}
+            name="acceptPrivacy"
+            linkText="privacy policy"
+            linkHref="/privacy"
+          />
 
-        <AgreementCheckbox
-          form={form}
-          name="acceptTerms"
-          linkText="terms and conditions"
-          linkHref="/terms"
-        />
-
-        <AgreementCheckbox
-          form={form}
-          name="acceptPrivacy"
-          linkText="privacy policy"
-          linkHref="/privacy"
-        />
-
-        <Button type="submit" className="w-full text-xs md:text-sm" disabled={isLoading}>
-          {isLoading ? "Creating account..." : "Create account"}
-        </Button>
-      </form>
-    </Form>
+          <Button type="submit" className="w-full text-xs md:text-sm" disabled={isLoading}>
+            {isLoading ? "Creating account..." : "Create account"}
+          </Button>
+        </form>
+      </Form>
+    </div>
   );
 };
 

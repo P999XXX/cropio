@@ -2,11 +2,11 @@ import { Leaf } from "lucide-react";
 
 const SignUpHeader = () => {
   return (
-    <div className="flex items-center gap-1 md:justify-center justify-start">
-      <Leaf className="h-4 w-4 md:h-5 md:w-5 text-muted-foreground" />
-      <h1 className="text-base md:text-xl font-medium text-muted-foreground">
-        Let's change agri business together!
-      </h1>
+    <div className="space-y-2">
+      <h1 className="text-2xl font-semibold">Sign Up</h1>
+      <p className="text-sm text-muted-foreground">
+        Create your account to get started
+      </p>
     </div>
   );
 };
