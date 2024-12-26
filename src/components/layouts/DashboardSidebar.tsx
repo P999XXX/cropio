@@ -23,8 +23,8 @@ import {
   Settings,
   HelpCircle,
   Headset,
-  Menu,
-  X,
+  ChevronRight,
+  ChevronLeft,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -58,7 +58,7 @@ const DashboardSidebar = () => {
       <SidebarHeader className="h-header px-4 flex items-center">
         <div className="flex justify-between items-center w-full">
           <SidebarTrigger 
-            icon={!isExpanded ? Menu : undefined}
+            icon={!isExpanded ? ChevronRight : undefined}
             className={`h-8 w-8 flex items-center justify-center bg-muted hover:bg-muted/80 text-muted-foreground hover:text-muted-foreground ${isExpanded ? 'hidden' : ''}`}
           />
           {isExpanded && (
@@ -67,7 +67,7 @@ const DashboardSidebar = () => {
                 cropio<span className="text-primary">.app</span>
               </span>
               <SidebarTrigger 
-                icon={X}
+                icon={ChevronLeft}
                 className="h-8 w-8 flex items-center justify-center bg-muted hover:bg-muted/80 text-muted-foreground hover:text-muted-foreground"
               />
             </div>
