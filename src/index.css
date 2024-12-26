@@ -86,17 +86,21 @@
   }
 
   h1 {
-    @apply text-xl md:text-2xl font-geologica font-medium;
+    @apply text-2xl md:text-3xl font-geologica font-medium;
   }
 
   h2, h3, h4, h5, h6 {
     @apply font-geologica font-medium;
   }
+
+  input, button {
+    @apply text-sm;
+  }
 }
 
 @layer components {
   .form-label {
-    @apply text-foreground !important;
+    @apply text-foreground text-sm !important;
   }
 
   .form-error {
@@ -105,5 +109,13 @@
 
   .agreement-link {
     @apply text-muted-foreground hover:text-foreground transition-colors font-medium;
+  }
+
+  .auth-input {
+    @apply text-sm;
+  }
+
+  .auth-button {
+    @apply text-sm w-full;
   }
 }

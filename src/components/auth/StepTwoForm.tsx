@@ -129,7 +129,7 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
             linkHref="/privacy"
           />
 
-          <Button type="submit" className="w-full" disabled={isLoading}>
+          <Button type="submit" className="auth-button" disabled={isLoading}>
             {isLoading ? "Creating account..." : "Create account"}
           </Button>
         </form>
