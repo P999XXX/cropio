@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { GoogleIcon } from "@/components/icons/GoogleIcon";
-import { LinkedInIcon } from "@/components/icons/LinkedInIcon";
+import GoogleIcon from "@/components/icons/GoogleIcon";
+import LinkedInIcon from "@/components/icons/LinkedInIcon";
 import { toast } from "sonner";
 
 interface AuthProvidersProps {
