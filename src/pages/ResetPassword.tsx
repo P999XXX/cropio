@@ -71,7 +71,7 @@ const ResetPassword = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <div className={`container mx-auto px-4 ${isMobile ? 'pt-8' : 'pt-16'} flex items-${isMobile ? 'start' : 'center'} justify-center min-h-[calc(100vh-64px)]`}>
+      <div className={`container mx-auto px-4 ${isMobile ? 'pt-12' : 'pt-20'} flex items-${isMobile ? 'start' : 'center'} justify-center min-h-[calc(100vh-64px)]`}>
         <div className={`max-w-md w-full ${isMobile ? 'mt-8' : 'my-8'}`}>
           <div className={`space-y-2 ${isMobile ? 'text-left' : 'text-center'} mb-6`}>
             <h1 className="text-2xl md:text-3xl font-bold">Reset Password</h1>
