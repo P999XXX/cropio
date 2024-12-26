@@ -37,7 +37,7 @@ const inviteSchema = z.object({
 interface InviteMemberDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onInvite: (email: string, role: 'admin' | 'member') => Promise<void>;
+  onInvite: (email: string, role: 'admin' | 'member') => void;
 }
 
 const InviteMemberDialog = ({
@@ -60,8 +60,6 @@ const InviteMemberDialog = ({
     try {
       await onInvite(values.email, values.role);
       form.reset();
-    } catch (error) {
-      console.error('Error in invite dialog:', error);
     } finally {
       setIsSubmitting(false);
     }
@@ -105,12 +103,12 @@ const InviteMemberDialog = ({
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select role" />
+                        <SelectValue placeholder="Select a role" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
                       <SelectItem value="member">Member</SelectItem>
-                      <SelectItem value="admin">Administrator</SelectItem>
+                      <SelectItem value="admin">Admin</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />

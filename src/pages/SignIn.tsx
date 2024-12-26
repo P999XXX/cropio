@@ -23,18 +23,6 @@ const SignIn = () => {
   const isMobile = useIsMobile();
 
   useEffect(() => {
-    const checkSession = async () => {
-      const { data: { session }, error } = await supabase.auth.getSession();
-      console.log("Session check:", { session: !!session, error });
-      
-      if (session) {
-        console.log("User is already logged in, redirecting to dashboard");
-        navigate("/dashboard");
-      }
-    };
-
-    checkSession();
-
     // Check URL hash for error message
     const hashParams = new URLSearchParams(window.location.hash.replace('#', ''));
     const errorDescription = hashParams.get('error_description');
@@ -59,23 +47,18 @@ const SignIn = () => {
     };
     
     getFirstName();
-  }, [navigate]);
+  }, []);
 
   const handleSignIn = async (values: SignInFormData) => {
-    console.log("Attempting sign in with:", values.email);
     setIsLoading(true);
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { error } = await supabase.auth.signInWithPassword({
         email: values.email,
         password: values.password,
       });
 
-      if (error) {
-        console.error("Sign in error:", error);
-        throw error;
-      }
+      if (error) throw error;
 
-      console.log("Sign in successful:", data);
       toast.success("Successfully signed in!", successToastStyle);
       navigate("/dashboard");
     } catch (error: any) {

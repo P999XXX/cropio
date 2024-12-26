@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
@@ -6,47 +7,89 @@ import TeamMembersList from "@/components/team/TeamMembersList";
 import InviteMemberDialog from "@/components/team/InviteMemberDialog";
 import { Button } from "@/components/ui/button";
 import { UserPlus } from "lucide-react";
-import { useTeamData } from "@/hooks/useTeamData";
 
 const TeamManagement = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [teamMembers, setTeamMembers] = useState<any[]>([]);
+  const [pendingInvites, setPendingInvites] = useState<any[]>([]);
   const [showInviteDialog, setShowInviteDialog] = useState(false);
-  const { isLoading, teamMembers, userTeam, refreshData } = useTeamData();
+  const [userTeam, setUserTeam] = useState<any>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        navigate('/signin');
+        return;
+      }
+      fetchTeamData();
+    };
+
+    checkAuth();
+  }, [navigate]);
+
+  const fetchTeamData = async () => {
+    try {
+      setIsLoading(true);
+      
+      // Fetch user's team
+      const { data: teamData, error: teamError } = await supabase
+        .from('teams')
+        .select('*')
+        .single();
+
+      if (teamError) throw teamError;
+      setUserTeam(teamData);
+
+      // Fetch team members with their profiles
+      const { data: members, error: membersError } = await supabase
+        .from('team_members')
+        .select(`
+          *,
+          profile:profiles(first_name, last_name, email)
+        `)
+        .eq('team_id', teamData.id);
+
+      if (membersError) throw membersError;
+      setTeamMembers(members);
+
+      // Fetch pending invites
+      const { data: invites, error: invitesError } = await supabase
+        .from('team_invites')
+        .select('*')
+        .eq('team_id', teamData.id)
+        .eq('status', 'pending');
+
+      if (invitesError) throw invitesError;
+      setPendingInvites(invites);
+
+    } catch (error: any) {
+      console.error('Error fetching team data:', error);
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleInviteMember = async (email: string, role: 'admin' | 'member') => {
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        toast.error('Please sign in to invite team members');
-        return;
-      }
-
-      if (!userTeam) {
-        toast.error('No team found');
-        return;
-      }
-
       const { error } = await supabase
         .from('team_invites')
         .insert({
           team_id: userTeam.id,
           email,
           role,
-          invited_by: session.user.id,
-          status: 'pending'
         });
 
-      if (error) {
-        console.error('Error inviting member:', error);
-        toast.error('Error sending invitation');
-        return;
-      }
+      if (error) throw error;
 
-      toast.success('Invitation sent successfully');
+      toast.success('Invitation sent successfully!');
       setShowInviteDialog(false);
-      await refreshData();
+      fetchTeamData(); // Refresh the data
     } catch (error: any) {
-      console.error('Error in handleInviteMember:', error);
-      toast.error('Error sending invitation');
+      console.error('Error inviting member:', error);
+      toast.error(error.message);
     }
   };
 
@@ -61,7 +104,7 @@ const TeamManagement = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <div className="container mx-auto px-4 pt-24 pb-8">
+      <div className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-6">
           <div>
             <h1 className="text-2xl font-bold">Team Management</h1>
@@ -81,7 +124,7 @@ const TeamManagement = () => {
         <div className="space-y-6">
           <TeamMembersList
             members={teamMembers}
-            onRemoveMember={refreshData}
+            onRemoveMember={fetchTeamData}
           />
         </div>
 
