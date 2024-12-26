@@ -26,7 +26,12 @@ const SignIn = () => {
     const errorDescription = hashParams.get('error_description');
     
     if (errorDescription === 'Email link is invalid or has expired') {
-      toast.error("Your password reset link has expired. Please request a new one.");
+      toast.error("Your password reset link has expired. Please request a new one.", {
+        style: {
+          background: '#ea384c',
+          color: '#FFFFFF',
+        },
+      });
     }
 
     const getFirstName = async () => {
@@ -57,10 +62,21 @@ const SignIn = () => {
 
       if (error) throw error;
 
+      toast.success("Successfully signed in!", {
+        style: {
+          background: '#4CAF50',
+          color: '#FFFFFF',
+        },
+      });
       navigate("/dashboard");
     } catch (error: any) {
       console.error("Sign in error:", error);
-      toast.error(error.message || "Failed to sign in");
+      toast.error(error.message || "Failed to sign in", {
+        style: {
+          background: '#ea384c',
+          color: '#FFFFFF',
+        },
+      });
     } finally {
       setIsLoading(false);
     }
@@ -81,7 +97,12 @@ const SignIn = () => {
       if (error) throw error;
     } catch (error: any) {
       console.error("Google sign in error:", error);
-      toast.error(error.message || "Failed to sign in with Google");
+      toast.error(error.message || "Failed to sign in with Google", {
+        style: {
+          background: '#ea384c',
+          color: '#FFFFFF',
+        },
+      });
     }
   };
 
@@ -96,7 +117,12 @@ const SignIn = () => {
       if (error) throw error;
     } catch (error: any) {
       console.error("LinkedIn sign in error:", error);
-      toast.error(error.message || "Failed to sign in with LinkedIn");
+      toast.error(error.message || "Failed to sign in with LinkedIn", {
+        style: {
+          background: '#ea384c',
+          color: '#FFFFFF',
+        },
+      });
     }
   };
 
@@ -114,9 +140,20 @@ const SignIn = () => {
       
       setShowForgotPassword(false);
       setShowResetThankYou(true);
+      toast.success("Reset instructions sent!", {
+        style: {
+          background: '#4CAF50',
+          color: '#FFFFFF',
+        },
+      });
     } catch (error: any) {
       console.error("Reset password error:", error);
-      toast.error(error.message || "Failed to send reset instructions");
+      toast.error(error.message || "Failed to send reset instructions", {
+        style: {
+          background: '#ea384c',
+          color: '#FFFFFF',
+        },
+      });
     } finally {
       setIsResetting(false);
     }
