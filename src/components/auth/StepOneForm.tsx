@@ -61,7 +61,7 @@ const StepOneForm = ({
                     </FormControl>
                     <label
                       htmlFor="supplier"
-                      className="flex flex-col items-center justify-between rounded-md border-2 border-gray-300 bg-transparent p-2 hover:border-primary hover:bg-transparent peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-[#F8FEF5] [&:has([data-state=checked])]:border-primary [&:has([data-state=checked])]:bg-[#F8FEF5] w-full"
+                      className="flex flex-col items-center justify-between rounded-md border-2 border-gray-300 bg-transparent p-2 hover:border-primary hover:bg-transparent peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-[#F8FEF5] [&:has([data-state=checked])]:border-primary [&:has([data-state=checked])]:bg-[#F8FEF5] dark:hover:border-primary dark:peer-data-[state=checked]:bg-primary/10 dark:[&:has([data-state=checked])]:bg-primary/10 w-full transition-colors"
                     >
                       <div className="mb-0.5 h-20 w-20 md:h-24 md:w-24 flex items-center justify-center">
                         <img 
@@ -83,7 +83,7 @@ const StepOneForm = ({
                     </FormControl>
                     <label
                       htmlFor="buyer"
-                      className="flex flex-col items-center justify-between rounded-md border-2 border-gray-300 bg-transparent p-2 hover:border-primary hover:bg-transparent peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-[#F8FEF5] [&:has([data-state=checked])]:border-primary [&:has([data-state=checked])]:bg-[#F8FEF5] w-full"
+                      className="flex flex-col items-center justify-between rounded-md border-2 border-gray-300 bg-transparent p-2 hover:border-primary hover:bg-transparent peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-[#F8FEF5] [&:has([data-state=checked])]:border-primary [&:has([data-state=checked])]:bg-[#F8FEF5] dark:hover:border-primary dark:peer-data-[state=checked]:bg-primary/10 dark:[&:has([data-state=checked])]:bg-primary/10 w-full transition-colors"
                     >
                       <div className="mb-0.5 h-20 w-20 md:h-24 md:w-24 flex items-center justify-center">
                         <img 

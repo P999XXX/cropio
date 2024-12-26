@@ -23,7 +23,7 @@ export default {
         inter: ['Inter', 'sans-serif'],
       },
       fontSize: {
-        base: ['13px', '20px'], // Reduced from 15px to 13px
+        base: ['13px', '20px'],
       },
       colors: {
         border: "hsl(var(--border))",
