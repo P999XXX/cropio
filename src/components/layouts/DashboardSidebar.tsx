@@ -56,7 +56,7 @@ const DashboardSidebar = () => {
       <SidebarHeader className="flex items-center justify-start px-4 py-1">
         <SidebarTrigger 
           icon={isExpanded ? MoreHorizontal : MoreVertical} 
-          className="h-7 w-7" 
+          className="h-8 w-8" 
         />
       </SidebarHeader>
       
