@@ -52,7 +52,7 @@ const StepOneForm = ({
                 <RadioGroup
                   onValueChange={field.onChange}
                   defaultValue={field.value}
-                  className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4"
+                  className="grid grid-cols-1 gap-2"
                 >
                   <FormItem>
                     <FormControl>
@@ -66,11 +66,11 @@ const StepOneForm = ({
                       htmlFor="buyer"
                       className="flex flex-col items-center justify-between rounded-md border-2 border-gray-300 bg-transparent p-4 hover:border-primary hover:bg-transparent peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary w-full"
                     >
-                      <div className="mb-3 h-12 w-12 rounded-full bg-gray-100 flex items-center justify-center">
+                      <div className="mb-3 h-16 w-16 rounded-full bg-gray-100 flex items-center justify-center">
                         <img 
                           src="/lovable-uploads/977f591c-307c-470a-a365-6a048c8b3e26.png" 
                           alt="Buyer" 
-                          className="h-6 w-6"
+                          className="h-8 w-8"
                         />
                       </div>
                       <span className="text-sm font-medium">Buyer</span>
@@ -88,11 +88,11 @@ const StepOneForm = ({
                       htmlFor="supplier"
                       className="flex flex-col items-center justify-between rounded-md border-2 border-gray-300 bg-transparent p-4 hover:border-primary hover:bg-transparent peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary w-full"
                     >
-                      <div className="mb-3 h-12 w-12 rounded-full bg-gray-100 flex items-center justify-center">
+                      <div className="mb-3 h-16 w-16 rounded-full bg-gray-100 flex items-center justify-center">
                         <img 
                           src="/lovable-uploads/0aaa1e70-1712-4d31-a2b1-af6c7d6d14df.png" 
                           alt="Supplier" 
-                          className="h-6 w-6"
+                          className="h-8 w-8"
                         />
                       </div>
                       <span className="text-sm font-medium">Supplier</span>
