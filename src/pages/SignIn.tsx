@@ -21,6 +21,15 @@ const SignIn = () => {
   const isMobile = useIsMobile();
 
   useEffect(() => {
+    // Check URL for error message
+    const url = new URL(window.location.href);
+    const searchParams = new URLSearchParams(url.search);
+    const error = searchParams.get('error');
+    
+    if (error === 'Email+link+is+invalid+or+has+expired') {
+      toast.error("Your password reset link has expired. Please request a new one.");
+    }
+
     const getFirstName = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.user) {
