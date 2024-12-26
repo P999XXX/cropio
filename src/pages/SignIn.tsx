@@ -69,8 +69,13 @@ const SignIn = () => {
     }
   };
 
-  const handleResetPasswordRequest = () => {
-    handlePasswordReset(resetEmail, setIsResetting, setShowForgotPassword, setShowResetThankYou);
+  const handleResetPasswordRequest = async () => {
+    return handlePasswordReset(resetEmail, setIsResetting, setShowForgotPassword, setShowResetThankYou);
+  };
+
+  const handleForgotPassword = async () => {
+    setShowForgotPassword(true);
+    return Promise.resolve();
   };
 
   return (
@@ -93,7 +98,7 @@ const SignIn = () => {
               isLoading={isLoading}
               onGoogleSignIn={handleGoogleSignIn}
               onLinkedInSignIn={handleLinkedInSignIn}
-              onForgotPassword={() => setShowForgotPassword(true)}
+              onForgotPassword={handleForgotPassword}
             />
           ) : (
             <SignInCard
@@ -101,7 +106,7 @@ const SignIn = () => {
               isLoading={isLoading}
               onGoogleSignIn={handleGoogleSignIn}
               onLinkedInSignIn={handleLinkedInSignIn}
-              onForgotPassword={() => setShowForgotPassword(true)}
+              onForgotPassword={handleForgotPassword}
             />
           )}
         </div>
