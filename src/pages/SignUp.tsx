@@ -1,4 +1,7 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 import {
   Card,
@@ -8,212 +11,65 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { supabase } from "@/integrations/supabase/client";
-import StepOneForm from "@/components/auth/StepOneForm";
-import StepTwoForm, { StepTwoFormData } from "@/components/auth/StepTwoForm";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import ThankYouDialog from "@/components/auth/ThankYouDialog";
-import SignUpHeader from "@/components/auth/SignUpHeader";
+import SignUpForm, { SignUpFormData } from "@/components/auth/SignUpForm";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [step, setStep] = useState(1);
-  const [role, setRole] = useState<"buyer" | "supplier">("buyer");
-  const [showThankYouDialog, setShowThankYouDialog] = useState(false);
-  const [userEmail, setUserEmail] = useState("");
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
-  const sendWelcomeEmail = async (email: string, companyName: string) => {
-    try {
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-      
-      if (sessionError || !session) {
-        console.error("Session error:", sessionError);
-        return;
-      }
-
-      const response = await fetch(
-        "https://perkzwevnbmhbbdwwwaj.supabase.co/functions/v1/send-welcome-email",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${session.access_token}`,
-          },
-          body: JSON.stringify({ email, companyName }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`Failed to send welcome email: ${await response.text()}`);
-      }
-    } catch (error) {
-      console.error("Error sending welcome email:", error);
-    }
-  };
-
-  const handleSignUp = async (values: StepTwoFormData) => {
+  const handleSignUp = async (values: SignUpFormData) => {
     setIsLoading(true);
     try {
-      const { data, error } = await supabase.auth.signUp({
+      const { error } = await supabase.auth.signUp({
         email: values.email,
         password: values.password,
-        options: {
-          data: {
-            company_name: values.companyName,
-            role: role,
-            first_name: values.firstName,
-            last_name: values.lastName,
-          },
-        },
       });
 
       if (error) throw error;
 
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      if (data.user) {
-        await sendWelcomeEmail(values.email, values.companyName);
-      }
-
-      setUserEmail(values.email);
-      setShowThankYouDialog(true);
+      toast.success("Signed up successfully! Please check your email for confirmation.");
+      navigate("/signin");
     } catch (error: any) {
-      console.error("Signup error:", error);
-      toast.error(error.message || "Something went wrong. Please try again.");
+      console.error("Sign up error:", error);
+      toast.error(error.message || "Failed to sign up");
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleGoogleSignUp = async () => {
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: `${window.location.origin}/`,
-          queryParams: {
-            access_type: 'offline',
-            prompt: 'consent',
-          },
-        },
-      });
-      if (error) throw error;
-    } catch (error: any) {
-      console.error("Google signup error:", error);
-      toast.error("Failed to sign up with Google");
-    }
-  };
-
-  const handleLinkedInSignUp = async () => {
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "linkedin",
-        options: {
-          redirectTo: `${window.location.origin}/`,
-        },
-      });
-      if (error) throw error;
-    } catch (error: any) {
-      console.error("LinkedIn signup error:", error);
-      toast.error("Failed to sign up with LinkedIn");
-    }
-  };
-
-  const handleRoleSelect = (selectedRole: "buyer" | "supplier") => {
-    setRole(selectedRole);
-    setStep(2);
-  };
-
-  const handleDialogClose = () => {
-    setShowThankYouDialog(false);
-    navigate("/");
   };
 
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
       <div className={`container mx-auto px-4 ${isMobile ? 'pt-8' : 'pt-16'} flex items-${isMobile ? 'start' : 'center'} justify-center min-h-[calc(100vh-64px)]`}>
-        <div className={`max-w-md w-full space-y-6 ${isMobile ? 'mt-8' : 'my-8'}`}>
+        <div className={`max-w-md w-full space-y-6 ${isMobile ? 'mt-16' : 'my-8'}`}>
           <div className="text-left space-y-2">
-            <h1 className="text-3xl font-bold">Register for Free</h1>
-            <SignUpHeader />
+            <h1 className="text-3xl font-bold">Create an Account</h1>
+            <p className="text-muted-foreground">Sign up to get started</p>
           </div>
 
-          <div className="md:block hidden">
-            <Card>
-              <CardHeader className="space-y-1">
-                <CardTitle className="text-2xl">Create an Account</CardTitle>
-                <CardDescription>
-                  {step === 1
-                    ? "Choose your role to get started"
-                    : "Complete your registration"}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid gap-4">
-                  {step === 1 ? (
-                    <StepOneForm
-                      onSubmit={handleRoleSelect}
-                      onGoogleSignUp={handleGoogleSignUp}
-                      onLinkedInSignUp={handleLinkedInSignUp}
-                    />
-                  ) : (
-                    <StepTwoForm onSubmit={handleSignUp} isLoading={isLoading} />
-                  )}
-                </div>
-              </CardContent>
-              <CardFooter>
-                <div className="text-sm text-center w-full text-muted-foreground">
-                  Already have an account?{" "}
-                  <a href="/signin" className="text-primary hover:underline font-medium">
-                    Sign in
-                  </a>
-                </div>
-              </CardFooter>
-            </Card>
-          </div>
-
-          <div className="md:hidden block space-y-6">
-            <div className="space-y-1">
-              <h2 className="text-2xl font-semibold">Create an Account</h2>
-              <p className="text-sm text-muted-foreground">
-                {step === 1
-                  ? "Choose your role to get started"
-                  : "Complete your registration"}
-              </p>
-            </div>
-            <div className="space-y-4">
-              <div className="grid gap-4">
-                {step === 1 ? (
-                  <StepOneForm
-                    onSubmit={handleRoleSelect}
-                    onGoogleSignUp={handleGoogleSignUp}
-                    onLinkedInSignUp={handleLinkedInSignUp}
-                  />
-                ) : (
-                  <StepTwoForm onSubmit={handleSignUp} isLoading={isLoading} />
-                )}
+          <Card>
+            <CardHeader className="space-y-1">
+              <CardTitle className="text-2xl">Sign Up</CardTitle>
+              <CardDescription>
+                Enter your email and password to create an account
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <SignUpForm onSubmit={handleSignUp} isLoading={isLoading} />
+            </CardContent>
+            <CardFooter className="flex flex-col space-y-4">
+              <div className="text-sm text-center w-full text-muted-foreground">
+                Already have an account?{" "}
+                <a href="/signin" className="text-primary hover:underline font-medium">
+                  Sign in
+                </a>
               </div>
-            </div>
-            <div className="text-sm text-center text-muted-foreground">
-              Already have an account?{" "}
-              <a href="/signin" className="text-primary hover:underline font-medium">
-                Sign in
-              </a>
-            </div>
-          </div>
+            </CardFooter>
+          </Card>
         </div>
       </div>
-
-      <ThankYouDialog
-        open={showThankYouDialog}
-        onOpenChange={handleDialogClose}
-        userEmail={userEmail}
-      />
     </div>
   );
 };
