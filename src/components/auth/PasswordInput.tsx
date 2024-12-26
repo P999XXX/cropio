@@ -28,7 +28,7 @@ const PasswordInput = ({ form, name, label, description, className }: PasswordIn
       control={form.control}
       name={name}
       render={({ field }) => (
-        <FormItem>
+        <FormItem className="space-y-1">
           <FormLabel className="!text-foreground">{label}</FormLabel>
           {description && (
             <FormDescription className="text-xs">{description}</FormDescription>

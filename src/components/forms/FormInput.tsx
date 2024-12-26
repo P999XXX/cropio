@@ -20,7 +20,7 @@ const FormInput = ({ form, name, label, placeholder, type = "text", description,
       control={form.control}
       name={name}
       render={({ field }) => (
-        <FormItem>
+        <FormItem className="space-y-1">
           <FormLabel>{label}</FormLabel>
           <FormControl>
             <Input placeholder={placeholder} type={type} className={className} {...field} />
