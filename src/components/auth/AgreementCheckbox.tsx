@@ -33,7 +33,7 @@ const AgreementCheckbox = ({ form, name, linkText, linkHref }: AgreementCheckbox
             <div className="text-sm font-normal">
               I accept the <a href={linkHref} className="agreement-link">{linkText}</a>
             </div>
-            <FormMessage className="text-[10px] text-destructive flex items-center gap-1">
+            <FormMessage className="text-[11px] text-destructive flex items-center gap-1">
               {form.formState.errors[name]?.message && (
                 <>
                   <AlertTriangle className="h-3 w-3" />

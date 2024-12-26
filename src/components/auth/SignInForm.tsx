@@ -50,7 +50,7 @@ const SignInForm = ({ onSubmit, isLoading, onForgotPassword }: SignInFormProps) 
               <FormControl>
                 <Input placeholder="Enter your email" type="email" {...field} />
               </FormControl>
-              <FormMessage className="text-[10px] text-destructive flex items-center gap-1">
+              <FormMessage className="text-[11px] text-destructive flex items-center gap-1">
                 {form.formState.errors.email?.message && (
                   <>
                     <AlertTriangle className="h-3 w-3" />
@@ -88,7 +88,7 @@ const SignInForm = ({ onSubmit, isLoading, onForgotPassword }: SignInFormProps) 
                   </button>
                 </div>
               </FormControl>
-              <FormMessage className="text-[10px] text-destructive flex items-center gap-1">
+              <FormMessage className="text-[11px] text-destructive flex items-center gap-1">
                 {form.formState.errors.password?.message && (
                   <>
                     <AlertTriangle className="h-3 w-3" />

@@ -4,6 +4,7 @@ import { UseFormReturn } from "react-hook-form";
 import { StepTwoFormData } from "../StepTwoForm";
 import { AsYouType, CountryCode } from 'libphonenumber-js';
 import { countryToDigits, countryToExample } from "./countryData";
+import { AlertTriangle } from "lucide-react";
 
 interface PhoneNumberInputProps {
   form: UseFormReturn<StepTwoFormData>;
@@ -14,12 +15,8 @@ const PhoneNumberInput = ({ form, selectedCountry }: PhoneNumberInputProps) => {
   const requiredDigits = countryToDigits[selectedCountry] || 10;
 
   const handlePhoneNumberChange = (value: string) => {
-    // Remove any non-digit characters
     const digitsOnly = value.replace(/\D/g, '');
-    
-    // Limit the input to the maximum number of digits for the selected country
     const limitedDigits = digitsOnly.slice(0, requiredDigits);
-    
     const formatter = new AsYouType(selectedCountry);
     const formattedNumber = formatter.input(limitedDigits);
     form.setValue('phoneNumber', formattedNumber);
@@ -41,7 +38,14 @@ const PhoneNumberInput = ({ form, selectedCountry }: PhoneNumberInputProps) => {
           onChange={(e) => handlePhoneNumberChange(e.target.value)}
         />
       </FormControl>
-      <FormMessage className="text-xs text-destructive" />
+      <FormMessage className="text-[11px] text-destructive flex items-center gap-1">
+        {form.formState.errors.phoneNumber?.message && (
+          <>
+            <AlertTriangle className="h-3 w-3" />
+            <span>{form.formState.errors.phoneNumber?.message}</span>
+          </>
+        )}
+      </FormMessage>
     </FormItem>
   );
 };
