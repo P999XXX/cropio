@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Chrome, Linkedin } from "lucide-react";
+import { Google, Linkedin } from "lucide-react";
 import { toast } from "sonner";
 
 interface AuthProvidersProps {
@@ -28,15 +28,15 @@ const AuthProviders = ({
   return (
     <div className="flex flex-col gap-4">
       <Button 
-        variant="outline" 
+        variant="secondary" 
         onClick={() => handleSocialSignUp(onGoogleSignUp)} 
         className="w-full"
       >
-        <Chrome className="mr-2 h-4 w-4" />
+        <Google className="mr-2 h-4 w-4" />
         <span className="font-normal">{buttonText} with <span className="font-medium">Google</span></span>
       </Button>
       <Button 
-        variant="outline" 
+        variant="secondary" 
         onClick={() => handleSocialSignUp(onLinkedInSignUp)} 
         className="w-full"
       >
