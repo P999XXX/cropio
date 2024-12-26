@@ -18,6 +18,9 @@ export default {
       },
     },
     extend: {
+      maxWidth: {
+        'md': '500px',
+      },
       fontFamily: {
         geologica: ['Geologica', 'sans-serif'],
         inter: ['Inter', 'sans-serif'],
