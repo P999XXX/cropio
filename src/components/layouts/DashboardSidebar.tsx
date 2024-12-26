@@ -9,6 +9,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarTrigger,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import {
   LayoutDashboard,
@@ -22,6 +23,7 @@ import {
   Settings,
   Headset,
   MoreVertical,
+  MoreHorizontal,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -42,10 +44,16 @@ const bottomMenuItems = [
 ];
 
 const DashboardSidebar = () => {
+  const { state } = useSidebar();
+  const isExpanded = state === "expanded";
+
   return (
-    <Sidebar>
+    <Sidebar variant="inset" collapsible="icon">
       <SidebarHeader className="flex items-center justify-start px-4 py-2">
-        <SidebarTrigger icon={MoreVertical} />
+        <SidebarTrigger 
+          icon={isExpanded ? MoreHorizontal : MoreVertical} 
+          className="h-7 w-7" 
+        />
       </SidebarHeader>
       
       <SidebarContent>
