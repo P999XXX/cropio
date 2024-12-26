@@ -17,9 +17,10 @@ interface PasswordInputProps {
   name: "password" | "confirmPassword";
   label: string;
   description?: string;
+  className?: string;
 }
 
-const PasswordInput = ({ form, name, label, description }: PasswordInputProps) => {
+const PasswordInput = ({ form, name, label, description, className }: PasswordInputProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -37,6 +38,7 @@ const PasswordInput = ({ form, name, label, description }: PasswordInputProps) =
               <Input
                 placeholder={`${name === "password" ? "Enter" : "Confirm"} your password`}
                 type={showPassword ? "text" : "password"}
+                className={className}
                 {...field}
               />
               <button
