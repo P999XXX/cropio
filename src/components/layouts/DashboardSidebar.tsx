@@ -53,13 +53,13 @@ const DashboardSidebar = () => {
     <Sidebar 
       variant="inset" 
       collapsible="icon"
-      className="fixed top-0 h-screen shadow-md border-r border-border bg-background z-[99] overflow-hidden"
+      className="fixed top-0 h-screen border-r border-border bg-background z-[99] overflow-hidden"
     >
       <SidebarHeader className="h-header px-4 flex items-center">
         <div className="flex justify-between items-center w-full">
           <SidebarTrigger 
             icon={!isExpanded ? ChevronRight : undefined}
-            className={`flex items-center justify-center text-muted-foreground hover:bg-transparent ${isExpanded ? 'hidden' : ''}`}
+            className={`flex items-center justify-center text-foreground hover:bg-transparent ${isExpanded ? 'hidden' : ''}`}
           />
           {isExpanded && (
             <div className="flex items-center justify-between w-full">
@@ -68,7 +68,7 @@ const DashboardSidebar = () => {
               </span>
               <SidebarTrigger 
                 icon={ChevronLeft}
-                className="flex items-center justify-center text-muted-foreground hover:bg-transparent"
+                className="flex items-center justify-center text-foreground hover:bg-transparent"
               />
             </div>
           )}
@@ -87,7 +87,7 @@ const DashboardSidebar = () => {
                     className="hover:bg-transparent group-data-[collapsible=icon]:justify-center p-0"
                   >
                     <Link to={item.path} className="flex items-center gap-3">
-                      <item.icon className="h-4 w-4 transition-all duration-300 ease-in-out opacity-100" />
+                      <item.icon className="h-4 w-4 transition-all duration-300 ease-in-out text-foreground" />
                       <span className="font-medium">{item.label}</span>
                     </Link>
                   </SidebarMenuButton>
@@ -110,7 +110,7 @@ const DashboardSidebar = () => {
                     className="hover:bg-transparent group-data-[collapsible=icon]:justify-center p-0"
                   >
                     <Link to={item.path} className="flex items-center gap-3">
-                      <item.icon className="h-4 w-4 transition-all duration-300 ease-in-out opacity-100" />
+                      <item.icon className="h-4 w-4 transition-all duration-300 ease-in-out text-foreground" />
                       <span className="font-medium">{item.label}</span>
                     </Link>
                   </SidebarMenuButton>
