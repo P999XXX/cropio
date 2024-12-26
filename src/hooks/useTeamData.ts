@@ -13,14 +13,13 @@ export const useTeamData = () => {
   const fetchTeamData = async (userId: string) => {
     try {
       setIsLoading(true);
-      console.log("Fetching team data for user:", userId);
       
       // First get the user's team membership
       const { data: membership, error: membershipError } = await supabase
         .from('team_members')
         .select('team_id, role')
         .eq('user_id', userId)
-        .single();
+        .maybeSingle();
 
       if (membershipError) {
         console.error('Error fetching user membership:', membershipError);
@@ -34,14 +33,12 @@ export const useTeamData = () => {
         return;
       }
 
-      console.log("User membership found:", membership);
-
       // Then fetch the team details
       const { data: team, error: teamError } = await supabase
         .from('teams')
         .select('*')
         .eq('id', membership.team_id)
-        .single();
+        .maybeSingle();
 
       if (teamError) {
         console.error('Error fetching team:', teamError);
@@ -49,8 +46,9 @@ export const useTeamData = () => {
         return;
       }
 
-      setUserTeam(team);
-      console.log("Team data fetched:", team);
+      if (team) {
+        setUserTeam(team);
+      }
 
       // Finally fetch all team members
       const { data: members, error: membersError } = await supabase
@@ -73,7 +71,6 @@ export const useTeamData = () => {
         return;
       }
 
-      console.log("Team members fetched:", members);
       setTeamMembers(members || []);
     } catch (error: any) {
       console.error('Error in fetchTeamData:', error);
@@ -85,9 +82,7 @@ export const useTeamData = () => {
 
   const checkAuthAndFetchData = async () => {
     try {
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-      
-      if (sessionError) throw sessionError;
+      const { data: { session } } = await supabase.auth.getSession();
       
       if (!session) {
         console.log("No session found, redirecting to signin");
