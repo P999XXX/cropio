@@ -56,44 +56,52 @@ const AppContent = () => {
     // Handle email confirmation and password reset redirects
     const handleAuthRedirects = async () => {
       console.log("=== Starting auth redirect handling ===");
-      console.log("Current URL:", window.location.href);
       
-      // Get current URL parameters
-      const url = new URL(window.location.href);
-      const searchParams = new URLSearchParams(url.search);
-      const hashParams = new URLSearchParams(url.hash.replace('#', ''));
-      
-      // Log all parameters for debugging
-      console.log("Search params:", Object.fromEntries(searchParams.entries()));
-      console.log("Hash params:", Object.fromEntries(hashParams.entries()));
-      
-      // Check for recovery in both hash and search params
-      const isHashRecovery = hashParams.get('type') === 'recovery';
-      const isSearchRecovery = searchParams.get('type') === 'recovery';
-      
-      console.log("Recovery check:", { isHashRecovery, isSearchRecovery });
-      
-      // Handle recovery redirects
-      if (isHashRecovery || isSearchRecovery) {
-        console.log("Recovery detected - redirecting to reset-password");
-        navigate('/reset-password', { replace: true });
-        return;
-      }
-      
-      // Handle email confirmation
-      if (url.pathname.includes('/auth/callback')) {
-        const type = searchParams.get('type');
-        console.log("Auth callback detected, type:", type);
+      try {
+        // Get current URL parameters
+        const url = new URL(window.location.href);
+        const searchParams = new URLSearchParams(url.search);
+        const hashParams = new URLSearchParams(url.hash.replace('#', ''));
         
-        if (type === 'email_confirmation') {
-          console.log("Email confirmation detected");
-          const { data: { session }, error } = await supabase.auth.getSession();
-          console.log("Session check:", { session, error });
-          
-          if (!error && session) {
-            navigate('/signin', { replace: true });
+        console.log("Current URL:", url.toString());
+        console.log("Search params:", Object.fromEntries(searchParams.entries()));
+        console.log("Hash params:", Object.fromEntries(hashParams.entries()));
+        
+        // Check for recovery token in both hash and search params
+        const accessToken = hashParams.get('access_token') || searchParams.get('access_token');
+        const type = hashParams.get('type') || searchParams.get('type');
+        
+        console.log("Token check:", { accessToken: !!accessToken, type });
+        
+        if (type === 'recovery' && accessToken) {
+          console.log("Valid recovery token detected - redirecting to reset-password");
+          // Set the session before redirecting
+          const refreshToken = hashParams.get('refresh_token') || searchParams.get('refresh_token');
+          if (refreshToken) {
+            await supabase.auth.setSession({
+              access_token: accessToken,
+              refresh_token: refreshToken
+            });
+          }
+          navigate('/reset-password', { replace: true });
+          return;
+        }
+        
+        // Handle email confirmation
+        if (url.pathname.includes('/auth/callback')) {
+          console.log("Auth callback detected");
+          if (type === 'email_confirmation') {
+            const { data: { session }, error } = await supabase.auth.getSession();
+            console.log("Email confirmation - Session check:", { session: !!session, error });
+            
+            if (!error && session) {
+              navigate('/signin', { replace: true });
+            }
           }
         }
+      } catch (error) {
+        console.error("Auth redirect error:", error);
+        navigate('/signin', { replace: true });
       }
       
       console.log("=== Auth redirect handling complete ===");

@@ -7,7 +7,7 @@ import PasswordInput from "./PasswordInput";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const passwordSchema = z
   .string()
@@ -33,6 +33,24 @@ interface ResetPasswordFormProps {
 const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [isTokenValid, setIsTokenValid] = useState(true);
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { session }, error } = await supabase.auth.getSession();
+      
+      if (error || !session) {
+        console.error("Session error:", error);
+        setIsTokenValid(false);
+        toast.error("Your password reset link has expired. Please request a new one.");
+        setTimeout(() => {
+          navigate("/signin");
+        }, 3000);
+      }
+    };
+
+    checkSession();
+  }, [navigate]);
 
   const form = useForm<ResetPasswordFormData>({
     resolver: zodResolver(resetPasswordSchema),
@@ -43,13 +61,26 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
   });
 
   const onSubmit = async (values: ResetPasswordFormData) => {
+    if (!isTokenValid) {
+      toast.error("Your password reset link has expired. Please request a new one.");
+      navigate("/signin");
+      return;
+    }
+
     setIsLoading(true);
     try {
       const { error } = await supabase.auth.updateUser({
         password: values.password,
       });
 
-      if (error) throw error;
+      if (error) {
+        if (error.message.includes("expired")) {
+          toast.error("Your password reset link has expired. Please request a new one.");
+          navigate("/signin");
+          return;
+        }
+        throw error;
+      }
 
       // Sign out after password reset to ensure clean state
       await supabase.auth.signOut();
@@ -63,6 +94,10 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
       setIsLoading(false);
     }
   };
+
+  if (!isTokenValid) {
+    return null;
+  }
 
   return (
     <>
