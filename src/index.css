@@ -96,10 +96,10 @@
   }
 
   .form-error {
-    @apply text-destructive text-[10px] mt-1 flex items-center gap-1;
+    @apply text-destructive text-[11px] mt-1 flex items-center gap-1;
   }
 
   .agreement-link {
-    @apply text-primary hover:underline font-semibold;
+    @apply text-muted-foreground hover:text-foreground transition-colors font-medium;
   }
 }
