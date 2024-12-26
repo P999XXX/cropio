@@ -21,12 +21,11 @@ const SignIn = () => {
   const isMobile = useIsMobile();
 
   useEffect(() => {
-    // Check URL for error message
-    const url = new URL(window.location.href);
-    const searchParams = new URLSearchParams(url.search);
-    const error = decodeURIComponent(searchParams.get('error') || '');
+    // Check URL hash for error message
+    const hashParams = new URLSearchParams(window.location.hash.replace('#', ''));
+    const errorDescription = hashParams.get('error_description');
     
-    if (error === 'Email link is invalid or has expired') {
+    if (errorDescription === 'Email link is invalid or has expired') {
       toast.error("Your password reset link has expired. Please request a new one.");
     }
 
