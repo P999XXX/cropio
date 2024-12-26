@@ -48,7 +48,7 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="fixed top-0 w-full bg-background border-b border-border z-50 shadow-[0_2px_8px_0_rgba(0,0,0,0.05)]">
+    <nav className={`fixed top-0 w-full bg-background border-b border-border z-50 shadow-[0_2px_8px_0_rgba(0,0,0,0.05)] ${isDashboard ? 'md:pl-[68px] md:data-[sidebar-expanded=true]:pl-64' : ''}`} data-sidebar-expanded={isSidebarExpanded}>
       <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-header">
           <div className="flex items-center gap-4">
