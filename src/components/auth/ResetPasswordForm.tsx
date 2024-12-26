@@ -51,7 +51,10 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
 
       if (error) throw error;
 
-      toast.success("Password successfully updated!");
+      // Sign out after password reset to ensure clean state
+      await supabase.auth.signOut();
+      
+      toast.success("Password successfully updated! Please sign in with your new password.");
       navigate("/signin");
     } catch (error: any) {
       console.error("Reset password error:", error);
@@ -83,7 +86,7 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
           </Button>
         </form>
       </Form>
-      <div className="text-sm text-center text-muted-foreground">
+      <div className="text-sm text-center text-muted-foreground mt-4">
         Already know your password?{" "}
         <a href="/signin" className="text-primary hover:underline font-medium">
           Sign in

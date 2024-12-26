@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
 } from "@/components/ui/card";
 import Navbar from "@/components/Navbar";
@@ -14,28 +13,51 @@ import ResetPasswordForm from "@/components/auth/ResetPasswordForm";
 import ResetPasswordHeader from "@/components/auth/ResetPasswordHeader";
 
 const ResetPassword = () => {
-  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const isMobile = useIsMobile();
   const [firstName, setFirstName] = useState("");
 
   useEffect(() => {
-    const getFirstName = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user) {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('first_name')
-          .eq('id', session.user.id)
-          .single();
+    const handlePasswordReset = async () => {
+      const { data: { session }, error } = await supabase.auth.getSession();
+      
+      // If no session, try to get it from the URL
+      if (!session) {
+        const hashParams = new URLSearchParams(window.location.hash.substring(1));
+        const accessToken = hashParams.get('access_token');
+        const refreshToken = hashParams.get('refresh_token');
         
-        if (profile?.first_name) {
-          setFirstName(profile.first_name);
+        if (accessToken && refreshToken) {
+          const { data, error } = await supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: refreshToken
+          });
+          
+          if (error) {
+            console.error("Error setting session:", error);
+            navigate('/signin');
+            return;
+          }
+        } else {
+          // No tokens found, redirect to signin
+          navigate('/signin');
+          return;
         }
+      }
+
+      // Get user profile data
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('first_name')
+        .single();
+      
+      if (profile?.first_name) {
+        setFirstName(profile.first_name);
       }
     };
     
-    getFirstName();
-  }, []);
+    handlePasswordReset();
+  }, [navigate]);
 
   return (
     <div className="min-h-screen bg-background">
