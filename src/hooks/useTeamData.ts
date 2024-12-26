@@ -14,18 +14,10 @@ export const useTeamData = () => {
     try {
       setIsLoading(true);
       
-      // First, get the user's team membership with team data
+      // First, get the user's team membership
       const { data: membershipData, error: membershipError } = await supabase
         .from('team_members')
-        .select(`
-          team_id,
-          role,
-          team:teams(
-            id,
-            name,
-            created_at
-          )
-        `)
+        .select('team_id, role')
         .eq('user_id', userId)
         .maybeSingle();
 
@@ -41,10 +33,22 @@ export const useTeamData = () => {
         return;
       }
 
-      setUserTeam(membershipData.team);
-      const teamId = membershipData.team_id;
+      // Then fetch the team details
+      const { data: teamData, error: teamError } = await supabase
+        .from('teams')
+        .select('*')
+        .eq('id', membershipData.team_id)
+        .maybeSingle();
 
-      // Then fetch all team members with their profiles
+      if (teamError) {
+        console.error('Error fetching team:', teamError);
+        toast.error('Error loading team data');
+        return;
+      }
+
+      setUserTeam(teamData);
+
+      // Finally fetch all team members with their profiles
       const { data: members, error: membersError } = await supabase
         .from('team_members')
         .select(`
@@ -53,10 +57,11 @@ export const useTeamData = () => {
           profile:profiles(
             id,
             first_name,
-            last_name
+            last_name,
+            email
           )
         `)
-        .eq('team_id', teamId);
+        .eq('team_id', membershipData.team_id);
 
       if (membersError) {
         console.error('Error fetching members:', membersError);
