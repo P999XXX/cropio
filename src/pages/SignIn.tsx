@@ -98,7 +98,7 @@ const SignIn = () => {
       <div className="container mx-auto px-4 pt-12 md:pt-20 flex flex-col items-center min-h-[calc(100vh-64px)]">
         <div className="w-full max-w-md mb-8">
           <div className="space-y-2 text-center mb-6">
-            <h1>Sign In</h1>
+            <h1 className="font-semibold">Sign In</h1>
             <p className="text-muted-foreground">
               Welcome back! Please sign in to continue
             </p>
