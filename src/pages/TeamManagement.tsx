@@ -43,9 +43,18 @@ const TeamManagement = () => {
       const { data: teamData, error: teamError } = await supabase
         .from('teams')
         .select('*')
+        .eq('created_by', session.user.id)
         .single();
 
-      if (teamError) throw teamError;
+      if (teamError) {
+        console.error('Error fetching team:', teamError);
+        throw teamError;
+      }
+
+      if (!teamData) {
+        throw new Error("No team found for user");
+      }
+
       setUserTeam(teamData);
 
       // Fetch team members with their profiles
@@ -80,7 +89,10 @@ const TeamManagement = () => {
 
   const handleInviteMember = async (email: string, role: 'admin' | 'member') => {
     try {
-      // Get current user's session
+      if (!userTeam) {
+        throw new Error("No team found");
+      }
+
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
         throw new Error("No authenticated session");
@@ -92,7 +104,7 @@ const TeamManagement = () => {
           team_id: userTeam.id,
           email,
           role,
-          invited_by: session.user.id // Add the invited_by field with current user's ID
+          invited_by: session.user.id
         });
 
       if (error) throw error;
