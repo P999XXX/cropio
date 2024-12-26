@@ -7,11 +7,13 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import SignInCard from "@/components/auth/SignInCard";
 import SignInMobile from "@/components/auth/SignInMobile";
 import ForgotPasswordDialog from "@/components/auth/ForgotPasswordDialog";
+import ResetPasswordThankYouDialog from "@/components/auth/ResetPasswordThankYouDialog";
 import { SignInFormData } from "@/components/auth/SignInForm";
 
 const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [showResetThankYou, setShowResetThankYou] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
   const [isResetting, setIsResetting] = useState(false);
   const [firstName, setFirstName] = useState("");
@@ -102,8 +104,8 @@ const SignIn = () => {
       });
       if (error) throw error;
       
-      toast.success("Password reset instructions sent to your email");
       setShowForgotPassword(false);
+      setShowResetThankYou(true);
     } catch (error: any) {
       console.error("Reset password error:", error);
       toast.error(error.message || "Failed to send reset instructions");
@@ -119,10 +121,10 @@ const SignIn = () => {
         <div className="max-w-md w-full">
           <div className={`space-y-2 ${isMobile ? 'text-left' : 'text-center'} mb-6`}>
             <h1 className="text-2xl md:text-3xl font-extrabold">
-              {firstName ? `Welcome ${firstName}!` : "Welcome Back!"}
+              {firstName ? `Willkommen ${firstName}!` : "Willkommen zurück!"}
             </h1>
             <p className="text-[14px] text-muted-foreground">
-              Please sign in to continue
+              Bitte melden Sie sich an, um fortzufahren
             </p>
           </div>
 
@@ -152,6 +154,11 @@ const SignIn = () => {
         email={resetEmail}
         onEmailChange={setResetEmail}
         isResetting={isResetting}
+      />
+      <ResetPasswordThankYouDialog
+        open={showResetThankYou}
+        onOpenChange={setShowResetThankYou}
+        userEmail={resetEmail}
       />
     </div>
   );

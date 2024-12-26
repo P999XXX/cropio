@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -20,16 +20,16 @@ import { useIsMobile } from "@/hooks/use-mobile";
 
 const passwordSchema = z
   .string()
-  .min(8, "Password must be at least 8 characters")
-  .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-  .regex(/[a-z]/, "Password must contain at least one lowercase letter")
-  .regex(/[0-9]/, "Password must contain at least one number");
+  .min(8, "Passwort muss mindestens 8 Zeichen lang sein")
+  .regex(/[A-Z]/, "Passwort muss mindestens einen Großbuchstaben enthalten")
+  .regex(/[a-z]/, "Passwort muss mindestens einen Kleinbuchstaben enthalten")
+  .regex(/[0-9]/, "Passwort muss mindestens eine Zahl enthalten");
 
 const resetPasswordSchema = z.object({
   password: passwordSchema,
   confirmPassword: z.string(),
 }).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
+  message: "Passwörter stimmen nicht überein",
   path: ["confirmPassword"],
 });
 
@@ -40,6 +40,7 @@ const ResetPassword = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const isMobile = useIsMobile();
+  const [firstName, setFirstName] = useState("");
 
   const form = useForm<ResetPasswordFormData>({
     resolver: zodResolver(resetPasswordSchema),
@@ -48,6 +49,25 @@ const ResetPassword = () => {
       confirmPassword: "",
     },
   });
+
+  useEffect(() => {
+    const getFirstName = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('first_name')
+          .eq('id', session.user.id)
+          .single();
+        
+        if (profile?.first_name) {
+          setFirstName(profile.first_name);
+        }
+      }
+    };
+    
+    getFirstName();
+  }, []);
 
   const onSubmit = async (values: ResetPasswordFormData) => {
     setIsLoading(true);
@@ -58,11 +78,11 @@ const ResetPassword = () => {
 
       if (error) throw error;
 
-      toast.success("Password updated successfully!");
+      toast.success("Passwort wurde erfolgreich aktualisiert!");
       navigate("/signin");
     } catch (error: any) {
       console.error("Reset password error:", error);
-      toast.error(error.message || "Failed to reset password");
+      toast.error(error.message || "Fehler beim Zurücksetzen des Passworts");
     } finally {
       setIsLoading(false);
     }
@@ -74,15 +94,17 @@ const ResetPassword = () => {
       <div className={`container mx-auto px-4 ${isMobile ? 'pt-12' : 'pt-20'} flex items-${isMobile ? 'start' : 'center'} justify-center min-h-[calc(100vh-64px)]`}>
         <div className={`max-w-md w-full ${isMobile ? 'mt-8' : 'my-8'}`}>
           <div className={`space-y-2 ${isMobile ? 'text-left' : 'text-center'} mb-6`}>
-            <h1 className="text-2xl md:text-3xl font-bold">Reset Password</h1>
-            <p className="text-muted-foreground">Create a new password for your account</p>
+            <h1 className="text-2xl md:text-3xl font-bold">
+              {firstName ? `Hallo ${firstName}!` : "Passwort zurücksetzen"}
+            </h1>
+            <p className="text-muted-foreground">Erstellen Sie ein neues Passwort für Ihr Konto</p>
           </div>
 
           <div className="md:block hidden">
             <Card>
               <CardHeader className="pb-2">
                 <CardDescription>
-                  Please enter your new password below
+                  Bitte geben Sie Ihr neues Passwort ein
                 </CardDescription>
               </CardHeader>
               <CardContent className="pt-2">
@@ -91,27 +113,27 @@ const ResetPassword = () => {
                     <PasswordInput
                       form={form}
                       name="password"
-                      label="New Password"
-                      description="Password must contain at least 8 characters, including uppercase, lowercase, and numbers"
+                      label="Neues Passwort"
+                      description="Passwort muss mindestens 8 Zeichen lang sein und Groß-, Kleinbuchstaben sowie Zahlen enthalten"
                     />
 
                     <PasswordInput
                       form={form}
                       name="confirmPassword"
-                      label="Confirm New Password"
+                      label="Passwort bestätigen"
                     />
 
                     <Button type="submit" className="w-full" disabled={isLoading}>
-                      {isLoading ? "Updating password..." : "Update Password"}
+                      {isLoading ? "Passwort wird aktualisiert..." : "Passwort aktualisieren"}
                     </Button>
                   </form>
                 </Form>
               </CardContent>
               <CardFooter>
                 <div className="text-sm text-center w-full text-muted-foreground">
-                  Remember your password?{" "}
+                  Passwort bereits bekannt?{" "}
                   <a href="/signin" className="text-primary hover:underline font-medium">
-                    Sign in
+                    Anmelden
                   </a>
                 </div>
               </CardFooter>
@@ -124,25 +146,25 @@ const ResetPassword = () => {
                 <PasswordInput
                   form={form}
                   name="password"
-                  label="New Password"
-                  description="Password must contain at least 8 characters, including uppercase, lowercase, and numbers"
+                  label="Neues Passwort"
+                  description="Passwort muss mindestens 8 Zeichen lang sein und Groß-, Kleinbuchstaben sowie Zahlen enthalten"
                 />
 
                 <PasswordInput
                   form={form}
                   name="confirmPassword"
-                  label="Confirm New Password"
+                  label="Passwort bestätigen"
                 />
 
                 <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? "Updating password..." : "Update Password"}
+                  {isLoading ? "Passwort wird aktualisiert..." : "Passwort aktualisieren"}
                 </Button>
               </form>
             </Form>
             <div className="text-sm text-center text-muted-foreground">
-              Remember your password?{" "}
+              Passwort bereits bekannt?{" "}
               <a href="/signin" className="text-primary hover:underline font-medium">
-                Sign in
+                Anmelden
               </a>
             </div>
           </div>
