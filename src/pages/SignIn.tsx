@@ -92,7 +92,7 @@ const SignIn = () => {
       <div className={`container mx-auto px-4 ${isMobile ? 'pt-8' : 'pt-16'} flex items-${isMobile ? 'start' : 'center'} justify-center min-h-[calc(100vh-64px)]`}>
         <div className={`max-w-md w-full space-y-6 ${isMobile ? 'mt-16' : 'my-8'}`}>
           <div className={`space-y-2 ${isMobile ? 'text-left' : 'text-center'}`}>
-            <h1 className="text-3xl font-bold">Welcome back!</h1>
+            <h1 className="text-2xl md:text-3xl font-bold">Welcome back!</h1>
             <p className="text-muted-foreground">Sign in to your account</p>
           </div>
 
