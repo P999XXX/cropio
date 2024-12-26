@@ -24,9 +24,9 @@ const SignIn = () => {
     // Check URL for error message
     const url = new URL(window.location.href);
     const searchParams = new URLSearchParams(url.search);
-    const error = searchParams.get('error');
+    const error = decodeURIComponent(searchParams.get('error') || '');
     
-    if (error === 'Email+link+is+invalid+or+has+expired') {
+    if (error === 'Email link is invalid or has expired') {
       toast.error("Your password reset link has expired. Please request a new one.");
     }
 
