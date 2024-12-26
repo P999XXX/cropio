@@ -4,12 +4,12 @@ import {
   FormItem,
 } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
-import { UseFormReturn } from "react-hook-form";
+import { UseFormReturn, Path } from "react-hook-form";
 import FormErrorMessage from "@/components/forms/FormErrorMessage";
 
 interface AgreementCheckboxProps<T> {
   form: UseFormReturn<T>;
-  name: keyof T & string;
+  name: Path<T>;
   linkText: string;
   linkHref: string;
 }

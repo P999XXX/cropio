@@ -8,12 +8,12 @@ import {
   FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { UseFormReturn } from "react-hook-form";
+import { UseFormReturn, Path } from "react-hook-form";
 import FormErrorMessage from "@/components/forms/FormErrorMessage";
 
 interface PasswordInputProps<T> {
   form: UseFormReturn<T>;
-  name: keyof T & string;
+  name: Path<T>;
   label: string;
   description?: string;
   className?: string;
@@ -41,7 +41,7 @@ const PasswordInput = <T extends Record<string, any>>({
           <FormControl>
             <div className="relative">
               <Input
-                placeholder={`${name === "password" ? "Enter" : "Confirm"} your password`}
+                placeholder={`${String(name) === "password" ? "Enter" : "Confirm"} your password`}
                 type={showPassword ? "text" : "password"}
                 className={className}
                 {...field}
