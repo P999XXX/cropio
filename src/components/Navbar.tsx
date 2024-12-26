@@ -63,7 +63,10 @@ const Navbar = () => {
             {isDashboard && (
               <SidebarTrigger className="block md:hidden" />
             )}
-            <Link to="/" className={`flex-shrink-0 ${isDashboard && sidebarState === 'expanded' ? 'md:hidden' : ''}`}>
+            <Link 
+              to="/" 
+              className={`flex-shrink-0 ${isDashboard && sidebarState === 'expanded' ? 'md:hidden' : ''}`}
+            >
               <span className="text-2xl font-geologica font-extrabold">
                 cropio<span className="text-primary">.app</span>
               </span>
