@@ -17,15 +17,44 @@ import { UseFormReturn } from "react-hook-form";
 import { StepTwoFormData } from "./StepTwoForm";
 import { countries } from "./phone/countries";
 import CountryDisplay from "./phone/CountryDisplay";
+import { useEffect, useState } from "react";
+import { parsePhoneNumberFromString, AsYouType } from 'libphonenumber-js';
 
 interface PhoneInputProps {
   form: UseFormReturn<StepTwoFormData>;
 }
 
 const PhoneInput = ({ form }: PhoneInputProps) => {
+  const [userCountry, setUserCountry] = useState<string>("DE");
+
+  useEffect(() => {
+    // Fetch user's country from IP
+    fetch('https://ipapi.co/json/')
+      .then(response => response.json())
+      .then(data => {
+        const countryCode = data.country;
+        const country = countries.find(c => c.country === countryCode);
+        if (country) {
+          form.setValue('countryCode', country.value);
+          setUserCountry(countryCode);
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching country:', error);
+      });
+  }, []);
+
   const selectedCountry = countries.find(
     (country) => country.value === form.watch("countryCode")
   );
+
+  const handlePhoneNumberChange = (value: string) => {
+    if (selectedCountry) {
+      const formatter = new AsYouType(selectedCountry.country);
+      const formattedNumber = formatter.input(value);
+      form.setValue('phoneNumber', formattedNumber);
+    }
+  };
 
   return (
     <div className="space-y-2">
@@ -36,7 +65,18 @@ const PhoneInput = ({ form }: PhoneInputProps) => {
           name="countryCode"
           render={({ field }) => (
             <FormItem className="w-[110px] shrink-0">
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select 
+                onValueChange={(value) => {
+                  field.onChange(value);
+                  const country = countries.find(c => c.value === value);
+                  if (country) {
+                    setUserCountry(country.country);
+                    // Clear phone number when country changes
+                    form.setValue('phoneNumber', '');
+                  }
+                }} 
+                value={field.value}
+              >
                 <FormControl>
                   <SelectTrigger className="h-10">
                     <SelectValue>
@@ -49,7 +89,7 @@ const PhoneInput = ({ form }: PhoneInputProps) => {
                     </SelectValue>
                   </SelectTrigger>
                 </FormControl>
-                <SelectContent className="bg-white dark:bg-gray-800 min-w-[200px]">
+                <SelectContent className="bg-background min-w-[200px]">
                   {countries.map((country) => (
                     <SelectItem key={country.value} value={country.value}>
                       <CountryDisplay country={country} />
@@ -57,7 +97,7 @@ const PhoneInput = ({ form }: PhoneInputProps) => {
                   ))}
                 </SelectContent>
               </Select>
-              <FormMessage className="text-xs text-red-500" />
+              <FormMessage className="text-xs text-destructive" />
             </FormItem>
           )}
         />
@@ -67,9 +107,14 @@ const PhoneInput = ({ form }: PhoneInputProps) => {
           render={({ field }) => (
             <FormItem className="flex-1">
               <FormControl>
-                <Input placeholder="Enter phone number" type="tel" {...field} />
+                <Input 
+                  placeholder="Enter phone number" 
+                  type="tel"
+                  {...field}
+                  onChange={(e) => handlePhoneNumberChange(e.target.value)}
+                />
               </FormControl>
-              <FormMessage className="text-xs text-red-500" />
+              <FormMessage className="text-xs text-destructive" />
             </FormItem>
           )}
         />

@@ -23,12 +23,12 @@ const passwordSchema = z
   .regex(/[0-9]/, "Password must contain at least one number");
 
 const stepTwoSchema = z.object({
-  firstName: z.string().min(2, "First name must be at least 2 characters"),
-  lastName: z.string().min(2, "Last name must be at least 2 characters"),
+  firstName: z.string().min(3, "First name must be at least 3 characters"),
+  lastName: z.string().min(3, "Last name must be at least 3 characters"),
   email: z.string().email("Invalid email address"),
   password: passwordSchema,
   confirmPassword: z.string(),
-  companyName: z.string().min(2, "Company name must be at least 2 characters"),
+  companyName: z.string().min(5, "Company name must be at least 5 characters"),
   countryCode: z.string(),
   phoneNumber: z.string().min(6, "Phone number must be at least 6 digits"),
   acceptTerms: z.boolean().refine((val) => val === true, {
@@ -78,7 +78,7 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
               <FormControl>
                 <Input placeholder="Enter company name" {...field} />
               </FormControl>
-              <FormMessage className="text-xs text-red-500" />
+              <FormMessage className="text-xs text-destructive" />
             </FormItem>
           )}
         />
@@ -93,7 +93,7 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
                 <FormControl>
                   <Input placeholder="Enter first name" {...field} />
                 </FormControl>
-                <FormMessage className="text-xs text-red-500" />
+                <FormMessage className="text-xs text-destructive" />
               </FormItem>
             )}
           />
@@ -107,7 +107,7 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
                 <FormControl>
                   <Input placeholder="Enter last name" {...field} />
                 </FormControl>
-                <FormMessage className="text-xs text-red-500" />
+                <FormMessage className="text-xs text-destructive" />
               </FormItem>
             )}
           />
@@ -124,7 +124,7 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
               <FormControl>
                 <Input placeholder="Enter your email" type="email" {...field} />
               </FormControl>
-              <FormMessage className="text-xs text-red-500" />
+              <FormMessage className="text-xs text-destructive" />
             </FormItem>
           )}
         />
