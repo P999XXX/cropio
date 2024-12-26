@@ -18,9 +18,12 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        geologica: ['Geologica', 'sans-serif'],
+        inter: ['Inter', 'sans-serif'],
+      },
       fontSize: {
-        // Reducing base font size by 1px
-        base: ['15px', '24px'], // Default was 16px
+        base: ['15px', '24px'],
       },
       colors: {
         border: "hsl(var(--border))",
