@@ -53,7 +53,7 @@ const DashboardSidebar = () => {
       collapsible="icon"
       className="sticky top-16 h-[calc(100vh-4rem)] shadow-[0_2px_8px_0_rgba(0,0,0,0.05)] border-r border-border"
     >
-      <SidebarHeader className="flex items-center justify-start px-4 py-2">
+      <SidebarHeader className="flex items-center justify-start px-4 py-1">
         <SidebarTrigger 
           icon={isExpanded ? MoreHorizontal : MoreVertical} 
           className="h-7 w-7" 
@@ -79,7 +79,7 @@ const DashboardSidebar = () => {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter>
+      <SidebarFooter className="mt-auto">
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
