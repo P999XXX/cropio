@@ -8,7 +8,6 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import PasswordInput from "@/components/auth/PasswordInput";
 import { Button } from "@/components/ui/button";
@@ -73,21 +72,20 @@ const ResetPassword = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
       <div className={`container mx-auto px-4 ${isMobile ? 'pt-8' : 'pt-16'} flex items-${isMobile ? 'start' : 'center'} justify-center min-h-[calc(100vh-64px)]`}>
-        <div className={`max-w-md w-full space-y-6 ${isMobile ? 'mt-16' : 'my-8'}`}>
-          <div className={`space-y-2 ${isMobile ? 'text-left' : 'text-center'}`}>
+        <div className={`max-w-md w-full ${isMobile ? 'mt-8' : 'my-8'}`}>
+          <div className={`space-y-2 ${isMobile ? 'text-left' : 'text-center'} mb-6`}>
             <h1 className="text-2xl md:text-3xl font-bold">Reset Password</h1>
             <p className="text-muted-foreground">Create a new password for your account</p>
           </div>
 
           <div className="md:block hidden">
             <Card>
-              <CardHeader className="space-y-1">
-                <CardTitle className="text-2xl">New Password</CardTitle>
+              <CardHeader className="pb-2">
                 <CardDescription>
                   Please enter your new password below
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="pt-2">
                 <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                     <PasswordInput
@@ -120,13 +118,7 @@ const ResetPassword = () => {
             </Card>
           </div>
 
-          <div className="md:hidden block space-y-6">
-            <div className="space-y-1">
-              <h2 className="text-2xl font-semibold">New Password</h2>
-              <p className="text-sm text-muted-foreground">
-                Please enter your new password below
-              </p>
-            </div>
+          <div className="md:hidden block space-y-4">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                 <PasswordInput

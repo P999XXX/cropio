@@ -9,7 +9,6 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { useIsMobile } from "@/hooks/use-mobile";
 import StepOneForm from "@/components/auth/StepOneForm";
@@ -94,7 +93,7 @@ const SignUp = () => {
 
   const FormContent = () => (
     <>
-      <div className={`space-y-2 ${isMobile ? 'text-left' : 'text-center'}`}>
+      <div className={`space-y-2 ${isMobile ? 'text-left' : 'text-center'} mb-6`}>
         <h1 className="text-2xl md:text-3xl font-bold">Register for Free!</h1>
         <p className="text-muted-foreground">
           {currentStep === 1 ? "Choose Your Role" : "Complete Your Profile"}
@@ -102,7 +101,7 @@ const SignUp = () => {
       </div>
 
       {isMobile ? (
-        <div className="mt-8">
+        <div>
           {currentStep === 1 ? (
             <StepOneForm
               onSubmit={handleStepOne}
@@ -121,17 +120,14 @@ const SignUp = () => {
         </div>
       ) : (
         <Card>
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl">
-              {currentStep === 1 ? "Choose Your Role" : ""}
-            </CardTitle>
+          <CardHeader className="pb-2">
             <CardDescription>
               {currentStep === 1
                 ? "Select how you'll use the platform"
                 : "Enter your details to create an account"}
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pt-2">
             {currentStep === 1 ? (
               <StepOneForm
                 onSubmit={handleStepOne}
@@ -158,8 +154,8 @@ const SignUp = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <div className={`container mx-auto px-6 ${isMobile ? 'pt-12' : 'pt-16'} flex items-${isMobile ? 'start' : 'center'} justify-center min-h-[calc(100vh-64px)]`}>
-        <div className={`max-w-md w-full space-y-8 ${isMobile ? 'mt-16' : 'my-8'}`}>
+      <div className={`container mx-auto px-4 ${isMobile ? 'pt-8' : 'pt-16'} flex items-${isMobile ? 'start' : 'center'} justify-center min-h-[calc(100vh-64px)]`}>
+        <div className={`max-w-md w-full ${isMobile ? 'mt-8' : 'my-8'}`}>
           <FormContent />
         </div>
       </div>

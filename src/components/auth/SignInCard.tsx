@@ -1,4 +1,4 @@
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader } from "@/components/ui/card";
 import SignInForm, { SignInFormData } from "./SignInForm";
 import SocialLoginSection from "./SocialLoginSection";
 
@@ -19,12 +19,12 @@ const SignInCard = ({
 }: SignInCardProps) => {
   return (
     <Card>
-      <CardHeader className="space-y-1">
+      <CardHeader className="pb-2">
         <CardDescription className="hidden md:block">
           Enter your email and password to sign in
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-4 pt-2">
         <SignInForm 
           onSubmit={onSubmit} 
           isLoading={isLoading} 

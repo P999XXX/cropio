@@ -17,7 +17,7 @@ const SignInMobile = ({
   onForgotPassword,
 }: SignInMobileProps) => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <SignInForm 
         onSubmit={onSubmit} 
         isLoading={isLoading} 
