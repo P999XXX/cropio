@@ -81,10 +81,12 @@ const SignUp = () => {
             company_name: values.companyName,
             role: selectedRole,
           },
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
         },
       });
 
       if (signUpError) {
+        console.error("Sign up error:", signUpError);
         throw signUpError;
       }
 
@@ -93,6 +95,8 @@ const SignUp = () => {
         setUserEmail(values.email);
         setShowThankYou(true);
         toast.success("Registration successful! Please check your email to confirm your account.");
+      } else {
+        throw new Error("No user data received");
       }
     } catch (error: any) {
       console.error("Sign up error:", error);
