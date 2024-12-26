@@ -12,11 +12,8 @@ import {
 } from "@/components/ui/card";
 import { useIsMobile } from "@/hooks/use-mobile";
 import StepOneForm from "@/components/auth/StepOneForm";
-import StepTwoForm from "@/components/auth/StepTwoForm";
-import StepThreeForm from "@/components/auth/StepThreeForm";
+import StepTwoForm, { StepTwoFormData } from "@/components/auth/StepTwoForm";
 import ThankYouDialog from "@/components/auth/ThankYouDialog";
-import { StepTwoFormData } from "@/components/auth/StepTwoForm";
-import { StepThreeFormData } from "@/components/auth/StepThreeForm";
 
 const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -24,7 +21,6 @@ const SignUp = () => {
   const [selectedRole, setSelectedRole] = useState<"buyer" | "supplier">("buyer");
   const [showThankYou, setShowThankYou] = useState(false);
   const [userEmail, setUserEmail] = useState("");
-  const [stepTwoData, setStepTwoData] = useState<Partial<StepTwoFormData>>({});
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
@@ -34,44 +30,7 @@ const SignUp = () => {
   };
 
   const handleBack = () => {
-    if (currentStep === 3) {
-      setCurrentStep(2);
-    } else {
-      setCurrentStep(1);
-    }
-  };
-
-  const handleStepTwo = async (values: StepTwoFormData) => {
-    setStepTwoData(values);
-    setCurrentStep(3);
-  };
-
-  const handleStepThree = async (values: StepThreeFormData) => {
-    setIsLoading(true);
-    try {
-      const { error } = await supabase.auth.signUp({
-        email: stepTwoData.email!,
-        password: stepTwoData.password!,
-        options: {
-          data: {
-            first_name: stepTwoData.firstName,
-            last_name: stepTwoData.lastName,
-            company_name: stepTwoData.companyName,
-            role: selectedRole,
-          },
-        },
-      });
-
-      if (error) throw error;
-
-      setUserEmail(stepTwoData.email!);
-      setShowThankYou(true);
-    } catch (error: any) {
-      console.error("Sign up error:", error);
-      toast.error(error.message || "Failed to sign up");
-    } finally {
-      setIsLoading(false);
-    }
+    setCurrentStep(1);
   };
 
   const handleGoogleSignUp = async () => {
@@ -108,14 +67,40 @@ const SignUp = () => {
     }
   };
 
+  const handleStepTwo = async (values: StepTwoFormData) => {
+    setIsLoading(true);
+    try {
+      const { error } = await supabase.auth.signUp({
+        email: values.email,
+        password: values.password,
+        options: {
+          data: {
+            first_name: values.firstName,
+            last_name: values.lastName,
+            company_name: values.companyName,
+            role: selectedRole,
+          },
+        },
+      });
+
+      if (error) throw error;
+
+      setUserEmail(values.email);
+      setShowThankYou(true);
+    } catch (error: any) {
+      console.error("Sign up error:", error);
+      toast.error(error.message || "Failed to sign up");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const FormContent = () => (
     <>
       <div className={`space-y-2 ${isMobile ? 'text-left' : 'text-center'} mb-6`}>
         <h1 className="text-2xl md:text-3xl font-bold">Register for Free!</h1>
         <p className="text-muted-foreground">
-          {currentStep === 1 ? "Choose Your Role" : 
-           currentStep === 2 ? "Enter Your Details" : 
-           "Complete Your Profile"}
+          {currentStep === 1 ? "Choose Your Role" : "Complete Your Profile"}
         </p>
       </div>
 
@@ -127,15 +112,9 @@ const SignUp = () => {
               onGoogleSignUp={handleGoogleSignUp}
               onLinkedInSignUp={handleLinkedInSignUp}
             />
-          ) : currentStep === 2 ? (
+          ) : (
             <StepTwoForm 
               onSubmit={handleStepTwo} 
-              isLoading={false}
-              onBack={handleBack}
-            />
-          ) : (
-            <StepThreeForm
-              onSubmit={handleStepThree}
               isLoading={isLoading}
               onBack={handleBack}
             />
@@ -153,9 +132,7 @@ const SignUp = () => {
             <CardDescription>
               {currentStep === 1
                 ? "Select how you'll use the platform"
-                : currentStep === 2
-                ? "Enter your details to create an account"
-                : "Complete your profile information"}
+                : "Enter your details to create an account"}
             </CardDescription>
           </CardHeader>
           <CardContent className="pt-2">
@@ -165,15 +142,9 @@ const SignUp = () => {
                 onGoogleSignUp={handleGoogleSignUp}
                 onLinkedInSignUp={handleLinkedInSignUp}
               />
-            ) : currentStep === 2 ? (
+            ) : (
               <StepTwoForm 
                 onSubmit={handleStepTwo} 
-                isLoading={false}
-                onBack={handleBack}
-              />
-            ) : (
-              <StepThreeForm
-                onSubmit={handleStepThree}
                 isLoading={isLoading}
                 onBack={handleBack}
               />
