@@ -24,9 +24,10 @@ export type SignInFormData = z.infer<typeof signInSchema>;
 interface SignInFormProps {
   onSubmit: (values: SignInFormData) => Promise<void>;
   isLoading: boolean;
+  onForgotPassword: () => void;
 }
 
-const SignInForm = ({ onSubmit, isLoading }: SignInFormProps) => {
+const SignInForm = ({ onSubmit, isLoading, onForgotPassword }: SignInFormProps) => {
   const [showPassword, setShowPassword] = useState(false);
   
   const form = useForm<SignInFormData>({
@@ -84,6 +85,14 @@ const SignInForm = ({ onSubmit, isLoading }: SignInFormProps) => {
             </FormItem>
           )}
         />
+
+        <button
+          type="button"
+          onClick={onForgotPassword}
+          className="text-sm text-primary hover:underline block w-full text-left"
+        >
+          Forgot your password?
+        </button>
 
         <Button type="submit" className="w-full" disabled={isLoading}>
           {isLoading ? "Signing in..." : "Sign in"}

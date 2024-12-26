@@ -26,7 +26,11 @@ const SignInCard = ({
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <SignInForm onSubmit={onSubmit} isLoading={isLoading} />
+        <SignInForm 
+          onSubmit={onSubmit} 
+          isLoading={isLoading} 
+          onForgotPassword={onForgotPassword}
+        />
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
             <span className="w-full border-t" />
@@ -42,13 +46,7 @@ const SignInCard = ({
           onLinkedInSignIn={onLinkedInSignIn}
         />
       </CardContent>
-      <CardFooter className="flex flex-col space-y-4">
-        <button
-          onClick={onForgotPassword}
-          className="text-sm text-primary hover:underline"
-        >
-          Forgot your password?
-        </button>
+      <CardFooter>
         <div className="text-sm text-center w-full text-muted-foreground">
           Don't have an account?{" "}
           <a href="/signup" className="text-primary hover:underline font-medium">

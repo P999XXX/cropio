@@ -24,7 +24,11 @@ const SignInMobile = ({
           Enter your email and password to sign in
         </p>
       </div>
-      <SignInForm onSubmit={onSubmit} isLoading={isLoading} />
+      <SignInForm 
+        onSubmit={onSubmit} 
+        isLoading={isLoading} 
+        onForgotPassword={onForgotPassword}
+      />
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t" />
@@ -39,19 +43,11 @@ const SignInMobile = ({
         onGoogleSignIn={onGoogleSignIn}
         onLinkedInSignIn={onLinkedInSignIn}
       />
-      <div className="space-y-4">
-        <button
-          onClick={onForgotPassword}
-          className="text-sm text-primary hover:underline"
-        >
-          Forgot your password?
-        </button>
-        <div className="text-sm text-center text-muted-foreground">
-          Don't have an account?{" "}
-          <a href="/signup" className="text-primary hover:underline font-medium">
-            Sign up
-          </a>
-        </div>
+      <div className="text-sm text-center text-muted-foreground">
+        Don't have an account?{" "}
+        <a href="/signup" className="text-primary hover:underline font-medium">
+          Sign up
+        </a>
       </div>
     </div>
   );
