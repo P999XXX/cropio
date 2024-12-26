@@ -3,122 +3,17 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { useIsMobile } from "@/hooks/use-mobile";
-import SignInForm, { SignInFormData } from "@/components/auth/SignInForm";
-import AuthProviders from "@/components/auth/AuthProviders";
+import SignInCard from "@/components/auth/SignInCard";
+import SignInMobile from "@/components/auth/SignInMobile";
 import ForgotPasswordDialog from "@/components/auth/ForgotPasswordDialog";
-
-interface SignInCardProps {
-  onSubmit: (values: SignInFormData) => Promise<void>;
-  isLoading: boolean;
-  onForgotPassword: () => void;
-  onGoogleSignIn: () => void;
-  onLinkedInSignIn: () => void;
-}
-
-const SignInCard = ({
-  onSubmit,
-  isLoading,
-  onForgotPassword,
-  onGoogleSignIn,
-  onLinkedInSignIn,
-}: SignInCardProps) => {
-  return (
-    <>
-      <CardContent>
-        <SignInForm
-          onSubmit={onSubmit}
-          isLoading={isLoading}
-          onForgotPassword={onForgotPassword}
-        />
-        <div className="relative my-6">
-          <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t" />
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-muted-foreground">
-              Or continue with
-            </span>
-          </div>
-        </div>
-        <AuthProviders
-          onGoogleSignUp={onGoogleSignIn}
-          onLinkedInSignUp={onLinkedInSignIn}
-          variant="signin"
-        />
-      </CardContent>
-      <CardFooter className="flex flex-col space-y-4">
-        <div className="text-sm text-center w-full text-muted-foreground">
-          Don't have an account?{" "}
-          <a href="/signup" className="text-primary hover:underline font-medium">
-            Sign up
-          </a>
-        </div>
-      </CardFooter>
-    </>
-  );
-};
-
-interface SignInMobileProps extends SignInCardProps {}
-
-const SignInMobile = ({
-  onSubmit,
-  isLoading,
-  onForgotPassword,
-  onGoogleSignIn,
-  onLinkedInSignIn,
-}: SignInMobileProps) => {
-  return (
-    <div className="space-y-6">
-      <div className="space-y-2">
-        <h1 className="text-2xl md:text-3xl font-bold">Welcome Back!</h1>
-        <p className="text-muted-foreground">Sign in to your account</p>
-      </div>
-
-      <SignInForm
-        onSubmit={onSubmit}
-        isLoading={isLoading}
-        onForgotPassword={onForgotPassword}
-      />
-
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">
-            Or continue with
-          </span>
-        </div>
-      </div>
-
-      <AuthProviders
-        onGoogleSignUp={onGoogleSignIn}
-        onLinkedInSignUp={onLinkedInSignIn}
-        variant="signin"
-      />
-
-      <div className="text-sm text-center w-full text-muted-foreground">
-        Don't have an account?{" "}
-        <a href="/signup" className="text-primary hover:underline font-medium">
-          Sign up
-        </a>
-      </div>
-    </div>
-  );
-};
+import { SignInFormData } from "@/components/auth/SignInForm";
 
 const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [resetEmail, setResetEmail] = useState("");
+  const [isResetting, setIsResetting] = useState(false);
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
@@ -179,6 +74,24 @@ const SignIn = () => {
     setShowForgotPassword(true);
   };
 
+  const handleResetPassword = async () => {
+    setIsResetting(true);
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+      if (error) throw error;
+      
+      toast.success("Password reset instructions sent to your email");
+      setShowForgotPassword(false);
+    } catch (error: any) {
+      console.error("Reset password error:", error);
+      toast.error(error.message || "Failed to send reset instructions");
+    } finally {
+      setIsResetting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -188,30 +101,28 @@ const SignIn = () => {
             <SignInMobile
               onSubmit={handleSignIn}
               isLoading={isLoading}
-              onForgotPassword={handleForgotPassword}
               onGoogleSignIn={handleGoogleSignIn}
               onLinkedInSignIn={handleLinkedInSignIn}
+              onForgotPassword={handleForgotPassword}
             />
           ) : (
-            <Card className="md:min-w-[500px]">
-              <CardHeader>
-                <CardTitle>Welcome Back!</CardTitle>
-                <CardDescription>Sign in to your account</CardDescription>
-              </CardHeader>
-              <SignInCard
-                onSubmit={handleSignIn}
-                isLoading={isLoading}
-                onForgotPassword={handleForgotPassword}
-                onGoogleSignIn={handleGoogleSignIn}
-                onLinkedInSignIn={handleLinkedInSignIn}
-              />
-            </Card>
+            <SignInCard
+              onSubmit={handleSignIn}
+              isLoading={isLoading}
+              onGoogleSignIn={handleGoogleSignIn}
+              onLinkedInSignIn={handleLinkedInSignIn}
+              onForgotPassword={handleForgotPassword}
+            />
           )}
         </div>
       </div>
       <ForgotPasswordDialog
         open={showForgotPassword}
         onOpenChange={setShowForgotPassword}
+        onSubmit={handleResetPassword}
+        email={resetEmail}
+        onEmailChange={setResetEmail}
+        isResetting={isResetting}
       />
     </div>
   );
