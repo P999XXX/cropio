@@ -47,7 +47,9 @@ const Navbar = () => {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="flex items-center">
-              <span className="text-2xl font-bold text-primary">cropio</span>
+              <span className="text-2xl font-geologica font-extrabold">
+                cropio<span className="text-primary">.app</span>
+              </span>
             </Link>
           </div>
 
