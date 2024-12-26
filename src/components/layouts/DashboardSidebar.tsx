@@ -75,7 +75,7 @@ const DashboardSidebar = () => {
         </div>
       </SidebarHeader>
       
-      <SidebarContent className="px-2 pt-4">
+      <SidebarContent className="px-2 pt-2">
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
