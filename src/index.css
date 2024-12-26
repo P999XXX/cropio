@@ -86,7 +86,7 @@
   }
 
   h1 {
-    @apply text-xl md:text-2xl font-geologica font-medium;
+    @apply text-2xl md:text-3xl font-geologica font-medium;
   }
 
   h2, h3, h4, h5, h6 {
