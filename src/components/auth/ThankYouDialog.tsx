@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 
 interface ThankYouDialogProps {
   open: boolean;
@@ -34,6 +35,14 @@ const ThankYouDialog = ({ open, onOpenChange, userEmail }: ThankYouDialogProps) 
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="flex flex-col sm:flex-row gap-3 mt-4">
+          <Button
+            variant="outline"
+            onClick={() => navigate(-1)}
+            className="w-full sm:w-auto"
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back
+          </Button>
           <Button
             variant="outline"
             onClick={() => navigate("/signin")}
