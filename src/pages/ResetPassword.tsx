@@ -77,44 +77,81 @@ const ResetPassword = () => {
             <p className="text-muted-foreground">Create a new password for your account</p>
           </div>
 
-          <Card>
-            <CardHeader className="space-y-1">
-              <CardTitle className="text-2xl">New Password</CardTitle>
-              <CardDescription>
+          <div className="md:block hidden">
+            <Card>
+              <CardHeader className="space-y-1">
+                <CardTitle className="text-2xl">New Password</CardTitle>
+                <CardDescription>
+                  Please enter your new password below
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Form {...form}>
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                    <PasswordInput
+                      form={form}
+                      name="password"
+                      label="New Password"
+                      description="Password must contain at least 8 characters, including uppercase, lowercase, and numbers"
+                    />
+
+                    <PasswordInput
+                      form={form}
+                      name="confirmPassword"
+                      label="Confirm New Password"
+                    />
+
+                    <Button type="submit" className="w-full" disabled={isLoading}>
+                      {isLoading ? "Updating password..." : "Update Password"}
+                    </Button>
+                  </form>
+                </Form>
+              </CardContent>
+              <CardFooter>
+                <div className="text-sm text-center w-full text-muted-foreground">
+                  Remember your password?{" "}
+                  <a href="/signin" className="text-primary hover:underline font-medium">
+                    Sign in
+                  </a>
+                </div>
+              </CardFooter>
+            </Card>
+          </div>
+
+          <div className="md:hidden block space-y-6">
+            <div className="space-y-1">
+              <h2 className="text-2xl font-semibold">New Password</h2>
+              <p className="text-sm text-muted-foreground">
                 Please enter your new password below
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                  <PasswordInput
-                    form={form}
-                    name="password"
-                    label="New Password"
-                    description="Password must contain at least 8 characters, including uppercase, lowercase, and numbers"
-                  />
+              </p>
+            </div>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                <PasswordInput
+                  form={form}
+                  name="password"
+                  label="New Password"
+                  description="Password must contain at least 8 characters, including uppercase, lowercase, and numbers"
+                />
 
-                  <PasswordInput
-                    form={form}
-                    name="confirmPassword"
-                    label="Confirm New Password"
-                  />
+                <PasswordInput
+                  form={form}
+                  name="confirmPassword"
+                  label="Confirm New Password"
+                />
 
-                  <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? "Updating password..." : "Update Password"}
-                  </Button>
-                </form>
-              </Form>
-            </CardContent>
-            <CardFooter>
-              <div className="text-sm text-center w-full text-muted-foreground">
-                Remember your password?{" "}
-                <a href="/signin" className="text-primary hover:underline font-medium">
-                  Sign in
-                </a>
-              </div>
-            </CardFooter>
-          </Card>
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading ? "Updating password..." : "Update Password"}
+                </Button>
+              </form>
+            </Form>
+            <div className="text-sm text-center text-muted-foreground">
+              Remember your password?{" "}
+              <a href="/signin" className="text-primary hover:underline font-medium">
+                Sign in
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>

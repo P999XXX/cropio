@@ -1,4 +1,7 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 import {
   Card,
@@ -8,18 +11,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { supabase } from "@/integrations/supabase/client";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import AuthProviders from "@/components/auth/AuthProviders";
 import SignInForm, { SignInFormData } from "@/components/auth/SignInForm";
 import ForgotPasswordDialog from "@/components/auth/ForgotPasswordDialog";
 
 const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [showResetDialog, setShowResetDialog] = useState(false);
-  const [resetEmail, setResetEmail] = useState("");
-  const [isResetting, setIsResetting] = useState(false);
+  const [showForgotPasswordDialog, setShowForgotPasswordDialog] = useState(false);
   const navigate = useNavigate();
 
   const handleSignIn = async (values: SignInFormData) => {
@@ -32,72 +29,13 @@ const SignIn = () => {
 
       if (error) throw error;
 
-      toast.success("Successfully signed in!");
+      toast.success("Signed in successfully!");
       navigate("/");
     } catch (error: any) {
-      console.error("Signin error:", error);
+      console.error("Sign in error:", error);
       toast.error(error.message || "Failed to sign in");
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const handleResetPassword = async () => {
-    if (!resetEmail) {
-      toast.error("Please enter your email address");
-      return;
-    }
-
-    setIsResetting(true);
-    try {
-      const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
-        redirectTo: `${window.location.origin}/reset-password`,
-      });
-
-      if (error) throw error;
-
-      toast.success("Password reset instructions sent to your email");
-      setShowResetDialog(false);
-      setResetEmail("");
-    } catch (error: any) {
-      console.error("Reset password error:", error);
-      toast.error(error.message || "Failed to send reset instructions");
-    } finally {
-      setIsResetting(false);
-    }
-  };
-
-  const handleGoogleSignIn = async () => {
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: `${window.location.origin}/`,
-          queryParams: {
-            access_type: 'offline',
-            prompt: 'consent',
-          },
-        },
-      });
-      if (error) throw error;
-    } catch (error: any) {
-      console.error("Google signin error:", error);
-      toast.error("Failed to sign in with Google");
-    }
-  };
-
-  const handleLinkedInSignIn = async () => {
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "linkedin",
-        options: {
-          redirectTo: `${window.location.origin}/`,
-        },
-      });
-      if (error) throw error;
-    } catch (error: any) {
-      console.error("LinkedIn signin error:", error);
-      toast.error("Failed to sign in with LinkedIn");
     }
   };
 
@@ -111,59 +49,63 @@ const SignIn = () => {
             <p className="text-muted-foreground">Sign in to your account</p>
           </div>
 
-          <Card>
-            <CardHeader className="space-y-1">
-              <CardTitle className="text-2xl">Sign in</CardTitle>
-              <CardDescription>Enter your credentials below to sign in</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <SignInForm onSubmit={handleSignIn} isLoading={isLoading} />
-              
-              <div className="mt-2 text-center">
+          <div className="md:block hidden">
+            <Card>
+              <CardHeader className="space-y-1">
+                <CardTitle className="text-2xl">Sign In</CardTitle>
+                <CardDescription>
+                  Enter your email and password to sign in
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <SignInForm onSubmit={handleSignIn} isLoading={isLoading} />
+              </CardContent>
+              <CardFooter className="flex flex-col space-y-4">
                 <button
-                  onClick={() => setShowResetDialog(true)}
+                  onClick={() => setShowForgotPasswordDialog(true)}
                   className="text-sm text-primary hover:underline"
                 >
                   Forgot your password?
                 </button>
-              </div>
-
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t" />
+                <div className="text-sm text-center w-full text-muted-foreground">
+                  Don't have an account?{" "}
+                  <a href="/signup" className="text-primary hover:underline font-medium">
+                    Sign up
+                  </a>
                 </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-background px-2 text-muted-foreground">
-                    Or continue with
-                  </span>
-                </div>
-              </div>
+              </CardFooter>
+            </Card>
+          </div>
 
-              <AuthProviders 
-                onGoogleSignUp={handleGoogleSignIn}
-                onLinkedInSignUp={handleLinkedInSignIn}
-                variant="signin"
-              />
-            </CardContent>
-            <CardFooter>
-              <div className="text-sm text-center w-full text-muted-foreground">
+          <div className="md:hidden block space-y-6">
+            <div className="space-y-1">
+              <h2 className="text-2xl font-semibold">Sign In</h2>
+              <p className="text-sm text-muted-foreground">
+                Enter your email and password to sign in
+              </p>
+            </div>
+            <SignInForm onSubmit={handleSignIn} isLoading={isLoading} />
+            <div className="space-y-4">
+              <button
+                onClick={() => setShowForgotPasswordDialog(true)}
+                className="text-sm text-primary hover:underline"
+              >
+                Forgot your password?
+              </button>
+              <div className="text-sm text-center text-muted-foreground">
                 Don't have an account?{" "}
                 <a href="/signup" className="text-primary hover:underline font-medium">
                   Sign up
                 </a>
               </div>
-            </CardFooter>
-          </Card>
+            </div>
+          </div>
         </div>
       </div>
 
       <ForgotPasswordDialog
-        open={showResetDialog}
-        onOpenChange={setShowResetDialog}
-        onSubmit={handleResetPassword}
-        email={resetEmail}
-        onEmailChange={setResetEmail}
-        isResetting={isResetting}
+        open={showForgotPasswordDialog}
+        onOpenChange={setShowForgotPasswordDialog}
       />
     </div>
   );

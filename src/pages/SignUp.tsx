@@ -141,16 +141,50 @@ const SignUp = () => {
             <SignUpHeader />
           </div>
 
-          <Card>
-            <CardHeader className="space-y-1">
-              <CardTitle className="text-2xl">Create an Account</CardTitle>
-              <CardDescription>
+          <div className="md:block hidden">
+            <Card>
+              <CardHeader className="space-y-1">
+                <CardTitle className="text-2xl">Create an Account</CardTitle>
+                <CardDescription>
+                  {step === 1
+                    ? "Choose your role to get started"
+                    : "Complete your registration"}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid gap-4">
+                  {step === 1 ? (
+                    <StepOneForm
+                      onSubmit={handleRoleSelect}
+                      onGoogleSignUp={handleGoogleSignUp}
+                      onLinkedInSignUp={handleLinkedInSignUp}
+                    />
+                  ) : (
+                    <StepTwoForm onSubmit={handleSignUp} isLoading={isLoading} />
+                  )}
+                </div>
+              </CardContent>
+              <CardFooter>
+                <div className="text-sm text-center w-full text-muted-foreground">
+                  Already have an account?{" "}
+                  <a href="/signin" className="text-primary hover:underline font-medium">
+                    Sign in
+                  </a>
+                </div>
+              </CardFooter>
+            </Card>
+          </div>
+
+          <div className="md:hidden block space-y-6">
+            <div className="space-y-1">
+              <h2 className="text-2xl font-semibold">Create an Account</h2>
+              <p className="text-sm text-muted-foreground">
                 {step === 1
                   ? "Choose your role to get started"
                   : "Complete your registration"}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
+              </p>
+            </div>
+            <div className="space-y-4">
               <div className="grid gap-4">
                 {step === 1 ? (
                   <StepOneForm
@@ -162,16 +196,14 @@ const SignUp = () => {
                   <StepTwoForm onSubmit={handleSignUp} isLoading={isLoading} />
                 )}
               </div>
-            </CardContent>
-            <CardFooter>
-              <div className="text-sm text-center w-full text-muted-foreground">
-                Already have an account?{" "}
-                <a href="/signin" className="text-primary hover:underline font-medium">
-                  Sign in
-                </a>
-              </div>
-            </CardFooter>
-          </Card>
+            </div>
+            <div className="text-sm text-center text-muted-foreground">
+              Already have an account?{" "}
+              <a href="/signin" className="text-primary hover:underline font-medium">
+                Sign in
+              </a>
+            </div>
+          </div>
         </div>
       </div>
 
