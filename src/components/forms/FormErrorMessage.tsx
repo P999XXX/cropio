@@ -10,7 +10,7 @@ const FormErrorMessage = ({ message }: FormErrorMessageProps) => {
   return (
     <div className="form-error">
       <AlertTriangle className="h-3 w-3" />
-      <span>{message}</span>
+      {message}
     </div>
   );
 };
