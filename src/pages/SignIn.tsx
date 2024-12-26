@@ -3,19 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import SignInForm, { SignInFormData } from "@/components/auth/SignInForm";
-import ForgotPasswordDialog from "@/components/auth/ForgotPasswordDialog";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { Separator } from "@/components/ui/separator";
-import AuthProviders from "@/components/auth/AuthProviders";
+import ForgotPasswordDialog from "@/components/auth/ForgotPasswordDialog";
+import SignInCard from "@/components/auth/SignInCard";
+import SignInMobile from "@/components/auth/SignInMobile";
+import type { SignInFormData } from "@/components/auth/SignInForm";
 
 const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -105,87 +97,23 @@ const SignIn = () => {
           </div>
 
           <div className="md:block hidden">
-            <Card>
-              <CardHeader className="space-y-1">
-                <CardTitle className="text-2xl">Sign In</CardTitle>
-                <CardDescription>
-                  Enter your email and password to sign in
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <AuthProviders
-                  onGoogleSignUp={handleGoogleSignIn}
-                  onLinkedInSignUp={handleLinkedInSignIn}
-                  variant="signin"
-                />
-                <div className="relative">
-                  <div className="absolute inset-0 flex items-center">
-                    <span className="w-full border-t" />
-                  </div>
-                  <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-background px-2 text-muted-foreground">
-                      Or continue with
-                    </span>
-                  </div>
-                </div>
-                <SignInForm onSubmit={handleSignIn} isLoading={isLoading} />
-              </CardContent>
-              <CardFooter className="flex flex-col space-y-4">
-                <button
-                  onClick={() => setShowForgotPasswordDialog(true)}
-                  className="text-sm text-primary hover:underline"
-                >
-                  Forgot your password?
-                </button>
-                <div className="text-sm text-center w-full text-muted-foreground">
-                  Don't have an account?{" "}
-                  <a href="/signup" className="text-primary hover:underline font-medium">
-                    Sign up
-                  </a>
-                </div>
-              </CardFooter>
-            </Card>
+            <SignInCard
+              onSubmit={handleSignIn}
+              isLoading={isLoading}
+              onGoogleSignIn={handleGoogleSignIn}
+              onLinkedInSignIn={handleLinkedInSignIn}
+              onForgotPassword={() => setShowForgotPasswordDialog(true)}
+            />
           </div>
 
-          <div className="md:hidden block space-y-6">
-            <div className="space-y-4">
-              <AuthProviders
-                onGoogleSignUp={handleGoogleSignIn}
-                onLinkedInSignUp={handleLinkedInSignIn}
-                variant="signin"
-              />
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t" />
-                </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-background px-2 text-muted-foreground">
-                    Or continue with
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className="space-y-1">
-              <h2 className="text-2xl font-semibold">Sign In</h2>
-              <p className="text-sm text-muted-foreground">
-                Enter your email and password to sign in
-              </p>
-            </div>
-            <SignInForm onSubmit={handleSignIn} isLoading={isLoading} />
-            <div className="space-y-4">
-              <button
-                onClick={() => setShowForgotPasswordDialog(true)}
-                className="text-sm text-primary hover:underline"
-              >
-                Forgot your password?
-              </button>
-              <div className="text-sm text-center text-muted-foreground">
-                Don't have an account?{" "}
-                <a href="/signup" className="text-primary hover:underline font-medium">
-                  Sign up
-                </a>
-              </div>
-            </div>
+          <div className="md:hidden block">
+            <SignInMobile
+              onSubmit={handleSignIn}
+              isLoading={isLoading}
+              onGoogleSignIn={handleGoogleSignIn}
+              onLinkedInSignIn={handleLinkedInSignIn}
+              onForgotPassword={() => setShowForgotPasswordDialog(true)}
+            />
           </div>
         </div>
       </div>
