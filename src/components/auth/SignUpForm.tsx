@@ -5,12 +5,13 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import FormInput from "@/components/forms/FormInput";
 import PasswordInput from "./PasswordInput";
-import { SignUpFormData } from "@/types/auth";
 
 const signUpSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
+
+export type SignUpFormData = z.infer<typeof signUpSchema>;
 
 interface SignUpFormProps {
   onSubmit: (values: SignUpFormData) => Promise<void>;

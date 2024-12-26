@@ -9,13 +9,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
-import { StepTwoFormData, SignInFormData, SignUpFormData, ResetPasswordFormData } from "@/types/auth";
+import { StepTwoFormData } from "./StepTwoForm";
 import FormErrorMessage from "@/components/forms/FormErrorMessage";
 
-type FormTypes = StepTwoFormData | SignInFormData | SignUpFormData | ResetPasswordFormData;
-
 interface PasswordInputProps {
-  form: UseFormReturn<FormTypes>;
+  form: UseFormReturn<StepTwoFormData>;
   name: "password" | "confirmPassword";
   label: string;
   description?: string;

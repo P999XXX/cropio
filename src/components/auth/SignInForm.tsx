@@ -1,16 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
+import { Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import FormInput from "@/components/forms/FormInput";
 import PasswordInput from "./PasswordInput";
-import { SignInFormData } from "@/types/auth";
 
 const signInSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(1, "Password is required"),
 });
+
+export type SignInFormData = z.infer<typeof signInSchema>;
 
 interface SignInFormProps {
   onSubmit: (values: SignInFormData) => Promise<void>;

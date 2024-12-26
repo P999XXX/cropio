@@ -97,7 +97,7 @@ const SignIn = () => {
       <Navbar />
       <div className="container mx-auto px-4 pt-12 md:pt-20 flex flex-col items-center min-h-[calc(100vh-64px)]">
         <div className="w-full max-w-md mb-8">
-          <div className="space-y-2 text-left md:text-center mb-8">
+          <div className="space-y-2 text-center md:text-left mb-8">
             <h1 className="text-2xl md:text-3xl font-semibold">Sign In</h1>
             <p className="text-sm md:text-base text-muted-foreground">
               Welcome back! Please sign in to continue

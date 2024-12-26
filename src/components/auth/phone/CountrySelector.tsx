@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { UseFormReturn } from "react-hook-form";
-import { StepTwoFormData } from "@/types/auth";
+import { StepTwoFormData } from "../StepTwoForm";
 import { countries } from "./countries";
 import CountryDisplay from "./CountryDisplay";
 import { CountryCode } from 'libphonenumber-js';
