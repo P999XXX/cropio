@@ -19,17 +19,13 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <Link to="/" className="flex items-center gap-2">
-              <div className="relative w-6 h-6">
-                {/* Leaf shape */}
-                <div className="absolute inset-0 bg-primary rounded-tl-full rounded-br-full transform -rotate-45">
-                  {/* Inner vein */}
-                  <div className="absolute top-1/2 left-1/2 h-[1px] w-2/3 bg-background transform -translate-x-1/2 -translate-y-1/2 rotate-45"></div>
-                </div>
-                {/* Small circle representing a seed or dewdrop */}
-                <div className="absolute bottom-1 right-1 w-1.5 h-1.5 bg-background rounded-full"></div>
+            <Link to="/" className="flex items-center gap-3">
+              <div className="relative w-8 h-8">
+                <div className="absolute inset-0 bg-primary rounded-lg transform rotate-45"></div>
+                <div className="absolute inset-[3px] bg-background rounded-[12px] transform rotate-45"></div>
+                <div className="absolute inset-[6px] bg-primary rounded-sm transform rotate-45"></div>
               </div>
-              <span className="text-lg font-geologica font-semibold">
+              <span className="text-2xl font-geologica font-extrabold">
                 cropio<span className="text-primary">.app</span>
               </span>
             </Link>
