@@ -95,7 +95,7 @@ const SignUp = () => {
   const FormContent = () => (
     <>
       <div className="text-left space-y-2">
-        <h1 className="text-3xl font-bold">Register for Free !</h1>
+        <h1 className="text-3xl font-bold">Register for Free!</h1>
         <p className="text-muted-foreground">
           {currentStep === 1 ? "Choose Your Role" : "Complete Your Profile"}
         </p>
@@ -123,7 +123,7 @@ const SignUp = () => {
         <Card>
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl">
-              {currentStep === 1 ? "Choose Your Role" : "Complete Your Profile"}
+              {currentStep === 1 ? "Choose Your Role" : ""}
             </CardTitle>
             <CardDescription>
               {currentStep === 1
