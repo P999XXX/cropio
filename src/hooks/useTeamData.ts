@@ -57,8 +57,7 @@ export const useTeamData = () => {
           profile:profiles(
             id,
             first_name,
-            last_name,
-            email
+            last_name
           )
         `)
         .eq('team_id', membershipData.team_id);
