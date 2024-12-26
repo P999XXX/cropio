@@ -13,6 +13,7 @@ export type Database = {
         Row: {
           company_name: string
           created_at: string
+          email: string
           first_name: string | null
           id: string
           last_name: string | null
@@ -22,6 +23,7 @@ export type Database = {
         Insert: {
           company_name: string
           created_at?: string
+          email: string
           first_name?: string | null
           id: string
           last_name?: string | null
@@ -31,6 +33,7 @@ export type Database = {
         Update: {
           company_name?: string
           created_at?: string
+          email?: string
           first_name?: string | null
           id?: string
           last_name?: string | null
