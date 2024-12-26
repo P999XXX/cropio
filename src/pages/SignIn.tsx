@@ -95,11 +95,11 @@ const SignIn = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <div className="container mx-auto px-4 pt-20 flex flex-col items-center min-h-[calc(100vh-64px)]">
-        <div className="w-full max-w-md mb-8">
-          <div className="space-y-2 text-center mb-6">
-            <h1 className="font-semibold">Sign In</h1>
-            <p className="text-muted-foreground">
+      <div className="container mx-auto px-4 pt-12 flex items-start justify-center min-h-[calc(100vh-64px)]">
+        <div className="max-w-md w-full mt-8">
+          <div className="space-y-2 text-center md:text-left mb-6">
+            <h1 className="text-2xl md:text-3xl font-extrabold">Sign In</h1>
+            <p className="text-sm md:text-base text-muted-foreground">
               Welcome back! Please sign in to continue
             </p>
           </div>
