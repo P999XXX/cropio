@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, Sun, Moon } from "lucide-react";
+import { Menu, X, Sun, Moon, Users } from "lucide-react";
 import { Toggle } from "@/components/ui/toggle";
 import LanguageSwitcher from "./LanguageSwitcher";
 
@@ -38,6 +38,7 @@ const Navbar = () => {
     { name: "Functions", path: "/functions" },
     { name: "Buyers", path: "/buyers" },
     { name: "Suppliers", path: "/suppliers" },
+    { name: "Team", path: "/team", icon: Users },
     { name: "FAQ", path: "/faq" },
   ];
 
