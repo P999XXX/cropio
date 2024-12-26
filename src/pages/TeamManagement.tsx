@@ -44,7 +44,7 @@ const TeamManagement = () => {
       setIsLoading(true);
       console.log('Fetching team data for user:', userId);
       
-      // First, try to get the team where the user is a member
+      // First, get the user's team membership
       const { data: membershipData, error: membershipError } = await supabase
         .from('team_members')
         .select(`
@@ -54,8 +54,6 @@ const TeamManagement = () => {
         `)
         .eq('user_id', userId)
         .maybeSingle();
-
-      console.log("Team membership data:", { membershipData, membershipError });
 
       if (membershipError) {
         console.error('Error fetching team membership:', membershipError);
@@ -69,10 +67,11 @@ const TeamManagement = () => {
         return;
       }
 
+      setUserTeam(membershipData.team);
       const teamId = membershipData.team_id;
       console.log('Found team ID:', teamId);
 
-      // Fetch team members with their profiles
+      // Then fetch all team members with their profiles
       const { data: members, error: membersError } = await supabase
         .from('team_members')
         .select(`
@@ -95,7 +94,6 @@ const TeamManagement = () => {
 
       console.log('Team members loaded:', members);
       setTeamMembers(members || []);
-      setUserTeam(membershipData.team);
     } catch (error: any) {
       console.error('Error in fetchTeamData:', error);
       toast.error('An error occurred while loading team data');
