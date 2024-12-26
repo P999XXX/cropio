@@ -60,10 +60,15 @@ const DashboardSidebar = () => {
             className={`h-8 w-8 flex items-center justify-center bg-muted hover:bg-muted/80 text-muted-foreground hover:text-muted-foreground ${isExpanded ? 'hidden' : ''}`}
           />
           {isExpanded && (
-            <SidebarTrigger 
-              icon={X}
-              className="h-8 w-8 flex items-center justify-center bg-muted hover:bg-muted/80 text-muted-foreground hover:text-muted-foreground ml-auto"
-            />
+            <div className="flex items-center justify-between w-full">
+              <span className="text-lg font-geologica font-extrabold">
+                cropio<span className="text-primary">.app</span>
+              </span>
+              <SidebarTrigger 
+                icon={X}
+                className="h-8 w-8 flex items-center justify-center bg-muted hover:bg-muted/80 text-muted-foreground hover:text-muted-foreground"
+              />
+            </div>
           )}
         </div>
       </SidebarHeader>
