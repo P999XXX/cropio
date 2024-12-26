@@ -92,7 +92,7 @@
   }
 
   .form-label {
-    @apply text-foreground;
+    @apply text-foreground !important;
   }
 
   .form-error {
