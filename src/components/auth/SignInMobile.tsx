@@ -18,12 +18,6 @@ const SignInMobile = ({
 }: SignInMobileProps) => {
   return (
     <div className="space-y-6">
-      <div className="space-y-1">
-        <h2 className="text-2xl font-semibold">Sign In</h2>
-        <p className="text-sm text-muted-foreground">
-          Enter your email and password to sign in
-        </p>
-      </div>
       <SignInForm 
         onSubmit={onSubmit} 
         isLoading={isLoading} 
