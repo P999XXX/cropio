@@ -33,6 +33,12 @@ const TeamManagement = () => {
     try {
       setIsLoading(true);
       
+      // Get current user's session
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        throw new Error("No authenticated session");
+      }
+
       // Fetch user's team
       const { data: teamData, error: teamError } = await supabase
         .from('teams')
@@ -74,12 +80,19 @@ const TeamManagement = () => {
 
   const handleInviteMember = async (email: string, role: 'admin' | 'member') => {
     try {
+      // Get current user's session
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        throw new Error("No authenticated session");
+      }
+
       const { error } = await supabase
         .from('team_invites')
         .insert({
           team_id: userTeam.id,
           email,
           role,
+          invited_by: session.user.id // Add the invited_by field with current user's ID
         });
 
       if (error) throw error;
