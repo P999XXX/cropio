@@ -72,7 +72,7 @@ const DashboardSidebar = () => {
                     className="hover:bg-muted group-data-[collapsible=icon]:px-2 group-data-[collapsible=icon]:justify-center"
                   >
                     <Link to={item.path} className="flex items-center gap-3">
-                      <item.icon className="h-4 w-4" />
+                      <item.icon className="h-4 w-4 transition-opacity duration-200 ease-in-out opacity-0 animate-fade-in" />
                       <span className="font-medium">{item.label}</span>
                     </Link>
                   </SidebarMenuButton>
@@ -95,7 +95,7 @@ const DashboardSidebar = () => {
                     className="hover:bg-muted group-data-[collapsible=icon]:px-2 group-data-[collapsible=icon]:justify-center"
                   >
                     <Link to={item.path} className="flex items-center gap-3">
-                      <item.icon className="h-4 w-4" />
+                      <item.icon className="h-4 w-4 transition-opacity duration-200 ease-in-out opacity-0 animate-fade-in" />
                       <span className="font-medium">{item.label}</span>
                     </Link>
                   </SidebarMenuButton>
