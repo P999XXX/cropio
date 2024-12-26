@@ -86,17 +86,17 @@ const SignInForm = ({ onSubmit, isLoading, onForgotPassword }: SignInFormProps) 
           )}
         />
 
-        <button
-          type="button"
-          onClick={onForgotPassword}
-          className="text-sm text-primary hover:underline block w-full text-left"
-        >
-          Forgot your password?
-        </button>
-
         <Button type="submit" className="w-full" disabled={isLoading}>
           {isLoading ? "Signing in..." : "Sign in"}
         </Button>
+
+        <button
+          type="button"
+          onClick={onForgotPassword}
+          className="text-sm text-primary hover:underline block w-full text-center"
+        >
+          Forgot your password?
+        </button>
       </form>
     </Form>
   );
