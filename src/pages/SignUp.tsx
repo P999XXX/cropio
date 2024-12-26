@@ -127,7 +127,7 @@ const SignUp = () => {
           </div>
         </div>
       ) : (
-        <Card>
+        <Card className="md:min-w-[500px]">
           <CardHeader className="pb-2">
             <CardDescription>
               {currentStep === 1

@@ -3,17 +3,122 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { useIsMobile } from "@/hooks/use-mobile";
+import SignInForm, { SignInFormData } from "@/components/auth/SignInForm";
+import AuthProviders from "@/components/auth/AuthProviders";
 import ForgotPasswordDialog from "@/components/auth/ForgotPasswordDialog";
-import SignInCard from "@/components/auth/SignInCard";
-import SignInMobile from "@/components/auth/SignInMobile";
-import type { SignInFormData } from "@/components/auth/SignInForm";
+
+interface SignInCardProps {
+  onSubmit: (values: SignInFormData) => Promise<void>;
+  isLoading: boolean;
+  onForgotPassword: () => void;
+  onGoogleSignIn: () => void;
+  onLinkedInSignIn: () => void;
+}
+
+const SignInCard = ({
+  onSubmit,
+  isLoading,
+  onForgotPassword,
+  onGoogleSignIn,
+  onLinkedInSignIn,
+}: SignInCardProps) => {
+  return (
+    <>
+      <CardContent>
+        <SignInForm
+          onSubmit={onSubmit}
+          isLoading={isLoading}
+          onForgotPassword={onForgotPassword}
+        />
+        <div className="relative my-6">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-background px-2 text-muted-foreground">
+              Or continue with
+            </span>
+          </div>
+        </div>
+        <AuthProviders
+          onGoogleSignUp={onGoogleSignIn}
+          onLinkedInSignUp={onLinkedInSignIn}
+          variant="signin"
+        />
+      </CardContent>
+      <CardFooter className="flex flex-col space-y-4">
+        <div className="text-sm text-center w-full text-muted-foreground">
+          Don't have an account?{" "}
+          <a href="/signup" className="text-primary hover:underline font-medium">
+            Sign up
+          </a>
+        </div>
+      </CardFooter>
+    </>
+  );
+};
+
+interface SignInMobileProps extends SignInCardProps {}
+
+const SignInMobile = ({
+  onSubmit,
+  isLoading,
+  onForgotPassword,
+  onGoogleSignIn,
+  onLinkedInSignIn,
+}: SignInMobileProps) => {
+  return (
+    <div className="space-y-6">
+      <div className="space-y-2">
+        <h1 className="text-2xl md:text-3xl font-bold">Welcome Back!</h1>
+        <p className="text-muted-foreground">Sign in to your account</p>
+      </div>
+
+      <SignInForm
+        onSubmit={onSubmit}
+        isLoading={isLoading}
+        onForgotPassword={onForgotPassword}
+      />
+
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t" />
+        </div>
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-background px-2 text-muted-foreground">
+            Or continue with
+          </span>
+        </div>
+      </div>
+
+      <AuthProviders
+        onGoogleSignUp={onGoogleSignIn}
+        onLinkedInSignUp={onLinkedInSignIn}
+        variant="signin"
+      />
+
+      <div className="text-sm text-center w-full text-muted-foreground">
+        Don't have an account?{" "}
+        <a href="/signup" className="text-primary hover:underline font-medium">
+          Sign up
+        </a>
+      </div>
+    </div>
+  );
+};
 
 const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [showForgotPasswordDialog, setShowForgotPasswordDialog] = useState(false);
-  const [resetEmail, setResetEmail] = useState("");
-  const [isResetting, setIsResetting] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
@@ -27,8 +132,7 @@ const SignIn = () => {
 
       if (error) throw error;
 
-      toast.success("Signed in successfully!");
-      navigate("/");
+      navigate("/dashboard");
     } catch (error: any) {
       console.error("Sign in error:", error);
       toast.error(error.message || "Failed to sign in");
@@ -40,9 +144,13 @@ const SignIn = () => {
   const handleGoogleSignIn = async () => {
     try {
       const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
+        provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/`,
+          queryParams: {
+            access_type: "offline",
+            prompt: "consent",
+          },
+          redirectTo: `${window.location.origin}/auth/callback`,
         },
       });
       if (error) throw error;
@@ -55,9 +163,9 @@ const SignIn = () => {
   const handleLinkedInSignIn = async () => {
     try {
       const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'linkedin',
+        provider: "linkedin",
         options: {
-          redirectTo: `${window.location.origin}/`,
+          redirectTo: `${window.location.origin}/auth/callback`,
         },
       });
       if (error) throw error;
@@ -67,23 +175,8 @@ const SignIn = () => {
     }
   };
 
-  const handleResetPassword = async () => {
-    setIsResetting(true);
-    try {
-      const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
-        redirectTo: `${window.location.origin}/reset-password`,
-      });
-
-      if (error) throw error;
-
-      toast.success("Password reset instructions sent to your email!");
-      setShowForgotPasswordDialog(false);
-    } catch (error: any) {
-      console.error("Reset password error:", error);
-      toast.error(error.message || "Failed to send reset instructions");
-    } finally {
-      setIsResetting(false);
-    }
+  const handleForgotPassword = () => {
+    setShowForgotPassword(true);
   };
 
   return (
@@ -91,40 +184,34 @@ const SignIn = () => {
       <Navbar />
       <div className={`container mx-auto px-4 ${isMobile ? 'pt-12' : 'pt-20'} flex items-${isMobile ? 'start' : 'center'} justify-center min-h-[calc(100vh-64px)]`}>
         <div className={`max-w-md w-full ${isMobile ? 'mt-8' : 'my-8'}`}>
-          <div className={`space-y-2 ${isMobile ? 'text-left' : 'text-center'} mb-6`}>
-            <h1 className="text-2xl md:text-3xl font-bold">Welcome back!</h1>
-            <p className="text-muted-foreground">Sign in to your account</p>
-          </div>
-
-          <div className="md:block hidden">
-            <SignInCard
-              onSubmit={handleSignIn}
-              isLoading={isLoading}
-              onGoogleSignIn={handleGoogleSignIn}
-              onLinkedInSignIn={handleLinkedInSignIn}
-              onForgotPassword={() => setShowForgotPasswordDialog(true)}
-            />
-          </div>
-
-          <div className="md:hidden block">
+          {isMobile ? (
             <SignInMobile
               onSubmit={handleSignIn}
               isLoading={isLoading}
+              onForgotPassword={handleForgotPassword}
               onGoogleSignIn={handleGoogleSignIn}
               onLinkedInSignIn={handleLinkedInSignIn}
-              onForgotPassword={() => setShowForgotPasswordDialog(true)}
             />
-          </div>
+          ) : (
+            <Card className="md:min-w-[500px]">
+              <CardHeader>
+                <CardTitle>Welcome Back!</CardTitle>
+                <CardDescription>Sign in to your account</CardDescription>
+              </CardHeader>
+              <SignInCard
+                onSubmit={handleSignIn}
+                isLoading={isLoading}
+                onForgotPassword={handleForgotPassword}
+                onGoogleSignIn={handleGoogleSignIn}
+                onLinkedInSignIn={handleLinkedInSignIn}
+              />
+            </Card>
+          )}
         </div>
       </div>
-
       <ForgotPasswordDialog
-        open={showForgotPasswordDialog}
-        onOpenChange={setShowForgotPasswordDialog}
-        onSubmit={handleResetPassword}
-        email={resetEmail}
-        onEmailChange={setResetEmail}
-        isResetting={isResetting}
+        open={showForgotPassword}
+        onOpenChange={setShowForgotPassword}
       />
     </div>
   );
