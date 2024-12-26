@@ -65,7 +65,7 @@ const StepOneForm = ({
                     </FormControl>
                     <label
                       htmlFor="buyer"
-                      className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-transparent p-4 hover:border-primary hover:bg-transparent peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary w-full"
+                      className="flex flex-col items-center justify-between rounded-md border-2 border-gray-300 bg-transparent p-4 hover:border-primary hover:bg-transparent peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary w-full"
                     >
                       <ShoppingCart className="mb-3 h-6 w-6" />
                       <span className="text-sm font-medium">Buyer</span>
@@ -81,7 +81,7 @@ const StepOneForm = ({
                     </FormControl>
                     <label
                       htmlFor="supplier"
-                      className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-transparent p-4 hover:border-primary hover:bg-transparent peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary w-full"
+                      className="flex flex-col items-center justify-between rounded-md border-2 border-gray-300 bg-transparent p-4 hover:border-primary hover:bg-transparent peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary w-full"
                     >
                       <Truck className="mb-3 h-6 w-6" />
                       <span className="text-sm font-medium">Supplier</span>
