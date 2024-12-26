@@ -29,16 +29,20 @@ const App = () => {
       // Apply saved theme preference
       if (savedTheme === 'dark') {
         document.documentElement.classList.add('dark');
+        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#1A1F2C');
       } else {
         document.documentElement.classList.remove('dark');
+        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#FFFFFF');
       }
     } else {
       // If no saved preference, use system preference
       if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
         document.documentElement.classList.add('dark');
+        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#1A1F2C');
         localStorage.setItem("theme", "dark");
       } else {
         localStorage.setItem("theme", "light");
+        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#FFFFFF');
       }
     }
 

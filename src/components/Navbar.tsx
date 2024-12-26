@@ -17,8 +17,10 @@ const Navbar = () => {
     const newTheme = isDark ? "light" : "dark";
     if (newTheme === "dark") {
       document.documentElement.classList.add('dark');
+      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#1A1F2C');
     } else {
       document.documentElement.classList.remove('dark');
+      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#FFFFFF');
     }
     localStorage.setItem("theme", newTheme);
     setIsDark(!isDark);
