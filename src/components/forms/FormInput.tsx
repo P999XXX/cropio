@@ -24,7 +24,7 @@ const FormInput = ({ form, name, label, placeholder, type = "text", description 
           <FormControl>
             <Input placeholder={placeholder} type={type} {...field} />
           </FormControl>
-          <FormErrorMessage message={form.formState.errors[name]?.message} />
+          <FormErrorMessage message={form.formState.errors[name]?.message as string} />
         </FormItem>
       )}
     />
