@@ -4,7 +4,6 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -44,24 +43,18 @@ const bottomMenuItems = [
 const DashboardSidebar = () => {
   return (
     <Sidebar>
-      <SidebarHeader className="flex items-center justify-between px-4 py-2">
-        <Link to="/dashboard" className="flex items-center">
-          <span className="text-xl font-geologica font-extrabold">
-            cropio<span className="text-primary">.app</span>
-          </span>
-        </Link>
+      <SidebarHeader className="flex items-center justify-end px-4 py-2">
         <SidebarTrigger />
       </SidebarHeader>
       
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Menu</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {mainMenuItems.map((item) => (
                 <SidebarMenuItem key={item.label}>
                   <SidebarMenuButton asChild tooltip={item.label}>
-                    <Link to={item.path}>
+                    <Link to={item.path} className="flex items-center">
                       <item.icon className="h-4 w-4" />
                       <span>{item.label}</span>
                     </Link>
@@ -80,7 +73,7 @@ const DashboardSidebar = () => {
               {bottomMenuItems.map((item) => (
                 <SidebarMenuItem key={item.label}>
                   <SidebarMenuButton asChild tooltip={item.label}>
-                    <Link to={item.path}>
+                    <Link to={item.path} className="flex items-center">
                       <item.icon className="h-4 w-4" />
                       <span>{item.label}</span>
                     </Link>
