@@ -13,31 +13,34 @@ export const useTeamData = () => {
   const fetchTeamData = async (userId: string) => {
     try {
       setIsLoading(true);
+      console.log("Fetching team data for user:", userId);
       
-      // First, get the user's team membership
-      const { data: membershipData, error: membershipError } = await supabase
+      // First get the user's team membership directly
+      const { data: userMembership, error: membershipError } = await supabase
         .from('team_members')
         .select('team_id, role')
         .eq('user_id', userId)
         .maybeSingle();
 
       if (membershipError) {
-        console.error('Error fetching team membership:', membershipError);
+        console.error('Error fetching user membership:', membershipError);
         toast.error('Error loading team data');
         return;
       }
 
-      if (!membershipData) {
+      if (!userMembership) {
         console.log('No team membership found');
         toast.error('No team found');
         return;
       }
 
+      console.log("User membership found:", userMembership);
+
       // Then fetch the team details
       const { data: teamData, error: teamError } = await supabase
         .from('teams')
         .select('*')
-        .eq('id', membershipData.team_id)
+        .eq('id', userMembership.team_id)
         .maybeSingle();
 
       if (teamError) {
@@ -47,20 +50,21 @@ export const useTeamData = () => {
       }
 
       setUserTeam(teamData);
+      console.log("Team data fetched:", teamData);
 
-      // Finally fetch all team members with their profiles
+      // Finally fetch all team members with their profiles in a single query
       const { data: members, error: membersError } = await supabase
         .from('team_members')
         .select(`
           id,
           role,
-          profile:profiles(
+          profile:profiles!inner(
             id,
             first_name,
             last_name
           )
         `)
-        .eq('team_id', membershipData.team_id);
+        .eq('team_id', userMembership.team_id);
 
       if (membersError) {
         console.error('Error fetching members:', membersError);
@@ -68,6 +72,7 @@ export const useTeamData = () => {
         return;
       }
 
+      console.log("Team members fetched:", members);
       setTeamMembers(members || []);
     } catch (error: any) {
       console.error('Error in fetchTeamData:', error);
