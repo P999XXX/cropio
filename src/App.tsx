@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { LanguageContext } from "@/components/LanguageSwitcher";
 import { supabase } from "@/integrations/supabase/client";
@@ -10,6 +10,7 @@ import Index from "./pages/Index";
 import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
 import ResetPassword from "./pages/ResetPassword";
+import Components from "./pages/Components";
 
 const queryClient = new QueryClient();
 
@@ -94,6 +95,7 @@ const App = () => {
               <Route path="/signup" element={<SignUp />} />
               <Route path="/signin" element={<SignIn />} />
               <Route path="/reset-password" element={<ResetPassword />} />
+              <Route path="/components" element={<Components />} />
             </Routes>
           </BrowserRouter>
         </TooltipProvider>
