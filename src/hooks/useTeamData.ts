@@ -14,13 +14,17 @@ export const useTeamData = () => {
     try {
       setIsLoading(true);
       
-      // First, get the user's team membership
+      // First, get the user's team membership with team data
       const { data: membershipData, error: membershipError } = await supabase
         .from('team_members')
         .select(`
           team_id,
           role,
-          team:teams(*)
+          team:teams(
+            id,
+            name,
+            created_at
+          )
         `)
         .eq('user_id', userId)
         .maybeSingle();
