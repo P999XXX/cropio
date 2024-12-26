@@ -5,7 +5,7 @@ import { ColorsSection } from "@/components/design-system/ColorsSection";
 const Components = () => {
   return (
     <div className="container py-8 space-y-12">
-      <h1 className="text-3xl font-bold">Components</h1>
+      <h1 className="text-2xl font-bold lg:text-3xl">Components</h1>
       <ColorsSection />
       <TypographySection />
       <ButtonsSection />

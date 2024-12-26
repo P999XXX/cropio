@@ -29,7 +29,7 @@ const Index = () => {
       <div className="pt-20 pb-16 sm:pt-24 sm:pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center animate-fade-in">
-            <h1 className="text-3xl tracking-tight font-extrabold text-gray-900 sm:text-4xl md:text-5xl">
+            <h1 className="text-2xl tracking-tight font-extrabold text-gray-900 sm:text-3xl md:text-3xl">
               <span className="block">The Global B2B Marketplace for</span>
               <span className="block text-primary">Agricultural Products</span>
             </h1>

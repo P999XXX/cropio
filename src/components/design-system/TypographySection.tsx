@@ -4,10 +4,10 @@ export const TypographySection = () => {
       <h2 className="text-2xl font-semibold">Typography</h2>
       <div className="space-y-4">
         <div>
-          <h1 className="scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-4xl">
+          <h1 className="scroll-m-20 text-2xl font-extrabold tracking-tight lg:text-3xl">
             Heading 1
           </h1>
-          <p className="text-muted-foreground">Font size: 2.25rem (36px) / Line height: 2.5rem (40px)</p>
+          <p className="text-muted-foreground">Font size: 1.875rem (30px) / Line height: 2.25rem (36px)</p>
         </div>
         <div>
           <h2 className="scroll-m-20 text-2xl font-semibold tracking-tight">
