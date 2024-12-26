@@ -9,7 +9,9 @@ const FormErrorMessage = ({ message }: FormErrorMessageProps) => {
   
   return (
     <div className="form-error">
-      <AlertTriangle className="h-3 w-3" />
+      <div className="bg-warning/20 rounded-full p-0.5">
+        <AlertTriangle className="h-3 w-3 text-foreground" />
+      </div>
       {message}
     </div>
   );
