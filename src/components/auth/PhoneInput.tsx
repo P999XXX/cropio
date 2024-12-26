@@ -1,23 +1,11 @@
-import {
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { FormLabel } from "@/components/ui/form";
 import { UseFormReturn } from "react-hook-form";
 import { StepTwoFormData } from "./StepTwoForm";
 import { countries } from "./phone/countries";
-import CountryDisplay from "./phone/CountryDisplay";
 import { useEffect, useState } from "react";
 import { CountryCode } from 'libphonenumber-js';
 import PhoneNumberInput from "./phone/PhoneNumberInput";
+import CountrySelector from "./phone/CountrySelector";
 
 interface PhoneInputProps {
   form: UseFormReturn<StepTwoFormData>;
@@ -46,57 +34,23 @@ const PhoneInput = ({ form }: PhoneInputProps) => {
     (country) => country.value === form.watch("countryCode")
   );
 
+  const handleCountryChange = (countryCode: CountryCode) => {
+    setUserCountry(countryCode);
+    form.setValue('phoneNumber', '');
+  };
+
   return (
     <div className="space-y-2">
       <FormLabel>Phone Number</FormLabel>
       <div className="flex gap-2">
-        <FormField
-          control={form.control}
-          name="countryCode"
-          render={({ field }) => (
-            <FormItem className="w-[110px] shrink-0">
-              <Select 
-                onValueChange={(value) => {
-                  field.onChange(value);
-                  const country = countries.find(c => c.value === value);
-                  if (country) {
-                    setUserCountry(country.country as CountryCode);
-                    form.setValue('phoneNumber', '');
-                  }
-                }} 
-                value={field.value}
-              >
-                <SelectTrigger className="h-10">
-                  <SelectValue>
-                    {selectedCountry && (
-                      <CountryDisplay 
-                        country={selectedCountry} 
-                        showLabel={false}
-                      />
-                    )}
-                  </SelectValue>
-                </SelectTrigger>
-                <SelectContent className="bg-background min-w-[200px]">
-                  {countries.map((country) => (
-                    <SelectItem key={country.value} value={country.value}>
-                      <CountryDisplay country={country} />
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage className="text-xs text-destructive" />
-            </FormItem>
-          )}
+        <CountrySelector
+          form={form}
+          onCountryChange={handleCountryChange}
+          selectedCountry={selectedCountry}
         />
-        <FormField
-          control={form.control}
-          name="phoneNumber"
-          render={() => (
-            <PhoneNumberInput 
-              form={form}
-              selectedCountry={userCountry}
-            />
-          )}
+        <PhoneNumberInput 
+          form={form}
+          selectedCountry={userCountry}
         />
       </div>
     </div>

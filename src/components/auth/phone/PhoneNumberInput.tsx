@@ -11,13 +11,14 @@ interface PhoneNumberInputProps {
 }
 
 const PhoneNumberInput = ({ form, selectedCountry }: PhoneNumberInputProps) => {
+  const requiredDigits = countryToDigits[selectedCountry] || 10;
+
   const handlePhoneNumberChange = (value: string) => {
     // Remove any non-digit characters
     const digitsOnly = value.replace(/\D/g, '');
-    const maxDigits = countryToDigits[selectedCountry] || 10;
     
     // Limit the input to the maximum number of digits for the selected country
-    const limitedDigits = digitsOnly.slice(0, maxDigits);
+    const limitedDigits = digitsOnly.slice(0, requiredDigits);
     
     const formatter = new AsYouType(selectedCountry);
     const formattedNumber = formatter.input(limitedDigits);
@@ -33,7 +34,6 @@ const PhoneNumberInput = ({ form, selectedCountry }: PhoneNumberInputProps) => {
           {...form.register('phoneNumber', {
             validate: (value) => {
               const digitsOnly = value.replace(/\D/g, '');
-              const requiredDigits = countryToDigits[selectedCountry] || 10;
               return digitsOnly.length === requiredDigits || 
                 `Phone number must be exactly ${requiredDigits} digits for ${selectedCountry}`;
             }
