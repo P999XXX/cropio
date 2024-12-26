@@ -74,7 +74,7 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
           name="companyName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Company Name</FormLabel>
+              <FormLabel className="!text-foreground">Company Name</FormLabel>
               <FormControl>
                 <Input placeholder="Enter company name" {...field} />
               </FormControl>
@@ -89,7 +89,7 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
             name="firstName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>First Name</FormLabel>
+                <FormLabel className="!text-foreground">First Name</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter first name" {...field} />
                 </FormControl>
@@ -103,7 +103,7 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
             name="lastName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Last Name</FormLabel>
+                <FormLabel className="!text-foreground">Last Name</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter last name" {...field} />
                 </FormControl>
@@ -120,7 +120,7 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel className="!text-foreground">Email</FormLabel>
               <FormControl>
                 <Input placeholder="Enter your email" type="email" {...field} />
               </FormControl>
