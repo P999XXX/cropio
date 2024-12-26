@@ -14,6 +14,8 @@ import {
 import SignInForm, { SignInFormData } from "@/components/auth/SignInForm";
 import ForgotPasswordDialog from "@/components/auth/ForgotPasswordDialog";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Separator } from "@/components/ui/separator";
+import AuthProviders from "@/components/auth/AuthProviders";
 
 const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -40,6 +42,36 @@ const SignIn = () => {
       toast.error(error.message || "Failed to sign in");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/`,
+        },
+      });
+      if (error) throw error;
+    } catch (error: any) {
+      console.error("Google sign in error:", error);
+      toast.error(error.message || "Failed to sign in with Google");
+    }
+  };
+
+  const handleLinkedInSignIn = async () => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'linkedin',
+        options: {
+          redirectTo: `${window.location.origin}/`,
+        },
+      });
+      if (error) throw error;
+    } catch (error: any) {
+      console.error("LinkedIn sign in error:", error);
+      toast.error(error.message || "Failed to sign in with LinkedIn");
     }
   };
 
@@ -80,7 +112,22 @@ const SignIn = () => {
                   Enter your email and password to sign in
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="space-y-4">
+                <AuthProviders
+                  onGoogleSignUp={handleGoogleSignIn}
+                  onLinkedInSignUp={handleLinkedInSignIn}
+                  variant="signin"
+                />
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <span className="w-full border-t" />
+                  </div>
+                  <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-background px-2 text-muted-foreground">
+                      Or continue with
+                    </span>
+                  </div>
+                </div>
                 <SignInForm onSubmit={handleSignIn} isLoading={isLoading} />
               </CardContent>
               <CardFooter className="flex flex-col space-y-4">
@@ -101,6 +148,23 @@ const SignIn = () => {
           </div>
 
           <div className="md:hidden block space-y-6">
+            <div className="space-y-4">
+              <AuthProviders
+                onGoogleSignUp={handleGoogleSignIn}
+                onLinkedInSignUp={handleLinkedInSignIn}
+                variant="signin"
+              />
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-background px-2 text-muted-foreground">
+                    Or continue with
+                  </span>
+                </div>
+              </div>
+            </div>
             <div className="space-y-1">
               <h2 className="text-2xl font-semibold">Sign In</h2>
               <p className="text-sm text-muted-foreground">
