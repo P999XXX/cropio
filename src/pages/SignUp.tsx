@@ -15,8 +15,7 @@ import StepOneForm from "@/components/auth/StepOneForm";
 import StepTwoForm from "@/components/auth/StepTwoForm";
 import StepThreeForm from "@/components/auth/StepThreeForm";
 import ThankYouDialog from "@/components/auth/ThankYouDialog";
-import { StepTwoFormData } from "@/components/auth/StepTwoForm";
-import { StepThreeFormData } from "@/components/auth/StepThreeForm";
+import { StepOneFormData, StepTwoFormData, StepThreeFormData } from "@/types/auth";
 
 const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -24,12 +23,18 @@ const SignUp = () => {
   const [selectedRole, setSelectedRole] = useState<"buyer" | "supplier">("buyer");
   const [showThankYou, setShowThankYou] = useState(false);
   const [userEmail, setUserEmail] = useState("");
-  const [stepTwoData, setStepTwoData] = useState<Partial<StepTwoFormData>>({});
+  const [formData, setFormData] = useState<{
+    stepOne?: StepOneFormData;
+    stepTwo?: StepTwoFormData;
+    stepThree?: StepThreeFormData;
+  }>({});
+  
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
-  const handleStepOne = (role: "buyer" | "supplier") => {
-    setSelectedRole(role);
+  const handleStepOne = (data: StepOneFormData) => {
+    setSelectedRole(data.role);
+    setFormData(prev => ({ ...prev, stepOne: data }));
     setCurrentStep(2);
   };
 
@@ -41,8 +46,8 @@ const SignUp = () => {
     }
   };
 
-  const handleStepTwo = async (values: StepTwoFormData) => {
-    setStepTwoData(values);
+  const handleStepTwo = (values: StepTwoFormData) => {
+    setFormData(prev => ({ ...prev, stepTwo: values }));
     setCurrentStep(3);
   };
 
@@ -50,13 +55,13 @@ const SignUp = () => {
     setIsLoading(true);
     try {
       const { error } = await supabase.auth.signUp({
-        email: stepTwoData.email!,
-        password: stepTwoData.password!,
+        email: values.email,
+        password: values.password,
         options: {
           data: {
-            first_name: stepTwoData.firstName,
-            last_name: stepTwoData.lastName,
-            company_name: stepTwoData.companyName,
+            first_name: formData.stepTwo?.firstName,
+            last_name: formData.stepTwo?.lastName,
+            company_name: formData.stepTwo?.companyName,
             role: selectedRole,
           },
         },
@@ -64,7 +69,7 @@ const SignUp = () => {
 
       if (error) throw error;
 
-      setUserEmail(stepTwoData.email!);
+      setUserEmail(values.email);
       setShowThankYou(true);
     } catch (error: any) {
       console.error("Sign up error:", error);
