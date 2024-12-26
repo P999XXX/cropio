@@ -6,6 +6,7 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+import { Progress } from "@/components/ui/progress";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -40,6 +41,11 @@ const StepOneForm = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+        <div className="space-y-2">
+          <Progress value={50} className="h-2" />
+          <p className="text-sm text-muted-foreground text-center">Step 1: Choose your role</p>
+        </div>
+
         <FormField
           control={form.control}
           name="role"
