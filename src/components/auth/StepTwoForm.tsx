@@ -1,19 +1,12 @@
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import PasswordInput from "./PasswordInput";
 import AgreementCheckbox from "./AgreementCheckbox";
 import PhoneInput from "./PhoneInput";
-import FormErrorMessage from "@/components/forms/FormErrorMessage";
+import FormInput from "@/components/forms/FormInput";
 
 const passwordSchema = z
   .string()
@@ -69,64 +62,36 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <FormField
-          control={form.control}
+        <FormInput
+          form={form}
           name="companyName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="!text-foreground">Company Name</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter company name" {...field} />
-              </FormControl>
-              <FormErrorMessage message={form.formState.errors.companyName?.message} />
-            </FormItem>
-          )}
+          label="Company Name"
+          placeholder="Enter company name"
         />
 
         <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
-          <FormField
-            control={form.control}
+          <FormInput
+            form={form}
             name="firstName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="!text-foreground">First Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter first name" {...field} />
-                </FormControl>
-                <FormErrorMessage message={form.formState.errors.firstName?.message} />
-              </FormItem>
-            )}
+            label="First Name"
+            placeholder="Enter first name"
           />
-
-          <FormField
-            control={form.control}
+          <FormInput
+            form={form}
             name="lastName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="!text-foreground">Last Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter last name" {...field} />
-                </FormControl>
-                <FormErrorMessage message={form.formState.errors.lastName?.message} />
-              </FormItem>
-            )}
+            label="Last Name"
+            placeholder="Enter last name"
           />
         </div>
 
         <PhoneInput form={form} />
 
-        <FormField
-          control={form.control}
+        <FormInput
+          form={form}
           name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="!text-foreground">Email</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter your email" type="email" {...field} />
-              </FormControl>
-              <FormErrorMessage message={form.formState.errors.email?.message} />
-            </FormItem>
-          )}
+          label="Email"
+          type="email"
+          placeholder="Enter your email"
         />
 
         <PasswordInput
