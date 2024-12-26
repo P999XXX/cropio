@@ -24,11 +24,45 @@ interface PhoneInputProps {
   form: UseFormReturn<StepTwoFormData>;
 }
 
+const countryToDigits: { [key: string]: number } = {
+  "DE": 11, // Germany
+  "AT": 10, // Austria
+  "CH": 9,  // Switzerland
+  "GB": 10, // Great Britain
+  "US": 10, // USA
+  "FR": 9,  // France
+  "IT": 10, // Italy
+  "ES": 9,  // Spain
+  "NL": 9,  // Netherlands
+  "BE": 9,  // Belgium
+  "DK": 8,  // Denmark
+  "SE": 9,  // Sweden
+  "NO": 8,  // Norway
+  "FI": 9,  // Finland
+  "PL": 9,  // Poland
+  "CZ": 9,  // Czech Republic
+  "HU": 9,  // Hungary
+  "GR": 10, // Greece
+  "PT": 9,  // Portugal
+  "IE": 9,  // Ireland
+  "LU": 9,  // Luxembourg
+  "RO": 9,  // Romania
+  "SK": 9,  // Slovakia
+  "SI": 8,  // Slovenia
+  "HR": 9,  // Croatia
+  "BG": 9,  // Bulgaria
+  "IS": 7,  // Iceland
+  "MT": 8,  // Malta
+  "CY": 8,  // Cyprus
+  "EE": 8,  // Estonia
+  "LV": 8,  // Latvia
+  "LT": 8,  // Lithuania
+};
+
 const PhoneInput = ({ form }: PhoneInputProps) => {
   const [userCountry, setUserCountry] = useState<CountryCode>("DE");
 
   useEffect(() => {
-    // Fetch user's country from IP
     fetch('https://ipapi.co/json/')
       .then(response => response.json())
       .then(data => {
@@ -50,8 +84,15 @@ const PhoneInput = ({ form }: PhoneInputProps) => {
 
   const handlePhoneNumberChange = (value: string) => {
     if (selectedCountry) {
+      // Remove any non-digit characters
+      const digitsOnly = value.replace(/\D/g, '');
+      const maxDigits = countryToDigits[selectedCountry.country] || 10;
+      
+      // Limit the input to the maximum number of digits for the selected country
+      const limitedDigits = digitsOnly.slice(0, maxDigits);
+      
       const formatter = new AsYouType(selectedCountry.country as CountryCode);
-      const formattedNumber = formatter.input(value);
+      const formattedNumber = formatter.input(limitedDigits);
       form.setValue('phoneNumber', formattedNumber);
     }
   };
@@ -108,7 +149,7 @@ const PhoneInput = ({ form }: PhoneInputProps) => {
             <FormItem className="flex-1">
               <FormControl>
                 <Input 
-                  placeholder="Enter phone number" 
+                  placeholder={`Enter ${countryToDigits[userCountry] || 10} digits`}
                   type="tel"
                   {...field}
                   onChange={(e) => handlePhoneNumberChange(e.target.value)}
