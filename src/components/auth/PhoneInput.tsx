@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Flag } from "lucide-react";
+import ReactCountryFlag from "react-country-flag";
 import { UseFormReturn } from "react-hook-form";
 import { StepTwoFormData } from "./StepTwoForm";
 
@@ -31,7 +31,7 @@ const countries: CountryOption[] = [
   { value: "+49", label: "Deutschland", country: "DE" },
   { value: "+43", label: "Österreich", country: "AT" },
   { value: "+41", label: "Schweiz", country: "CH" },
-  { value: "+44", label: "Großbritannien", country: "UK" },
+  { value: "+44", label: "Großbritannien", country: "GB" },
   { value: "+1", label: "USA/Kanada", country: "US" },
   { value: "+33", label: "Frankreich", country: "FR" },
   { value: "+39", label: "Italien", country: "IT" },
@@ -63,6 +63,10 @@ const countries: CountryOption[] = [
 ];
 
 const PhoneInput = ({ form }: PhoneInputProps) => {
+  const selectedCountry = countries.find(
+    (country) => country.value === form.watch("countryCode")
+  );
+
   return (
     <div className="space-y-2">
       <FormLabel>Phone Number</FormLabel>
@@ -77,7 +81,16 @@ const PhoneInput = ({ form }: PhoneInputProps) => {
                   <SelectTrigger className="h-10">
                     <SelectValue>
                       <div className="flex items-center gap-2">
-                        <Flag className="h-4 w-4" />
+                        {selectedCountry && (
+                          <ReactCountryFlag
+                            countryCode={selectedCountry.country}
+                            svg
+                            style={{
+                              width: '1.2em',
+                              height: '1.2em',
+                            }}
+                          />
+                        )}
                         <span>{field.value}</span>
                       </div>
                     </SelectValue>
@@ -87,7 +100,14 @@ const PhoneInput = ({ form }: PhoneInputProps) => {
                   {countries.map((country) => (
                     <SelectItem key={country.value} value={country.value}>
                       <div className="flex items-center gap-2">
-                        <Flag className="h-4 w-4" />
+                        <ReactCountryFlag
+                          countryCode={country.country}
+                          svg
+                          style={{
+                            width: '1.2em',
+                            height: '1.2em',
+                          }}
+                        />
                         <span>
                           {country.label} ({country.value})
                         </span>
