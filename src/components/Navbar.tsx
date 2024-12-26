@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Sun, Moon } from "lucide-react";
 import { Toggle } from "@/components/ui/toggle";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { useSidebar } from "@/components/ui/sidebar";
 import LanguageSwitcher from "./LanguageSwitcher";
 
 const Navbar = () => {
@@ -10,6 +11,8 @@ const Navbar = () => {
   const [isDark, setIsDark] = useState(false);
   const location = useLocation();
   const isDashboard = location.pathname.startsWith('/dashboard');
+  const { state } = useSidebar();
+  const isSidebarExpanded = state === "expanded";
 
   useEffect(() => {
     const theme = localStorage.getItem("theme");
@@ -53,9 +56,11 @@ const Navbar = () => {
               <SidebarTrigger className="block md:hidden" />
             )}
             <Link to="/" className="flex items-center">
-              <span className="text-2xl font-geologica font-extrabold">
-                cropio<span className="text-primary">.app</span>
-              </span>
+              {(!isDashboard || !isSidebarExpanded) && (
+                <span className="text-2xl font-geologica font-extrabold">
+                  cropio<span className="text-primary">.app</span>
+                </span>
+              )}
             </Link>
           </div>
 
