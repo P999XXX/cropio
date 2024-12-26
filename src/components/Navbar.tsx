@@ -13,14 +13,21 @@ const Navbar = () => {
     setIsDark(theme === "dark");
   }, []);
 
+  const updateThemeColors = (isDark: boolean) => {
+    const color = isDark ? '#1A1F2C' : '#FFFFFF';
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', color);
+    document.querySelector('meta[name="msapplication-navbutton-color"]')?.setAttribute('content', color);
+    document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]')?.setAttribute('content', color);
+  };
+
   const toggleDarkMode = () => {
     const newTheme = isDark ? "light" : "dark";
     if (newTheme === "dark") {
       document.documentElement.classList.add('dark');
-      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#1A1F2C');
+      updateThemeColors(true);
     } else {
       document.documentElement.classList.remove('dark');
-      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#FFFFFF');
+      updateThemeColors(false);
     }
     localStorage.setItem("theme", newTheme);
     setIsDark(!isDark);

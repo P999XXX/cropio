@@ -16,6 +16,13 @@ const queryClient = new QueryClient();
 const App = () => {
   const [currentLanguage, setCurrentLanguage] = useState("en");
 
+  const updateThemeColors = (isDark: boolean) => {
+    const color = isDark ? '#1A1F2C' : '#FFFFFF';
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', color);
+    document.querySelector('meta[name="msapplication-navbutton-color"]')?.setAttribute('content', color);
+    document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]')?.setAttribute('content', color);
+  };
+
   useEffect(() => {
     // Initialize language from localStorage
     const savedLanguage = localStorage.getItem("preferredLanguage");
@@ -29,20 +36,20 @@ const App = () => {
       // Apply saved theme preference
       if (savedTheme === 'dark') {
         document.documentElement.classList.add('dark');
-        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#1A1F2C');
+        updateThemeColors(true);
       } else {
         document.documentElement.classList.remove('dark');
-        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#FFFFFF');
+        updateThemeColors(false);
       }
     } else {
       // If no saved preference, use system preference
       if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
         document.documentElement.classList.add('dark');
-        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#1A1F2C');
+        updateThemeColors(true);
         localStorage.setItem("theme", "dark");
       } else {
         localStorage.setItem("theme", "light");
-        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#FFFFFF');
+        updateThemeColors(false);
       }
     }
 
