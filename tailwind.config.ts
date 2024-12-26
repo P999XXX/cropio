@@ -39,18 +39,40 @@ export default {
         secondary: {
           DEFAULT: "#F1F0FB",
           foreground: "#1A1F2C",
+          hover: "#E5E4F5",
         },
         success: {
           DEFAULT: "#4CAF50",
           foreground: "#FFFFFF",
+          hover: "#43A047",
+        },
+        destructive: {
+          DEFAULT: "#ea384c",
+          foreground: "#FFFFFF",
+          hover: "#D32F2F",
+        },
+        warning: {
+          DEFAULT: "#F97316",
+          foreground: "#FFFFFF",
+          hover: "#EA580C",
         },
         accent: {
           DEFAULT: "#097355",
           foreground: "#FFFFFF",
+          hover: "#056144",
         },
         muted: {
           DEFAULT: "#F8F9FA",
           foreground: "#6C757D",
+          hover: "#E9ECEF",
+        },
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
         },
       },
       borderRadius: {
