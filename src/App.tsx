@@ -26,8 +26,6 @@ const queryClient = new QueryClient({
   },
 });
 
-// ... keep existing code (AppContent component definition)
-
 const AppContent = () => {
   const navigate = useNavigate();
   const [currentLanguage, setCurrentLanguage] = useState("en");
