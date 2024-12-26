@@ -96,7 +96,7 @@
   }
 
   .form-error {
-    @apply text-destructive text-[11px] mt-1 flex items-center gap-1;
+    @apply text-destructive text-[10px] mt-1 flex items-center gap-1;
   }
 
   .agreement-link {
