@@ -14,7 +14,6 @@ const SignUp = lazy(() => import("./pages/SignUp"));
 const SignIn = lazy(() => import("./pages/SignIn"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const Components = lazy(() => import("./pages/Components"));
-const TeamManagement = lazy(() => import("./pages/TeamManagement"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -138,7 +137,6 @@ const AppContent = () => {
             <Route path="/signin" element={<SignIn />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/components" element={<Components />} />
-            <Route path="/team" element={<TeamManagement />} />
           </Routes>
         </Suspense>
       </TooltipProvider>
