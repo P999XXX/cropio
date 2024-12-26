@@ -27,6 +27,12 @@ interface StepOneFormProps {
   onLinkedInSignUp: () => void;
 }
 
+// Preload images
+const supplierImage = new Image();
+supplierImage.src = "/lovable-uploads/0aaa1e70-1712-4d31-a2b1-af6c7d6d14df.png";
+const buyerImage = new Image();
+buyerImage.src = "/lovable-uploads/977f591c-307c-470a-a365-6a048c8b3e26.png";
+
 const StepOneForm = ({
   onSubmit,
   onGoogleSignUp,
@@ -34,6 +40,9 @@ const StepOneForm = ({
 }: StepOneFormProps) => {
   const form = useForm<StepOneFormData>({
     resolver: zodResolver(stepOneSchema),
+    defaultValues: {
+      role: undefined,
+    },
   });
 
   const handleSubmit = (data: StepOneFormData) => {
@@ -72,6 +81,7 @@ const StepOneForm = ({
                           alt="Supplier" 
                           className="h-14 w-14 md:h-16 md:w-16 dark:invert"
                           loading="eager"
+                          fetchPriority="high"
                           decoding="async"
                           width={64}
                           height={64}
@@ -98,6 +108,7 @@ const StepOneForm = ({
                           alt="Buyer" 
                           className="h-14 w-14 md:h-16 md:w-16 dark:invert"
                           loading="eager"
+                          fetchPriority="high"
                           decoding="async"
                           width={64}
                           height={64}
