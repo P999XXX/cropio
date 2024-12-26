@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { LanguageContext } from "@/components/LanguageSwitcher";
 import { supabase } from "@/integrations/supabase/client";
@@ -14,7 +14,8 @@ import Components from "./pages/Components";
 
 const queryClient = new QueryClient();
 
-const App = () => {
+const AppContent = () => {
+  const navigate = useNavigate();
   const [currentLanguage, setCurrentLanguage] = useState("en");
 
   const updateThemeColors = (isDark: boolean) => {
@@ -62,39 +63,51 @@ const App = () => {
         const type = hashParams.get('type');
         
         if (type === 'email_confirmation') {
-          window.location.href = '/signin';
+          const { data: { session }, error } = await supabase.auth.getSession();
+          if (!error && session) {
+            navigate('/signin');
+          }
         } else if (type === 'recovery') {
-          window.location.href = '/reset-password';
+          navigate('/reset-password');
         }
       }
       
       // Handle pathname-based redirects (new style)
       if (pathname.includes('/auth/callback')) {
-        window.location.href = '/signin';
+        const { data: { session }, error } = await supabase.auth.getSession();
+        if (!error && session) {
+          navigate('/signin');
+        }
       }
     };
 
     handleAuthRedirects();
-  }, []);
+  }, [navigate]);
 
   return (
     <LanguageContext.Provider value={{ currentLanguage, setLanguage: setCurrentLanguage }}>
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/signup" element={<SignUp />} />
-              <Route path="/signin" element={<SignIn />} />
-              <Route path="/reset-password" element={<ResetPassword />} />
-              <Route path="/components" element={<Components />} />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
-      </QueryClientProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/components" element={<Components />} />
+        </Routes>
+      </TooltipProvider>
     </LanguageContext.Provider>
+  );
+};
+
+const App = () => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <AppContent />
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 };
 
