@@ -57,7 +57,7 @@ const Navbar = () => {
 
   return (
     <nav className={`fixed top-0 right-0 bg-background border-b border-border z-[51] shadow-[0_2px_8px_0_rgba(0,0,0,0.05)] ${isDashboard ? 'left-[var(--sidebar-width-icon)]' : 'left-0'} transition-[left] duration-200 ease-linear ${isDashboard && sidebarState === 'expanded' ? 'left-[var(--sidebar-width)]' : ''}`}>
-      <div className={`w-full ${isDashboard ? 'pl-12' : 'px-4'} sm:px-6 lg:px-8`}>
+      <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-header">
           <div className="flex items-center gap-4">
             {isDashboard && (
