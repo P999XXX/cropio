@@ -70,7 +70,7 @@ const StepOneForm = ({
                           className="h-14 w-14 md:h-16 md:w-16"
                         />
                       </div>
-                      <span className="text-xs md:text-sm font-medium">Supplier</span>
+                      <span className="text-sm font-medium">Supplier</span>
                     </label>
                   </FormItem>
                   <FormItem>
@@ -92,17 +92,17 @@ const StepOneForm = ({
                           className="h-14 w-14 md:h-16 md:w-16"
                         />
                       </div>
-                      <span className="text-xs md:text-sm font-medium">Buyer</span>
+                      <span className="text-sm font-medium">Buyer</span>
                     </label>
                   </FormItem>
                 </RadioGroup>
               </FormControl>
-              <FormMessage className="text-xs" />
+              <FormMessage />
             </FormItem>
           )}
         />
 
-        <Button type="submit" className="w-full text-xs md:text-sm">
+        <Button type="submit" className="auth-button">
           Continue
         </Button>
 
@@ -110,7 +110,7 @@ const StepOneForm = ({
           <div className="absolute inset-0 flex items-center">
             <span className="w-full border-t" />
           </div>
-          <div className="relative flex justify-center text-[10px] md:text-xs uppercase">
+          <div className="relative flex justify-center text-xs uppercase">
             <span className="bg-background px-2 text-muted-foreground">
               Or continue with
             </span>
