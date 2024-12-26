@@ -18,10 +18,6 @@ const SignInMobile = ({
 }: SignInMobileProps) => {
   return (
     <div className="space-y-6">
-      <SocialLoginSection
-        onGoogleSignIn={onGoogleSignIn}
-        onLinkedInSignIn={onLinkedInSignIn}
-      />
       <div className="space-y-1">
         <h2 className="text-2xl font-semibold">Sign In</h2>
         <p className="text-sm text-muted-foreground">
@@ -29,6 +25,20 @@ const SignInMobile = ({
         </p>
       </div>
       <SignInForm onSubmit={onSubmit} isLoading={isLoading} />
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t" />
+        </div>
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-background px-2 text-muted-foreground">
+            Or continue with
+          </span>
+        </div>
+      </div>
+      <SocialLoginSection
+        onGoogleSignIn={onGoogleSignIn}
+        onLinkedInSignIn={onLinkedInSignIn}
+      />
       <div className="space-y-4">
         <button
           onClick={onForgotPassword}
