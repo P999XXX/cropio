@@ -1,0 +1,11 @@
+@layer utilities {
+  .h-header {
+    height: 3.8rem;
+  }
+}
+
+@layer components {
+  [data-sidebar="group"] {
+    @apply relative flex w-full min-w-0 flex-col p-2 pt-7;
+  }
+}

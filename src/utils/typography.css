@@ -1,0 +1,13 @@
+@layer base {
+  h1 {
+    @apply text-2xl md:text-3xl font-geologica font-medium;
+  }
+
+  h2, h3, h4, h5, h6 {
+    @apply font-geologica font-medium;
+  }
+
+  input, button {
+    @apply text-sm;
+  }
+}
