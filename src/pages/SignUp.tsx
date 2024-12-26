@@ -136,23 +136,21 @@ const SignUp = () => {
       <Navbar />
       <div className="container mx-auto px-4 pt-16 flex items-center justify-center min-h-[calc(100vh-64px)]">
         <div className="max-w-md w-full space-y-6 my-8">
-          <div className="text-center space-y-2">
+          <div className="text-left space-y-2">
             <h1 className="text-3xl font-bold">Register for Free</h1>
             <SignUpHeader />
           </div>
 
           <Card>
-            <CardHeader className="pb-4">
-              <CardTitle className="text-2xl font-semibold">
-                Create an Account
-              </CardTitle>
+            <CardHeader className="space-y-1">
+              <CardTitle className="text-2xl">Create an Account</CardTitle>
               <CardDescription>
                 {step === 1
                   ? "Choose your role to get started"
                   : "Complete your registration"}
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-4">
               <div className="grid gap-4">
                 {step === 1 ? (
                   <StepOneForm
@@ -165,8 +163,8 @@ const SignUp = () => {
                 )}
               </div>
             </CardContent>
-            <CardFooter className="flex flex-col space-y-4">
-              <div className="text-sm text-center text-muted-foreground">
+            <CardFooter>
+              <div className="text-sm text-center w-full text-muted-foreground">
                 Already have an account?{" "}
                 <a href="/signin" className="text-primary hover:underline font-medium">
                   Sign in

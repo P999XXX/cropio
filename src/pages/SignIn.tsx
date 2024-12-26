@@ -105,18 +105,18 @@ const SignIn = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
       <div className="container mx-auto px-4 pt-16 flex items-center justify-center min-h-[calc(100vh-64px)]">
-        <div className="max-w-md w-full space-y-3 my-8">
-          <div className="text-center space-y-2">
+        <div className="max-w-md w-full space-y-6 my-8">
+          <div className="text-left space-y-2">
             <h1 className="text-3xl font-bold">Welcome Back</h1>
             <p className="text-muted-foreground">Sign in to your account</p>
           </div>
 
           <Card>
-            <CardHeader className="pb-4">
-              <CardTitle className="text-2xl font-semibold">Sign in</CardTitle>
-              <CardDescription>Enter your credentials to access your account</CardDescription>
+            <CardHeader className="space-y-1">
+              <CardTitle className="text-2xl">Sign in</CardTitle>
+              <CardDescription>Enter your credentials below to sign in</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-4">
               <SignInForm onSubmit={handleSignIn} isLoading={isLoading} />
               
               <div className="mt-2 text-center">
@@ -128,7 +128,7 @@ const SignIn = () => {
                 </button>
               </div>
 
-              <div className="relative my-4">
+              <div className="relative">
                 <div className="absolute inset-0 flex items-center">
                   <span className="w-full border-t" />
                 </div>
@@ -145,8 +145,8 @@ const SignIn = () => {
                 variant="signin"
               />
             </CardContent>
-            <CardFooter className="flex flex-col space-y-4">
-              <div className="text-sm text-center text-muted-foreground">
+            <CardFooter>
+              <div className="text-sm text-center w-full text-muted-foreground">
                 Don't have an account?{" "}
                 <a href="/signup" className="text-primary hover:underline font-medium">
                   Sign up

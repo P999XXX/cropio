@@ -71,12 +71,15 @@ const ResetPassword = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
       <div className="container mx-auto px-4 pt-16 flex items-center justify-center min-h-[calc(100vh-64px)]">
-        <div className="max-w-md w-full space-y-3 my-8">
+        <div className="max-w-md w-full space-y-6 my-8">
+          <div className="text-left space-y-2">
+            <h1 className="text-3xl font-bold">Reset Password</h1>
+            <p className="text-muted-foreground">Create a new password for your account</p>
+          </div>
+
           <Card>
-            <CardHeader className="pb-4">
-              <CardTitle className="text-2xl font-semibold">
-                Reset Password
-              </CardTitle>
+            <CardHeader className="space-y-1">
+              <CardTitle className="text-2xl">New Password</CardTitle>
               <CardDescription>
                 Please enter your new password below
               </CardDescription>
@@ -103,8 +106,8 @@ const ResetPassword = () => {
                 </form>
               </Form>
             </CardContent>
-            <CardFooter className="flex flex-col space-y-4">
-              <div className="text-sm text-center text-muted-foreground">
+            <CardFooter>
+              <div className="text-sm text-center w-full text-muted-foreground">
                 Remember your password?{" "}
                 <a href="/signin" className="text-primary hover:underline font-medium">
                   Sign in
