@@ -97,7 +97,7 @@ const SignUp = () => {
       <div className="text-left space-y-2">
         <h1 className="text-3xl font-bold">Create an Account</h1>
         <p className="text-muted-foreground">
-          Step {currentStep} of 2: {currentStep === 1 ? "Choose Your Role" : "Complete Your Profile"}
+          {currentStep === 1 ? "Choose Your Role" : "Complete Your Profile"}
         </p>
       </div>
 
