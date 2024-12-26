@@ -11,7 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import SignUpForm from "@/components/auth/SignUpForm";
+import SignUpForm, { SignUpFormData } from "@/components/auth/SignUpForm";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const SignUp = () => {
