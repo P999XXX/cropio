@@ -51,7 +51,7 @@ const DashboardSidebar = () => {
     <Sidebar 
       variant="inset" 
       collapsible="icon"
-      className="absolute top-0 h-full shadow-md border-r border-border bg-background z-[99]"
+      className="fixed top-0 h-screen shadow-md border-r border-border bg-background z-[99] overflow-hidden"
     >
       <SidebarHeader className="h-header px-4 flex items-center">
         <div className="flex justify-between items-center w-full">
