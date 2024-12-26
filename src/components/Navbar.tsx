@@ -9,17 +9,19 @@ const Navbar = () => {
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
-    setIsDark(document.documentElement.classList.contains('dark'));
+    const theme = localStorage.getItem("theme");
+    setIsDark(theme === "dark");
   }, []);
 
   const toggleDarkMode = () => {
-    if (document.documentElement.classList.contains('dark')) {
-      document.documentElement.classList.remove('dark');
-      setIsDark(false);
-    } else {
+    const newTheme = isDark ? "light" : "dark";
+    if (newTheme === "dark") {
       document.documentElement.classList.add('dark');
-      setIsDark(true);
+    } else {
+      document.documentElement.classList.remove('dark');
     }
+    localStorage.setItem("theme", newTheme);
+    setIsDark(!isDark);
   };
 
   const navItems = [

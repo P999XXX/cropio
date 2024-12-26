@@ -17,26 +17,30 @@ const App = () => {
   const [currentLanguage, setCurrentLanguage] = useState("en");
 
   useEffect(() => {
-    // Check user's system preference for dark mode
-    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      document.documentElement.classList.add('dark');
-    }
-
     // Initialize language from localStorage
     const savedLanguage = localStorage.getItem("preferredLanguage");
     if (savedLanguage) {
       setCurrentLanguage(savedLanguage);
     }
 
-    // Listen for changes in system dark mode preference
-    const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const handleDarkModeChange = (e: MediaQueryListEvent) => {
-      if (e.matches) {
+    // Check for saved theme preference
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) {
+      // Apply saved theme preference
+      if (savedTheme === 'dark') {
         document.documentElement.classList.add('dark');
       } else {
         document.documentElement.classList.remove('dark');
       }
-    };
+    } else {
+      // If no saved preference, use system preference
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem("theme", "dark");
+      } else {
+        localStorage.setItem("theme", "light");
+      }
+    }
 
     // Handle email confirmation and password reset redirects
     const handleAuthRedirects = async () => {
@@ -65,11 +69,6 @@ const App = () => {
     };
 
     handleAuthRedirects();
-    darkModeMediaQuery.addEventListener('change', handleDarkModeChange);
-
-    return () => {
-      darkModeMediaQuery.removeEventListener('change', handleDarkModeChange);
-    };
   }, []);
 
   return (
