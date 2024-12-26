@@ -15,6 +15,7 @@ import { StepTwoFormData } from "../StepTwoForm";
 import { countries } from "./countries";
 import CountryDisplay from "./CountryDisplay";
 import { CountryCode } from 'libphonenumber-js';
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface CountrySelectorProps {
   form: UseFormReturn<StepTwoFormData>;
@@ -49,12 +50,18 @@ const CountrySelector = ({ form, onCountryChange, selectedCountry }: CountrySele
                 )}
               </SelectValue>
             </SelectTrigger>
-            <SelectContent className="bg-background min-w-[200px]">
-              {countries.map((country) => (
-                <SelectItem key={country.value} value={country.value}>
-                  <CountryDisplay country={country} />
-                </SelectItem>
-              ))}
+            <SelectContent className="bg-background min-w-[280px]">
+              <ScrollArea className="h-[300px]">
+                {countries.map((country) => (
+                  <SelectItem 
+                    key={country.value} 
+                    value={country.value}
+                    className="cursor-pointer"
+                  >
+                    <CountryDisplay country={country} />
+                  </SelectItem>
+                ))}
+              </ScrollArea>
             </SelectContent>
           </Select>
           <FormMessage className="text-xs text-destructive" />

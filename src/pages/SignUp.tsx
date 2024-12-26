@@ -102,7 +102,7 @@ const SignUp = () => {
       </div>
 
       {isMobile ? (
-        <div className="mt-6">
+        <div className="mt-8">
           {currentStep === 1 ? (
             <StepOneForm
               onSubmit={handleStepOne}
@@ -112,7 +112,7 @@ const SignUp = () => {
           ) : (
             <StepTwoForm onSubmit={handleStepTwo} isLoading={isLoading} />
           )}
-          <div className="text-sm text-center w-full text-muted-foreground mt-4">
+          <div className="text-sm text-center w-full text-muted-foreground mt-6">
             Already have an account?{" "}
             <a href="/signin" className="text-primary hover:underline font-medium">
               Sign in
@@ -158,8 +158,8 @@ const SignUp = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <div className={`container mx-auto px-4 ${isMobile ? 'pt-8' : 'pt-16'} flex items-${isMobile ? 'start' : 'center'} justify-center min-h-[calc(100vh-64px)]`}>
-        <div className={`max-w-md w-full space-y-6 ${isMobile ? 'mt-16' : 'my-8'}`}>
+      <div className={`container mx-auto px-6 ${isMobile ? 'pt-12' : 'pt-16'} flex items-${isMobile ? 'start' : 'center'} justify-center min-h-[calc(100vh-64px)]`}>
+        <div className={`max-w-md w-full space-y-8 ${isMobile ? 'mt-16' : 'my-8'}`}>
           <FormContent />
         </div>
       </div>
