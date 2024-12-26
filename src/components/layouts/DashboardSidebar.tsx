@@ -69,7 +69,7 @@ const DashboardSidebar = () => {
                   <SidebarMenuButton 
                     asChild 
                     tooltip={item.label}
-                    className="hover:bg-secondary"
+                    className="hover:bg-secondary group-data-[collapsible=icon]:justify-center"
                   >
                     <Link to={item.path} className="flex items-center gap-3">
                       <item.icon className="h-4 w-4" />
@@ -92,7 +92,7 @@ const DashboardSidebar = () => {
                   <SidebarMenuButton 
                     asChild 
                     tooltip={item.label}
-                    className="hover:bg-secondary"
+                    className="hover:bg-secondary group-data-[collapsible=icon]:justify-center"
                   >
                     <Link to={item.path} className="flex items-center gap-3">
                       <item.icon className="h-4 w-4" />
