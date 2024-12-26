@@ -121,10 +121,10 @@ const SignIn = () => {
         <div className="max-w-md w-full">
           <div className={`space-y-2 ${isMobile ? 'text-left' : 'text-center'} mb-6`}>
             <h1 className="text-2xl md:text-3xl font-extrabold">
-              {firstName ? `Willkommen ${firstName}!` : "Willkommen zurück!"}
+              {firstName ? `Welcome back ${firstName}!` : "Welcome back!"}
             </h1>
             <p className="text-[14px] text-muted-foreground">
-              Bitte melden Sie sich an, um fortzufahren
+              Please sign in to continue
             </p>
           </div>
 
