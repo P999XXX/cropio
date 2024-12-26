@@ -20,7 +20,7 @@ const SignInCard = ({
   return (
     <Card>
       <CardHeader className="pb-2">
-        <CardDescription className="hidden md:block">
+        <CardDescription>
           Enter your email and password to sign in
         </CardDescription>
       </CardHeader>
