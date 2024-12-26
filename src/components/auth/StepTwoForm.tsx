@@ -8,7 +8,6 @@ import AgreementCheckbox from "./AgreementCheckbox";
 import PhoneInput from "./PhoneInput";
 import FormInput from "@/components/forms/FormInput";
 import { ArrowLeft } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 
 const passwordSchema = z
   .string()
@@ -135,12 +134,14 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
           </Button>
           <Button
             type="button"
-            variant="outline"
-            className="w-full"
+            variant="secondary"
+            className="w-full flex items-center justify-center"
             onClick={handleBack}
           >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back
+            <div className="flex items-center">
+              <ArrowLeft className="mr-2" />
+              <span className="font-normal">Back</span>
+            </div>
           </Button>
         </div>
       </form>
