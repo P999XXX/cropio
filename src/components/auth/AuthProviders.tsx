@@ -35,7 +35,7 @@ const AuthProviders = ({
         <div className="flex items-center">
           <GoogleIcon className="mr-2" />
           <span>
-            {variant === "signup" ? "Sign up" : "Continue"} with Google
+            {variant === "signup" ? "Sign up" : "Sign in"} with Google
           </span>
         </div>
       </Button>
@@ -48,7 +48,7 @@ const AuthProviders = ({
         <div className="flex items-center">
           <LinkedInIcon className="mr-2" />
           <span>
-            {variant === "signup" ? "Sign up" : "Continue"} with LinkedIn
+            {variant === "signup" ? "Sign up" : "Sign in"} with LinkedIn
           </span>
         </div>
       </Button>
