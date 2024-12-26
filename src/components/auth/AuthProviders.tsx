@@ -31,18 +31,26 @@ const AuthProviders = ({
       <Button 
         variant="secondary" 
         onClick={() => handleSocialSignUp(onGoogleSignUp)} 
-        className="w-full"
+        className="w-full flex items-center"
       >
-        <GoogleIcon className="mr-2 h-8 w-8" />
-        <span className="font-normal">{buttonText} with <span className="font-medium">Google</span></span>
+        <div className="flex items-center">
+          <GoogleIcon className="mr-2" />
+          <span className="font-normal">
+            {buttonText} with <span className="font-bold">Google</span>
+          </span>
+        </div>
       </Button>
       <Button 
         variant="secondary" 
         onClick={() => handleSocialSignUp(onLinkedInSignUp)} 
-        className="w-full"
+        className="w-full flex items-center"
       >
-        <LinkedInIcon className="mr-2 h-8 w-8" />
-        <span className="font-normal">{buttonText} with <span className="font-medium">LinkedIn</span></span>
+        <div className="flex items-center">
+          <LinkedInIcon className="mr-2" />
+          <span className="font-normal">
+            {buttonText} with <span className="font-bold">LinkedIn</span>
+          </span>
+        </div>
       </Button>
     </div>
   );
