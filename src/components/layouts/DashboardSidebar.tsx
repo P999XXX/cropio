@@ -54,10 +54,18 @@ const DashboardSidebar = () => {
       className="absolute top-0 h-full pt-[2px] shadow-md border-r border-border bg-background z-50"
     >
       <SidebarHeader className="px-2 mb-6">
-        <SidebarTrigger 
-          icon={isExpanded ? X : Menu}
-          className="h-8 w-8 flex items-center justify-center bg-muted hover:bg-muted/80 text-muted-foreground hover:text-muted-foreground"
-        />
+        <div className="flex justify-between items-center">
+          <SidebarTrigger 
+            icon={!isExpanded ? Menu : undefined}
+            className={`h-8 w-8 flex items-center justify-center bg-muted hover:bg-muted/80 text-muted-foreground hover:text-muted-foreground ${isExpanded ? 'hidden' : ''}`}
+          />
+          {isExpanded && (
+            <SidebarTrigger 
+              icon={X}
+              className="h-8 w-8 flex items-center justify-center bg-muted hover:bg-muted/80 text-muted-foreground hover:text-muted-foreground ml-auto"
+            />
+          )}
+        </div>
       </SidebarHeader>
       
       <SidebarContent className="px-2">
