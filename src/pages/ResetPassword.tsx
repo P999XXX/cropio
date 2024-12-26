@@ -7,21 +7,26 @@ import ResetPasswordForm from "@/components/auth/ResetPasswordForm";
 
 const ResetPassword = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const formData = new FormData(e.target as HTMLFormElement);
+    const password = formData.get('password') as string;
+    const confirmPassword = formData.get('confirmPassword') as string;
+
     setIsLoading(true);
+    
     if (password !== confirmPassword) {
       toast.error("Passwords do not match");
       setIsLoading(false);
       return;
     }
+
     try {
       const { error } = await supabase.auth.updateUser({ password });
       if (error) throw error;
+      
       toast.success("Password reset successfully");
       navigate("/signin");
     } catch (error: any) {
@@ -43,7 +48,10 @@ const ResetPassword = () => {
               Enter your new password below
             </p>
           </div>
-          <ResetPasswordForm onSubmit={handleSubmit} isLoading={isLoading} />
+          <ResetPasswordForm 
+            onSubmit={handleSubmit}
+            isLoading={isLoading}
+          />
         </div>
       </div>
     </div>
