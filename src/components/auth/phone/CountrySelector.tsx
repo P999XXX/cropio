@@ -99,7 +99,8 @@ const CountrySelector = ({ form, onCountryChange, selectedCountry }: CountrySele
                     {filteredCountries.map((country) => (
                       <div
                         key={country.value}
-                        className="flex items-center px-2 py-3 cursor-pointer hover:bg-secondary rounded-md text-sm"
+                        className={`flex items-center px-2 py-3 cursor-pointer rounded-md text-sm text-foreground
+                          ${field.value === country.value ? 'bg-secondary' : 'hover:bg-secondary/50'}`}
                         onClick={() => handleCountrySelect(country.value)}
                       >
                         <CountryDisplay country={country} />
@@ -148,7 +149,8 @@ const CountrySelector = ({ form, onCountryChange, selectedCountry }: CountrySele
                   <SelectItem 
                     key={country.value} 
                     value={country.value}
-                    className="cursor-pointer text-sm hover:bg-secondary focus:bg-secondary"
+                    className={`cursor-pointer text-sm text-foreground data-[highlighted]:text-foreground data-[highlighted]:bg-secondary
+                      ${field.value === country.value ? 'bg-secondary' : ''}`}
                   >
                     <CountryDisplay country={country} />
                   </SelectItem>
