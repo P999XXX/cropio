@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
@@ -7,117 +6,11 @@ import TeamMembersList from "@/components/team/TeamMembersList";
 import InviteMemberDialog from "@/components/team/InviteMemberDialog";
 import { Button } from "@/components/ui/button";
 import { UserPlus } from "lucide-react";
-
-interface TeamMember {
-  id: string;
-  role: string;
-  profile: {
-    id: string;
-    first_name: string | null;
-    last_name: string | null;
-    email: string;
-  };
-}
-
-interface Team {
-  id: string;
-  name: string;
-  created_at: string;
-}
+import { useTeamData } from "@/hooks/useTeamData";
 
 const TeamManagement = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [showInviteDialog, setShowInviteDialog] = useState(false);
-  const [userTeam, setUserTeam] = useState<Team | null>(null);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    checkAuthAndFetchData();
-  }, []);
-
-  const checkAuthAndFetchData = async () => {
-    try {
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-      
-      if (sessionError) throw sessionError;
-      
-      if (!session) {
-        console.log("No session found, redirecting to signin");
-        navigate('/signin');
-        return;
-      }
-
-      await fetchTeamData(session.user.id);
-    } catch (error) {
-      console.error('Auth check error:', error);
-      toast.error('Authentication error. Please sign in again.');
-      navigate('/signin');
-    }
-  };
-
-  const fetchTeamData = async (userId: string) => {
-    try {
-      setIsLoading(true);
-      console.log('Fetching team data for user:', userId);
-      
-      // First, get the user's team membership
-      const { data: membershipData, error: membershipError } = await supabase
-        .from('team_members')
-        .select(`
-          team_id,
-          role,
-          team:teams(*)
-        `)
-        .eq('user_id', userId)
-        .maybeSingle();
-
-      if (membershipError) {
-        console.error('Error fetching team membership:', membershipError);
-        toast.error('Error loading team data');
-        return;
-      }
-
-      if (!membershipData) {
-        console.log('No team membership found');
-        toast.error('No team found');
-        return;
-      }
-
-      setUserTeam(membershipData.team);
-      const teamId = membershipData.team_id;
-      console.log('Found team ID:', teamId);
-
-      // Then fetch all team members with their profiles
-      const { data: members, error: membersError } = await supabase
-        .from('team_members')
-        .select(`
-          id,
-          role,
-          profile:profiles(
-            id,
-            first_name,
-            last_name,
-            email
-          )
-        `)
-        .eq('team_id', teamId);
-
-      if (membersError) {
-        console.error('Error fetching members:', membersError);
-        toast.error('Error loading team members');
-        return;
-      }
-
-      console.log('Team members loaded:', members);
-      setTeamMembers(members || []);
-    } catch (error: any) {
-      console.error('Error in fetchTeamData:', error);
-      toast.error('An error occurred while loading team data');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const { isLoading, teamMembers, userTeam, refreshData } = useTeamData();
 
   const handleInviteMember = async (email: string, role: 'admin' | 'member') => {
     try {
@@ -131,8 +24,6 @@ const TeamManagement = () => {
         toast.error('No team found');
         return;
       }
-
-      console.log('Sending invite:', { email, role, teamId: userTeam.id });
 
       const { error } = await supabase
         .from('team_invites')
@@ -152,7 +43,7 @@ const TeamManagement = () => {
 
       toast.success('Invitation sent successfully');
       setShowInviteDialog(false);
-      await fetchTeamData(session.user.id);
+      await refreshData();
     } catch (error: any) {
       console.error('Error in handleInviteMember:', error);
       toast.error('Error sending invitation');
@@ -190,7 +81,7 @@ const TeamManagement = () => {
         <div className="space-y-6">
           <TeamMembersList
             members={teamMembers}
-            onRemoveMember={() => checkAuthAndFetchData()}
+            onRemoveMember={refreshData}
           />
         </div>
 
