@@ -53,8 +53,8 @@ const DashboardSidebar = () => {
       collapsible="icon"
       className="absolute top-0 h-full shadow-md border-r border-border bg-background z-50"
     >
-      <SidebarHeader className="px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+      <SidebarHeader className="h-16 px-4 sm:px-6 lg:px-8 flex items-center">
+        <div className="flex justify-between items-center w-full">
           <SidebarTrigger 
             icon={!isExpanded ? Menu : undefined}
             className={`h-8 w-8 flex items-center justify-center bg-muted hover:bg-muted/80 text-muted-foreground hover:text-muted-foreground ${isExpanded ? 'hidden' : ''}`}
