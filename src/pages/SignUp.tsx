@@ -11,26 +11,79 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import SignUpForm, { SignUpFormData } from "@/components/auth/SignUpForm";
 import { useIsMobile } from "@/hooks/use-mobile";
+import StepOneForm from "@/components/auth/StepOneForm";
+import StepTwoForm, { StepTwoFormData } from "@/components/auth/StepTwoForm";
+import ThankYouDialog from "@/components/auth/ThankYouDialog";
 
 const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
+  const [selectedRole, setSelectedRole] = useState<"buyer" | "supplier">("buyer");
+  const [showThankYou, setShowThankYou] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
-  const handleSignUp = async (values: SignUpFormData) => {
+  const handleStepOne = (role: "buyer" | "supplier") => {
+    setSelectedRole(role);
+    setCurrentStep(2);
+  };
+
+  const handleGoogleSignUp = async () => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+      if (error) throw error;
+    } catch (error: any) {
+      console.error("Google sign up error:", error);
+      toast.error(error.message || "Failed to sign up with Google");
+    }
+  };
+
+  const handleLinkedInSignUp = async () => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'linkedin',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+      if (error) throw error;
+    } catch (error: any) {
+      console.error("LinkedIn sign up error:", error);
+      toast.error(error.message || "Failed to sign up with LinkedIn");
+    }
+  };
+
+  const handleStepTwo = async (values: StepTwoFormData) => {
     setIsLoading(true);
     try {
       const { error } = await supabase.auth.signUp({
         email: values.email,
         password: values.password,
+        options: {
+          data: {
+            first_name: values.firstName,
+            last_name: values.lastName,
+            company_name: values.companyName,
+            role: selectedRole,
+          },
+        },
       });
 
       if (error) throw error;
 
-      toast.success("Signed up successfully! Please check your email for confirmation.");
-      navigate("/signin");
+      setUserEmail(values.email);
+      setShowThankYou(true);
     } catch (error: any) {
       console.error("Sign up error:", error);
       toast.error(error.message || "Failed to sign up");
@@ -48,7 +101,15 @@ const SignUp = () => {
 
       {isMobile ? (
         <div className="mt-6">
-          <SignUpForm onSubmit={handleSignUp} isLoading={isLoading} />
+          {currentStep === 1 ? (
+            <StepOneForm
+              onSubmit={handleStepOne}
+              onGoogleSignUp={handleGoogleSignUp}
+              onLinkedInSignUp={handleLinkedInSignUp}
+            />
+          ) : (
+            <StepTwoForm onSubmit={handleStepTwo} isLoading={isLoading} />
+          )}
           <div className="text-sm text-center w-full text-muted-foreground mt-4">
             Already have an account?{" "}
             <a href="/signin" className="text-primary hover:underline font-medium">
@@ -59,13 +120,25 @@ const SignUp = () => {
       ) : (
         <Card>
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl">Sign Up</CardTitle>
+            <CardTitle className="text-2xl">
+              {currentStep === 1 ? "Choose Your Role" : "Complete Your Profile"}
+            </CardTitle>
             <CardDescription>
-              Enter your email and password to create an account
+              {currentStep === 1
+                ? "Select how you'll use the platform"
+                : "Enter your details to create an account"}
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <SignUpForm onSubmit={handleSignUp} isLoading={isLoading} />
+            {currentStep === 1 ? (
+              <StepOneForm
+                onSubmit={handleStepOne}
+                onGoogleSignUp={handleGoogleSignUp}
+                onLinkedInSignUp={handleLinkedInSignUp}
+              />
+            ) : (
+              <StepTwoForm onSubmit={handleStepTwo} isLoading={isLoading} />
+            )}
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
             <div className="text-sm text-center w-full text-muted-foreground">
@@ -88,6 +161,11 @@ const SignUp = () => {
           <FormContent />
         </div>
       </div>
+      <ThankYouDialog
+        open={showThankYou}
+        onOpenChange={setShowThankYou}
+        userEmail={userEmail}
+      />
     </div>
   );
 };
