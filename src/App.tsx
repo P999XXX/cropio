@@ -3,10 +3,9 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useState, Suspense, lazy } from "react";
 import { LanguageContext } from "@/components/LanguageSwitcher";
 import { supabase } from "@/integrations/supabase/client";
-import { lazy } from "react";
 
 // Lazy load route components
 const Index = lazy(() => import("./pages/Index"));
@@ -14,6 +13,7 @@ const SignUp = lazy(() => import("./pages/SignUp"));
 const SignIn = lazy(() => import("./pages/SignIn"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const Components = lazy(() => import("./pages/Components"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -137,6 +137,8 @@ const AppContent = () => {
             <Route path="/signin" element={<SignIn />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/components" element={<Components />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard/*" element={<Dashboard />} />
           </Routes>
         </Suspense>
       </TooltipProvider>
