@@ -53,7 +53,7 @@ const StepOneForm = ({
                 <RadioGroup
                   onValueChange={field.onChange}
                   defaultValue={field.value}
-                  className="grid grid-cols-1 md:grid-cols-2 gap-4"
+                  className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4"
                 >
                   <FormItem>
                     <FormControl>
