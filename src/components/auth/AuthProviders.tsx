@@ -33,7 +33,7 @@ const AuthProviders = ({
         onClick={() => handleSocialSignUp(onGoogleSignUp)} 
         className="w-full"
       >
-        <GoogleIcon className="mr-2 h-5 w-5" />
+        <GoogleIcon className="mr-2 h-6 w-6" />
         <span className="font-normal">{buttonText} with <span className="font-medium">Google</span></span>
       </Button>
       <Button 
@@ -41,7 +41,7 @@ const AuthProviders = ({
         onClick={() => handleSocialSignUp(onLinkedInSignUp)} 
         className="w-full"
       >
-        <LinkedInIcon className="mr-2 h-5 w-5" />
+        <LinkedInIcon className="mr-2 h-6 w-6" />
         <span className="font-normal">{buttonText} with <span className="font-medium">LinkedIn</span></span>
       </Button>
     </div>
