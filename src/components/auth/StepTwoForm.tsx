@@ -5,14 +5,19 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import FormInput from "@/components/forms/FormInput";
 import { ArrowLeft } from "lucide-react";
+import { StepTwoFormData } from "@/types/auth";
 
 const stepTwoSchema = z.object({
   firstName: z.string().min(2, "First name must be at least 2 characters"),
   lastName: z.string().min(2, "Last name must be at least 2 characters"),
   companyName: z.string().min(2, "Company name must be at least 2 characters"),
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+  countryCode: z.string().optional(),
+  phoneNumber: z.string().optional(),
+  acceptTerms: z.boolean().optional(),
+  acceptPrivacy: z.boolean().optional(),
 });
-
-export type StepTwoFormData = z.infer<typeof stepTwoSchema>;
 
 interface StepTwoFormProps {
   onSubmit: (values: StepTwoFormData) => Promise<void>;
@@ -27,6 +32,12 @@ const StepTwoForm = ({ onSubmit, onBack, isLoading }: StepTwoFormProps) => {
       firstName: "",
       lastName: "",
       companyName: "",
+      email: "",
+      password: "",
+      countryCode: "",
+      phoneNumber: "",
+      acceptTerms: false,
+      acceptPrivacy: false,
     },
   });
 

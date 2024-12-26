@@ -1,7 +1,7 @@
 import { FormControl, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
-import { StepTwoFormData } from "../StepTwoForm";
+import { StepTwoFormData } from "@/types/auth";
 import { AsYouType, CountryCode } from 'libphonenumber-js';
 import { countryToDigits, countryToExample } from "./countryData";
 import { AlertTriangle } from "lucide-react";
