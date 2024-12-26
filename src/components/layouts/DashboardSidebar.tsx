@@ -51,7 +51,7 @@ const DashboardSidebar = () => {
     <Sidebar 
       variant="inset" 
       collapsible="icon"
-      className="sticky top-16 h-[calc(100vh-4rem)] shadow-[0_2px_8px_0_rgba(0,0,0,0.05)] border-r border-border"
+      className="absolute top-0 h-[calc(107%-4rem)] shadow-[0_2px_8px_0_rgba(0,0,0,0.05)] border-r border-border"
     >
       <SidebarHeader className="flex items-center justify-start px-4">
         <SidebarTrigger 
