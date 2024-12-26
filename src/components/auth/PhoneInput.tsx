@@ -59,6 +59,41 @@ const countryToDigits: { [key: string]: number } = {
   "LT": 8,  // Lithuania
 };
 
+const countryToExample: { [key: string]: string } = {
+  "DE": "1511234567", // Germany
+  "AT": "664123456", // Austria
+  "CH": "791234567", // Switzerland
+  "GB": "7911123456", // Great Britain
+  "US": "2125550123", // USA
+  "FR": "612345678", // France
+  "IT": "3123456789", // Italy
+  "ES": "612345678", // Spain
+  "NL": "612345678", // Netherlands
+  "BE": "470123456", // Belgium
+  "DK": "20123456", // Denmark
+  "SE": "701234567", // Sweden
+  "NO": "41234567", // Norway
+  "FI": "401234567", // Finland
+  "PL": "512345678", // Poland
+  "CZ": "601234567", // Czech Republic
+  "HU": "201234567", // Hungary
+  "GR": "6912345678", // Greece
+  "PT": "912345678", // Portugal
+  "IE": "871234567", // Ireland
+  "LU": "621234567", // Luxembourg
+  "RO": "712345678", // Romania
+  "SK": "912345678", // Slovakia
+  "SI": "31234567", // Slovenia
+  "HR": "911234567", // Croatia
+  "BG": "897123456", // Bulgaria
+  "IS": "6123456", // Iceland
+  "MT": "21234567", // Malta
+  "CY": "96123456", // Cyprus
+  "EE": "51234567", // Estonia
+  "LV": "21234567", // Latvia
+  "LT": "61234567", // Lithuania
+};
+
 const PhoneInput = ({ form }: PhoneInputProps) => {
   const [userCountry, setUserCountry] = useState<CountryCode>("DE");
 
@@ -149,7 +184,7 @@ const PhoneInput = ({ form }: PhoneInputProps) => {
             <FormItem className="flex-1">
               <FormControl>
                 <Input 
-                  placeholder={`Enter ${countryToDigits[userCountry] || 10} digits`}
+                  placeholder={`Example: ${countryToExample[userCountry] || '1234567890'}`}
                   type="tel"
                   {...field}
                   onChange={(e) => handlePhoneNumberChange(e.target.value)}
