@@ -17,6 +17,8 @@ import ForgotPasswordDialog from "@/components/auth/ForgotPasswordDialog";
 const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showForgotPasswordDialog, setShowForgotPasswordDialog] = useState(false);
+  const [resetEmail, setResetEmail] = useState("");
+  const [isResetting, setIsResetting] = useState(false);
   const navigate = useNavigate();
 
   const handleSignIn = async (values: SignInFormData) => {
@@ -36,6 +38,25 @@ const SignIn = () => {
       toast.error(error.message || "Failed to sign in");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleResetPassword = async () => {
+    setIsResetting(true);
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+
+      if (error) throw error;
+
+      toast.success("Password reset instructions sent to your email!");
+      setShowForgotPasswordDialog(false);
+    } catch (error: any) {
+      console.error("Reset password error:", error);
+      toast.error(error.message || "Failed to send reset instructions");
+    } finally {
+      setIsResetting(false);
     }
   };
 
@@ -106,6 +127,10 @@ const SignIn = () => {
       <ForgotPasswordDialog
         open={showForgotPasswordDialog}
         onOpenChange={setShowForgotPasswordDialog}
+        onSubmit={handleResetPassword}
+        email={resetEmail}
+        onEmailChange={setResetEmail}
+        isResetting={isResetting}
       />
     </div>
   );
