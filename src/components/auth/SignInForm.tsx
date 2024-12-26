@@ -8,11 +8,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Eye, EyeOff, AlertTriangle } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import FormErrorMessage from "@/components/forms/FormErrorMessage";
 
 const signInSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -50,14 +51,7 @@ const SignInForm = ({ onSubmit, isLoading, onForgotPassword }: SignInFormProps) 
               <FormControl>
                 <Input placeholder="Enter your email" type="email" {...field} />
               </FormControl>
-              <FormMessage className="text-[11px] text-destructive flex items-center gap-1">
-                {form.formState.errors.email?.message && (
-                  <>
-                    <AlertTriangle className="h-3 w-3" />
-                    <span>{form.formState.errors.email?.message}</span>
-                  </>
-                )}
-              </FormMessage>
+              <FormErrorMessage message={form.formState.errors.email?.message} />
             </FormItem>
           )}
         />
@@ -88,14 +82,7 @@ const SignInForm = ({ onSubmit, isLoading, onForgotPassword }: SignInFormProps) 
                   </button>
                 </div>
               </FormControl>
-              <FormMessage className="text-[11px] text-destructive flex items-center gap-1">
-                {form.formState.errors.password?.message && (
-                  <>
-                    <AlertTriangle className="h-3 w-3" />
-                    <span>{form.formState.errors.password?.message}</span>
-                  </>
-                )}
-              </FormMessage>
+              <FormErrorMessage message={form.formState.errors.password?.message} />
             </FormItem>
           )}
         />

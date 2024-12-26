@@ -5,7 +5,6 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
@@ -14,6 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import PasswordInput from "./PasswordInput";
 import AgreementCheckbox from "./AgreementCheckbox";
 import PhoneInput from "./PhoneInput";
+import FormErrorMessage from "@/components/forms/FormErrorMessage";
 
 const passwordSchema = z
   .string()
@@ -78,14 +78,7 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
               <FormControl>
                 <Input placeholder="Enter company name" {...field} />
               </FormControl>
-              <FormMessage className="text-[11px] text-destructive flex items-center gap-1">
-                {form.formState.errors.companyName?.message && (
-                  <>
-                    <AlertTriangle className="h-3 w-3" />
-                    <span>{form.formState.errors.companyName?.message}</span>
-                  </>
-                )}
-              </FormMessage>
+              <FormErrorMessage message={form.formState.errors.companyName?.message} />
             </FormItem>
           )}
         />
@@ -100,14 +93,7 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
                 <FormControl>
                   <Input placeholder="Enter first name" {...field} />
                 </FormControl>
-                <FormMessage className="text-[11px] text-destructive flex items-center gap-1">
-                  {form.formState.errors.firstName?.message && (
-                    <>
-                      <AlertTriangle className="h-3 w-3" />
-                      <span>{form.formState.errors.firstName?.message}</span>
-                    </>
-                  )}
-                </FormMessage>
+                <FormErrorMessage message={form.formState.errors.firstName?.message} />
               </FormItem>
             )}
           />
@@ -121,14 +107,7 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
                 <FormControl>
                   <Input placeholder="Enter last name" {...field} />
                 </FormControl>
-                <FormMessage className="text-[11px] text-destructive flex items-center gap-1">
-                  {form.formState.errors.lastName?.message && (
-                    <>
-                      <AlertTriangle className="h-3 w-3" />
-                      <span>{form.formState.errors.lastName?.message}</span>
-                    </>
-                  )}
-                </FormMessage>
+                <FormErrorMessage message={form.formState.errors.lastName?.message} />
               </FormItem>
             )}
           />
@@ -145,14 +124,7 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
               <FormControl>
                 <Input placeholder="Enter your email" type="email" {...field} />
               </FormControl>
-              <FormMessage className="text-[11px] text-destructive flex items-center gap-1">
-                {form.formState.errors.email?.message && (
-                  <>
-                    <AlertTriangle className="h-3 w-3" />
-                    <span>{form.formState.errors.email?.message}</span>
-                  </>
-                )}
-              </FormMessage>
+              <FormErrorMessage message={form.formState.errors.email?.message} />
             </FormItem>
           )}
         />

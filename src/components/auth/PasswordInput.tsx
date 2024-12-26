@@ -1,16 +1,16 @@
 import { useState } from "react";
-import { Eye, EyeOff, AlertTriangle } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
   FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
 import { StepTwoFormData } from "./StepTwoForm";
+import FormErrorMessage from "@/components/forms/FormErrorMessage";
 
 interface PasswordInputProps {
   form: UseFormReturn<StepTwoFormData>;
@@ -52,14 +52,7 @@ const PasswordInput = ({ form, name, label, description }: PasswordInputProps) =
               </button>
             </div>
           </FormControl>
-          <FormMessage className="text-[11px] text-destructive flex items-center gap-1">
-            {form.formState.errors[name]?.message && (
-              <>
-                <AlertTriangle className="h-3 w-3" />
-                <span>{form.formState.errors[name]?.message}</span>
-              </>
-            )}
-          </FormMessage>
+          <FormErrorMessage message={form.formState.errors[name]?.message} />
         </FormItem>
       )}
     />

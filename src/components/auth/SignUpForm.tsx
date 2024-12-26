@@ -5,7 +5,6 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Eye, EyeOff } from "lucide-react";
@@ -13,6 +12,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import FormErrorMessage from "@/components/forms/FormErrorMessage";
 
 const signUpSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -49,7 +49,7 @@ const SignUpForm = ({ onSubmit, isLoading }: SignUpFormProps) => {
               <FormControl>
                 <Input placeholder="Enter your email" type="email" {...field} />
               </FormControl>
-              <FormMessage className="text-xs text-red-500" />
+              <FormErrorMessage message={form.formState.errors.email?.message} />
             </FormItem>
           )}
         />
@@ -80,7 +80,7 @@ const SignUpForm = ({ onSubmit, isLoading }: SignUpFormProps) => {
                   </button>
                 </div>
               </FormControl>
-              <FormMessage className="text-xs text-red-500" />
+              <FormErrorMessage message={form.formState.errors.password?.message} />
             </FormItem>
           )}
         />
