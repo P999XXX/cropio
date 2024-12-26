@@ -90,6 +90,7 @@
 
   body {
     @apply bg-background text-foreground font-inter;
+    padding-top: 3.8rem;
   }
 
   h1 {
