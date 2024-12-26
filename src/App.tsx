@@ -56,40 +56,44 @@ const AppContent = () => {
     // Handle email confirmation and password reset redirects
     const handleAuthRedirects = async () => {
       console.log("Handling auth redirects");
-      const { hash, pathname, search } = window.location;
       
-      // Log current URL information for debugging
-      console.log("Current URL info:", { hash, pathname, search });
+      // Get current URL parameters
+      const url = new URL(window.location.href);
+      const type = url.searchParams.get('type');
+      const hash = url.hash;
       
-      // Handle hash-based redirects (old style)
+      console.log("URL info:", {
+        href: url.href,
+        type,
+        hash,
+        pathname: url.pathname
+      });
+
+      // Check for recovery type in hash (old style)
       if (hash) {
-        console.log("Processing hash-based redirect");
         const hashParams = new URLSearchParams(hash.substring(1));
-        const type = hashParams.get('type');
-        console.log("Hash params type:", type);
+        const hashType = hashParams.get('type');
+        console.log("Hash type:", hashType);
         
-        if (type === 'recovery') {
-          console.log("Hash: Redirecting to reset-password");
+        if (hashType === 'recovery') {
+          console.log("Hash recovery detected - redirecting to reset-password");
           navigate('/reset-password');
           return;
         }
       }
-      
-      // Handle pathname-based redirects (new style)
-      if (pathname.includes('/auth/callback')) {
-        console.log("Processing pathname-based redirect");
-        const params = new URLSearchParams(search);
-        const type = params.get('type');
-        console.log("Search params type:", type);
+
+      // Check for recovery type in search params (new style)
+      if (url.pathname.includes('/auth/callback')) {
+        console.log("Auth callback detected, type:", type);
         
         if (type === 'recovery') {
-          console.log("Pathname: Redirecting to reset-password");
+          console.log("Search params recovery detected - redirecting to reset-password");
           navigate('/reset-password');
           return;
         }
         
-        // Only handle email confirmation if it's not a recovery
         if (type === 'email_confirmation') {
+          console.log("Email confirmation detected");
           const { data: { session }, error } = await supabase.auth.getSession();
           if (!error && session) {
             navigate('/signin');
