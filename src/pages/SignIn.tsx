@@ -95,14 +95,15 @@ const SignIn = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <div className="container mx-auto px-4 pt-12 flex items-start justify-center min-h-[calc(100vh-64px)]">
-        <div className="max-w-md w-full mt-8">
+      <div className={`container mx-auto px-4 ${isMobile ? 'pt-12' : 'pt-20'} flex items-${isMobile ? 'start' : 'center'} justify-center min-h-[calc(100vh-64px)]`}>
+        <div className="max-w-md w-full">
           <div className="space-y-2 text-center md:text-left mb-6">
             <h1 className="text-2xl md:text-3xl font-extrabold">Sign In</h1>
             <p className="text-sm md:text-base text-muted-foreground">
               Welcome back! Please sign in to continue
             </p>
           </div>
+
           {isMobile ? (
             <SignInMobile
               onSubmit={handleSignIn}

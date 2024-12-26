@@ -18,7 +18,7 @@ const SignInCard = ({
   onForgotPassword,
 }: SignInCardProps) => {
   return (
-    <Card>
+    <Card className="md:min-w-[500px]">
       <CardHeader className="pb-2">
         <CardDescription>
           Enter your email and password to sign in
