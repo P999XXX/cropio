@@ -30,7 +30,7 @@ const stepTwoSchema = z.object({
   confirmPassword: z.string(),
   companyName: z.string().min(5, "Company name must be at least 5 characters"),
   countryCode: z.string(),
-  phoneNumber: z.string().min(6, "Phone number must be at least 6 digits"),
+  phoneNumber: z.string(),
   acceptTerms: z.boolean().refine((val) => val === true, {
     message: "You must accept the terms and conditions",
   }),

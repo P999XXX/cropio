@@ -30,7 +30,14 @@ const PhoneNumberInput = ({ form, selectedCountry }: PhoneNumberInputProps) => {
         <Input 
           placeholder={`Example: ${countryToExample[selectedCountry] || '1234567890'}`}
           type="tel"
-          {...form.register('phoneNumber')}
+          {...form.register('phoneNumber', {
+            validate: (value) => {
+              const digitsOnly = value.replace(/\D/g, '');
+              const requiredDigits = countryToDigits[selectedCountry] || 10;
+              return digitsOnly.length === requiredDigits || 
+                `Phone number must be exactly ${requiredDigits} digits for ${selectedCountry}`;
+            }
+          })}
           onChange={(e) => handlePhoneNumberChange(e.target.value)}
         />
       </FormControl>
