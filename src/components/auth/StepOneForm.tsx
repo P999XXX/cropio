@@ -53,7 +53,7 @@ const StepOneForm = ({
                 <RadioGroup
                   onValueChange={field.onChange}
                   defaultValue={field.value}
-                  className="grid grid-cols-2 gap-4"
+                  className="grid grid-cols-1 md:grid-cols-2 gap-4"
                 >
                   <FormItem>
                     <FormControl>
@@ -65,7 +65,7 @@ const StepOneForm = ({
                     </FormControl>
                     <label
                       htmlFor="buyer"
-                      className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-transparent p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                      className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-transparent p-4 hover:border-primary hover:bg-transparent peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary w-full"
                     >
                       <ShoppingCart className="mb-3 h-6 w-6" />
                       <span className="text-sm font-medium">Buyer</span>
@@ -81,7 +81,7 @@ const StepOneForm = ({
                     </FormControl>
                     <label
                       htmlFor="supplier"
-                      className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-transparent p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                      className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-transparent p-4 hover:border-primary hover:bg-transparent peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary w-full"
                     >
                       <Truck className="mb-3 h-6 w-6" />
                       <span className="text-sm font-medium">Supplier</span>
