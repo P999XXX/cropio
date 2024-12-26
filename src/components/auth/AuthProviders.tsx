@@ -31,7 +31,7 @@ const AuthProviders = ({
       <Button 
         variant="secondary" 
         onClick={() => handleSocialSignUp(onGoogleSignUp)} 
-        className="w-full flex items-center justify-center bg-secondary/50 dark:bg-secondary/10 hover:bg-secondary/60 dark:hover:bg-secondary/20 text-foreground"
+        className="w-full flex items-center justify-center bg-secondary/60 dark:bg-secondary/10 hover:bg-secondary/70 dark:hover:bg-secondary/20 text-foreground"
       >
         <div className="flex items-center">
           <GoogleIcon className="mr-2" />
@@ -43,7 +43,7 @@ const AuthProviders = ({
       <Button 
         variant="secondary" 
         onClick={() => handleSocialSignUp(onLinkedInSignUp)} 
-        className="w-full flex items-center justify-center bg-secondary/50 dark:bg-secondary/10 hover:bg-secondary/60 dark:hover:bg-secondary/20 text-foreground"
+        className="w-full flex items-center justify-center bg-secondary/60 dark:bg-secondary/10 hover:bg-secondary/70 dark:hover:bg-secondary/20 text-foreground"
       >
         <div className="flex items-center">
           <LinkedInIcon className="mr-2" />
