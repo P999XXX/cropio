@@ -64,9 +64,9 @@ const StepOneForm = ({
                     </FormControl>
                     <label
                       htmlFor="supplier"
-                      className="flex flex-col items-center justify-between rounded-md border-2 border-gray-300 bg-transparent p-2 hover:border-primary hover:bg-transparent peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-[#F2FCE2] [&:has([data-state=checked])]:border-primary [&:has([data-state=checked])]:bg-[#F2FCE2] w-full"
+                      className="flex flex-col items-center justify-between rounded-md border-2 border-gray-300 bg-transparent p-2 hover:border-primary hover:bg-transparent peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-[#F8FEF5] [&:has([data-state=checked])]:border-primary [&:has([data-state=checked])]:bg-[#F8FEF5] w-full"
                     >
-                      <div className="mb-3 h-24 w-24 flex items-center justify-center">
+                      <div className="mb-1 h-24 w-24 flex items-center justify-center">
                         <img 
                           src="/lovable-uploads/0aaa1e70-1712-4d31-a2b1-af6c7d6d14df.png" 
                           alt="Supplier" 
@@ -86,9 +86,9 @@ const StepOneForm = ({
                     </FormControl>
                     <label
                       htmlFor="buyer"
-                      className="flex flex-col items-center justify-between rounded-md border-2 border-gray-300 bg-transparent p-2 hover:border-primary hover:bg-transparent peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-[#F2FCE2] [&:has([data-state=checked])]:border-primary [&:has([data-state=checked])]:bg-[#F2FCE2] w-full"
+                      className="flex flex-col items-center justify-between rounded-md border-2 border-gray-300 bg-transparent p-2 hover:border-primary hover:bg-transparent peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-[#F8FEF5] [&:has([data-state=checked])]:border-primary [&:has([data-state=checked])]:bg-[#F8FEF5] w-full"
                     >
-                      <div className="mb-3 h-24 w-24 flex items-center justify-center">
+                      <div className="mb-1 h-24 w-24 flex items-center justify-center">
                         <img 
                           src="/lovable-uploads/977f591c-307c-470a-a365-6a048c8b3e26.png" 
                           alt="Buyer" 
