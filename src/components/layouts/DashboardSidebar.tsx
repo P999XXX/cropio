@@ -53,10 +53,10 @@ const DashboardSidebar = () => {
       collapsible="icon"
       className="absolute top-0 h-full pt-[64px] shadow-md border-r border-border bg-background"
     >
-      <SidebarHeader className="flex items-center px-4 absolute top-4 left-0">
+      <SidebarHeader className="flex items-center px-2">
         <SidebarTrigger 
           icon={isExpanded ? MoreHorizontal : MoreVertical} 
-          className="h-8 w-8 flex items-center justify-center" 
+          className="h-8 w-8 flex items-center justify-center bg-muted hover:bg-muted/80 text-muted-foreground" 
         />
       </SidebarHeader>
       
@@ -69,7 +69,7 @@ const DashboardSidebar = () => {
                   <SidebarMenuButton 
                     asChild 
                     tooltip={item.label}
-                    className="hover:bg-secondary group-data-[collapsible=icon]:px-2 group-data-[collapsible=icon]:justify-center"
+                    className="hover:bg-muted group-data-[collapsible=icon]:px-2 group-data-[collapsible=icon]:justify-center"
                   >
                     <Link to={item.path} className="flex items-center gap-3">
                       <item.icon className="h-4 w-4" />
@@ -92,7 +92,7 @@ const DashboardSidebar = () => {
                   <SidebarMenuButton 
                     asChild 
                     tooltip={item.label}
-                    className="hover:bg-secondary group-data-[collapsible=icon]:px-2 group-data-[collapsible=icon]:justify-center"
+                    className="hover:bg-muted group-data-[collapsible=icon]:px-2 group-data-[collapsible=icon]:justify-center"
                   >
                     <Link to={item.path} className="flex items-center gap-3">
                       <item.icon className="h-4 w-4" />
