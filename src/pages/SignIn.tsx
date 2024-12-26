@@ -9,6 +9,8 @@ import SignInMobile from "@/components/auth/SignInMobile";
 import ForgotPasswordDialog from "@/components/auth/ForgotPasswordDialog";
 import ResetPasswordThankYouDialog from "@/components/auth/ResetPasswordThankYouDialog";
 import { SignInFormData } from "@/components/auth/SignInForm";
+import { handleGoogleSignIn, handleLinkedInSignIn, handlePasswordReset } from "@/utils/auth-handlers";
+import { errorToastStyle, successToastStyle } from "@/utils/toast-styles";
 
 const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -26,12 +28,7 @@ const SignIn = () => {
     const errorDescription = hashParams.get('error_description');
     
     if (errorDescription === 'Email link is invalid or has expired') {
-      toast.error("Your password reset link has expired. Please request a new one.", {
-        style: {
-          background: '#ea384c',
-          color: '#FFFFFF',
-        },
-      });
+      toast.error("Your password reset link has expired. Please request a new one.", errorToastStyle);
     }
 
     const getFirstName = async () => {
@@ -62,101 +59,18 @@ const SignIn = () => {
 
       if (error) throw error;
 
-      toast.success("Successfully signed in!", {
-        style: {
-          background: '#4CAF50',
-          color: '#FFFFFF',
-        },
-      });
+      toast.success("Successfully signed in!", successToastStyle);
       navigate("/dashboard");
     } catch (error: any) {
       console.error("Sign in error:", error);
-      toast.error(error.message || "Failed to sign in", {
-        style: {
-          background: '#ea384c',
-          color: '#FFFFFF',
-        },
-      });
+      toast.error(error.message || "Failed to sign in", errorToastStyle);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleGoogleSignIn = async () => {
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          queryParams: {
-            access_type: "offline",
-            prompt: "consent",
-          },
-          redirectTo: `${window.location.origin}/auth/callback`,
-        },
-      });
-      if (error) throw error;
-    } catch (error: any) {
-      console.error("Google sign in error:", error);
-      toast.error(error.message || "Failed to sign in with Google", {
-        style: {
-          background: '#ea384c',
-          color: '#FFFFFF',
-        },
-      });
-    }
-  };
-
-  const handleLinkedInSignIn = async () => {
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "linkedin",
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-        },
-      });
-      if (error) throw error;
-    } catch (error: any) {
-      console.error("LinkedIn sign in error:", error);
-      toast.error(error.message || "Failed to sign in with LinkedIn", {
-        style: {
-          background: '#ea384c',
-          color: '#FFFFFF',
-        },
-      });
-    }
-  };
-
-  const handleForgotPassword = () => {
-    setShowForgotPassword(true);
-  };
-
-  const handleResetPassword = async () => {
-    setIsResetting(true);
-    try {
-      const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
-        redirectTo: `${window.location.origin}/reset-password`,
-      });
-      if (error) throw error;
-      
-      setShowForgotPassword(false);
-      setShowResetThankYou(true);
-      toast.success("Reset instructions sent!", {
-        style: {
-          background: '#4CAF50',
-          color: '#FFFFFF',
-        },
-      });
-    } catch (error: any) {
-      console.error("Reset password error:", error);
-      toast.error(error.message || "Failed to send reset instructions", {
-        style: {
-          background: '#ea384c',
-          color: '#FFFFFF',
-        },
-      });
-    } finally {
-      setIsResetting(false);
-    }
+  const handleResetPasswordRequest = () => {
+    handlePasswordReset(resetEmail, setIsResetting, setShowForgotPassword, setShowResetThankYou);
   };
 
   return (
@@ -179,7 +93,7 @@ const SignIn = () => {
               isLoading={isLoading}
               onGoogleSignIn={handleGoogleSignIn}
               onLinkedInSignIn={handleLinkedInSignIn}
-              onForgotPassword={handleForgotPassword}
+              onForgotPassword={() => setShowForgotPassword(true)}
             />
           ) : (
             <SignInCard
@@ -187,7 +101,7 @@ const SignIn = () => {
               isLoading={isLoading}
               onGoogleSignIn={handleGoogleSignIn}
               onLinkedInSignIn={handleLinkedInSignIn}
-              onForgotPassword={handleForgotPassword}
+              onForgotPassword={() => setShowForgotPassword(true)}
             />
           )}
         </div>
@@ -195,7 +109,7 @@ const SignIn = () => {
       <ForgotPasswordDialog
         open={showForgotPassword}
         onOpenChange={setShowForgotPassword}
-        onSubmit={handleResetPassword}
+        onSubmit={handleResetPasswordRequest}
         email={resetEmail}
         onEmailChange={setResetEmail}
         isResetting={isResetting}
