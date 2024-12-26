@@ -53,7 +53,7 @@ const DashboardSidebar = () => {
       collapsible="icon"
       className="absolute top-0 h-full shadow-md border-r border-border bg-background z-50"
     >
-      <SidebarHeader className="h-16 px-4 sm:px-6 lg:px-8 flex items-center">
+      <SidebarHeader className="h-16 px-4 flex items-center">
         <div className="flex justify-between items-center w-full">
           <SidebarTrigger 
             icon={!isExpanded ? Menu : undefined}
