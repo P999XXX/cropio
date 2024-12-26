@@ -7,6 +7,8 @@ import PasswordInput from "./PasswordInput";
 import AgreementCheckbox from "./AgreementCheckbox";
 import PhoneInput from "./PhoneInput";
 import FormInput from "@/components/forms/FormInput";
+import { ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const passwordSchema = z
   .string()
@@ -43,6 +45,7 @@ interface StepTwoFormProps {
 }
 
 const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
+  const navigate = useNavigate();
   const form = useForm<StepTwoFormData>({
     resolver: zodResolver(stepTwoSchema),
     defaultValues: {
@@ -121,9 +124,20 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
           linkHref="/privacy"
         />
 
-        <Button type="submit" className="auth-button" disabled={isLoading}>
-          {isLoading ? "Creating account..." : "Create account"}
-        </Button>
+        <div className="space-y-3">
+          <Button type="submit" className="auth-button w-full" disabled={isLoading}>
+            {isLoading ? "Creating account..." : "Create account"}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full"
+            onClick={() => navigate(-1)}
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back
+          </Button>
+        </div>
       </form>
     </Form>
   );
