@@ -19,8 +19,15 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <Link to="/" className="flex items-center">
-              <span className="text-2xl font-geologica font-extrabold">
+            <Link to="/" className="flex items-center gap-2">
+              <div className="w-6 h-6 relative">
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-4 h-4 border-2 border-primary transform rotate-45">
+                    <div className="w-2 h-2 bg-primary absolute -top-1 left-1/2 transform -translate-x-1/2 rounded-full"></div>
+                  </div>
+                </div>
+              </div>
+              <span className="text-xl font-geologica font-extrabold">
                 cropio<span className="text-primary">.app</span>
               </span>
             </Link>
