@@ -21,6 +21,7 @@ import {
   CreditCard,
   Settings,
   Headset,
+  MoreVertical,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -43,8 +44,8 @@ const bottomMenuItems = [
 const DashboardSidebar = () => {
   return (
     <Sidebar>
-      <SidebarHeader className="flex items-center justify-end px-4 py-2">
-        <SidebarTrigger />
+      <SidebarHeader className="flex items-center justify-start px-4 py-2">
+        <SidebarTrigger icon={MoreVertical} />
       </SidebarHeader>
       
       <SidebarContent>
