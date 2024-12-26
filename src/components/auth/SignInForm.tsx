@@ -46,11 +46,11 @@ const SignInForm = ({ onSubmit, isLoading, onForgotPassword }: SignInFormProps) 
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel className="!text-foreground">Email</FormLabel>
               <FormControl>
                 <Input placeholder="Enter your email" type="email" {...field} />
               </FormControl>
-              <FormMessage className="text-xs text-red-500" />
+              <FormMessage className="text-xs text-destructive" />
             </FormItem>
           )}
         />
@@ -60,7 +60,7 @@ const SignInForm = ({ onSubmit, isLoading, onForgotPassword }: SignInFormProps) 
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel className="!text-foreground">Password</FormLabel>
               <FormControl>
                 <div className="relative">
                   <Input
@@ -81,7 +81,7 @@ const SignInForm = ({ onSubmit, isLoading, onForgotPassword }: SignInFormProps) 
                   </button>
                 </div>
               </FormControl>
-              <FormMessage className="text-xs text-red-500" />
+              <FormMessage className="text-xs text-destructive" />
             </FormItem>
           )}
         />

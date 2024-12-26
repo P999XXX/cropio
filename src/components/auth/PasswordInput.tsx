@@ -28,7 +28,7 @@ const PasswordInput = ({ form, name, label, description }: PasswordInputProps) =
       name={name}
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{label}</FormLabel>
+          <FormLabel className="!text-foreground">{label}</FormLabel>
           {description && (
             <FormDescription className="text-xs">{description}</FormDescription>
           )}
@@ -52,7 +52,7 @@ const PasswordInput = ({ form, name, label, description }: PasswordInputProps) =
               </button>
             </div>
           </FormControl>
-          <FormMessage className="text-xs text-red-500" />
+          <FormMessage className="text-xs text-destructive" />
         </FormItem>
       )}
     />
