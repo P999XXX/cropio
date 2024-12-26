@@ -70,7 +70,8 @@ const SignUp = () => {
   const handleStepTwo = async (values: StepTwoFormData) => {
     setIsLoading(true);
     try {
-      const { error } = await supabase.auth.signUp({
+      // Sign up the user with Supabase
+      const { data: authData, error: signUpError } = await supabase.auth.signUp({
         email: values.email,
         password: values.password,
         options: {
@@ -83,10 +84,16 @@ const SignUp = () => {
         },
       });
 
-      if (error) throw error;
+      if (signUpError) {
+        throw signUpError;
+      }
 
-      setUserEmail(values.email);
-      setShowThankYou(true);
+      // If signup was successful
+      if (authData.user) {
+        setUserEmail(values.email);
+        setShowThankYou(true);
+        toast.success("Registration successful! Please check your email to confirm your account.");
+      }
     } catch (error: any) {
       console.error("Sign up error:", error);
       toast.error(error.message || "Failed to sign up");
