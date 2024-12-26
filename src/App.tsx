@@ -19,7 +19,7 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 60000, // 1 minute
-      cacheTime: 300000, // 5 minutes
+      gcTime: 300000, // 5 minutes (formerly cacheTime)
       retry: 1,
       refetchOnWindowFocus: false,
     },
@@ -40,7 +40,6 @@ const AppContent = () => {
   };
 
   useEffect(() => {
-    // Initialize language from localStorage
     const savedLanguage = localStorage.getItem("preferredLanguage");
     if (savedLanguage) {
       setCurrentLanguage(savedLanguage);
