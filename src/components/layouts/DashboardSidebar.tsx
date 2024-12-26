@@ -51,25 +51,29 @@ const DashboardSidebar = () => {
     <Sidebar 
       variant="inset" 
       collapsible="icon"
-      className="absolute top-0 h-full pt-[25px] shadow-[0_2px_8px_0_rgba(0,0,0,0.05)] border-r border-border"
+      className="absolute top-0 h-full pt-[64px] shadow-md border-r border-border bg-background"
     >
-      <SidebarHeader className="flex items-center justify-start px-4">
+      <SidebarHeader className="flex items-center justify-start px-4 absolute top-4 left-0 w-full">
         <SidebarTrigger 
           icon={isExpanded ? MoreHorizontal : MoreVertical} 
-          className="h-8 w-8 absolute top-1" 
+          className="h-8 w-8" 
         />
       </SidebarHeader>
       
-      <SidebarContent>
+      <SidebarContent className="px-2">
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
               {mainMenuItems.map((item) => (
                 <SidebarMenuItem key={item.label}>
-                  <SidebarMenuButton asChild tooltip={item.label}>
-                    <Link to={item.path} className="flex items-center">
+                  <SidebarMenuButton 
+                    asChild 
+                    tooltip={item.label}
+                    className="hover:bg-secondary"
+                  >
+                    <Link to={item.path} className="flex items-center gap-3">
                       <item.icon className="h-4 w-4" />
-                      <span>{item.label}</span>
+                      <span className="font-medium">{item.label}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -79,16 +83,20 @@ const DashboardSidebar = () => {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="mt-auto">
+      <SidebarFooter className="mt-auto mb-4">
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
               {bottomMenuItems.map((item) => (
                 <SidebarMenuItem key={item.label}>
-                  <SidebarMenuButton asChild tooltip={item.label}>
-                    <Link to={item.path} className="flex items-center">
+                  <SidebarMenuButton 
+                    asChild 
+                    tooltip={item.label}
+                    className="hover:bg-secondary"
+                  >
+                    <Link to={item.path} className="flex items-center gap-3">
                       <item.icon className="h-4 w-4" />
-                      <span>{item.label}</span>
+                      <span className="font-medium">{item.label}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
