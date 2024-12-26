@@ -15,12 +15,12 @@ export const useTeamData = () => {
       setIsLoading(true);
       console.log("Fetching team data for user:", userId);
       
-      // First get the user's team membership directly
-      const { data: userMembership, error: membershipError } = await supabase
+      // First get the user's team membership
+      const { data: membership, error: membershipError } = await supabase
         .from('team_members')
         .select('team_id, role')
         .eq('user_id', userId)
-        .maybeSingle();
+        .single();
 
       if (membershipError) {
         console.error('Error fetching user membership:', membershipError);
@@ -28,20 +28,20 @@ export const useTeamData = () => {
         return;
       }
 
-      if (!userMembership) {
+      if (!membership) {
         console.log('No team membership found');
         toast.error('No team found');
         return;
       }
 
-      console.log("User membership found:", userMembership);
+      console.log("User membership found:", membership);
 
       // Then fetch the team details
-      const { data: teamData, error: teamError } = await supabase
+      const { data: team, error: teamError } = await supabase
         .from('teams')
         .select('*')
-        .eq('id', userMembership.team_id)
-        .maybeSingle();
+        .eq('id', membership.team_id)
+        .single();
 
       if (teamError) {
         console.error('Error fetching team:', teamError);
@@ -49,22 +49,23 @@ export const useTeamData = () => {
         return;
       }
 
-      setUserTeam(teamData);
-      console.log("Team data fetched:", teamData);
+      setUserTeam(team);
+      console.log("Team data fetched:", team);
 
-      // Finally fetch all team members with their profiles in a single query
+      // Finally fetch all team members
       const { data: members, error: membersError } = await supabase
         .from('team_members')
         .select(`
           id,
           role,
-          profile:profiles!inner(
+          profile:profiles(
             id,
             first_name,
-            last_name
+            last_name,
+            email
           )
         `)
-        .eq('team_id', userMembership.team_id);
+        .eq('team_id', membership.team_id);
 
       if (membersError) {
         console.error('Error fetching members:', membersError);
