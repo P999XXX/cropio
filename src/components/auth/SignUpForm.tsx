@@ -36,17 +36,15 @@ const SignUpForm = ({ onSubmit, isLoading }: SignUpFormProps) => {
           label="Email"
           type="email"
           placeholder="Enter your email"
-          className="text-xs md:text-sm"
         />
 
         <PasswordInput
           form={form}
           name="password"
           label="Password"
-          className="text-xs md:text-sm"
         />
 
-        <Button type="submit" className="w-full text-xs md:text-sm" disabled={isLoading}>
+        <Button type="submit" className="w-full" disabled={isLoading}>
           {isLoading ? "Signing up..." : "Sign up"}
         </Button>
       </form>

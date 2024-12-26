@@ -62,8 +62,8 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
   return (
     <div className="space-y-6">
       <div className="space-y-2">
-        <h2 className="text-2xl font-semibold">Complete Your Profile</h2>
-        <p className="text-sm text-muted-foreground">
+        <h2 className="text-2xl md:text-3xl font-semibold">Complete Your Profile</h2>
+        <p className="text-sm md:text-base text-muted-foreground">
           Enter your details to create an account
         </p>
       </div>
@@ -75,7 +75,6 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
             name="companyName"
             label="Company Name"
             placeholder="Enter company name"
-            className="text-xs md:text-sm"
           />
 
           <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
@@ -84,14 +83,12 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
               name="firstName"
               label="First Name"
               placeholder="Enter first name"
-              className="text-xs md:text-sm"
             />
             <FormInput
               form={form}
               name="lastName"
               label="Last Name"
               placeholder="Enter last name"
-              className="text-xs md:text-sm"
             />
           </div>
 
@@ -103,7 +100,6 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
             label="Email"
             type="email"
             placeholder="Enter your email"
-            className="text-xs md:text-sm"
           />
 
           <PasswordInput
@@ -111,14 +107,12 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
             name="password"
             label="Password"
             description="Password must contain at least 8 characters, including uppercase, lowercase, and numbers"
-            className="text-xs md:text-sm"
           />
 
           <PasswordInput
             form={form}
             name="confirmPassword"
             label="Confirm Password"
-            className="text-xs md:text-sm"
           />
 
           <AgreementCheckbox
@@ -135,7 +129,7 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
             linkHref="/privacy"
           />
 
-          <Button type="submit" className="w-full text-xs md:text-sm" disabled={isLoading}>
+          <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading ? "Creating account..." : "Create account"}
           </Button>
         </form>
