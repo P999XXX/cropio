@@ -51,9 +51,9 @@ const DashboardSidebar = () => {
     <Sidebar 
       variant="inset" 
       collapsible="icon"
-      className="absolute top-0 h-full pt-[2px] shadow-md border-r border-border bg-background z-50"
+      className="absolute top-0 h-full shadow-md border-r border-border bg-background z-50"
     >
-      <SidebarHeader className="px-4 sm:px-6 lg:px-8 mb-6">
+      <SidebarHeader className="px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <SidebarTrigger 
             icon={!isExpanded ? Menu : undefined}
