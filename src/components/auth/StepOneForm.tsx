@@ -68,6 +68,10 @@ const StepOneForm = ({
                           src="/lovable-uploads/0aaa1e70-1712-4d31-a2b1-af6c7d6d14df.png" 
                           alt="Supplier" 
                           className="h-14 w-14 md:h-16 md:w-16 dark:invert"
+                          loading="eager"
+                          decoding="async"
+                          width={64}
+                          height={64}
                         />
                       </div>
                       <span className="text-sm font-medium">Supplier</span>
@@ -90,6 +94,10 @@ const StepOneForm = ({
                           src="/lovable-uploads/977f591c-307c-470a-a365-6a048c8b3e26.png" 
                           alt="Buyer" 
                           className="h-14 w-14 md:h-16 md:w-16 dark:invert"
+                          loading="eager"
+                          decoding="async"
+                          width={64}
+                          height={64}
                         />
                       </div>
                       <span className="text-sm font-medium">Buyer</span>
