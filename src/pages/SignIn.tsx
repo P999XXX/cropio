@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/card";
 import SignInForm, { SignInFormData } from "@/components/auth/SignInForm";
 import ForgotPasswordDialog from "@/components/auth/ForgotPasswordDialog";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -20,6 +21,7 @@ const SignIn = () => {
   const [resetEmail, setResetEmail] = useState("");
   const [isResetting, setIsResetting] = useState(false);
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
 
   const handleSignIn = async (values: SignInFormData) => {
     setIsLoading(true);
@@ -63,7 +65,7 @@ const SignIn = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <div className="container mx-auto px-4 pt-16 flex items-center justify-center min-h-[calc(100vh-64px)]">
+      <div className={`container mx-auto px-4 ${isMobile ? 'pt-8' : 'pt-16'} flex items-${isMobile ? 'start' : 'center'} justify-center min-h-[calc(100vh-64px)]`}>
         <div className="max-w-md w-full space-y-6 my-8">
           <div className="text-left space-y-2">
             <h1 className="text-3xl font-bold">Welcome Back</h1>

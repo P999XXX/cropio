@@ -15,6 +15,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ThankYouDialog from "@/components/auth/ThankYouDialog";
 import SignUpHeader from "@/components/auth/SignUpHeader";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -23,6 +24,7 @@ const SignUp = () => {
   const [showThankYouDialog, setShowThankYouDialog] = useState(false);
   const [userEmail, setUserEmail] = useState("");
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
 
   const sendWelcomeEmail = async (email: string, companyName: string) => {
     try {
@@ -134,7 +136,7 @@ const SignUp = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <div className="container mx-auto px-4 pt-16 flex items-center justify-center min-h-[calc(100vh-64px)]">
+      <div className={`container mx-auto px-4 ${isMobile ? 'pt-8' : 'pt-16'} flex items-${isMobile ? 'start' : 'center'} justify-center min-h-[calc(100vh-64px)]`}>
         <div className="max-w-md w-full space-y-6 my-8">
           <div className="text-left space-y-2">
             <h1 className="text-3xl font-bold">Register for Free</h1>

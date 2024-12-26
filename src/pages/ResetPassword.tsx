@@ -17,6 +17,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Navbar from "@/components/Navbar";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const passwordSchema = z
   .string()
@@ -39,6 +40,7 @@ const ResetPassword = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const isMobile = useIsMobile();
 
   const form = useForm<ResetPasswordFormData>({
     resolver: zodResolver(resetPasswordSchema),
@@ -70,7 +72,7 @@ const ResetPassword = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <div className="container mx-auto px-4 pt-16 flex items-center justify-center min-h-[calc(100vh-64px)]">
+      <div className={`container mx-auto px-4 ${isMobile ? 'pt-8' : 'pt-16'} flex items-${isMobile ? 'start' : 'center'} justify-center min-h-[calc(100vh-64px)]`}>
         <div className="max-w-md w-full space-y-6 my-8">
           <div className="text-left space-y-2">
             <h1 className="text-3xl font-bold">Reset Password</h1>
