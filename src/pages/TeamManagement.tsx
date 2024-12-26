@@ -21,11 +21,16 @@ const TeamManagement = () => {
 
   const checkAuthAndFetchData = async () => {
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      console.log("Session check:", { hasSession: !!session, sessionError });
+
       if (!session) {
+        console.log("No session found, redirecting to signin");
         navigate('/signin');
         return;
       }
+
+      console.log("User ID:", session.user.id);
       await fetchTeamData(session.user.id);
     } catch (error) {
       console.error('Auth check error:', error);
@@ -39,36 +44,48 @@ const TeamManagement = () => {
       setIsLoading(true);
       console.log('Fetching team data for user:', userId);
       
-      // Fetch user's team
-      const { data: teamData, error: teamError } = await supabase
-        .from('teams')
-        .select('*')
-        .eq('created_by', userId)
-        .single();
+      // First, try to get the team where the user is a member
+      const { data: membershipData, error: membershipError } = await supabase
+        .from('team_members')
+        .select(`
+          team_id,
+          role,
+          team:teams(*)
+        `)
+        .eq('user_id', userId)
+        .maybeSingle();
 
-      if (teamError) {
-        console.error('Error fetching team:', teamError);
+      console.log("Team membership data:", { membershipData, membershipError });
+
+      if (membershipError) {
+        console.error('Error fetching team membership:', membershipError);
         toast.error('Error loading team data');
         return;
       }
 
-      if (!teamData) {
-        console.log('No team found for user');
+      if (!membershipData) {
+        console.log('No team membership found');
         toast.error('No team found');
         return;
       }
 
-      console.log('Team data found:', teamData);
-      setUserTeam(teamData);
+      const teamId = membershipData.team_id;
+      console.log('Found team ID:', teamId);
 
       // Fetch team members with their profiles
       const { data: members, error: membersError } = await supabase
         .from('team_members')
         .select(`
-          *,
-          profile:profiles(first_name, last_name, email)
+          id,
+          role,
+          profile:profiles(
+            id,
+            first_name,
+            last_name,
+            email
+          )
         `)
-        .eq('team_id', teamData.id);
+        .eq('team_id', teamId);
 
       if (membersError) {
         console.error('Error fetching members:', membersError);
@@ -78,6 +95,7 @@ const TeamManagement = () => {
 
       console.log('Team members loaded:', members);
       setTeamMembers(members || []);
+      setUserTeam(membershipData.team);
     } catch (error: any) {
       console.error('Error in fetchTeamData:', error);
       toast.error('An error occurred while loading team data');
