@@ -61,7 +61,7 @@ const CountrySelector = ({ form, onCountryChange, selectedCountry }: CountrySele
         render={({ field }) => (
           <FormItem className="w-[110px] shrink-0">
             <div
-              className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background cursor-pointer"
+              className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background cursor-pointer auth-input"
               onClick={() => setIsOpen(true)}
             >
               {selectedCountry ? (
@@ -74,7 +74,7 @@ const CountrySelector = ({ form, onCountryChange, selectedCountry }: CountrySele
               <DialogContent className="h-[100dvh] max-w-full p-0 gap-0">
                 <DialogHeader className="px-4 py-2 border-b sticky top-0 bg-background z-10">
                   <div className="flex items-center justify-between">
-                    <DialogTitle>Select Country</DialogTitle>
+                    <DialogTitle className="text-base">Select Country</DialogTitle>
                     <Button
                       variant="ghost"
                       size="icon"
@@ -89,7 +89,7 @@ const CountrySelector = ({ form, onCountryChange, selectedCountry }: CountrySele
                       placeholder="Search countries..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-8"
+                      className="pl-8 auth-input"
                     />
                     <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   </div>
@@ -99,7 +99,7 @@ const CountrySelector = ({ form, onCountryChange, selectedCountry }: CountrySele
                     {filteredCountries.map((country) => (
                       <div
                         key={country.value}
-                        className="flex items-center px-2 py-3 cursor-pointer hover:bg-muted rounded-md"
+                        className="flex items-center px-2 py-3 cursor-pointer hover:bg-muted rounded-md text-sm"
                         onClick={() => handleCountrySelect(country.value)}
                       >
                         <CountryDisplay country={country} />
@@ -109,7 +109,7 @@ const CountrySelector = ({ form, onCountryChange, selectedCountry }: CountrySele
                 </ScrollArea>
               </DialogContent>
             </Dialog>
-            <FormMessage className="text-xs text-destructive" />
+            <FormMessage />
           </FormItem>
         )}
       />
@@ -132,7 +132,7 @@ const CountrySelector = ({ form, onCountryChange, selectedCountry }: CountrySele
             }} 
             value={field.value}
           >
-            <SelectTrigger className="h-10">
+            <SelectTrigger className="h-10 auth-input">
               <SelectValue>
                 {selectedCountry && (
                   <CountryDisplay 
@@ -148,7 +148,7 @@ const CountrySelector = ({ form, onCountryChange, selectedCountry }: CountrySele
                   <SelectItem 
                     key={country.value} 
                     value={country.value}
-                    className="cursor-pointer"
+                    className="cursor-pointer text-sm"
                   >
                     <CountryDisplay country={country} />
                   </SelectItem>
@@ -156,7 +156,7 @@ const CountrySelector = ({ form, onCountryChange, selectedCountry }: CountrySele
               </ScrollArea>
             </SelectContent>
           </Select>
-          <FormMessage className="text-xs text-destructive" />
+          <FormMessage />
         </FormItem>
       )}
     />
