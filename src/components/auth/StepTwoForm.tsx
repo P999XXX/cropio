@@ -60,81 +60,72 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
   });
 
   return (
-    <div className="space-y-6">
-      <div className="space-y-2">
-        <h2 className="text-2xl md:text-3xl font-semibold">Complete Your Profile</h2>
-        <p className="text-sm md:text-base text-muted-foreground">
-          Enter your details to create an account
-        </p>
-      </div>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <FormInput
+          form={form}
+          name="companyName"
+          label="Company Name"
+          placeholder="Enter company name"
+        />
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
           <FormInput
             form={form}
-            name="companyName"
-            label="Company Name"
-            placeholder="Enter company name"
+            name="firstName"
+            label="First Name"
+            placeholder="Enter first name"
           />
-
-          <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
-            <FormInput
-              form={form}
-              name="firstName"
-              label="First Name"
-              placeholder="Enter first name"
-            />
-            <FormInput
-              form={form}
-              name="lastName"
-              label="Last Name"
-              placeholder="Enter last name"
-            />
-          </div>
-
-          <PhoneInput form={form} />
-
           <FormInput
             form={form}
-            name="email"
-            label="Email"
-            type="email"
-            placeholder="Enter your email"
+            name="lastName"
+            label="Last Name"
+            placeholder="Enter last name"
           />
+        </div>
 
-          <PasswordInput
-            form={form}
-            name="password"
-            label="Password"
-            description="Password must contain at least 8 characters, including uppercase, lowercase, and numbers"
-          />
+        <PhoneInput form={form} />
 
-          <PasswordInput
-            form={form}
-            name="confirmPassword"
-            label="Confirm Password"
-          />
+        <FormInput
+          form={form}
+          name="email"
+          label="Email"
+          type="email"
+          placeholder="Enter your email"
+        />
 
-          <AgreementCheckbox
-            form={form}
-            name="acceptTerms"
-            linkText="terms and conditions"
-            linkHref="/terms"
-          />
+        <PasswordInput
+          form={form}
+          name="password"
+          label="Password"
+          description="Password must contain at least 8 characters, including uppercase, lowercase, and numbers"
+        />
 
-          <AgreementCheckbox
-            form={form}
-            name="acceptPrivacy"
-            linkText="privacy policy"
-            linkHref="/privacy"
-          />
+        <PasswordInput
+          form={form}
+          name="confirmPassword"
+          label="Confirm Password"
+        />
 
-          <Button type="submit" className="auth-button" disabled={isLoading}>
-            {isLoading ? "Creating account..." : "Create account"}
-          </Button>
-        </form>
-      </Form>
-    </div>
+        <AgreementCheckbox
+          form={form}
+          name="acceptTerms"
+          linkText="terms and conditions"
+          linkHref="/terms"
+        />
+
+        <AgreementCheckbox
+          form={form}
+          name="acceptPrivacy"
+          linkText="privacy policy"
+          linkHref="/privacy"
+        />
+
+        <Button type="submit" className="auth-button" disabled={isLoading}>
+          {isLoading ? "Creating account..." : "Create account"}
+        </Button>
+      </form>
+    </Form>
   );
 };
 
