@@ -1,33 +1,32 @@
 import { Button } from "@/components/ui/button";
+import { GoogleIcon } from "@/components/icons/GoogleIcon";
+import { LinkedInIcon } from "@/components/icons/LinkedInIcon";
 import { toast } from "sonner";
-import GoogleIcon from "@/components/icons/GoogleIcon";
-import LinkedInIcon from "@/components/icons/LinkedInIcon";
 
 interface AuthProvidersProps {
   onGoogleSignUp: () => void;
   onLinkedInSignUp: () => void;
-  selectedRole?: "buyer" | "supplier";
+  selectedRole?: string;
   variant?: "signup" | "signin";
 }
 
-const AuthProviders = ({ 
-  onGoogleSignUp, 
-  onLinkedInSignUp, 
+const AuthProviders = ({
+  onGoogleSignUp,
+  onLinkedInSignUp,
   selectedRole,
-  variant = "signup"
+  variant = "signup",
 }: AuthProvidersProps) => {
-  const handleSocialSignUp = (handler: () => void) => {
-    if (variant === "signup" && !selectedRole) {
-      toast.error("Please select your account type first");
-      return;
+  const handleSocialSignUp = async (callback: () => void) => {
+    try {
+      await callback();
+    } catch (error: any) {
+      console.error(`${variant === "signup" ? "Sign up" : "Sign in"} error:`, error);
+      toast.error(error.message || `Failed to ${variant === "signup" ? "sign up" : "sign in"}`);
     }
-    handler();
   };
 
-  const buttonText = variant === "signup" ? "Sign up" : "Sign in";
-
   return (
-    <div className="flex flex-col gap-4">
+    <div className="space-y-2">
       <Button 
         variant="secondary" 
         onClick={() => handleSocialSignUp(onGoogleSignUp)} 
@@ -35,11 +34,12 @@ const AuthProviders = ({
       >
         <div className="flex items-center">
           <GoogleIcon className="mr-2" />
-          <span className="font-normal">
-            {buttonText} with <span className="font-bold">Google</span>
+          <span>
+            {variant === "signup" ? "Sign up" : "Continue"} with Google
           </span>
         </div>
       </Button>
+
       <Button 
         variant="secondary" 
         onClick={() => handleSocialSignUp(onLinkedInSignUp)} 
@@ -47,8 +47,8 @@ const AuthProviders = ({
       >
         <div className="flex items-center">
           <LinkedInIcon className="mr-2" />
-          <span className="font-normal">
-            {buttonText} with <span className="font-bold">LinkedIn</span>
+          <span>
+            {variant === "signup" ? "Sign up" : "Continue"} with LinkedIn
           </span>
         </div>
       </Button>
