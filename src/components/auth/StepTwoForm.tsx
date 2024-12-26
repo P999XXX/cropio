@@ -62,6 +62,11 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
     },
   });
 
+  const handleBack = (e: React.MouseEvent) => {
+    e.preventDefault();
+    navigate(-1);
+  };
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -132,7 +137,7 @@ const StepTwoForm = ({ onSubmit, isLoading }: StepTwoFormProps) => {
             type="button"
             variant="outline"
             className="w-full"
-            onClick={() => navigate(-1)}
+            onClick={handleBack}
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back
