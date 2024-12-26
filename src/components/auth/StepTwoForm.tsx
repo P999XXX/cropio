@@ -135,7 +135,7 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
           <Button
             type="button"
             variant="secondary"
-            className="w-full flex items-center justify-center bg-gray-200 hover:bg-gray-300 dark:bg-secondary/10 dark:hover:bg-secondary/20 text-foreground"
+            className="w-full flex items-center justify-center bg-white hover:bg-gray-50 dark:bg-secondary/10 dark:hover:bg-secondary/20 text-foreground"
             onClick={handleBack}
           >
             <div className="flex items-center">
