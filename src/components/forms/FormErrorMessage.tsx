@@ -9,9 +9,7 @@ const FormErrorMessage = ({ message }: FormErrorMessageProps) => {
   
   return (
     <div className="form-error">
-      <div className="bg-[#f9ef16] rounded-full p-0.5">
-        <AlertCircle className="h-3.5 w-3.5 text-foreground" />
-      </div>
+      <AlertCircle className="h-3.5 w-3.5 text-destructive" />
       {message}
     </div>
   );
