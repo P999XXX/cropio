@@ -20,16 +20,16 @@ import { useIsMobile } from "@/hooks/use-mobile";
 
 const passwordSchema = z
   .string()
-  .min(8, "Passwort muss mindestens 8 Zeichen lang sein")
-  .regex(/[A-Z]/, "Passwort muss mindestens einen Großbuchstaben enthalten")
-  .regex(/[a-z]/, "Passwort muss mindestens einen Kleinbuchstaben enthalten")
-  .regex(/[0-9]/, "Passwort muss mindestens eine Zahl enthalten");
+  .min(8, "Password must be at least 8 characters")
+  .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+  .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+  .regex(/[0-9]/, "Password must contain at least one number");
 
 const resetPasswordSchema = z.object({
   password: passwordSchema,
   confirmPassword: z.string(),
 }).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwörter stimmen nicht überein",
+  message: "Passwords don't match",
   path: ["confirmPassword"],
 });
 
@@ -78,11 +78,11 @@ const ResetPassword = () => {
 
       if (error) throw error;
 
-      toast.success("Passwort wurde erfolgreich aktualisiert!");
+      toast.success("Password successfully updated!");
       navigate("/signin");
     } catch (error: any) {
       console.error("Reset password error:", error);
-      toast.error(error.message || "Fehler beim Zurücksetzen des Passworts");
+      toast.error(error.message || "Failed to reset password");
     } finally {
       setIsLoading(false);
     }
@@ -95,16 +95,16 @@ const ResetPassword = () => {
         <div className={`max-w-md w-full ${isMobile ? 'mt-8' : 'my-8'}`}>
           <div className={`space-y-2 ${isMobile ? 'text-left' : 'text-center'} mb-6`}>
             <h1 className="text-2xl md:text-3xl font-bold">
-              {firstName ? `Hallo ${firstName}!` : "Passwort zurücksetzen"}
+              {firstName ? `Hello ${firstName}!` : "Reset Password"}
             </h1>
-            <p className="text-muted-foreground">Erstellen Sie ein neues Passwort für Ihr Konto</p>
+            <p className="text-muted-foreground">Create a new password for your account</p>
           </div>
 
           <div className="md:block hidden">
             <Card>
               <CardHeader className="pb-2">
                 <CardDescription>
-                  Bitte geben Sie Ihr neues Passwort ein
+                  Please enter your new password
                 </CardDescription>
               </CardHeader>
               <CardContent className="pt-2">
@@ -113,27 +113,27 @@ const ResetPassword = () => {
                     <PasswordInput
                       form={form}
                       name="password"
-                      label="Neues Passwort"
-                      description="Passwort muss mindestens 8 Zeichen lang sein und Groß-, Kleinbuchstaben sowie Zahlen enthalten"
+                      label="New Password"
+                      description="Password must be at least 8 characters and contain uppercase, lowercase, and numbers"
                     />
 
                     <PasswordInput
                       form={form}
                       name="confirmPassword"
-                      label="Passwort bestätigen"
+                      label="Confirm Password"
                     />
 
                     <Button type="submit" className="w-full" disabled={isLoading}>
-                      {isLoading ? "Passwort wird aktualisiert..." : "Passwort aktualisieren"}
+                      {isLoading ? "Updating password..." : "Update Password"}
                     </Button>
                   </form>
                 </Form>
               </CardContent>
               <CardFooter>
                 <div className="text-sm text-center w-full text-muted-foreground">
-                  Passwort bereits bekannt?{" "}
+                  Already know your password?{" "}
                   <a href="/signin" className="text-primary hover:underline font-medium">
-                    Anmelden
+                    Sign in
                   </a>
                 </div>
               </CardFooter>
@@ -146,25 +146,25 @@ const ResetPassword = () => {
                 <PasswordInput
                   form={form}
                   name="password"
-                  label="Neues Passwort"
-                  description="Passwort muss mindestens 8 Zeichen lang sein und Groß-, Kleinbuchstaben sowie Zahlen enthalten"
+                  label="New Password"
+                  description="Password must be at least 8 characters and contain uppercase, lowercase, and numbers"
                 />
 
                 <PasswordInput
                   form={form}
                   name="confirmPassword"
-                  label="Passwort bestätigen"
+                  label="Confirm Password"
                 />
 
                 <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? "Passwort wird aktualisiert..." : "Passwort aktualisieren"}
+                  {isLoading ? "Updating password..." : "Update Password"}
                 </Button>
               </form>
             </Form>
             <div className="text-sm text-center text-muted-foreground">
-              Passwort bereits bekannt?{" "}
+              Already know your password?{" "}
               <a href="/signin" className="text-primary hover:underline font-medium">
-                Anmelden
+                Sign in
               </a>
             </div>
           </div>
