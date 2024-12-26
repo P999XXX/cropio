@@ -114,6 +114,6 @@
 
 @layer components {
   [data-sidebar="group"] {
-    @apply relative flex w-full min-w-0 flex-col p-2 pt-5;
+    @apply relative flex w-full min-w-0 flex-col p-2 pt-7;
   }
 }
