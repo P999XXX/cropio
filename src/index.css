@@ -104,3 +104,9 @@
     @apply text-sm;
   }
 }
+
+@layer utilities {
+  .h-header {
+    height: 3.8rem;
+  }
+}
