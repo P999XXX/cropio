@@ -13,7 +13,9 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import AuthProviders from "./AuthProviders";
 
 const stepOneSchema = z.object({
-  role: z.enum(["buyer", "supplier"]),
+  role: z.enum(["buyer", "supplier"], {
+    required_error: "Choose your role",
+  }),
 });
 
 type StepOneFormData = z.infer<typeof stepOneSchema>;
@@ -105,7 +107,7 @@ const StepOneForm = ({
                   </FormItem>
                 </RadioGroup>
               </FormControl>
-              <FormMessage />
+              <FormMessage className="text-center" />
             </FormItem>
           )}
         />
