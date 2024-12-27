@@ -86,7 +86,7 @@ export const UserMenu = ({ userInitials, className }: UserMenuProps) => {
               <Button 
                 variant="ghost" 
                 size="sm"
-                className="w-full justify-between text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors duration-200"
+                className="w-full justify-between text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors duration-200 dark:hover:text-destructive dark:text-muted-foreground dark:hover:bg-destructive/10"
               >
                 Log out
                 <LogOut className="h-4 w-4 ml-2" />
@@ -103,7 +103,7 @@ export const UserMenu = ({ userInitials, className }: UserMenuProps) => {
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <AlertDialogAction 
                   onClick={handleLogout}
-                  className="bg-destructive hover:bg-destructive/90"
+                  className="bg-destructive hover:bg-destructive/90 text-destructive-foreground"
                 >
                   Log out
                 </AlertDialogAction>
