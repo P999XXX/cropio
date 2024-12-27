@@ -8,7 +8,10 @@ export const MobileMenuHeader = () => {
     <div className="sticky top-0 z-50 bg-background border-b border-border px-4 py-3 flex items-center justify-between">
       <Logo />
       <SheetClose asChild>
-        <Button variant="ghost" size="icon" className="p-0 hover:bg-transparent">
+        <Button 
+          variant="ghost" 
+          className="shadow-none !p-0 !w-auto !h-auto hover:bg-transparent hover:text-[#000000]"
+        >
           <X className="h-4 w-4" />
           <span className="sr-only">Close</span>
         </Button>
