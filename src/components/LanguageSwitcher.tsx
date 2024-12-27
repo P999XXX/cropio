@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/components/ui/use-toast";
 import ReactCountryFlag from "react-country-flag";
-import { useLanguage } from "@/components/LanguageSwitcher";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const languages = [
   { code: "en", name: "English", countryCode: "GB" },
