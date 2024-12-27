@@ -90,10 +90,10 @@ export const UserMenu = ({ userInitials, className }: UserMenuProps) => {
               <Button 
                 variant="ghost" 
                 size="sm"
-                className="w-full justify-between text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors duration-200 dark:hover:text-destructive dark:text-muted-foreground dark:hover:bg-destructive/10"
+                className="text-xs w-fit justify-start text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors duration-200 dark:hover:text-destructive dark:text-muted-foreground dark:hover:bg-destructive/10 bg-secondary/50"
               >
                 Log out
-                <LogOut className="h-4 w-4 ml-2" />
+                <LogOut className="h-3 w-3 ml-2" />
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
