@@ -11,45 +11,53 @@ import { toast } from "sonner";
 const DashboardTeam = () => {
   const [isInviteDialogOpen, setIsInviteDialogOpen] = useState(false);
 
-  const { data: teamMembers, isLoading } = useQuery({
+  const { data: teamMembers, isLoading, error } = useQuery({
     queryKey: ["team-members"],
     queryFn: async () => {
       const { data: authData, error: authError } = await supabase.auth.getUser();
       if (authError) {
-        toast.error("Authentication error: " + authError.message);
-        throw authError;
+        throw new Error("Authentication error: " + authError.message);
       }
 
       if (!authData.user) {
-        toast.error("No authenticated user found");
         throw new Error("No authenticated user found");
       }
 
-      const { data, error } = await supabase
+      const { data, error: queryError } = await supabase
         .from("team_members")
         .select(`
-          *,
-          profile:profiles!team_members_profile_id_fkey(
+          id,
+          profile_id,
+          invited_by,
+          role,
+          email,
+          status,
+          created_at,
+          profile:profiles!team_members_profile_id_fkey (
             first_name,
             last_name,
             email
           ),
-          inviter:profiles!team_members_invited_by_fkey(
+          inviter:profiles!team_members_invited_by_fkey (
             first_name,
             last_name
           )
         `)
         .order('created_at', { ascending: false });
 
-      if (error) {
-        console.error("Query error:", error);
-        toast.error("Failed to fetch team members");
-        throw error;
+      if (queryError) {
+        console.error("Query error:", queryError);
+        throw new Error("Failed to fetch team members");
       }
 
       return data as TeamMember[];
     },
+    retry: 1,
   });
+
+  if (error) {
+    toast.error("Failed to load team members");
+  }
 
   return (
     <div className="team-management space-y-6">
