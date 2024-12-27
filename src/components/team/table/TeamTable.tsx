@@ -1,24 +1,16 @@
 import { TeamMember } from "@/types/team";
 import { formatDistanceToNow } from "date-fns";
-import { cn } from "@/lib/utils";
-import { StatusBadge } from "../badges/StatusBadge";
-import { RoleBadge } from "../badges/RoleBadge";
-import { MoreVertical, UserCog, UserX } from "lucide-react";
 import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
+import { StatusBadge } from "../badges/StatusBadge";
+import { RoleBadge } from "../badges/RoleBadge";
+import { TeamTableHeaderRow } from "./TeamTableHeaderRow";
+import { TeamMemberActions } from "./TeamMemberActions";
 
 interface TeamTableProps {
   members: TeamMember[];
@@ -30,41 +22,11 @@ interface TeamTableProps {
 }
 
 export const TeamTable = ({ members, sortConfig, onSort }: TeamTableProps) => {
-  const renderTableHeader = (
-    label: string,
-    key: keyof TeamMember,
-    className?: string
-  ) => (
-    <TableHead
-      className={cn(
-        "cursor-pointer hover:text-primary transition-colors",
-        className
-      )}
-      onClick={() => onSort(key)}
-    >
-      <div className="flex items-center gap-2">
-        {label}
-        {sortConfig.key === key && (
-          <span className="text-xs">
-            {sortConfig.direction === "asc" ? "↑" : "↓"}
-          </span>
-        )}
-      </div>
-    </TableHead>
-  );
-
   return (
     <div className="rounded-lg border bg-card w-full">
       <Table>
         <TableHeader>
-          <TableRow>
-            {renderTableHeader("Member", "email")}
-            {renderTableHeader("Role", "role")}
-            {renderTableHeader("Status", "status")}
-            {renderTableHeader("Joined", "created_at")}
-            {renderTableHeader("Invited By", "invited_by")}
-            <TableHead className="w-[50px]"></TableHead>
-          </TableRow>
+          <TeamTableHeaderRow sortConfig={sortConfig} onSort={onSort} />
         </TableHeader>
         <TableBody>
           {members.map((member) => (
@@ -105,23 +67,7 @@ export const TeamTable = ({ members, sortConfig, onSort }: TeamTableProps) => {
                 {member.inviter?.first_name} {member.inviter?.last_name}
               </TableCell>
               <TableCell>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="h-8 w-8 p-0">
-                      <MoreVertical className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem className="flex items-center gap-2">
-                      <UserCog className="h-4 w-4" />
-                      Change Role
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="flex items-center gap-2 text-destructive">
-                      <UserX className="h-4 w-4" />
-                      Remove Member
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <TeamMemberActions />
               </TableCell>
             </TableRow>
           ))}
