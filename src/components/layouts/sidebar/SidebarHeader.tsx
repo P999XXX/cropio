@@ -11,7 +11,7 @@ const SidebarHeader = () => {
       <div className="flex justify-between items-center w-full">
         <SidebarTrigger 
           icon={!isExpanded ? PanelLeftOpen : undefined}
-          className={`flex items-center justify-center text-foreground transition-all duration-300 ${isExpanded ? 'opacity-0 hidden' : 'opacity-100'}`}
+          className={`flex items-center justify-center text-foreground hover:text-black active:text-black transition-colors duration-300 ${isExpanded ? 'opacity-0 hidden' : 'opacity-100'}`}
         />
         <div className={`flex items-center justify-between w-full transition-all duration-300 ${!isExpanded ? 'opacity-0 hidden' : 'opacity-100'}`}>
           <span className="text-2xl font-geologica font-extrabold">
@@ -19,7 +19,7 @@ const SidebarHeader = () => {
           </span>
           <SidebarTrigger 
             icon={PanelLeftClose}
-            className="flex items-center justify-center text-foreground"
+            className="flex items-center justify-center text-foreground hover:text-black active:text-black transition-colors duration-300"
           />
         </div>
       </div>
