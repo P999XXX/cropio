@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { supabase } from "@/integrations/supabase/client";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { UserMenuTrigger } from "./user-menu/UserMenuTrigger";
 import { UserProfileContent } from "./user-menu/UserProfileContent";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface UserMenuProps {
   userInitials: string;
@@ -23,8 +23,10 @@ interface UserProfile {
 
 export const UserMenu = ({ userInitials, className }: UserMenuProps) => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     fetchUserProfile();
@@ -70,9 +72,17 @@ export const UserMenu = ({ userInitials, className }: UserMenuProps) => {
   
   return (
     <div className="relative">
-      <HoverCard openDelay={0} closeDelay={200}>
+      <HoverCard 
+        open={isOpen} 
+        onOpenChange={setIsOpen}
+        openDelay={0} 
+        closeDelay={200}
+      >
         <HoverCardTrigger asChild>
-          <div>
+          <div 
+            onClick={() => isMobile && setIsOpen(!isOpen)}
+            className="cursor-pointer"
+          >
             <UserMenuTrigger userInitials={userInitials} className={className} />
           </div>
         </HoverCardTrigger>
