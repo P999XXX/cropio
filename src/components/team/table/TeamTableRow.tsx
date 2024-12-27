@@ -42,12 +42,23 @@ export const TeamTableRow = ({ member }: TeamTableRowProps) => {
     <TableRow key={member.id}>
       <TableCell>
         <div className="flex flex-col">
-          <span className="font-medium">
-            {member.profile.first_name} {member.profile.last_name}
-          </span>
-          <span className="text-sm text-muted-foreground">
-            {member.profile.email}
-          </span>
+          {member.status === "accepted" ? (
+            <>
+              <span className="font-medium">
+                {member.profile.first_name} {member.profile.last_name}
+              </span>
+              <span className="text-sm text-muted-foreground">
+                {member.profile.email}
+              </span>
+            </>
+          ) : (
+            <>
+              <span className="font-medium">Invited User</span>
+              <span className="text-sm text-muted-foreground">
+                {member.email}
+              </span>
+            </>
+          )}
         </div>
       </TableCell>
       <TableCell>

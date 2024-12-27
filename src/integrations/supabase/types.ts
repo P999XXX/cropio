@@ -98,12 +98,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      is_team_admin: {
-        Args: {
-          check_user_id: string
-        }
-        Returns: boolean
-      }
+      [_ in never]: never
     }
     Enums: {
       team_member_role: "administrator" | "editor" | "readonly"
