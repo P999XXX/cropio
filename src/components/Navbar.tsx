@@ -57,7 +57,7 @@ const Navbar = () => {
 
   return (
     <nav className={`fixed top-0 left-0 right-0 bg-background border-b border-border z-[51] shadow-[0_2px_8px_0_rgba(0,0,0,0.05)]`}>
-      <div className={`w-full ${isDashboard ? 'px-12' : 'px-4 sm:px-6 lg:px-8'}`}>
+      <div className={`w-full ${isDashboard ? 'px-4 md:px-8' : 'px-4 sm:px-6 lg:px-8'}`}>
         <div className="flex justify-between h-header">
           <div className="flex items-center gap-4">
             {isDashboard && (
@@ -65,7 +65,7 @@ const Navbar = () => {
             )}
             <Link 
               to="/" 
-              className={`flex-shrink-0 ${isDashboard && sidebarState === 'expanded' ? 'md:hidden' : ''}`}
+              className={`flex-shrink-0 ${isDashboard ? 'pl-0 md:pl-4' : ''} ${isDashboard && sidebarState === 'expanded' ? 'md:hidden' : ''}`}
             >
               <span className="text-2xl font-geologica font-extrabold">
                 cropio<span className="text-primary">.app</span>
@@ -86,7 +86,6 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-4">
             <LanguageSwitcher />
             <CurrencySwitcher />
@@ -117,7 +116,6 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Mobile menu button */}
           <div className="md:hidden flex items-center space-x-2">
             <LanguageSwitcher />
             <CurrencySwitcher />
@@ -149,7 +147,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Navigation */}
       {!isDashboard && isOpen && (
         <div className="md:hidden animate-slide-in">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-background shadow-lg">
