@@ -76,7 +76,12 @@ const Navbar = () => {
       </SheetTrigger>
       <SheetContent side="left" className="w-[300px] sm:w-[400px] z-[100]">
         <nav className="flex flex-col gap-4">
-          <div className="flex flex-col gap-2 pt-4">
+          <div className="mb-4 pt-2">
+            <span className="text-2xl font-geologica font-extrabold">
+              cropio<span className="text-primary">.app</span>
+            </span>
+          </div>
+          <div className="flex flex-col gap-2">
             {isDashboard ? (
               <>
                 {mainMenuItems.map((item) => (
