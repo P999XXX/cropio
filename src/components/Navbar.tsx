@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { Menu, PanelLeftOpen, PanelLeftClose, MessageSquare, Globe, DollarSign } from "lucide-react";
+import { Menu, PanelLeftOpen, PanelLeftClose, MessageSquare, Globe, DollarSign, Sun, Moon } from "lucide-react";
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -10,6 +10,7 @@ import { NavActions } from "./navbar/NavActions";
 import { UserMenu } from "./navbar/UserMenu";
 import { mainMenuItems, bottomMenuItems } from "./layouts/sidebar/menu-items";
 import { Link } from "react-router-dom";
+import ReactCountryFlag from "react-country-flag";
 
 const navItems = [
   { name: "Products", path: "/products" },
@@ -19,15 +20,11 @@ const navItems = [
   { name: "FAQ", path: "/faq" },
 ];
 
-const additionalMenuItems = [
-  { name: "Language", icon: Globe, path: "#" },
-  { name: "Currency", icon: DollarSign, path: "#" },
-  { name: "Messages", icon: MessageSquare, path: "#" },
-];
-
 const Navbar = () => {
   const [isDark, setIsDark] = useState(false);
   const [userInitials, setUserInitials] = useState("");
+  const [selectedLang, setSelectedLang] = useState("en");
+  const [selectedCurrency, setSelectedCurrency] = useState("USD");
   const location = useLocation();
   const isDashboard = location.pathname.startsWith('/dashboard');
   
@@ -41,7 +38,12 @@ const Navbar = () => {
 
   useEffect(() => {
     const theme = localStorage.getItem("theme");
+    const savedLanguage = localStorage.getItem("preferredLanguage");
+    const savedCurrency = localStorage.getItem("preferredCurrency");
+    
     setIsDark(theme === "dark");
+    if (savedLanguage) setSelectedLang(savedLanguage);
+    if (savedCurrency) setSelectedCurrency(savedCurrency);
     fetchUserProfile();
   }, []);
 
@@ -70,6 +72,17 @@ const Navbar = () => {
     } else {
       document.documentElement.classList.remove('dark');
     }
+  };
+
+  const languages = {
+    en: { name: "English", countryCode: "GB" },
+    de: { name: "Deutsch", countryCode: "DE" },
+    es: { name: "Español", countryCode: "ES" },
+  };
+
+  const currencies = {
+    USD: "US Dollar",
+    EUR: "Euro",
   };
 
   const MobileMenu = () => (
@@ -101,6 +114,50 @@ const Navbar = () => {
                   </Link>
                 ))}
                 <div className="my-4 border-t" />
+                <button
+                  onClick={() => {
+                    const newLang = selectedLang === "en" ? "de" : "en";
+                    setSelectedLang(newLang);
+                    localStorage.setItem("preferredLanguage", newLang);
+                  }}
+                  className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-secondary"
+                >
+                  <ReactCountryFlag
+                    countryCode={languages[selectedLang].countryCode}
+                    svg
+                    style={{
+                      width: '1.5em',
+                      height: '1.5em',
+                      borderRadius: '50%',
+                      objectFit: 'cover',
+                      border: '1px solid rgba(0,0,0,0.1)',
+                    }}
+                  />
+                  <span>{languages[selectedLang].name}</span>
+                </button>
+                <button
+                  onClick={() => {
+                    const newCurrency = selectedCurrency === "USD" ? "EUR" : "USD";
+                    setSelectedCurrency(newCurrency);
+                    localStorage.setItem("preferredCurrency", newCurrency);
+                  }}
+                  className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-secondary"
+                >
+                  <DollarSign className="h-4 w-4" />
+                  <span>{currencies[selectedCurrency]}</span>
+                </button>
+                <button
+                  onClick={toggleDarkMode}
+                  className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-secondary"
+                >
+                  {isDark ? (
+                    <Moon className="h-4 w-4" />
+                  ) : (
+                    <Sun className="h-4 w-4" />
+                  )}
+                  <span>{isDark ? 'Dark Mode' : 'Light Mode'}</span>
+                </button>
+                <div className="my-4 border-t" />
                 {bottomMenuItems.map((item) => (
                   <Link
                     key={item.label}
@@ -123,17 +180,6 @@ const Navbar = () => {
                 </Link>
               ))
             )}
-            <div className="my-4 border-t" />
-            {additionalMenuItems.map((item) => (
-              <Link
-                key={item.name}
-                to={item.path}
-                className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-secondary"
-              >
-                <item.icon className="h-4 w-4" />
-                <span>{item.name}</span>
-              </Link>
-            ))}
           </div>
         </nav>
       </SheetContent>
@@ -160,6 +206,10 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center gap-4">
+            <Button variant="ghost" size="icon" className="h-9 w-9">
+              <MessageSquare className="h-4 w-4" />
+              <span className="sr-only">Open chat</span>
+            </Button>
             <NavActions 
               isDark={isDark} 
               onToggleTheme={toggleDarkMode} 
