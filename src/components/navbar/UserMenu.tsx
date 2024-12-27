@@ -20,7 +20,12 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
-const UserMenu = () => {
+interface UserMenuProps {
+  userInitials?: string;
+  className?: string;
+}
+
+export const UserMenu = ({ userInitials, className }: UserMenuProps) => {
   const [isHoverCardOpen, setIsHoverCardOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -111,5 +116,3 @@ const UserMenu = () => {
     </div>
   );
 };
-
-export default UserMenu;
