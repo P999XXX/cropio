@@ -13,7 +13,7 @@ const SidebarHeader = () => {
           icon={!isExpanded ? PanelLeftOpen : undefined}
           className={`flex items-center justify-center text-foreground opacity-75 hover:opacity-100 hover:text-black active:text-black hover:bg-transparent active:bg-transparent hover:shadow-none transition-colors duration-300 pl-[3px] ${isExpanded ? 'opacity-0 hidden' : ''}`}
         />
-        <div className={`flex items-center justify-between w-full transition-all duration-300 ${!isExpanded ? 'opacity-0 hidden' : 'opacity-100'}`}>
+        <div className={`flex items-center justify-between w-full ${!isExpanded ? 'opacity-0 hidden' : 'opacity-100'}`}>
           <span className="text-2xl font-geologica font-extrabold">
             cropio<span className="text-primary">.app</span>
           </span>
