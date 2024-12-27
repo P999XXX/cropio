@@ -63,9 +63,13 @@ export const CurrencySwitcher = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent 
         align="end" 
-        className="bg-background border shadow-lg z-[100]"
+        className="bg-background border shadow-lg"
         sideOffset={8}
-        style={{ position: 'fixed', marginTop: '0' }}
+        style={{ 
+          position: 'absolute',
+          zIndex: 100,
+          marginTop: '0.5rem'
+        }}
       >
         {currencies.map((currency) => {
           const Icon = currency.icon;
