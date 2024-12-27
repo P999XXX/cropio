@@ -17,16 +17,21 @@ import { formatDistanceToNow } from "date-fns";
 import { cn } from "@/lib/utils";
 import { StatusBadge } from "./badges/StatusBadge";
 import { RoleBadge } from "./badges/RoleBadge";
+import { paginateArray, getTotalPages } from "./utils/pagination";
+import { TablePagination } from "./table/TablePagination";
 
 interface TeamMembersTableProps {
   teamMembers: TeamMember[];
   isLoading: boolean;
 }
 
+const ITEMS_PER_PAGE = 10;
+
 export const TeamMembersTable = ({ teamMembers, isLoading }: TeamMembersTableProps) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [roleFilter, setRoleFilter] = useState<string>("all");
   const [viewMode, setViewMode] = useState<"grid" | "list">("list");
+  const [currentPage, setCurrentPage] = useState(1);
   const isMobile = useIsMobile();
   
   const [sortConfig, setSortConfig] = useState<{
@@ -44,32 +49,39 @@ export const TeamMembersTable = ({ teamMembers, isLoading }: TeamMembersTablePro
     });
   };
 
-  const filteredAndSortedMembers = teamMembers
-    .filter((member) => {
-      const searchableEmail = member.status === "accepted" 
-        ? member.profile?.email 
-        : member.email;
-      
-      const searchableName = member.status === "accepted"
-        ? `${member.profile?.first_name || ''} ${member.profile?.last_name || ''}`
-        : '';
+  const filteredMembers = teamMembers.filter((member) => {
+    const searchableEmail = member.status === "accepted" 
+      ? member.profile?.email 
+      : member.email;
+    
+    const searchableName = member.status === "accepted"
+      ? `${member.profile?.first_name || ''} ${member.profile?.last_name || ''}`
+      : '';
 
-      const matchesSearch =
-        searchableEmail?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        searchableName.toLowerCase().includes(searchTerm.toLowerCase());
-      
-      const matchesRole = roleFilter === "all" || member.role === roleFilter;
-      
-      return matchesSearch && matchesRole;
-    })
-    .sort((a, b) => {
-      const aValue = a[sortConfig.key];
-      const bValue = b[sortConfig.key];
-      
-      if (aValue < bValue) return sortConfig.direction === "asc" ? -1 : 1;
-      if (aValue > bValue) return sortConfig.direction === "asc" ? 1 : -1;
-      return 0;
-    });
+    const matchesSearch =
+      searchableEmail?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      searchableName.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    const matchesRole = roleFilter === "all" || member.role === roleFilter;
+    
+    return matchesSearch && matchesRole;
+  });
+
+  const sortedMembers = [...filteredMembers].sort((a, b) => {
+    const aValue = a[sortConfig.key];
+    const bValue = b[sortConfig.key];
+    
+    if (aValue < bValue) return sortConfig.direction === "asc" ? -1 : 1;
+    if (aValue > bValue) return sortConfig.direction === "asc" ? 1 : -1;
+    return 0;
+  });
+
+  const totalPages = getTotalPages(sortedMembers.length, ITEMS_PER_PAGE);
+  const paginatedMembers = paginateArray(sortedMembers, currentPage, ITEMS_PER_PAGE);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   if (isLoading) {
     return (
@@ -147,7 +159,7 @@ export const TeamMembersTable = ({ teamMembers, isLoading }: TeamMembersTablePro
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredAndSortedMembers.map((member) => (
+              {paginatedMembers.map((member) => (
                 <TableRow key={member.id} className="hover:bg-muted/50">
                   <TableCell>
                     <div className="flex flex-col">
@@ -191,7 +203,7 @@ export const TeamMembersTable = ({ teamMembers, isLoading }: TeamMembersTablePro
         </div>
       ) : (
         <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredAndSortedMembers.map((member) => (
+          {paginatedMembers.map((member) => (
             <TeamCard 
               key={member.id} 
               member={member} 
@@ -201,6 +213,14 @@ export const TeamMembersTable = ({ teamMembers, isLoading }: TeamMembersTablePro
             />
           ))}
         </div>
+      )}
+
+      {sortedMembers.length > ITEMS_PER_PAGE && (
+        <TablePagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       )}
     </div>
   );
