@@ -25,6 +25,14 @@ export const MobileMenuCurrency = () => {
       title: "Currency Changed",
       description: `Successfully switched to ${currencies.find(c => c.code === newCurrency)?.name}`,
     });
+
+    // Close the mobile menu by clicking outside
+    const outsideClick = new MouseEvent('click', {
+      bubbles: true,
+      cancelable: true,
+      view: window
+    });
+    document.dispatchEvent(outsideClick);
   };
 
   const selectedCurrencyData = currencies.find(c => c.code === selectedCurrency);
@@ -39,7 +47,7 @@ export const MobileMenuCurrency = () => {
         <CurrencyIcon className="h-4 w-4" />
         <span>{selectedCurrencyData?.name}</span>
       </div>
-      <RefreshCw className="h-4 w-4" />
+      <RefreshCw className="h-3 w-3" />
     </button>
   );
 };
