@@ -48,7 +48,7 @@ export const Sidebar = React.forwardRef<
             data-mobile="true"
             side={side}
             className={cn(
-              "w-[--sidebar-width] bg-background text-foreground p-0 [&>button]:hidden",
+              "w-[--sidebar-width] bg-background text-foreground p-0 [&>button]:hidden [&>div]:bg-background",
               className
             )}
             style={
@@ -57,7 +57,7 @@ export const Sidebar = React.forwardRef<
               } as React.CSSProperties
             }
           >
-            <div className="flex h-full w-full flex-col">{children}</div>
+            <div className="flex h-full w-full flex-col bg-background">{children}</div>
           </SheetContent>
         </Sheet>
       )
@@ -84,7 +84,7 @@ export const Sidebar = React.forwardRef<
         />
         <div
           className={cn(
-            "duration-200 fixed inset-y-0 z-10 hidden h-svh w-[--sidebar-width] transition-[left,right,width] ease-linear md:flex",
+            "duration-200 fixed inset-y-0 z-10 hidden h-svh w-[--sidebar-width] transition-[left,right,width] ease-linear md:flex bg-background",
             side === "left"
               ? "left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]"
               : "right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]",
