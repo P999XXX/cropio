@@ -14,13 +14,11 @@ const Navbar = () => {
   const location = useLocation();
   const isDashboard = location.pathname.startsWith('/dashboard');
   
-  // Only use sidebar context if we're in dashboard
   let sidebarState;
   try {
     const { state } = useSidebar();
     sidebarState = state;
   } catch {
-    // Not within SidebarProvider (non-dashboard routes)
     sidebarState = null;
   }
 
@@ -58,7 +56,7 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className={`fixed top-0 right-0 bg-background border-b border-border z-[51] shadow-[0_2px_8px_0_rgba(0,0,0,0.05)] ${isDashboard ? 'left-[var(--sidebar-width-icon)]' : 'left-0'} transition-[left] duration-200 ease-linear ${isDashboard && sidebarState === 'expanded' ? 'left-[var(--sidebar-width)]' : ''}`}>
+    <nav className={`fixed top-0 left-0 right-0 bg-background border-b border-border z-[51] shadow-[0_2px_8px_0_rgba(0,0,0,0.05)]`}>
       <div className={`w-full ${isDashboard ? 'px-12' : 'px-4 sm:px-6 lg:px-8'}`}>
         <div className="flex justify-between h-header">
           <div className="flex items-center gap-4">
