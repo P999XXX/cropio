@@ -32,7 +32,7 @@ export const MobileMenuLanguage = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="flex items-center gap-2 px-2 py-1.5 w-full text-left hover:bg-secondary rounded-md">
+        <button className="flex items-center gap-2 px-2 py-1.5 w-full text-left hover:bg-secondary rounded-md text-sm">
           <ReactCountryFlag
             countryCode={selectedLanguage?.countryCode || "GB"}
             svg
@@ -52,6 +52,7 @@ export const MobileMenuLanguage = () => {
           <DropdownMenuItem
             key={lang.code}
             onClick={() => handleLanguageChange(lang.code)}
+            className="text-sm"
           >
             <div className="flex items-center gap-2">
               <ReactCountryFlag

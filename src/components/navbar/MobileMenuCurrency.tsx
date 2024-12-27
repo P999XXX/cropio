@@ -31,7 +31,7 @@ export const MobileMenuCurrency = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="flex items-center gap-2 px-2 py-1.5 w-full text-left hover:bg-secondary rounded-md">
+        <button className="flex items-center gap-2 px-2 py-1.5 w-full text-left hover:bg-secondary rounded-md text-sm">
           <CurrencyIcon className="h-4 w-4" />
           <span>{selectedCurrencyData?.name}</span>
         </button>
@@ -43,6 +43,7 @@ export const MobileMenuCurrency = () => {
             <DropdownMenuItem
               key={currency.code}
               onClick={() => handleCurrencyChange(currency.code)}
+              className="text-sm"
             >
               <div className="flex items-center gap-2">
                 <Icon className="h-4 w-4" />

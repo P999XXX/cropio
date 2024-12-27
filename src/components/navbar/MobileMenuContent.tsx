@@ -20,7 +20,7 @@ export const MobileMenuContent = ({ isDashboard, isDark, onToggleTheme }: Mobile
           <Link
             key={item.label}
             to={item.path}
-            className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-secondary"
+            className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-secondary text-sm"
           >
             <item.icon className="h-4 w-4" />
             <span>{item.label}</span>
@@ -33,7 +33,7 @@ export const MobileMenuContent = ({ isDashboard, isDark, onToggleTheme }: Mobile
         <MobileMenuCurrency />
         <button
           onClick={onToggleTheme}
-          className="flex items-center gap-2 px-2 py-1.5 w-full rounded-md hover:bg-secondary"
+          className="flex items-center gap-2 px-2 py-1.5 w-full rounded-md hover:bg-secondary text-sm"
         >
           {isDark ? (
             <Moon className="h-4 w-4" />
@@ -49,7 +49,7 @@ export const MobileMenuContent = ({ isDashboard, isDark, onToggleTheme }: Mobile
           <Link
             key={item.label}
             to={item.path}
-            className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-secondary"
+            className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-secondary text-sm"
           >
             <item.icon className="h-4 w-4" />
             <span>{item.label}</span>
