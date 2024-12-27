@@ -115,8 +115,8 @@ export const TeamMembersTable = ({ teamMembers, isLoading }: TeamMembersTablePro
   );
 
   return (
-    <div className="space-y-4 team-members-table w-full">
-      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between bg-card rounded-lg p-3 shadow-sm w-full">
+    <div className="space-y-2 team-members-table w-full">
+      <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between bg-card rounded-lg p-2 shadow-sm w-full">
         <TeamTableHeader
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
@@ -202,7 +202,7 @@ export const TeamMembersTable = ({ teamMembers, isLoading }: TeamMembersTablePro
           </Table>
         </div>
       ) : (
-        <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full">
+        <div className="grid gap-1 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full">
           {paginatedMembers.map((member) => (
             <TeamCard 
               key={member.id} 
