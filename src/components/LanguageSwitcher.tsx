@@ -66,9 +66,10 @@ export const LanguageSwitcher = () => {
         <DropdownMenuContent 
           align="end"
           alignOffset={0}
-          className="w-[200px] p-2 z-[100]"
+          className="w-[200px] p-2"
           forceMount
           sideOffset={8}
+          style={{ zIndex: 100 }}
         >
           {languages.map((lang) => (
             <DropdownMenuItem
