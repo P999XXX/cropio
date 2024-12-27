@@ -9,11 +9,11 @@ interface ThemeToggleProps {
 export const ThemeToggle = ({ isDark, onToggle }: ThemeToggleProps) => {
   return (
     <Toggle
+      variant="outline"
       size="sm"
       pressed={isDark}
       onPressedChange={onToggle}
       aria-label="Toggle dark mode"
-      className="hover:bg-transparent"
     >
       {isDark ? (
         <Moon className="h-4 w-4" />
