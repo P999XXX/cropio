@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -12,34 +11,30 @@ interface MobileMenuProps {
 export const MobileMenu = ({ isOpen, setIsOpen, navItems, userInitials }: MobileMenuProps) => {
   if (!isOpen) {
     return (
-      <Button
+      <button
         onClick={() => setIsOpen(true)}
-        variant="ghost"
-        size="icon"
-        className="h-9 w-9"
+        className="inline-flex items-center justify-center p-2 rounded-md text-foreground hover:text-primary hover:bg-secondary focus:outline-none"
       >
-        <Menu className="h-5 w-5" />
-      </Button>
+        <Menu className="h-6 w-6" />
+      </button>
     );
   }
 
   return (
     <>
-      <Button
+      <button
         onClick={() => setIsOpen(false)}
-        variant="ghost"
-        size="icon"
-        className="h-9 w-9"
+        className="inline-flex items-center justify-center p-2 rounded-md text-foreground hover:text-primary hover:bg-secondary focus:outline-none"
       >
-        <X className="h-5 w-5" />
-      </Button>
-      <div className="absolute top-[calc(100%+1px)] left-0 right-0 bg-background border-b border-border animate-slide-in">
-        <div className="p-4 space-y-3">
+        <X className="h-6 w-6" />
+      </button>
+      <div className="md:hidden animate-slide-in">
+        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-background shadow-lg">
           {navItems.map((item) => (
             <Link
               key={item.name}
               to={item.path}
-              className="block w-full px-4 py-2 text-sm rounded-md text-foreground hover:text-primary hover:bg-secondary transition-colors"
+              className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:text-primary hover:bg-secondary"
               onClick={() => setIsOpen(false)}
             >
               {item.name}
@@ -48,7 +43,7 @@ export const MobileMenu = ({ isOpen, setIsOpen, navItems, userInitials }: Mobile
           {!userInitials && (
             <Link
               to="/signin"
-              className="block w-full text-center px-4 py-2 rounded-md text-sm font-medium text-white bg-primary hover:bg-primary/90 transition-colors"
+              className="block w-full text-center px-3 py-2 rounded-md text-base font-medium text-white bg-primary hover:bg-primary/90"
               onClick={() => setIsOpen(false)}
             >
               Sign In
