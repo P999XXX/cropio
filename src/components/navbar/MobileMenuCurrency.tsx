@@ -7,7 +7,11 @@ const currencies = [
   { code: "EUR", name: "Euro", icon: EuroIcon },
 ];
 
-export const MobileMenuCurrency = () => {
+interface MobileMenuCurrencyProps {
+  onClose?: () => void;
+}
+
+export const MobileMenuCurrency = ({ onClose }: MobileMenuCurrencyProps) => {
   const [selectedCurrency, setSelectedCurrency] = useState("USD");
   const { toast } = useToast();
 
@@ -26,13 +30,10 @@ export const MobileMenuCurrency = () => {
       description: `Successfully switched to ${currencies.find(c => c.code === newCurrency)?.name}`,
     });
 
-    // Close the mobile menu by clicking outside
-    const outsideClick = new MouseEvent('click', {
-      bubbles: true,
-      cancelable: true,
-      view: window
-    });
-    document.dispatchEvent(outsideClick);
+    // Call the onClose prop to close the menu
+    if (onClose) {
+      onClose();
+    }
   };
 
   const selectedCurrencyData = currencies.find(c => c.code === selectedCurrency);

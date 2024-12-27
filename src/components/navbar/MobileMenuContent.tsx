@@ -41,7 +41,9 @@ export const MobileMenuContent = ({ isDashboard, isDark, onToggleTheme, onClose 
       description: `Successfully switched to ${selectedLang?.name}`,
     });
     setShowLanguages(false);
-    window.location.reload();
+    if (onClose) {
+      onClose();
+    }
   };
 
   if (!isDashboard) return null;
@@ -122,14 +124,17 @@ export const MobileMenuContent = ({ isDashboard, isDark, onToggleTheme, onClose 
           )}
         </div>
 
-        <MobileMenuCurrency />
+        <MobileMenuCurrency onClose={onClose} />
       </div>
 
       <Separator className="bg-border" />
 
       <div className="space-y-1">
         <button
-          onClick={onToggleTheme}
+          onClick={() => {
+            onToggleTheme();
+            if (onClose) onClose();
+          }}
           className="flex items-center gap-2 px-2 py-1.5 w-full rounded-md hover:bg-secondary text-sm"
         >
           {isDark ? (
