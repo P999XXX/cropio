@@ -74,7 +74,7 @@ const Navbar = () => {
           <span className="sr-only">Toggle menu</span>
         </Button>
       </SheetTrigger>
-      <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+      <SheetContent side="left" className="w-[300px] sm:w-[400px]">
         <nav className="flex flex-col gap-4">
           <div className="flex flex-col gap-2 pt-4">
             {isDashboard ? (
@@ -122,7 +122,7 @@ const Navbar = () => {
     <nav className="fixed top-0 left-0 right-0 bg-background border-b border-border z-[51] shadow-[0_2px_8px_0_rgba(0,0,0,0.05)]">
       <div className={`w-full ${isDashboard ? 'px-4 md:px-8' : 'px-4 sm:px-6 lg:px-8'}`}>
         <div className="flex justify-between h-header">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
             {isDashboard ? (
               <>
                 <SidebarTrigger 
