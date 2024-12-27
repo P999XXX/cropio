@@ -1,5 +1,5 @@
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { MessageSquare, Sun, Moon, PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import { MessageSquare, Sun, Moon, PanelLeftClose, PanelLeftOpen, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useLocation } from "react-router-dom";
