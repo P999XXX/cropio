@@ -68,8 +68,10 @@ export const MobileMenuContent = ({ isDashboard, isDark, onToggleTheme, onClose 
 
       <div className="space-y-3">
         <Select onValueChange={handleLanguageChange} defaultValue={localStorage.getItem("preferredLanguage") || "en"}>
-          <SelectTrigger className="w-full p-0 border-0 hover:bg-secondary rounded-md focus:ring-0">
-            <SelectValue placeholder="Select Language" />
+          <SelectTrigger className="w-full p-0 border-0 h-[34px] hover:bg-secondary rounded-md focus:ring-0">
+            <div className="flex items-center gap-2 px-2 py-1.5 w-full text-sm">
+              {languages.find(l => l.code === (localStorage.getItem("preferredLanguage") || "en"))?.name}
+            </div>
           </SelectTrigger>
           <SelectContent>
             {languages.map((lang) => (
