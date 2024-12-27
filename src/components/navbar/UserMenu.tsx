@@ -24,8 +24,8 @@ interface UserProfile {
 const UserMenuContent = ({ profile, onLogout }: { profile: UserProfile | null, onLogout: () => void }) => (
   <div className="flex flex-col space-y-4">
     <div className="flex items-start space-x-4">
-      <Avatar className="h-10 w-10 bg-[#9b87f5]">
-        <AvatarFallback className="text-primary-foreground">
+      <Avatar className="h-10 w-10 bg-[#F1F0FB]">
+        <AvatarFallback className="text-primary">
           <User className="h-5 w-5" />
         </AvatarFallback>
       </Avatar>
@@ -112,8 +112,8 @@ export const UserMenu = ({ userInitials, className }: UserMenuProps) => {
       <Popover>
         <HoverCardTrigger asChild>
           <PopoverTrigger asChild>
-            <Avatar className={className || "h-9 w-9 bg-[#9b87f5] hover:opacity-90 transition-opacity border border-border cursor-pointer"}>
-              <AvatarFallback className="text-primary-foreground text-[11px] bg-transparent">
+            <Avatar className={className || "h-9 w-9 bg-[#F1F0FB] hover:opacity-90 transition-opacity border border-border cursor-pointer"}>
+              <AvatarFallback className="text-primary text-[11px] bg-transparent">
                 {userInitials}
               </AvatarFallback>
             </Avatar>
