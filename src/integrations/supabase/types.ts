@@ -42,6 +42,57 @@ export type Database = {
         }
         Relationships: []
       }
+      team_members: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          invitation_token: string | null
+          invited_by: string
+          profile_id: string
+          role: Database["public"]["Enums"]["team_member_role"]
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          invitation_token?: string | null
+          invited_by: string
+          profile_id: string
+          role?: Database["public"]["Enums"]["team_member_role"]
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          invitation_token?: string | null
+          invited_by?: string
+          profile_id?: string
+          role?: Database["public"]["Enums"]["team_member_role"]
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_members_invited_by_fkey"
+            columns: ["invited_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_members_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -50,7 +101,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      team_member_role: "administrator" | "editor" | "readonly"
     }
     CompositeTypes: {
       [_ in never]: never
