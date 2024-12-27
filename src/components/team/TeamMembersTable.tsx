@@ -25,7 +25,7 @@ interface TeamMembersTableProps {
   isLoading: boolean;
 }
 
-const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = 12; // Updated from 10 to 12
 
 export const TeamMembersTable = ({ teamMembers, isLoading }: TeamMembersTableProps) => {
   const [searchTerm, setSearchTerm] = useState("");
