@@ -10,8 +10,8 @@ export const UserMenu = ({ userInitials }: UserMenuProps) => {
   
   return (
     <Link to="/dashboard/settings">
-      <Avatar className="h-9 w-9 bg-background border border-border hover:bg-secondary transition-colors">
-        <AvatarFallback className="text-foreground text-sm">
+      <Avatar className="h-9 w-9 bg-primary border border-border hover:bg-primary/90 transition-colors">
+        <AvatarFallback className="text-primary-foreground text-sm">
           {userInitials}
         </AvatarFallback>
       </Avatar>
