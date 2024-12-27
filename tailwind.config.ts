@@ -26,8 +26,8 @@ export default {
         inter: ['Inter', 'sans-serif'],
       },
       fontSize: {
-        // Updated base font size to be 5% smaller (from 13px to 12.35px)
-        base: ['12.35px', '19px'],
+        // Updated base font size to be 10% smaller (from 13px to 11.7px)
+        base: ['11.7px', '18px'],
       },
       colors: {
         border: "hsl(var(--border))",
