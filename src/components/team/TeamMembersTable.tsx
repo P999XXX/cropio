@@ -146,7 +146,7 @@ export const TeamMembersTable = ({ teamMembers, isLoading }: TeamMembersTablePro
         )}
       </div>
 
-      {viewMode === "list" ? (
+      {!isMobile && viewMode === "list" ? (
         <div className="rounded-lg border bg-card">
           <Table>
             <TableHeader>
