@@ -50,15 +50,15 @@ const UserMenuContent = ({ profile, onLogout }: { profile: UserProfile | null, o
         </div>
       </div>
     </div>
-    <div className="flex justify-start">
+    <div className="flex justify-end">
       <Button 
         variant="ghost" 
         size="sm"
         onClick={onLogout}
         className="w-32 text-sm text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors duration-200"
       >
-        <span className="flex-1 text-center">Sign out</span>
-        <LogOut className="h-4 w-4" />
+        <span className="flex-1">Sign out</span>
+        <LogOut className="h-4 w-4 ml-2" />
       </Button>
     </div>
   </div>
