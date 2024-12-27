@@ -18,7 +18,7 @@ export const useLanguage = () => useContext(LanguageContext);
 const languages = [
   { code: "en", name: "English", flag: "🇬🇧" },
   { code: "de", name: "Deutsch", flag: "🇩🇪" },
-  { code:: "es", name: "Español", flag: "🇪🇸" },
+  { code: "es", name: "Español", flag: "🇪🇸" },
 ];
 
 export const LanguageSwitcher = () => {
