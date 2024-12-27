@@ -24,13 +24,13 @@ const MenuItem = ({ icon: Icon, label, path }: MenuItemProps) => {
           to={path} 
           className={`flex items-center gap-3 relative w-full rounded-md px-2 py-1.5 transition-colors
             group-data-[collapsible=icon]:w-8 group-data-[collapsible=icon]:h-8 group-data-[collapsible=icon]:p-0
-            ${!isActive && 'hover:bg-[#1A1F2C] hover:text-primary group-data-[collapsible=icon]:hover:bg-transparent'}
-            ${isActive ? 'bg-[#1A1F2C] text-primary group-data-[collapsible=icon]:bg-transparent' : 'text-foreground'}
+            ${!isActive && 'hover:bg-[#8E9196] hover:text-primary group-data-[collapsible=icon]:hover:bg-transparent'}
+            ${isActive ? 'bg-[#8E9196] text-primary group-data-[collapsible=icon]:bg-transparent' : 'text-foreground'}
           `}
         >
           <div className={`w-8 h-8 flex items-center justify-center flex-shrink-0 rounded-md transition-colors
             group-data-[collapsible=icon]:w-full group-data-[collapsible=icon]:h-full
-            ${isActive ? 'group-data-[collapsible=icon]:bg-[#1A1F2C] group-data-[collapsible=icon]:text-primary' : 'group-data-[collapsible=icon]:hover:bg-[#1A1F2C] group-data-[collapsible=icon]:hover:text-primary'}
+            ${isActive ? 'group-data-[collapsible=icon]:bg-[#8E9196] group-data-[collapsible=icon]:text-primary' : 'group-data-[collapsible=icon]:hover:bg-[#8E9196] group-data-[collapsible=icon]:hover:text-primary'}
           `}>
             <Icon className="h-4 w-4 flex-shrink-0" />
           </div>
