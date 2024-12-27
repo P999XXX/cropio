@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { LogOut, User } from "lucide-react";
 import {
@@ -27,7 +27,43 @@ interface UserMenuProps {
 
 export const UserMenu = ({ userInitials, className }: UserMenuProps) => {
   const [isHoverCardOpen, setIsHoverCardOpen] = useState(false);
+  const [userData, setUserData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    companyName: '',
+    role: ''
+  });
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
+  const fetchUserData = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('first_name, last_name, email, company_name, role')
+          .eq('id', user.id)
+          .single();
+
+        if (profile) {
+          setUserData({
+            firstName: profile.first_name || '',
+            lastName: profile.last_name || '',
+            email: profile.email || '',
+            companyName: profile.company_name || '',
+            role: profile.role || ''
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
 
   const handleLogout = async () => {
     try {
@@ -63,21 +99,23 @@ export const UserMenu = ({ userInitials, className }: UserMenuProps) => {
                 <User className="h-8 w-8 text-primary" />
               </div>
               <div className="space-y-1">
-                <p className="text-sm font-medium">John Doe</p>
-                <p className="text-xs text-muted-foreground">john@example.com</p>
+                <p className="text-sm font-medium">
+                  {userData.firstName} {userData.lastName}
+                </p>
+                <p className="text-xs text-muted-foreground">{userData.email}</p>
               </div>
             </div>
             <div className="space-y-3">
               <div className="flex flex-col space-y-1">
                 <span className="text-xs font-medium">Company</span>
                 <span className="text-xs text-muted-foreground">
-                  Acme Corp
+                  {userData.companyName}
                 </span>
               </div>
               <div className="flex flex-col space-y-1">
                 <span className="text-xs font-medium">Role</span>
                 <span className="text-xs text-muted-foreground">
-                  Administrator
+                  {userData.role}
                 </span>
               </div>
             </div>
