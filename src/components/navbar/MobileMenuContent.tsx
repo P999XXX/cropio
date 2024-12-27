@@ -1,9 +1,23 @@
 import { Link, useLocation } from "react-router-dom";
 import { Sun, Moon } from "lucide-react";
 import { mainMenuItems, bottomMenuItems } from "../layouts/sidebar/menu-items";
-import { MobileMenuLanguage } from "./MobileMenuLanguage";
 import { MobileMenuCurrency } from "./MobileMenuCurrency";
 import { Separator } from "@/components/ui/separator";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import ReactCountryFlag from "react-country-flag";
+import { useToast } from "@/components/ui/use-toast";
+
+const languages = [
+  { code: "en", name: "English", countryCode: "GB" },
+  { code: "de", name: "Deutsch", countryCode: "DE" },
+  { code: "es", name: "Español", countryCode: "ES" },
+];
 
 interface MobileMenuContentProps {
   isDashboard: boolean;
@@ -14,6 +28,19 @@ interface MobileMenuContentProps {
 
 export const MobileMenuContent = ({ isDashboard, isDark, onToggleTheme, onClose }: MobileMenuContentProps) => {
   const location = useLocation();
+  const { toast } = useToast();
+  
+  const handleLanguageChange = (langCode: string) => {
+    const selectedLang = languages.find(l => l.code === langCode);
+    localStorage.setItem("preferredLanguage", langCode);
+    
+    toast({
+      title: "Language Changed",
+      description: `Successfully switched to ${selectedLang?.name}`,
+    });
+
+    window.location.reload();
+  };
   
   if (!isDashboard) return null;
 
@@ -39,8 +66,32 @@ export const MobileMenuContent = ({ isDashboard, isDark, onToggleTheme, onClose 
 
       <Separator className="bg-border" />
 
-      <div className="space-y-1">
-        <MobileMenuLanguage />
+      <div className="space-y-3">
+        <Select onValueChange={handleLanguageChange} defaultValue={localStorage.getItem("preferredLanguage") || "en"}>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Select Language" />
+          </SelectTrigger>
+          <SelectContent>
+            {languages.map((lang) => (
+              <SelectItem key={lang.code} value={lang.code}>
+                <div className="flex items-center gap-2">
+                  <ReactCountryFlag
+                    countryCode={lang.countryCode}
+                    svg
+                    style={{
+                      width: '1.2em',
+                      height: '1.2em',
+                      borderRadius: '50%',
+                      objectFit: 'cover',
+                      border: '1px solid rgba(0,0,0,0.1)',
+                    }}
+                  />
+                  <span>{lang.name}</span>
+                </div>
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
         <MobileMenuCurrency />
         <button
           onClick={onToggleTheme}
