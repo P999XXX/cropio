@@ -69,7 +69,10 @@ export const MobileMenuContent = ({ isDashboard, isDark, onToggleTheme, onClose 
       <Separator className="bg-border" />
 
       <div className="space-y-3">
-        <Select onValueChange={handleLanguageChange} defaultValue={localStorage.getItem("preferredLanguage") || "en"}>
+        <Select 
+          onValueChange={handleLanguageChange} 
+          defaultValue={localStorage.getItem("preferredLanguage") || "en"}
+        >
           <SelectTrigger className="w-full p-0 border-0 h-[34px] hover:bg-secondary rounded-md focus:ring-0">
             <div className="flex items-center gap-2 px-2 py-1.5 pr-5 w-full text-sm">
               <ReactCountryFlag
@@ -83,12 +86,12 @@ export const MobileMenuContent = ({ isDashboard, isDark, onToggleTheme, onClose 
                   border: '1px solid rgba(0,0,0,0.1)',
                 }}
               />
-              <span>{currentLanguage?.name}</span>
+              <SelectValue placeholder={currentLanguage?.name || "English"} />
             </div>
           </SelectTrigger>
           <SelectContent>
             {languages.map((lang) => (
-              <SelectItem key={lang.code} value={lang.code} className="cursor-pointer">
+              <SelectItem key={lang.code} value={lang.code}>
                 <div className="flex items-center gap-2">
                   <ReactCountryFlag
                     countryCode={lang.countryCode}
