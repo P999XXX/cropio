@@ -53,7 +53,7 @@ export const MobileMenuContent = ({ isDashboard, isDark, onToggleTheme, onClose 
   const currentLanguage = languages.find(l => l.code === selectedLang);
 
   return (
-    <div className="px-4 py-6 space-y-6">
+    <div className="px-4 py-6 space-y-6 lg:hidden">
       <div className="space-y-1">
         {mainMenuItems.map((item) => {
           const isActive = location.pathname === item.path;
