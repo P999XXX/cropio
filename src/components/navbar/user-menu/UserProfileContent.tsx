@@ -47,10 +47,10 @@ export const UserProfileContent = ({ profile, onLogout }: UserProfileContentProp
         variant="destructive" 
         size="sm"
         onClick={onLogout}
-        className="w-32 text-sm"
+        className="w-28 text-xs"
       >
         <span className="flex-1">Sign out</span>
-        <LogOut className="h-4 w-4 ml-2" />
+        <LogOut className="h-3 w-3 ml-1" />
       </Button>
     </div>
   </div>
