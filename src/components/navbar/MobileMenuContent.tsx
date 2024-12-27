@@ -73,56 +73,54 @@ export const MobileMenuContent = ({ isDashboard, isDark, onToggleTheme, onClose 
 
       <Separator className="bg-border" />
 
-      <div className="space-y-3">
-        <div className="space-y-1">
-          <button
-            onClick={() => setShowLanguages(!showLanguages)}
-            className="flex items-center justify-between gap-2 px-2 py-1.5 w-full text-left hover:bg-secondary rounded-md text-sm"
-          >
-            <div className="flex items-center gap-2">
-              <ReactCountryFlag
-                countryCode={currentLanguage?.countryCode || "GB"}
-                svg
-                style={{
-                  width: '1.2em',
-                  height: '1.2em',
-                  borderRadius: '50%',
-                  objectFit: 'cover',
-                  border: '1px solid rgba(0,0,0,0.1)',
-                }}
-              />
-              <span>{currentLanguage?.name}</span>
-            </div>
-            <ChevronDown 
-              className={`h-4 w-4 transition-transform duration-200 ${showLanguages ? 'rotate-180' : ''}`}
+      <div className="space-y-1">
+        <button
+          onClick={() => setShowLanguages(!showLanguages)}
+          className="flex items-center justify-between gap-2 px-2 py-1.5 w-full text-left hover:bg-secondary rounded-md text-sm"
+        >
+          <div className="flex items-center gap-2">
+            <ReactCountryFlag
+              countryCode={currentLanguage?.countryCode || "GB"}
+              svg
+              style={{
+                width: '1.2em',
+                height: '1.2em',
+                borderRadius: '50%',
+                objectFit: 'cover',
+                border: '1px solid rgba(0,0,0,0.1)',
+              }}
             />
-          </button>
-          
-          {showLanguages && (
-            <div className="ml-2 space-y-1 mt-1">
-              {availableLanguages.map((lang) => (
-                <button
-                  key={lang.code}
-                  onClick={() => handleLanguageChange(lang.code)}
-                  className="flex items-center gap-2 px-2 py-1.5 w-full text-left rounded-md text-sm hover:bg-secondary"
-                >
-                  <ReactCountryFlag
-                    countryCode={lang.countryCode}
-                    svg
-                    style={{
-                      width: '1.2em',
-                      height: '1.2em',
-                      borderRadius: '50%',
-                      objectFit: 'cover',
-                      border: '1px solid rgba(0,0,0,0.1)',
-                    }}
-                  />
-                  <span>{lang.name}</span>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
+            <span>{currentLanguage?.name}</span>
+          </div>
+          <ChevronDown 
+            className={`h-4 w-4 transition-transform duration-200 ${showLanguages ? 'rotate-180' : ''}`}
+          />
+        </button>
+        
+        {showLanguages && (
+          <div className="ml-2 space-y-1 mt-1">
+            {availableLanguages.map((lang) => (
+              <button
+                key={lang.code}
+                onClick={() => handleLanguageChange(lang.code)}
+                className="flex items-center gap-2 px-2 py-1.5 w-full text-left rounded-md text-sm hover:bg-secondary"
+              >
+                <ReactCountryFlag
+                  countryCode={lang.countryCode}
+                  svg
+                  style={{
+                    width: '1.2em',
+                    height: '1.2em',
+                    borderRadius: '50%',
+                    objectFit: 'cover',
+                    border: '1px solid rgba(0,0,0,0.1)',
+                  }}
+                />
+                <span>{lang.name}</span>
+              </button>
+            ))}
+          </div>
+        )}
 
         <MobileMenuCurrency onClose={onClose} />
       </div>
