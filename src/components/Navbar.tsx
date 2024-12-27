@@ -56,7 +56,7 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="fixed top-0 right-0 left-0 bg-background border-b border-border z-[60] shadow-[0_2px_8px_0_rgba(0,0,0,0.05)]">
+    <nav className="fixed top-0 right-0 bg-background border-b border-border z-[60] shadow-[0_2px_8px_0_rgba(0,0,0,0.05)] left-[var(--sidebar-width-icon)] transition-[left] duration-200 ease-linear">
       <div className={`w-full ${isDashboard ? 'px-12' : 'px-4 sm:px-6 lg:px-8'}`}>
         <div className="flex justify-between h-header">
           <div className="flex items-center gap-4">
