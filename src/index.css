@@ -26,18 +26,22 @@
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background-color: hsl(var(--primary)) !important;
   opacity: 0.5 !important;
-  border-radius: 999px !important;
+  border-radius: 20px !important;
   border: none !important;
 }
 
-.custom-scrollbar::-webkit-scrollbar-button {
+/* Hide scrollbar buttons in Webkit browsers */
+.custom-scrollbar::-webkit-scrollbar-button:start:decrement,
+.custom-scrollbar::-webkit-scrollbar-button:end:increment {
   display: none !important;
+  height: 0 !important;
+  width: 0 !important;
 }
 
 /* Light mode specific styles */
 @media (prefers-color-scheme: light) {
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: hsl(164, 75%, 25%) !important; /* Lighter version of primary */
+    background-color: hsl(164, 75%, 25%) !important;
   }
 }
 
