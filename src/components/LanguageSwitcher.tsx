@@ -25,10 +25,12 @@ export const LanguageSwitcher = () => {
   const [selectedLang, setSelectedLang] = useState("en");
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
+  const { setLanguage } = useLanguage();
 
   const handleLanguageChange = async (langCode: string) => {
     try {
       setSelectedLang(langCode);
+      setLanguage(langCode);
       localStorage.setItem("preferredLanguage", langCode);
       setOpen(false);
       
@@ -36,8 +38,6 @@ export const LanguageSwitcher = () => {
         title: "Language Changed",
         description: `Successfully switched to ${languages.find(l => l.code === langCode)?.name}`,
       });
-
-      window.location.reload();
     } catch (error) {
       console.error("Error changing language:", error);
       toast({
@@ -52,8 +52,9 @@ export const LanguageSwitcher = () => {
     const savedLanguage = localStorage.getItem("preferredLanguage");
     if (savedLanguage) {
       setSelectedLang(savedLanguage);
+      setLanguage(savedLanguage);
     }
-  }, []);
+  }, [setLanguage]);
 
   const selectedCountry = languages.find(l => l.code === selectedLang)?.countryCode || "GB";
 
