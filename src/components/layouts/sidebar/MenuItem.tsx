@@ -23,7 +23,7 @@ const MenuItem = ({ icon: Icon, label, path }: MenuItemProps) => {
         <Link 
           to={path} 
           className={`flex items-center gap-3 relative w-full rounded-md px-2 py-1.5 transition-colors
-            group-data-[collapsible=icon]:w-8 group-data-[collapsible=icon]:h-8 group-data-[collapsible=icon]:p-0
+            group-data-[collapsible=icon]:w-8 group-data-[collapsible=icon]:h-8 group-data-[collapsible=icon]:justify-center
             hover:bg-secondary hover:text-secondary-foreground
             ${isActive ? 'bg-secondary text-secondary-foreground' : 'text-foreground'}
           `}
