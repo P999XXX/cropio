@@ -1,6 +1,5 @@
 import { formatDistanceToNow } from "date-fns";
 import { MoreVertical, UserCog, UserX } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -9,8 +8,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-import { TeamMember, TeamMemberStatus } from "@/types/team";
+import { TeamMember } from "@/types/team";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { StatusBadge } from "../badges/StatusBadge";
+import { RoleBadge } from "../badges/RoleBadge";
 
 interface TeamCardProps {
   member: TeamMember;
@@ -23,28 +24,6 @@ interface TeamCardProps {
 }
 
 export const TeamCard = ({ member, viewMode }: TeamCardProps) => {
-  const getRoleBadgeVariant = (role: string) => {
-    switch (role) {
-      case "administrator":
-        return "default";
-      case "editor":
-        return "secondary";
-      default:
-        return "outline";
-    }
-  };
-
-  const getStatusBadgeVariant = (status: TeamMemberStatus) => {
-    switch (status) {
-      case "accepted":
-        return "default";
-      case "pending":
-        return "secondary";
-      default:
-        return "destructive";
-    }
-  };
-
   const getInitials = (firstName?: string, lastName?: string) => {
     if (!firstName && !lastName) return '??';
     return `${(firstName?.[0] || '').toUpperCase()}${(lastName?.[0] || '').toUpperCase()}`;
@@ -104,12 +83,8 @@ export const TeamCard = ({ member, viewMode }: TeamCardProps) => {
       </CardHeader>
       <CardContent className="pb-2">
         <div className="flex flex-wrap gap-2">
-          <Badge variant={getRoleBadgeVariant(member.role)} className="rounded-full">
-            {member.role}
-          </Badge>
-          <Badge variant={getStatusBadgeVariant(member.status)} className="rounded-full">
-            {member.status}
-          </Badge>
+          <RoleBadge role={member.role} />
+          <StatusBadge status={member.status} />
         </div>
       </CardContent>
       <CardFooter className="flex justify-between text-sm text-muted-foreground border-t pt-4">

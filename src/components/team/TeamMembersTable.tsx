@@ -13,9 +13,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
 import { formatDistanceToNow } from "date-fns";
 import { cn } from "@/lib/utils";
+import { StatusBadge } from "./badges/StatusBadge";
+import { RoleBadge } from "./badges/RoleBadge";
 
 interface TeamMembersTableProps {
   teamMembers: TeamMember[];
@@ -69,28 +70,6 @@ export const TeamMembersTable = ({ teamMembers, isLoading }: TeamMembersTablePro
       if (aValue > bValue) return sortConfig.direction === "asc" ? 1 : -1;
       return 0;
     });
-
-  const getRoleBadgeVariant = (role: string) => {
-    switch (role) {
-      case "administrator":
-        return "default";
-      case "editor":
-        return "secondary";
-      default:
-        return "outline";
-    }
-  };
-
-  const getStatusBadgeVariant = (status: string) => {
-    switch (status) {
-      case "accepted":
-        return "success";
-      case "pending":
-        return "warning";
-      default:
-        return "destructive";
-    }
-  };
 
   if (isLoading) {
     return (
@@ -192,14 +171,10 @@ export const TeamMembersTable = ({ teamMembers, isLoading }: TeamMembersTablePro
                     </div>
                   </TableCell>
                   <TableCell>
-                    <Badge variant={getRoleBadgeVariant(member.role)} className="rounded-full">
-                      {member.role}
-                    </Badge>
+                    <RoleBadge role={member.role} />
                   </TableCell>
                   <TableCell>
-                    <Badge variant={getStatusBadgeVariant(member.status)} className="rounded-full">
-                      {member.status}
-                    </Badge>
+                    <StatusBadge status={member.status} />
                   </TableCell>
                   <TableCell>
                     {formatDistanceToNow(new Date(member.created_at), {
