@@ -1,17 +1,10 @@
 import { useState } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { ArrowUpDown } from "lucide-react";
 import { TeamMember } from "@/types/team";
 import { TeamTableHeader } from "./table/TeamTableHeader";
-import { TeamTableRow } from "./table/TeamTableRow";
+import { Grid3X3, LayoutList } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { TeamCard } from "./card/TeamCard";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface TeamMembersTableProps {
   teamMembers: TeamMember[];
@@ -21,6 +14,9 @@ interface TeamMembersTableProps {
 export const TeamMembersTable = ({ teamMembers, isLoading }: TeamMembersTableProps) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [roleFilter, setRoleFilter] = useState<string>("all");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const isMobile = useIsMobile();
+  
   const [sortConfig, setSortConfig] = useState<{
     key: keyof TeamMember;
     direction: "asc" | "desc";
@@ -66,59 +62,51 @@ export const TeamMembersTable = ({ teamMembers, isLoading }: TeamMembersTablePro
   }
 
   return (
-    <div className="space-y-4">
-      <TeamTableHeader
-        searchTerm={searchTerm}
-        onSearchChange={setSearchTerm}
-        roleFilter={roleFilter}
-        onRoleFilterChange={setRoleFilter}
-      />
+    <div className="space-y-4 team-members-table">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <TeamTableHeader
+          searchTerm={searchTerm}
+          onSearchChange={setSearchTerm}
+          roleFilter={roleFilter}
+          onRoleFilterChange={setRoleFilter}
+        />
+        
+        {!isMobile && (
+          <div className="flex items-center gap-2">
+            <Button
+              variant={viewMode === "grid" ? "default" : "outline"}
+              size="icon"
+              onClick={() => setViewMode("grid")}
+              className="w-8 h-8"
+            >
+              <Grid3X3 className="h-4 w-4" />
+            </Button>
+            <Button
+              variant={viewMode === "list" ? "default" : "outline"}
+              size="icon"
+              onClick={() => setViewMode("list")}
+              className="w-8 h-8"
+            >
+              <LayoutList className="h-4 w-4" />
+            </Button>
+          </div>
+        )}
+      </div>
 
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Member</TableHead>
-              <TableHead>
-                <Button
-                  variant="ghost"
-                  onClick={() => handleSort("role")}
-                  className="flex items-center gap-1"
-                >
-                  Role
-                  <ArrowUpDown className="h-3 w-3" />
-                </Button>
-              </TableHead>
-              <TableHead>
-                <Button
-                  variant="ghost"
-                  onClick={() => handleSort("status")}
-                  className="flex items-center gap-1"
-                >
-                  Status
-                  <ArrowUpDown className="h-3 w-3" />
-                </Button>
-              </TableHead>
-              <TableHead>
-                <Button
-                  variant="ghost"
-                  onClick={() => handleSort("created_at")}
-                  className="flex items-center gap-1"
-                >
-                  Joined
-                  <ArrowUpDown className="h-3 w-3" />
-                </Button>
-              </TableHead>
-              <TableHead>Invited By</TableHead>
-              <TableHead className="w-[50px]"></TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {filteredAndSortedMembers.map((member) => (
-              <TeamTableRow key={member.id} member={member} />
-            ))}
-          </TableBody>
-        </Table>
+      <div className={`grid gap-4 ${
+        viewMode === "grid" 
+          ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" 
+          : "grid-cols-1"
+      }`}>
+        {filteredAndSortedMembers.map((member) => (
+          <TeamCard 
+            key={member.id} 
+            member={member} 
+            viewMode={viewMode}
+            onSort={handleSort}
+            sortConfig={sortConfig}
+          />
+        ))}
       </div>
     </div>
   );
