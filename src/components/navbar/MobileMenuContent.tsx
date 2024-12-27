@@ -4,11 +4,11 @@ import { mainMenuItems, bottomMenuItems } from "../layouts/sidebar/menu-items";
 import { MobileMenuCurrency } from "./MobileMenuCurrency";
 import { Separator } from "@/components/ui/separator";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from "@/components/ui/select";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import ReactCountryFlag from "react-country-flag";
 import { useToast } from "@/components/ui/use-toast";
 import { useState, useEffect } from "react";
@@ -45,6 +45,7 @@ export const MobileMenuContent = ({ isDashboard, isDark, onToggleTheme, onClose 
       title: "Language Changed",
       description: `Successfully switched to ${selectedLang?.name}`,
     });
+    window.location.reload();
   };
   
   if (!isDashboard) return null;
@@ -74,32 +75,27 @@ export const MobileMenuContent = ({ isDashboard, isDark, onToggleTheme, onClose 
       <Separator className="bg-border" />
 
       <div className="space-y-3">
-        <Select 
-          value={selectedLang}
-          onValueChange={handleLanguageChange}
-        >
-          <SelectTrigger className="w-full p-0 border-0 h-[34px] hover:bg-secondary rounded-md focus:ring-0 focus:ring-offset-0">
-            <div className="flex items-center gap-2 px-2 py-1.5 w-full text-sm">
-              <ReactCountryFlag
-                countryCode={currentLanguage?.countryCode || "GB"}
-                svg
-                style={{
-                  width: '1.2em',
-                  height: '1.2em',
-                  borderRadius: '50%',
-                  objectFit: 'cover',
-                  border: '1px solid rgba(0,0,0,0.1)',
-                }}
-              />
-              <span>{currentLanguage?.name}</span>
-            </div>
-          </SelectTrigger>
-          <SelectContent>
+        <DropdownMenu>
+          <DropdownMenuTrigger className="flex items-center gap-2 px-2 py-1.5 w-full text-left hover:bg-secondary rounded-md text-sm">
+            <ReactCountryFlag
+              countryCode={currentLanguage?.countryCode || "GB"}
+              svg
+              style={{
+                width: '1.2em',
+                height: '1.2em',
+                borderRadius: '50%',
+                objectFit: 'cover',
+                border: '1px solid rgba(0,0,0,0.1)',
+              }}
+            />
+            <span>{currentLanguage?.name}</span>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start" className="w-[200px]">
             {languages.map((lang) => (
-              <SelectItem 
-                key={lang.code} 
-                value={lang.code}
-                className="cursor-pointer"
+              <DropdownMenuItem
+                key={lang.code}
+                onClick={() => handleLanguageChange(lang.code)}
+                className="text-sm cursor-pointer"
               >
                 <div className="flex items-center gap-2">
                   <ReactCountryFlag
@@ -115,10 +111,10 @@ export const MobileMenuContent = ({ isDashboard, isDark, onToggleTheme, onClose 
                   />
                   <span>{lang.name}</span>
                 </div>
-              </SelectItem>
+              </DropdownMenuItem>
             ))}
-          </SelectContent>
-        </Select>
+          </DropdownMenuContent>
+        </DropdownMenu>
         <MobileMenuCurrency />
         <button
           onClick={onToggleTheme}
