@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { TableCell, TableRow } from "@/components/ui/table";
-import { TeamMember } from "@/types/team";
+import { TeamMember, TeamMemberStatus } from "@/types/team";
 import { formatDistanceToNow } from "date-fns";
 import { MoreVertical, UserX, UserCog } from "lucide-react";
 
