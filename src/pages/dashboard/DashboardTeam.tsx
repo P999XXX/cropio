@@ -14,47 +14,42 @@ const DashboardTeam = () => {
   const { data: teamMembers = [], isLoading, error } = useQuery({
     queryKey: ["team-members"],
     queryFn: async () => {
-      try {
-        const { data, error: fetchError } = await supabase
-          .from("team_members")
-          .select(`
-            id,
-            profile_id,
-            invited_by,
-            role,
-            email,
-            status,
-            created_at,
-            profile:profiles!team_members_profile_id_fkey (
-              first_name,
-              last_name,
-              email
-            ),
-            inviter:profiles!team_members_invited_by_fkey (
-              first_name,
-              last_name
-            )
-          `)
-          .order('created_at', { ascending: false });
+      const { data, error: fetchError } = await supabase
+        .from("team_members")
+        .select(`
+          id,
+          profile_id,
+          invited_by,
+          role,
+          email,
+          status,
+          created_at,
+          profile:profiles!team_members_profile_id_fkey (
+            first_name,
+            last_name,
+            email
+          ),
+          inviter:profiles!team_members_invited_by_fkey (
+            first_name,
+            last_name
+          )
+        `)
+        .order('created_at', { ascending: false });
 
-        if (fetchError) {
-          console.error("Team members fetch error:", fetchError);
-          throw new Error(fetchError.message);
-        }
-
-        return data as TeamMember[];
-      } catch (err) {
-        console.error("Team members fetch error:", err);
-        throw err;
+      if (fetchError) {
+        console.error("Team members fetch error:", fetchError);
+        throw new Error(fetchError.message);
       }
-    },
-    retry: 1,
-    retryDelay: 1000,
-  });
 
-  if (error) {
-    toast.error("Failed to load team members");
-  }
+      return data as TeamMember[];
+    },
+    retry: 2,
+    retryDelay: 1000,
+    onError: (error) => {
+      console.error("Failed to fetch team members:", error);
+      toast.error("Failed to load team members. Please try again later.");
+    }
+  });
 
   return (
     <div className="team-management space-y-6">
