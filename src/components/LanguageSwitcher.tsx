@@ -1,11 +1,10 @@
 import { useState, createContext, useContext, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { Globe } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -56,32 +55,32 @@ export const LanguageSwitcher = () => {
 
   return (
     <div className="relative inline-block">
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
+      <HoverCard>
+        <HoverCardTrigger asChild>
           <Button variant="ghost" size="icon" className="h-9 w-9">
             <Globe className="h-4 w-4" />
             <span className="sr-only">Toggle language</span>
           </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent 
-          align="end"
-          alignOffset={0}
-          className="w-[200px] p-2 z-[100]"
-          forceMount
+        </HoverCardTrigger>
+        <HoverCardContent 
+          align="end" 
+          className="w-[200px] p-2"
           sideOffset={8}
         >
-          {languages.map((lang) => (
-            <DropdownMenuItem
-              key={lang.code}
-              onClick={() => handleLanguageChange(lang.code)}
-              className="cursor-pointer"
-            >
-              <span className="mr-2">{lang.flag}</span>
-              {lang.name}
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
+          <div className="space-y-2">
+            {languages.map((lang) => (
+              <button
+                key={lang.code}
+                onClick={() => handleLanguageChange(lang.code)}
+                className="flex w-full items-center px-2 py-1.5 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
+              >
+                <span className="mr-2">{lang.flag}</span>
+                {lang.name}
+              </button>
+            ))}
+          </div>
+        </HoverCardContent>
+      </HoverCard>
     </div>
   );
 };

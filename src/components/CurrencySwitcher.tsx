@@ -1,11 +1,10 @@
 import { useState, createContext, useContext, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { DollarSign, EuroIcon } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -55,35 +54,35 @@ export const CurrencySwitcher = () => {
 
   return (
     <div className="relative inline-block">
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
+      <HoverCard>
+        <HoverCardTrigger asChild>
           <Button variant="ghost" size="icon" className="h-9 w-9">
             <CurrentIcon className="h-4 w-4" />
             <span className="sr-only">Toggle currency</span>
           </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent 
+        </HoverCardTrigger>
+        <HoverCardContent 
           align="end"
-          alignOffset={0}
-          className="w-[200px] p-2 z-[100]"
-          forceMount
+          className="w-[200px] p-2"
           sideOffset={8}
         >
-          {currencies.map((currency) => {
-            const Icon = currency.icon;
-            return (
-              <DropdownMenuItem
-                key={currency.code}
-                onClick={() => handleCurrencyChange(currency.code)}
-                className="cursor-pointer"
-              >
-                <Icon className="mr-2 h-4 w-4" />
-                {currency.name}
-              </DropdownMenuItem>
-            );
-          })}
-        </DropdownMenuContent>
-      </DropdownMenu>
+          <div className="space-y-2">
+            {currencies.map((currency) => {
+              const Icon = currency.icon;
+              return (
+                <button
+                  key={currency.code}
+                  onClick={() => handleCurrencyChange(currency.code)}
+                  className="flex w-full items-center px-2 py-1.5 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
+                >
+                  <Icon className="mr-2 h-4 w-4" />
+                  {currency.name}
+                </button>
+              );
+            })}
+          </div>
+        </HoverCardContent>
+      </HoverCard>
     </div>
   );
 };
