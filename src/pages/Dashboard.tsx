@@ -26,8 +26,8 @@ const Dashboard = () => {
         </div>
       }>
         <Routes>
-          <Route index element={<DashboardHome />} />
-          <Route path="team" element={<DashboardTeam />} />
+          <Route path="/" element={<DashboardHome />} />
+          <Route path="/team" element={<DashboardTeam />} />
           <Route path="certificates" element={<DashboardCertificates />} />
           <Route path="products" element={<DashboardProducts />} />
           <Route path="market" element={<DashboardMarket />} />
