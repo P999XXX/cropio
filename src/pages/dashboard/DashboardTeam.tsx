@@ -15,10 +15,6 @@ const DashboardTeam = () => {
     queryKey: ["team-members"],
     queryFn: async () => {
       try {
-        const { data: authData, error: authError } = await supabase.auth.getUser();
-        if (authError) throw new Error("Authentication error: " + authError.message);
-        if (!authData.user) throw new Error("No authenticated user found");
-
         const { data, error } = await supabase
           .from("team_members")
           .select(`

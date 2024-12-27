@@ -100,7 +100,7 @@ export type Database = {
     Functions: {
       is_team_admin: {
         Args: {
-          user_id: string
+          check_user_id: string
         }
         Returns: boolean
       }
