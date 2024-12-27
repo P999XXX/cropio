@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { TeamMembersTable } from "@/components/team/TeamMembersTable";
-import { InviteMemberDialog } from "@/components/team/invite/InviteMemberDialog";
+import { InviteMemberDialog } from "@/components/team/InviteMemberDialog";
 import { Button } from "@/components/ui/button";
 import { UserPlus } from "lucide-react";
 import { TeamMember } from "@/types/team";
@@ -14,40 +14,43 @@ const DashboardTeam = () => {
   const { data: teamMembers = [], isLoading, error } = useQuery({
     queryKey: ["team-members"],
     queryFn: async () => {
-      // Get the current user's ID
-      const { data: authData, error: authError } = await supabase.auth.getUser();
-      if (authError) throw new Error("Authentication error: " + authError.message);
-      if (!authData.user) throw new Error("No authenticated user found");
+      try {
+        const { data: authData, error: authError } = await supabase.auth.getUser();
+        if (authError) throw new Error("Authentication error: " + authError.message);
+        if (!authData.user) throw new Error("No authenticated user found");
 
-      // Fetch team members including both invited and accepted members
-      const { data, error: fetchError } = await supabase
-        .from("team_members")
-        .select(`
-          id,
-          profile_id,
-          invited_by,
-          role,
-          email,
-          status,
-          created_at,
-          profile:profiles!team_members_profile_id_fkey (
-            first_name,
-            last_name,
-            email
-          ),
-          inviter:profiles!team_members_invited_by_fkey (
-            first_name,
-            last_name
-          )
-        `)
-        .order('created_at', { ascending: false });
+        const { data, error: fetchError } = await supabase
+          .from("team_members")
+          .select(`
+            id,
+            profile_id,
+            invited_by,
+            role,
+            email,
+            status,
+            created_at,
+            profile:profiles!team_members_profile_id_fkey (
+              first_name,
+              last_name,
+              email
+            ),
+            inviter:profiles!team_members_invited_by_fkey (
+              first_name,
+              last_name
+            )
+          `)
+          .order('created_at', { ascending: false });
 
-      if (fetchError) {
-        console.error("Error fetching team members:", fetchError);
-        throw new Error(fetchError.message);
+        if (fetchError) {
+          console.error("Error fetching team members:", fetchError);
+          throw new Error(fetchError.message);
+        }
+
+        return data as TeamMember[];
+      } catch (error) {
+        console.error("Error in team members query:", error);
+        throw error;
       }
-
-      return data as TeamMember[];
     },
     meta: {
       onError: (error: Error) => {
