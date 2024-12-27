@@ -24,7 +24,6 @@ const MenuItem = ({ icon: Icon, label, path }: MenuItemProps) => {
           to={path} 
           className={`flex items-center gap-3 relative w-full rounded-md px-2 py-1.5 transition-colors
             hover:bg-secondary hover:text-secondary-foreground
-            group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:mx-2
             ${isActive ? 'bg-secondary text-secondary-foreground' : 'text-foreground'}
           `}
         >
