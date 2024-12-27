@@ -14,7 +14,6 @@ export const ThemeToggle = ({ isDark, onToggle }: ThemeToggleProps) => {
       pressed={isDark}
       onPressedChange={onToggle}
       aria-label="Toggle dark mode"
-      className="border-border"
     >
       {isDark ? (
         <Moon className="h-4 w-4" />
