@@ -54,39 +54,41 @@ export const CurrencySwitcher = () => {
   const CurrentIcon = currencies.find(c => c.code === selectedCurrency)?.icon || DollarSign;
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="h-9 w-9">
-          <CurrentIcon className="h-4 w-4" />
-          <span className="sr-only">Toggle currency</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent 
-        align="end" 
-        className="bg-background border shadow-lg"
-        sideOffset={8}
-        style={{ 
-          position: 'absolute',
-          zIndex: 999,
-          marginTop: '0.5rem',
-          right: 0
-        }}
-      >
-        {currencies.map((currency) => {
-          const Icon = currency.icon;
-          return (
-            <DropdownMenuItem
-              key={currency.code}
-              onClick={() => handleCurrencyChange(currency.code)}
-              className="cursor-pointer hover:bg-muted"
-            >
-              <Icon className="mr-2 h-4 w-4" />
-              {currency.name}
-            </DropdownMenuItem>
-          );
-        })}
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <div className="relative">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="icon" className="h-9 w-9">
+            <CurrentIcon className="h-4 w-4" />
+            <span className="sr-only">Toggle currency</span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent 
+          align="end" 
+          className="bg-background border shadow-lg fixed"
+          sideOffset={8}
+          style={{ 
+            position: 'fixed',
+            zIndex: 999,
+            marginTop: '0.5rem',
+            right: 'auto'
+          }}
+        >
+          {currencies.map((currency) => {
+            const Icon = currency.icon;
+            return (
+              <DropdownMenuItem
+                key={currency.code}
+                onClick={() => handleCurrencyChange(currency.code)}
+                className="cursor-pointer hover:bg-muted"
+              >
+                <Icon className="mr-2 h-4 w-4" />
+                {currency.name}
+              </DropdownMenuItem>
+            );
+          })}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   );
 };
 

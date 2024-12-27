@@ -55,36 +55,38 @@ export const LanguageSwitcher = () => {
   }, []);
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="h-9 w-9">
-          <Globe className="h-4 w-4" />
-          <span className="sr-only">Toggle language</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent 
-        align="end" 
-        className="bg-background border shadow-lg"
-        sideOffset={8}
-        style={{ 
-          position: 'absolute',
-          zIndex: 999,
-          marginTop: '0.5rem',
-          right: 0
-        }}
-      >
-        {languages.map((lang) => (
-          <DropdownMenuItem
-            key={lang.code}
-            onClick={() => handleLanguageChange(lang.code)}
-            className="cursor-pointer hover:bg-muted"
-          >
-            <span className="mr-2">{lang.flag}</span>
-            {lang.name}
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <div className="relative">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="icon" className="h-9 w-9">
+            <Globe className="h-4 w-4" />
+            <span className="sr-only">Toggle language</span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent 
+          align="end" 
+          className="bg-background border shadow-lg fixed"
+          sideOffset={8}
+          style={{ 
+            position: 'fixed',
+            zIndex: 999,
+            marginTop: '0.5rem',
+            right: 'auto'
+          }}
+        >
+          {languages.map((lang) => (
+            <DropdownMenuItem
+              key={lang.code}
+              onClick={() => handleLanguageChange(lang.code)}
+              className="cursor-pointer hover:bg-muted"
+            >
+              <span className="mr-2">{lang.flag}</span>
+              {lang.name}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   );
 };
 
