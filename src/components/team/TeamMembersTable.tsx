@@ -34,11 +34,17 @@ export const TeamMembersTable = ({ teamMembers, isLoading }: TeamMembersTablePro
 
   const filteredAndSortedMembers = teamMembers
     .filter((member) => {
+      const searchableEmail = member.status === "accepted" 
+        ? member.profile?.email 
+        : member.email;
+      
+      const searchableName = member.status === "accepted"
+        ? `${member.profile?.first_name || ''} ${member.profile?.last_name || ''}`
+        : '';
+
       const matchesSearch =
-        member.profile.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        `${member.profile.first_name} ${member.profile.last_name}`
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase());
+        searchableEmail?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        searchableName.toLowerCase().includes(searchTerm.toLowerCase());
       
       const matchesRole = roleFilter === "all" || member.role === roleFilter;
       
