@@ -3,6 +3,7 @@ import { formatDistanceToNow } from "date-fns";
 import { cn } from "@/lib/utils";
 import { StatusBadge } from "../badges/StatusBadge";
 import { RoleBadge } from "../badges/RoleBadge";
+import { MoreVertical, UserCog, UserX } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -11,6 +12,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 
 interface TeamTableProps {
   members: TeamMember[];
@@ -55,6 +63,7 @@ export const TeamTable = ({ members, sortConfig, onSort }: TeamTableProps) => {
             {renderTableHeader("Status", "status")}
             {renderTableHeader("Joined", "created_at")}
             {renderTableHeader("Invited By", "invited_by", "text-right")}
+            <TableHead className="w-[50px]"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -94,6 +103,25 @@ export const TeamTable = ({ members, sortConfig, onSort }: TeamTableProps) => {
               </TableCell>
               <TableCell className="text-right">
                 {member.inviter?.first_name} {member.inviter?.last_name}
+              </TableCell>
+              <TableCell>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="h-8 w-8 p-0">
+                      <MoreVertical className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem className="flex items-center gap-2">
+                      <UserCog className="h-4 w-4" />
+                      Change Role
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="flex items-center gap-2 text-destructive">
+                      <UserX className="h-4 w-4" />
+                      Remove Member
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </TableCell>
             </TableRow>
           ))}
