@@ -64,9 +64,10 @@ export const InviteMemberDialog = ({
         data: { user },
         error: authError,
       } = await supabase.auth.getUser();
+      
       if (authError) throw authError;
 
-      const { data, error } = await supabase.from("team_members").insert({
+      const { error } = await supabase.from("team_members").insert({
         email: values.email,
         role: values.role,
         invited_by: user.id,
@@ -74,7 +75,7 @@ export const InviteMemberDialog = ({
       });
 
       if (error) throw error;
-      return data;
+      return true;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["team-members"] });
