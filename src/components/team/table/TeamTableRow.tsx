@@ -27,7 +27,7 @@ export const TeamTableRow = ({ member }: TeamTableRowProps) => {
     }
   };
 
-  const getStatusBadgeVariant = (status: string) => {
+  const getStatusBadgeVariant = (status: TeamMemberStatus) => {
     switch (status) {
       case "accepted":
         return "default";

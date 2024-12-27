@@ -5,7 +5,7 @@ import { TeamMembersTable } from "@/components/team/TeamMembersTable";
 import { InviteMemberDialog } from "@/components/team/InviteMemberDialog";
 import { Button } from "@/components/ui/button";
 import { UserPlus } from "lucide-react";
-import { TeamMember, TeamMemberRole } from "@/types/team";
+import { TeamMember } from "@/types/team";
 
 const DashboardTeam = () => {
   const [isInviteDialogOpen, setIsInviteDialogOpen] = useState(false);
