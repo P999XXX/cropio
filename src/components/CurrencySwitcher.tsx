@@ -56,7 +56,11 @@ export const CurrencySwitcher = () => {
     <div className="relative inline-block">
       <HoverCard openDelay={200} closeDelay={200}>
         <HoverCardTrigger asChild>
-          <Button variant="ghost" size="icon" className="h-9 w-9">
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="h-9 w-9 hover:bg-secondary"
+          >
             <CurrentIcon className="h-4 w-4" />
             <span className="sr-only">Toggle currency</span>
           </Button>
