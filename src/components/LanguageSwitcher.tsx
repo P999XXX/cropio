@@ -54,7 +54,7 @@ export const LanguageSwitcher = () => {
 
   return (
     <div className="relative inline-block">
-      <HoverCard openDelay={0} closeDelay={0}>
+      <HoverCard openDelay={200} closeDelay={200}>
         <HoverCardTrigger asChild>
           <Button variant="ghost" size="icon" className="h-9 w-9 font-medium uppercase">
             {selectedLang}
@@ -66,6 +66,7 @@ export const LanguageSwitcher = () => {
           className="w-[200px] p-2 bg-muted animate-in zoom-in-95 duration-100"
           sideOffset={4}
           side="bottom"
+          avoidCollisions={false}
         >
           <div className="space-y-2">
             {languages.map((lang) => (
