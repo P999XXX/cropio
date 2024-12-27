@@ -73,10 +73,10 @@ export const CurrencySwitcher = () => {
                 <button
                   key={currency.code}
                   onClick={() => handleCurrencyChange(currency.code)}
-                  className={`flex w-full items-center px-2 py-1.5 text-sm rounded-md transition-colors ${
+                  className={`flex w-full items-center px-2 py-1.5 text-sm rounded-md ${
                     selectedCurrency === currency.code 
                       ? 'bg-accent text-accent-foreground' 
-                      : 'hover:bg-accent/50 hover:text-accent-foreground'
+                      : ''
                   }`}
                 >
                   <Icon className="mr-2 h-4 w-4" />

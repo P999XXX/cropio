@@ -72,10 +72,10 @@ export const LanguageSwitcher = () => {
               <button
                 key={lang.code}
                 onClick={() => handleLanguageChange(lang.code)}
-                className={`flex w-full items-center px-2 py-1.5 text-sm rounded-md transition-colors ${
+                className={`flex w-full items-center px-2 py-1.5 text-sm rounded-md ${
                   selectedLang === lang.code 
                     ? 'bg-accent text-accent-foreground' 
-                    : 'hover:bg-accent/50 hover:text-accent-foreground'
+                    : ''
                 }`}
               >
                 <span className="mr-2">{lang.flag}</span>
