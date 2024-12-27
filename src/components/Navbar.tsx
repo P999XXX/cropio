@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Sun, Moon, Currency, MessageSquare } from "lucide-react";
+import { Menu, X, Sun, Moon, Banknote, MessageSquare } from "lucide-react";
 import { Toggle } from "@/components/ui/toggle";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useSidebar } from "@/components/ui/sidebar";
@@ -91,7 +91,7 @@ const Navbar = () => {
           <div className="hidden md:flex items-center space-x-4">
             <LanguageSwitcher />
             <Button variant="ghost" size="icon" className="h-9 w-9">
-              <Currency className="h-4 w-4" />
+              <Banknote className="h-4 w-4" />
               <span className="sr-only">Toggle currency</span>
             </Button>
             <Button variant="ghost" size="icon" className="h-9 w-9">
@@ -125,7 +125,7 @@ const Navbar = () => {
           <div className="md:hidden flex items-center space-x-2">
             <LanguageSwitcher />
             <Button variant="ghost" size="icon" className="h-9 w-9">
-              <Currency className="h-4 w-4" />
+              <Banknote className="h-4 w-4" />
             </Button>
             <Button variant="ghost" size="icon" className="h-9 w-9">
               <MessageSquare className="h-4 w-4" />
