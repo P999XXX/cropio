@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import { UserMenuTrigger } from "./user-menu/UserMenuTrigger";
 import { UserProfileContent } from "./user-menu/UserProfileContent";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { useQueryClient } from "@tanstack/react-query";
 
 interface UserMenuProps {
   userInitials: string;
