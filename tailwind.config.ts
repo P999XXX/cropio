@@ -35,9 +35,9 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#097355",
+          DEFAULT: "#0B4D3C", // Darker, more elegant green
           foreground: "#FFFFFF",
-          hover: "#056144",
+          hover: "#093D30", // Even darker shade for hover
         },
         secondary: {
           DEFAULT: "#F1F0FB",
@@ -60,9 +60,9 @@ export default {
           hover: "#EA580C",
         },
         accent: {
-          DEFAULT: "#097355",
+          DEFAULT: "#0B4D3C", // Updated to match primary
           foreground: "#FFFFFF",
-          hover: "#056144",
+          hover: "#093D30", // Updated to match primary hover
         },
         muted: {
           DEFAULT: "#F8F9FA",
