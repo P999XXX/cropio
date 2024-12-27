@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Sun, Moon, MessageSquare } from "lucide-react";
+import { Menu, X, Sun, Moon, MessageSquare, PanelLeftOpen, PanelLeftClose } from "lucide-react";
 import { Toggle } from "@/components/ui/toggle";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useSidebar } from "@/components/ui/sidebar";
@@ -61,7 +61,10 @@ const Navbar = () => {
         <div className="flex justify-between h-header">
           <div className="flex items-center gap-4">
             {isDashboard && (
-              <SidebarTrigger className="block md:hidden" />
+              <SidebarTrigger 
+                icon={sidebarState === 'expanded' ? PanelLeftClose : PanelLeftOpen}
+                className="block md:hidden" 
+              />
             )}
             <Link 
               to="/" 
