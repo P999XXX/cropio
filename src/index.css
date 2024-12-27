@@ -7,24 +7,39 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Custom Scrollbar Styles */
 .custom-scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: hsl(var(--muted)) transparent;
+  scrollbar-width: thin !important;
+  scrollbar-color: hsl(var(--muted)) transparent !important;
+  -ms-overflow-style: thin !important; /* For Internet Explorer */
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
+  width: 6px !important;
+  height: 6px !important;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
+  background: transparent !important;
+  border-radius: 20px !important;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: hsl(var(--muted));
-  border-radius: 20px;
+  background-color: hsl(var(--muted)) !important;
+  border-radius: 20px !important;
+  border: none !important;
 }
 
 .dark .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: hsl(var(--muted));
+  background-color: hsl(var(--muted)) !important;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.custom-scrollbar::-webkit-scrollbar:hover {
+  width: 6px !important;
+}
+
+/* Optional: Hover state for better visibility */
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: hsl(var(--muted-foreground)) !important;
 }

@@ -52,7 +52,7 @@ export const MobileMenuContent = ({ isDashboard, isDark, onToggleTheme, onClose 
   const availableLanguages = languages.filter(lang => lang.code !== selectedLang);
 
   return (
-    <div className="mobile-menu-content px-4 py-6 space-y-6 lg:hidden overflow-y-auto custom-scrollbar">
+    <div className="mobile-menu-content px-4 py-6 space-y-6 lg:hidden overflow-y-auto custom-scrollbar h-[calc(100vh-4rem)]">
       <div className="space-y-1">
         {mainMenuItems.map((item) => {
           const isActive = location.pathname === item.path;
