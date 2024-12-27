@@ -68,8 +68,9 @@ export const LanguageSwitcher = () => {
         sideOffset={8}
         style={{ 
           position: 'absolute',
-          zIndex: 100,
-          marginTop: '0.5rem'
+          zIndex: 999,
+          marginTop: '0.5rem',
+          right: 0
         }}
       >
         {languages.map((lang) => (
