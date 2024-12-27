@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Sun, Moon } from "lucide-react";
+import { Menu, X, Sun, Moon, Currency, MessageSquare } from "lucide-react";
 import { Toggle } from "@/components/ui/toggle";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useSidebar } from "@/components/ui/sidebar";
 import LanguageSwitcher from "./LanguageSwitcher";
+import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -89,6 +90,14 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-4">
             <LanguageSwitcher />
+            <Button variant="ghost" size="icon" className="h-9 w-9">
+              <Currency className="h-4 w-4" />
+              <span className="sr-only">Toggle currency</span>
+            </Button>
+            <Button variant="ghost" size="icon" className="h-9 w-9">
+              <MessageSquare className="h-4 w-4" />
+              <span className="sr-only">Open chat</span>
+            </Button>
             <Toggle
               variant="outline"
               size="sm"
@@ -115,6 +124,12 @@ const Navbar = () => {
           {/* Mobile menu button */}
           <div className="md:hidden flex items-center space-x-2">
             <LanguageSwitcher />
+            <Button variant="ghost" size="icon" className="h-9 w-9">
+              <Currency className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="icon" className="h-9 w-9">
+              <MessageSquare className="h-4 w-4" />
+            </Button>
             <Toggle
               variant="outline"
               size="sm"
