@@ -1,10 +1,10 @@
 import { useState, createContext, useContext, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { useToast } from "@/components/ui/use-toast";
 import ReactCountryFlag from "react-country-flag";
 
@@ -23,12 +23,14 @@ const languages = [
 
 export const LanguageSwitcher = () => {
   const [selectedLang, setSelectedLang] = useState("en");
+  const [open, setOpen] = useState(false);
   const { toast } = useToast();
 
   const handleLanguageChange = async (langCode: string) => {
     try {
       setSelectedLang(langCode);
       localStorage.setItem("preferredLanguage", langCode);
+      setOpen(false);
       
       toast({
         title: "Language Changed",
@@ -56,9 +58,9 @@ export const LanguageSwitcher = () => {
   const selectedCountry = languages.find(l => l.code === selectedLang)?.countryCode || "GB";
 
   return (
-    <div className="relative inline-block">
-      <HoverCard openDelay={200} closeDelay={200}>
-        <HoverCardTrigger asChild>
+    <div className="relative inline-block language-switcher">
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
           <Button 
             variant="ghost" 
             size="icon" 
@@ -78,13 +80,11 @@ export const LanguageSwitcher = () => {
             />
             <span className="sr-only">Toggle language</span>
           </Button>
-        </HoverCardTrigger>
-        <HoverCardContent 
+        </PopoverTrigger>
+        <PopoverContent 
           align="end" 
           className="w-[200px] p-2 bg-card text-card-foreground border border-border shadow-lg dark:shadow-none animate-in zoom-in-95 duration-100"
           sideOffset={4}
-          side="bottom"
-          avoidCollisions={false}
         >
           <div className="space-y-2">
             {languages.map((lang) => (
@@ -115,8 +115,8 @@ export const LanguageSwitcher = () => {
               </button>
             ))}
           </div>
-        </HoverCardContent>
-      </HoverCard>
+        </PopoverContent>
+      </Popover>
     </div>
   );
 };
