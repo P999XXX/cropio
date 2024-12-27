@@ -6,6 +6,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { Globe } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -54,34 +59,50 @@ export const LanguageSwitcher = () => {
     }
   }, []);
 
+  const currentLanguage = languages.find(l => l.code === selectedLang);
+
   return (
     <div className="relative inline-block">
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="h-9 w-9">
-            <Globe className="h-4 w-4" />
-            <span className="sr-only">Toggle language</span>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent 
-          align="end"
-          alignOffset={0}
-          className="w-[200px] p-2 z-[100]"
-          forceMount
-          sideOffset={8}
-        >
-          {languages.map((lang) => (
-            <DropdownMenuItem
-              key={lang.code}
-              onClick={() => handleLanguageChange(lang.code)}
-              className="cursor-pointer"
-            >
-              <span className="mr-2">{lang.flag}</span>
-              {lang.name}
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <HoverCard>
+        <HoverCardTrigger asChild>
+          <div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-9 w-9">
+                  <Globe className="h-4 w-4" />
+                  <span className="sr-only">Toggle language</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent 
+                align="end"
+                alignOffset={0}
+                className="w-[200px] p-2 z-[100]"
+                forceMount
+                sideOffset={8}
+              >
+                {languages.map((lang) => (
+                  <DropdownMenuItem
+                    key={lang.code}
+                    onClick={() => handleLanguageChange(lang.code)}
+                    className="cursor-pointer"
+                  >
+                    <span className="mr-2">{lang.flag}</span>
+                    {lang.name}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </HoverCardTrigger>
+        <HoverCardContent className="w-auto p-2">
+          <div className="flex flex-col space-y-1">
+            <p className="text-sm font-medium">Current Language</p>
+            <p className="text-sm text-muted-foreground">
+              {currentLanguage?.flag} {currentLanguage?.name}
+            </p>
+          </div>
+        </HoverCardContent>
+      </HoverCard>
     </div>
   );
 };

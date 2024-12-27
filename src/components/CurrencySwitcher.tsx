@@ -6,6 +6,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { DollarSign, EuroIcon } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -17,8 +22,8 @@ export const CurrencyContext = createContext({
 export const useCurrency = () => useContext(CurrencyContext);
 
 const currencies = [
-  { code: "USD", name: "US Dollar", icon: DollarSign },
-  { code: "EUR", name: "Euro", icon: EuroIcon },
+  { code: "USD", name: "US Dollar", icon: DollarSign, symbol: "$" },
+  { code: "EUR", name: "Euro", icon: EuroIcon, symbol: "€" },
 ];
 
 export const CurrencySwitcher = () => {
@@ -51,39 +56,55 @@ export const CurrencySwitcher = () => {
     }
   }, []);
 
-  const CurrentIcon = currencies.find(c => c.code === selectedCurrency)?.icon || DollarSign;
+  const currentCurrency = currencies.find(c => c.code === selectedCurrency);
+  const CurrentIcon = currentCurrency?.icon || DollarSign;
 
   return (
     <div className="relative inline-block">
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="h-9 w-9">
-            <CurrentIcon className="h-4 w-4" />
-            <span className="sr-only">Toggle currency</span>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent 
-          align="end"
-          alignOffset={0}
-          className="w-[200px] p-2 z-[100]"
-          forceMount
-          sideOffset={8}
-        >
-          {currencies.map((currency) => {
-            const Icon = currency.icon;
-            return (
-              <DropdownMenuItem
-                key={currency.code}
-                onClick={() => handleCurrencyChange(currency.code)}
-                className="cursor-pointer"
+      <HoverCard>
+        <HoverCardTrigger asChild>
+          <div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-9 w-9">
+                  <CurrentIcon className="h-4 w-4" />
+                  <span className="sr-only">Toggle currency</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent 
+                align="end"
+                alignOffset={0}
+                className="w-[200px] p-2 z-[100]"
+                forceMount
+                sideOffset={8}
               >
-                <Icon className="mr-2 h-4 w-4" />
-                {currency.name}
-              </DropdownMenuItem>
-            );
-          })}
-        </DropdownMenuContent>
-      </DropdownMenu>
+                {currencies.map((currency) => {
+                  const Icon = currency.icon;
+                  return (
+                    <DropdownMenuItem
+                      key={currency.code}
+                      onClick={() => handleCurrencyChange(currency.code)}
+                      className="cursor-pointer"
+                    >
+                      <Icon className="mr-2 h-4 w-4" />
+                      {currency.name}
+                    </DropdownMenuItem>
+                  );
+                })}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </HoverCardTrigger>
+        <HoverCardContent className="w-auto p-2">
+          <div className="flex flex-col space-y-1">
+            <p className="text-sm font-medium">Current Currency</p>
+            <p className="text-sm text-muted-foreground">
+              <CurrentIcon className="inline-block h-4 w-4 mr-1" />
+              {currentCurrency?.name} ({currentCurrency?.symbol})
+            </p>
+          </div>
+        </HoverCardContent>
+      </HoverCard>
     </div>
   );
 };
