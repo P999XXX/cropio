@@ -7,6 +7,7 @@ import { LogOut, User } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 interface UserMenuProps {
   userInitials: string;
@@ -67,6 +68,7 @@ const UserMenuContent = ({ profile, onLogout }: { profile: UserProfile | null, o
 export const UserMenu = ({ userInitials, className }: UserMenuProps) => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchUserProfile();
@@ -96,6 +98,8 @@ export const UserMenu = ({ userInitials, className }: UserMenuProps) => {
         title: "Signed out successfully",
         description: "You have been signed out of your account",
       });
+      
+      navigate('/');
     } catch (error: any) {
       toast({
         title: "Error signing out",
