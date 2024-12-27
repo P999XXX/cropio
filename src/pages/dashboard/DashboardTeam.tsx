@@ -14,6 +14,12 @@ const DashboardTeam = () => {
   const { data: teamMembers = [], isLoading, error } = useQuery({
     queryKey: ["team-members"],
     queryFn: async () => {
+      // Get the current user's ID
+      const { data: authData, error: authError } = await supabase.auth.getUser();
+      if (authError) throw new Error("Authentication error: " + authError.message);
+      if (!authData.user) throw new Error("No authenticated user found");
+
+      // Fetch team members including both invited and accepted members
       const { data, error: fetchError } = await supabase
         .from("team_members")
         .select(`
@@ -37,6 +43,7 @@ const DashboardTeam = () => {
         .order('created_at', { ascending: false });
 
       if (fetchError) {
+        console.error("Error fetching team members:", fetchError);
         throw new Error(fetchError.message);
       }
 
