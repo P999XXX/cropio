@@ -1,10 +1,11 @@
 import { useState, createContext, useContext, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useToast } from "@/components/ui/use-toast";
 import ReactCountryFlag from "react-country-flag";
 
@@ -26,7 +27,7 @@ export const LanguageSwitcher = () => {
   const { toast } = useToast();
 
   const handleLanguageChange = async (langCode: string) => {
-    if (langCode === selectedLang) return; // Don't reload if same language
+    if (langCode === selectedLang) return;
 
     try {
       setSelectedLang(langCode);
@@ -39,7 +40,6 @@ export const LanguageSwitcher = () => {
         duration: 2000,
       });
 
-      // Add a small delay before reload to show the toast
       setTimeout(() => {
         window.location.reload();
       }, 500);
@@ -64,8 +64,8 @@ export const LanguageSwitcher = () => {
 
   return (
     <div className="relative inline-block language-switcher">
-      <HoverCard openDelay={200} closeDelay={200}>
-        <HoverCardTrigger asChild>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
           <Button 
             variant="ghost" 
             size="icon" 
@@ -85,44 +85,38 @@ export const LanguageSwitcher = () => {
             />
             <span className="sr-only">Toggle language</span>
           </Button>
-        </HoverCardTrigger>
-        <HoverCardContent 
+        </DropdownMenuTrigger>
+        <DropdownMenuContent 
           align="end" 
-          className="w-[200px] p-2 bg-background border border-border shadow-lg dark:shadow-none animate-in zoom-in-95 duration-100"
-          sideOffset={4}
-          side="bottom"
+          className="w-[200px] bg-background border border-border shadow-lg dark:shadow-none animate-in zoom-in-95 duration-100"
         >
-          <div className="space-y-1">
-            {languages.map((lang) => (
-              <button
-                key={lang.code}
-                onClick={() => handleLanguageChange(lang.code)}
-                className={`flex w-full items-center px-2 py-1.5 text-sm rounded-md transition-colors ${
-                  selectedLang === lang.code 
-                    ? 'bg-primary text-primary-foreground' 
-                    : 'hover:bg-secondary hover:text-secondary-foreground'
-                }`}
-              >
-                <span className="mr-2">
-                  <ReactCountryFlag
-                    countryCode={lang.countryCode}
-                    svg
-                    style={{
-                      width: '1.4em',
-                      height: '1.4em',
-                      borderRadius: '50%',
-                      objectFit: 'cover',
-                      border: '1px solid rgba(0,0,0,0.1)',
-                    }}
-                    title={lang.name}
-                  />
-                </span>
-                {lang.name}
-              </button>
-            ))}
-          </div>
-        </HoverCardContent>
-      </HoverCard>
+          {languages.map((lang) => (
+            <DropdownMenuItem
+              key={lang.code}
+              onClick={() => handleLanguageChange(lang.code)}
+              className={`flex items-center gap-2 px-2 py-1.5 text-sm cursor-pointer ${
+                selectedLang === lang.code 
+                  ? 'bg-primary text-primary-foreground' 
+                  : 'hover:bg-secondary hover:text-secondary-foreground'
+              }`}
+            >
+              <ReactCountryFlag
+                countryCode={lang.countryCode}
+                svg
+                style={{
+                  width: '1.4em',
+                  height: '1.4em',
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                  border: '1px solid rgba(0,0,0,0.1)',
+                }}
+                title={lang.name}
+              />
+              {lang.name}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 };
