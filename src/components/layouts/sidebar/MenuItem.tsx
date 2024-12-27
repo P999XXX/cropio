@@ -22,7 +22,7 @@ const MenuItem = ({ icon: Icon, label, path }: MenuItemProps) => {
       >
         <Link 
           to={path} 
-          className={`flex items-center gap-0 relative w-full rounded-md px-2 py-1.5 transition-colors
+          className={`flex items-center relative w-full rounded-md px-2 py-1.5 transition-colors
             group-data-[collapsible=icon]:w-10 group-data-[collapsible=icon]:h-10 group-data-[collapsible=icon]:p-0
             group-data-[collapsible=icon]:ml-[-5px]
             group-data-[collapsible=icon]:inline-flex
