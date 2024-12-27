@@ -1,16 +1,19 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Sun, Moon, MessageSquare, PanelLeftOpen, PanelLeftClose } from "lucide-react";
+import { Menu, X, Sun, Moon, MessageSquare, PanelLeftOpen, PanelLeftClose, User } from "lucide-react";
 import { Toggle } from "@/components/ui/toggle";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useSidebar } from "@/components/ui/sidebar";
 import LanguageSwitcher from "./LanguageSwitcher";
 import CurrencySwitcher from "./CurrencySwitcher";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDark, setIsDark] = useState(false);
+  const [userInitials, setUserInitials] = useState("");
   const location = useLocation();
   const isDashboard = location.pathname.startsWith('/dashboard');
   
@@ -25,7 +28,24 @@ const Navbar = () => {
   useEffect(() => {
     const theme = localStorage.getItem("theme");
     setIsDark(theme === "dark");
+    fetchUserProfile();
   }, []);
+
+  const fetchUserProfile = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('first_name, last_name')
+        .eq('id', user.id)
+        .single();
+
+      if (profile) {
+        const initials = `${profile.first_name?.[0] || ''}${profile.last_name?.[0] || ''}`.toUpperCase();
+        setUserInitials(initials || 'U');
+      }
+    }
+  };
 
   const updateThemeColors = (isDark: boolean) => {
     const color = isDark ? '#1A1F2C' : '#FFFFFF';
@@ -109,10 +129,19 @@ const Navbar = () => {
                 <Sun className="h-4 w-4" />
               )}
             </Toggle>
-            {!isDashboard && (
+            {userInitials && (
+              <Link to="/dashboard/settings">
+                <Avatar className="h-9 w-9 bg-primary hover:bg-primary/90 transition-colors">
+                  <AvatarFallback className="text-primary-foreground">
+                    {userInitials}
+                  </AvatarFallback>
+                </Avatar>
+              </Link>
+            )}
+            {!isDashboard && !userInitials && (
               <Link
                 to="/signin"
-                className="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary-hover transition-colors duration-200"
+                className="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary/90 transition-colors duration-200"
               >
                 Sign In
               </Link>
@@ -138,7 +167,16 @@ const Navbar = () => {
                 <Sun className="h-4 w-4" />
               )}
             </Toggle>
-            {!isDashboard && (
+            {userInitials && (
+              <Link to="/dashboard/settings">
+                <Avatar className="h-9 w-9 bg-primary hover:bg-primary/90 transition-colors">
+                  <AvatarFallback className="text-primary-foreground">
+                    {userInitials}
+                  </AvatarFallback>
+                </Avatar>
+              </Link>
+            )}
+            {!isDashboard && !userInitials && (
               <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="inline-flex items-center justify-center p-2 rounded-md text-foreground hover:text-primary hover:bg-secondary focus:outline-none"
@@ -165,7 +203,7 @@ const Navbar = () => {
             ))}
             <Link
               to="/signin"
-              className="block w-full text-center px-3 py-2 rounded-md text-base font-medium text-white bg-primary hover:bg-primary-hover"
+              className="block w-full text-center px-3 py-2 rounded-md text-base font-medium text-white bg-primary hover:bg-primary/90"
               onClick={() => setIsOpen(false)}
             >
               Sign In
