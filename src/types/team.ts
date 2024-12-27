@@ -1,4 +1,5 @@
 export type TeamMemberRole = "administrator" | "editor" | "readonly";
+export type TeamMemberStatus = "pending" | "accepted" | "declined";
 
 export interface TeamMember {
   id: string;
@@ -6,7 +7,7 @@ export interface TeamMember {
   invited_by: string;
   role: TeamMemberRole;
   email: string;
-  status: "pending" | "accepted" | "declined";
+  status: TeamMemberStatus;
   created_at: string;
   updated_at: string;
   profile: {

@@ -92,9 +92,9 @@ export const TeamMembersTable = ({ teamMembers, isLoading }: TeamMembersTablePro
   const getStatusBadgeVariant = (status: string) => {
     switch (status) {
       case "accepted":
-        return "success";
+        return "default";
       case "pending":
-        return "warning";
+        return "secondary";
       default:
         return "destructive";
     }
