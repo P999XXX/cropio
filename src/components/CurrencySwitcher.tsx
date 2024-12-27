@@ -64,7 +64,9 @@ export const CurrencySwitcher = () => {
         <HoverCardContent 
           align="end"
           className="w-[200px] p-2 bg-muted animate-in zoom-in-95 duration-100"
-          sideOffset={8}
+          sideOffset={4}
+          side="bottom"
+          forceMount
         >
           <div className="space-y-2">
             {currencies.map((currency) => {
