@@ -52,10 +52,10 @@ export const TeamCard = ({ member, viewMode }: TeamCardProps) => {
             {member.status === "accepted" ? (
               <>
                 <h3 className="font-semibold">
-                  {member.profile.first_name} {member.profile.last_name}
+                  {member.profile?.first_name} {member.profile?.last_name}
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                  {member.profile.email}
+                  {member.profile?.email}
                 </p>
               </>
             ) : (
@@ -103,7 +103,7 @@ export const TeamCard = ({ member, viewMode }: TeamCardProps) => {
           })}
         </span>
         <span>
-          Invited by {member.inviter.first_name} {member.inviter.last_name}
+          Invited by {member.inviter?.first_name || 'Unknown'} {member.inviter?.last_name || ''}
         </span>
       </CardFooter>
     </Card>
