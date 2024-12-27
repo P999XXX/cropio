@@ -9,7 +9,7 @@ export const DashboardSidebarTrigger = ({ isExpanded }: DashboardSidebarTriggerP
   return (
     <SidebarTrigger 
       icon={isExpanded ? PanelLeftClose : PanelLeftOpen}
-      className="hidden md:block" 
+      className="hidden lg:block" 
     />
   );
 };
