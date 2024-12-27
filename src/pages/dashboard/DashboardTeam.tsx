@@ -11,47 +11,40 @@ import { toast } from "sonner";
 const DashboardTeam = () => {
   const [isInviteDialogOpen, setIsInviteDialogOpen] = useState(false);
 
-  const { data: teamMembers, isLoading } = useQuery({
+  const { data: teamMembers = [], isLoading } = useQuery({
     queryKey: ["team-members"],
     queryFn: async () => {
-      try {
-        const { data, error } = await supabase
-          .from("team_members")
-          .select(`
-            id,
-            profile_id,
-            invited_by,
-            role,
-            email,
-            status,
-            created_at,
-            profile:profiles!team_members_profile_id_fkey (
-              first_name,
-              last_name,
-              email
-            ),
-            inviter:profiles!team_members_invited_by_fkey (
-              first_name,
-              last_name
-            )
-          `)
-          .order('created_at', { ascending: false });
+      const { data, error } = await supabase
+        .from("team_members")
+        .select(`
+          id,
+          profile_id,
+          invited_by,
+          role,
+          email,
+          status,
+          created_at,
+          profile:profiles!team_members_profile_id_fkey (
+            first_name,
+            last_name,
+            email
+          ),
+          inviter:profiles!team_members_invited_by_fkey (
+            first_name,
+            last_name
+          )
+        `)
+        .order('created_at', { ascending: false });
 
-        if (error) {
-          console.error("Team members fetch error:", error);
-          throw new Error(error.message);
-        }
-
-        return data as TeamMember[];
-      } catch (error) {
+      if (error) {
         console.error("Team members fetch error:", error);
-        toast.error("Failed to load team members. Please try again.");
-        return [];
+        throw new Error("Failed to load team members");
       }
+
+      return data as TeamMember[];
     },
     retry: 1,
     retryDelay: 1000,
-    staleTime: 1000 * 60,
   });
 
   return (
@@ -73,7 +66,7 @@ const DashboardTeam = () => {
       </div>
 
       <TeamMembersTable 
-        teamMembers={teamMembers || []} 
+        teamMembers={teamMembers} 
         isLoading={isLoading} 
       />
 
