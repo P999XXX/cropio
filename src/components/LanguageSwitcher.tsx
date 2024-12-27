@@ -76,7 +76,7 @@ export const LanguageSwitcher = () => {
                 className={`flex w-full items-center px-2 py-1.5 text-sm rounded-md transition-colors ${
                   selectedLang === lang.code 
                     ? 'bg-primary text-primary-foreground dark:bg-primary dark:text-primary-foreground' 
-                    : 'hover:bg-muted dark:hover:bg-muted'
+                    : 'hover:bg-muted hover:text-foreground dark:hover:bg-muted dark:hover:text-foreground'
                 }`}
               >
                 <span className="mr-2">{lang.flag}</span>
