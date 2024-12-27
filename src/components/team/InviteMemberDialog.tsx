@@ -60,21 +60,17 @@ export const InviteMemberDialog = ({
 
   const inviteMutation = useMutation({
     mutationFn: async (values: InviteFormData) => {
-      const {
-        data: { user },
-        error: authError,
-      } = await supabase.auth.getUser();
-      
-      if (authError) throw authError;
+      const { data: authData, error: authError } = await supabase.auth.getUser();
+      if (authError) throw new Error(authError.message);
 
-      const { error } = await supabase.from("team_members").insert({
+      const { error: insertError } = await supabase.from("team_members").insert({
         email: values.email,
         role: values.role,
-        invited_by: user.id,
-        profile_id: user.id,
+        invited_by: authData.user.id,
+        profile_id: authData.user.id,
       });
 
-      if (error) throw error;
+      if (insertError) throw new Error(insertError.message);
       return true;
     },
     onSuccess: () => {
@@ -83,9 +79,9 @@ export const InviteMemberDialog = ({
       form.reset();
       onOpenChange(false);
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       console.error("Error inviting team member:", error);
-      toast.error("Failed to invite team member");
+      toast.error(`Failed to invite team member: ${error.message}`);
     },
   });
 
