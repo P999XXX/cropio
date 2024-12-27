@@ -78,7 +78,7 @@ export const CurrencySwitcher = () => {
                   className={`flex w-full items-center px-2 py-1.5 text-sm rounded-md transition-colors ${
                     selectedCurrency === currency.code 
                       ? 'bg-primary text-primary-foreground dark:bg-primary dark:text-primary-foreground' 
-                      : 'hover:bg-secondary hover:text-secondary-foreground dark:hover:bg-muted dark:hover:text-foreground'
+                      : 'hover:bg-secondary hover:text-secondary-foreground dark:hover:bg-secondary dark:hover:text-secondary-foreground'
                   }`}
                 >
                   <Icon className="mr-2 h-4 w-4" />
