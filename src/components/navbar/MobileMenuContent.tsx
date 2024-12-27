@@ -3,6 +3,7 @@ import { Sun, Moon } from "lucide-react";
 import { mainMenuItems, bottomMenuItems } from "../layouts/sidebar/menu-items";
 import { MobileMenuLanguage } from "./MobileMenuLanguage";
 import { MobileMenuCurrency } from "./MobileMenuCurrency";
+import { Separator } from "@/components/ui/separator";
 
 interface MobileMenuContentProps {
   isDashboard: boolean;
@@ -28,6 +29,8 @@ export const MobileMenuContent = ({ isDashboard, isDark, onToggleTheme }: Mobile
         ))}
       </div>
 
+      <Separator className="bg-border" />
+
       <div className="space-y-1">
         <MobileMenuLanguage />
         <MobileMenuCurrency />
@@ -43,6 +46,8 @@ export const MobileMenuContent = ({ isDashboard, isDark, onToggleTheme }: Mobile
           <span>{isDark ? 'Dark Mode' : 'Light Mode'}</span>
         </button>
       </div>
+
+      <Separator className="bg-border" />
 
       <div className="space-y-1">
         {bottomMenuItems.map((item) => (
