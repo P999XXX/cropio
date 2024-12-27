@@ -6,6 +6,7 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import { useToast } from "@/components/ui/use-toast";
+import ReactCountryFlag from "react-country-flag";
 
 export const LanguageContext = createContext({
   currentLanguage: "en",
@@ -15,9 +16,9 @@ export const LanguageContext = createContext({
 export const useLanguage = () => useContext(LanguageContext);
 
 const languages = [
-  { code: "en", name: "English", flag: "🇬🇧" },
-  { code: "de", name: "Deutsch", flag: "🇩🇪" },
-  { code: "es", name: "Español", flag: "🇪🇸" },
+  { code: "en", name: "English", countryCode: "GB" },
+  { code: "de", name: "Deutsch", countryCode: "DE" },
+  { code: "es", name: "Español", countryCode: "ES" },
 ];
 
 export const LanguageSwitcher = () => {
@@ -79,7 +80,17 @@ export const LanguageSwitcher = () => {
                     : 'hover:bg-secondary hover:text-secondary-foreground dark:hover:bg-secondary dark:hover:text-secondary-foreground'
                 }`}
               >
-                <span className="mr-2">{lang.flag}</span>
+                <span className="mr-2">
+                  <ReactCountryFlag
+                    countryCode={lang.countryCode}
+                    svg
+                    style={{
+                      width: '1.2em',
+                      height: '1.2em',
+                    }}
+                    title={lang.name}
+                  />
+                </span>
                 {lang.name}
               </button>
             ))}
