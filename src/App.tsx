@@ -8,24 +8,34 @@ import { LanguageContext } from "@/components/LanguageSwitcher";
 import AuthRedirectHandler from "@/components/auth/AuthRedirectHandler";
 import ThemeHandler from "@/components/ThemeHandler";
 
-// Lazy load route components
-const Index = lazy(() => import("./pages/Index"));
-const SignUp = lazy(() => import("./pages/SignUp"));
-const SignIn = lazy(() => import("./pages/SignIn"));
-const ResetPassword = lazy(() => import("./pages/ResetPassword"));
-const Components = lazy(() => import("./pages/Components"));
-const Dashboard = lazy(() => import("./pages/Dashboard"));
-
+// Configure QueryClient with optimized settings
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 60000,
-      gcTime: 300000,
+      staleTime: 300000, // 5 minutes
+      gcTime: 3600000,   // 1 hour
       retry: 1,
       refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
     },
   },
 });
+
+// Lazy load route components with loading chunks
+const Index = lazy(() => import("./pages/Index" /* webpackChunkName: "index" */));
+const SignUp = lazy(() => import("./pages/SignUp" /* webpackChunkName: "auth" */));
+const SignIn = lazy(() => import("./pages/SignIn" /* webpackChunkName: "auth" */));
+const ResetPassword = lazy(() => import("./pages/ResetPassword" /* webpackChunkName: "auth" */));
+const Components = lazy(() => import("./pages/Components" /* webpackChunkName: "components" */));
+const Dashboard = lazy(() => import("./pages/Dashboard" /* webpackChunkName: "dashboard" */));
+
+// Loading spinner component
+const LoadingSpinner = () => (
+  <div className="flex items-center justify-center min-h-screen">
+    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+  </div>
+);
 
 const AppContent = () => {
   const [currentLanguage, setCurrentLanguage] = useState("en");
@@ -44,18 +54,13 @@ const AppContent = () => {
         <Sonner />
         <AuthRedirectHandler />
         <ThemeHandler />
-        <Suspense fallback={
-          <div className="flex items-center justify-center min-h-screen">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-          </div>
-        }>
+        <Suspense fallback={<LoadingSpinner />}>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/components" element={<Components />} />
-            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/dashboard/*" element={<Dashboard />} />
           </Routes>
         </Suspense>
