@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { TeamMembersTable } from "@/components/team/TeamMembersTable";
 import { InviteMemberDialog } from "@/components/team/InviteMemberDialog";
 import { Button } from "@/components/ui/button";
-import { UserPlus } from "lucide-react";
+import { UserPlus, Users } from "lucide-react";
 import { TeamMember } from "@/types/team";
 import { toast } from "sonner";
 
@@ -61,17 +61,20 @@ const DashboardTeam = () => {
   });
 
   return (
-    <div className="team-management space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold">Team Management</h1>
-          <p className="text-muted-foreground mt-1">
+    <div className="team-management space-y-8">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-card p-6 rounded-lg shadow-sm">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <Users className="h-6 w-6 text-primary" />
+            <h1 className="text-2xl font-bold">Team Management</h1>
+          </div>
+          <p className="text-muted-foreground">
             Manage your team members and their permissions
           </p>
         </div>
         <Button 
           onClick={() => setIsInviteDialogOpen(true)}
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 shadow-sm"
         >
           <UserPlus className="h-4 w-4" />
           Invite Member

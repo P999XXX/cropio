@@ -68,8 +68,8 @@ export const TeamMembersTable = ({ teamMembers, isLoading }: TeamMembersTablePro
   }
 
   return (
-    <div className="space-y-4 team-members-table">
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+    <div className="space-y-6 team-members-table">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between bg-card rounded-lg p-4 shadow-sm">
         <TeamTableHeader
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
@@ -99,7 +99,7 @@ export const TeamMembersTable = ({ teamMembers, isLoading }: TeamMembersTablePro
         )}
       </div>
 
-      <div className={`grid gap-4 ${
+      <div className={`grid gap-6 ${
         viewMode === "grid" 
           ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" 
           : "grid-cols-1"

@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { TeamMember, TeamMemberStatus } from "@/types/team";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 interface TeamCardProps {
   member: TeamMember;
@@ -44,28 +45,43 @@ export const TeamCard = ({ member, viewMode }: TeamCardProps) => {
     }
   };
 
+  const getInitials = (firstName?: string, lastName?: string) => {
+    if (!firstName && !lastName) return '??';
+    return `${(firstName?.[0] || '').toUpperCase()}${(lastName?.[0] || '').toUpperCase()}`;
+  };
+
   return (
-    <Card className={`team-member-card ${viewMode === "list" ? "list-mode" : ""}`}>
+    <Card className={`team-member-card transition-all duration-200 hover:shadow-md ${viewMode === "list" ? "list-mode" : ""}`}>
       <CardHeader className="relative pb-2">
-        <div className="flex justify-between items-start">
-          <div className="space-y-1">
-            {member.status === "accepted" ? (
-              <>
-                <h3 className="font-semibold">
-                  {member.profile?.first_name} {member.profile?.last_name}
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  {member.profile?.email}
-                </p>
-              </>
-            ) : (
-              <>
-                <h3 className="font-semibold">Invited User</h3>
-                <p className="text-sm text-muted-foreground">
-                  {member.email}
-                </p>
-              </>
-            )}
+        <div className="flex justify-between items-start gap-4">
+          <div className="flex items-center gap-3">
+            <Avatar className="h-10 w-10 bg-primary/10">
+              <AvatarFallback>
+                {member.status === "accepted" 
+                  ? getInitials(member.profile?.first_name, member.profile?.last_name)
+                  : '??'
+                }
+              </AvatarFallback>
+            </Avatar>
+            <div className="space-y-1">
+              {member.status === "accepted" ? (
+                <>
+                  <h3 className="font-semibold">
+                    {member.profile?.first_name} {member.profile?.last_name}
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    {member.profile?.email}
+                  </p>
+                </>
+              ) : (
+                <>
+                  <h3 className="font-semibold">Invited User</h3>
+                  <p className="text-sm text-muted-foreground">
+                    {member.email}
+                  </p>
+                </>
+              )}
+            </div>
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -88,21 +104,21 @@ export const TeamCard = ({ member, viewMode }: TeamCardProps) => {
       </CardHeader>
       <CardContent className="pb-2">
         <div className="flex flex-wrap gap-2">
-          <Badge variant={getRoleBadgeVariant(member.role)}>
+          <Badge variant={getRoleBadgeVariant(member.role)} className="rounded-full">
             {member.role}
           </Badge>
-          <Badge variant={getStatusBadgeVariant(member.status)}>
+          <Badge variant={getStatusBadgeVariant(member.status)} className="rounded-full">
             {member.status}
           </Badge>
         </div>
       </CardContent>
-      <CardFooter className="flex justify-between text-sm text-muted-foreground">
+      <CardFooter className="flex justify-between text-sm text-muted-foreground border-t pt-4">
         <span>
           Joined {formatDistanceToNow(new Date(member.created_at), {
             addSuffix: true,
           })}
         </span>
-        <span>
+        <span className="text-right">
           Invited by {member.inviter?.first_name || 'Unknown'} {member.inviter?.last_name || ''}
         </span>
       </CardFooter>
