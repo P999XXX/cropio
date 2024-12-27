@@ -1,13 +1,12 @@
 import { Link } from "react-router-dom";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import { LogOut, User } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+import { UserMenuTrigger } from "./user-menu/UserMenuTrigger";
+import { UserProfileContent } from "./user-menu/UserProfileContent";
 
 interface UserMenuProps {
   userInitials: string;
@@ -21,49 +20,6 @@ interface UserProfile {
   company_name: string;
   role: string;
 }
-
-const UserMenuContent = ({ profile, onLogout }: { profile: UserProfile | null, onLogout: () => void }) => (
-  <div className="flex flex-col space-y-4">
-    <div className="flex items-start space-x-4">
-      <Avatar className="h-10 w-10 bg-[#F1F0FB]">
-        <AvatarFallback className="text-primary">
-          <User className="h-5 w-5" />
-        </AvatarFallback>
-      </Avatar>
-      <div className="space-y-1">
-        <h4 className="text-base font-semibold leading-none">
-          {profile?.first_name} {profile?.last_name}
-        </h4>
-        <p className="text-sm text-muted-foreground">
-          {profile?.email}
-        </p>
-      </div>
-    </div>
-    <div className="border-t border-border pt-4 space-y-2">
-      <div className="text-sm">
-        <div className="flex justify-between">
-          <span className="text-muted-foreground">Company</span>
-          <span className="font-medium">{profile?.company_name}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-muted-foreground">Role</span>
-          <span className="font-medium capitalize">{profile?.role}</span>
-        </div>
-      </div>
-    </div>
-    <div className="flex justify-end">
-      <Button 
-        variant="destructive" 
-        size="sm"
-        onClick={onLogout}
-        className="w-32 text-sm"
-      >
-        <span className="flex-1">Sign out</span>
-        <LogOut className="h-4 w-4 ml-2" />
-      </Button>
-    </div>
-  </div>
-);
 
 export const UserMenu = ({ userInitials, className }: UserMenuProps) => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -117,18 +73,14 @@ export const UserMenu = ({ userInitials, className }: UserMenuProps) => {
       <Popover>
         <HoverCardTrigger asChild>
           <PopoverTrigger asChild>
-            <Avatar className={className || "h-9 w-9 bg-[#9b87f5] hover:opacity-90 transition-opacity border border-border cursor-pointer"}>
-              <AvatarFallback className="text-white text-[11px] bg-transparent">
-                {userInitials}
-              </AvatarFallback>
-            </Avatar>
+            <UserMenuTrigger userInitials={userInitials} className={className} />
           </PopoverTrigger>
         </HoverCardTrigger>
         <HoverCardContent className="w-80">
-          <UserMenuContent profile={profile} onLogout={handleLogout} />
+          <UserProfileContent profile={profile} onLogout={handleLogout} />
         </HoverCardContent>
         <PopoverContent className="w-80">
-          <UserMenuContent profile={profile} onLogout={handleLogout} />
+          <UserProfileContent profile={profile} onLogout={handleLogout} />
         </PopoverContent>
       </Popover>
     </HoverCard>
