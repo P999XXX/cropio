@@ -29,7 +29,7 @@ const MenuItem = ({ icon: Icon, label, path }: MenuItemProps) => {
           `}
         >
           <div className={`w-10 h-10 flex items-center justify-center flex-shrink-0 rounded-md transition-colors
-            group-data-[collapsible=icon]:w-10 group-data-[collapsible=icon]:h-10
+            group-data-[collapsible=icon]:w-full group-data-[collapsible=icon]:h-full group-data-[collapsible=icon]:rounded-md
             ${isActive ? 'bg-secondary text-primary' : 'hover:bg-secondary hover:text-primary'}
           `}>
             <Icon className="h-4 w-4 flex-shrink-0" />
