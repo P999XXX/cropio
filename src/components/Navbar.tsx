@@ -7,11 +7,16 @@ import { useSidebar } from "@/components/ui/sidebar";
 import LanguageSwitcher from "./LanguageSwitcher";
 import CurrencySwitcher from "./CurrencySwitcher";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDark, setIsDark] = useState(false);
+  const [userInitials, setUserInitials] = useState("");
   const location = useLocation();
+  const navigate = useNavigate();
   const isDashboard = location.pathname.startsWith('/dashboard');
   
   let sidebarState;
@@ -25,6 +30,25 @@ const Navbar = () => {
   useEffect(() => {
     const theme = localStorage.getItem("theme");
     setIsDark(theme === "dark");
+
+    // Fetch user profile data
+    const fetchUserProfile = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('first_name, last_name')
+          .eq('id', user.id)
+          .single();
+
+        if (profile) {
+          const initials = `${(profile.first_name?.[0] || '').toUpperCase()}${(profile.last_name?.[0] || '').toUpperCase()}`;
+          setUserInitials(initials || 'U');
+        }
+      }
+    };
+
+    fetchUserProfile();
   }, []);
 
   const updateThemeColors = (isDark: boolean) => {
@@ -54,6 +78,10 @@ const Navbar = () => {
     { name: "Suppliers", path: "/suppliers" },
     { name: "FAQ", path: "/faq" },
   ];
+
+  const handleProfileClick = () => {
+    navigate('/dashboard/settings');
+  };
 
   return (
     <nav className={`fixed top-0 left-0 right-0 bg-background border-b border-border z-[51] shadow-[0_2px_8px_0_rgba(0,0,0,0.05)]`}>
@@ -109,7 +137,20 @@ const Navbar = () => {
                 <Sun className="h-4 w-4" />
               )}
             </Toggle>
-            {!isDashboard && (
+            {isDashboard ? (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-9 w-9 p-0"
+                onClick={handleProfileClick}
+              >
+                <Avatar>
+                  <AvatarFallback className="bg-primary text-primary-foreground">
+                    {userInitials}
+                  </AvatarFallback>
+                </Avatar>
+              </Button>
+            ) : (
               <Link
                 to="/signin"
                 className="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary-hover transition-colors duration-200"
@@ -138,7 +179,20 @@ const Navbar = () => {
                 <Sun className="h-4 w-4" />
               )}
             </Toggle>
-            {!isDashboard && (
+            {isDashboard ? (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-9 w-9 p-0"
+                onClick={handleProfileClick}
+              >
+                <Avatar>
+                  <AvatarFallback className="bg-primary text-primary-foreground">
+                    {userInitials}
+                  </AvatarFallback>
+                </Avatar>
+              </Button>
+            ) : (
               <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="inline-flex items-center justify-center p-2 rounded-md text-foreground hover:text-primary hover:bg-secondary focus:outline-none"
