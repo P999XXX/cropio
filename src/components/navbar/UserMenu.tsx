@@ -31,7 +31,7 @@ const UserMenuContent = ({ profile, onLogout }: { profile: UserProfile | null, o
         </AvatarFallback>
       </Avatar>
       <div className="space-y-1">
-        <h4 className="text-sm font-medium leading-none">
+        <h4 className="text-base font-semibold leading-none">
           {profile?.first_name} {profile?.last_name}
         </h4>
         <p className="text-sm text-muted-foreground">
@@ -99,7 +99,6 @@ export const UserMenu = ({ userInitials, className }: UserMenuProps) => {
         description: "You have been signed out of your account",
       });
       
-      // Redirect to homepage after successful logout
       navigate('/');
     } catch (error: any) {
       toast({
@@ -107,7 +106,6 @@ export const UserMenu = ({ userInitials, className }: UserMenuProps) => {
         description: error.message,
         variant: "destructive",
       });
-      // Still redirect to homepage even if there's an error
       navigate('/');
     }
   };
