@@ -12,8 +12,6 @@ import { ArrowUpDown } from "lucide-react";
 import { TeamMember } from "@/types/team";
 import { TeamTableHeader } from "./table/TeamTableHeader";
 import { TeamTableRow } from "./table/TeamTableRow";
-import { TeamMemberCard } from "./TeamMemberCard";
-import { useIsMobile } from "@/hooks/use-mobile";
 
 interface TeamMembersTableProps {
   teamMembers: TeamMember[];
@@ -27,8 +25,6 @@ export const TeamMembersTable = ({ teamMembers, isLoading }: TeamMembersTablePro
     key: keyof TeamMember;
     direction: "asc" | "desc";
   }>({ key: "created_at", direction: "desc" });
-
-  const isMobile = useIsMobile();
 
   const handleSort = (key: keyof TeamMember) => {
     setSortConfig({
@@ -78,60 +74,52 @@ export const TeamMembersTable = ({ teamMembers, isLoading }: TeamMembersTablePro
         onRoleFilterChange={setRoleFilter}
       />
 
-      {isMobile ? (
-        <div className="grid gap-4">
-          {filteredAndSortedMembers.map((member) => (
-            <TeamMemberCard key={member.id} member={member} />
-          ))}
-        </div>
-      ) : (
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Member</TableHead>
-                <TableHead>
-                  <Button
-                    variant="ghost"
-                    onClick={() => handleSort("role")}
-                    className="flex items-center gap-1"
-                  >
-                    Role
-                    <ArrowUpDown className="h-3 w-3" />
-                  </Button>
-                </TableHead>
-                <TableHead>
-                  <Button
-                    variant="ghost"
-                    onClick={() => handleSort("status")}
-                    className="flex items-center gap-1"
-                  >
-                    Status
-                    <ArrowUpDown className="h-3 w-3" />
-                  </Button>
-                </TableHead>
-                <TableHead>
-                  <Button
-                    variant="ghost"
-                    onClick={() => handleSort("created_at")}
-                    className="flex items-center gap-1"
-                  >
-                    Joined
-                    <ArrowUpDown className="h-3 w-3" />
-                  </Button>
-                </TableHead>
-                <TableHead>Invited By</TableHead>
-                <TableHead className="w-[50px]"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredAndSortedMembers.map((member) => (
-                <TeamTableRow key={member.id} member={member} />
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      )}
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Member</TableHead>
+              <TableHead>
+                <Button
+                  variant="ghost"
+                  onClick={() => handleSort("role")}
+                  className="flex items-center gap-1"
+                >
+                  Role
+                  <ArrowUpDown className="h-3 w-3" />
+                </Button>
+              </TableHead>
+              <TableHead>
+                <Button
+                  variant="ghost"
+                  onClick={() => handleSort("status")}
+                  className="flex items-center gap-1"
+                >
+                  Status
+                  <ArrowUpDown className="h-3 w-3" />
+                </Button>
+              </TableHead>
+              <TableHead>
+                <Button
+                  variant="ghost"
+                  onClick={() => handleSort("created_at")}
+                  className="flex items-center gap-1"
+                >
+                  Joined
+                  <ArrowUpDown className="h-3 w-3" />
+                </Button>
+              </TableHead>
+              <TableHead>Invited By</TableHead>
+              <TableHead className="w-[50px]"></TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {filteredAndSortedMembers.map((member) => (
+              <TeamTableRow key={member.id} member={member} />
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 };
