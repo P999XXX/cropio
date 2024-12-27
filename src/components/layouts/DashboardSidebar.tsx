@@ -57,16 +57,16 @@ const DashboardSidebar = () => {
     <Sidebar 
       variant="inset" 
       collapsible="icon"
-      className="fixed top-0 h-screen border-r border-border bg-background z-[99] overflow-hidden"
+      className="fixed top-0 h-screen border-r border-border bg-background z-[99] overflow-hidden transition-all duration-300 ease-in-out"
     >
       <SidebarHeader className="h-header px-4 flex items-center">
         <div className="flex justify-between items-center w-full">
           <SidebarTrigger 
             icon={!isExpanded ? PanelLeftOpen : undefined}
-            className={`flex items-center justify-center text-foreground ${isExpanded ? 'hidden' : ''}`}
+            className={`flex items-center justify-center text-foreground transition-opacity duration-300 ${isExpanded ? 'opacity-0 hidden' : 'opacity-100'}`}
           />
           {isExpanded && (
-            <div className="flex items-center justify-between w-full">
+            <div className="flex items-center justify-between w-full transition-opacity duration-300">
               <span className="text-2xl font-geologica font-extrabold">
                 cropio<span className="text-primary">.app</span>
               </span>
@@ -88,11 +88,11 @@ const DashboardSidebar = () => {
                   <SidebarMenuButton 
                     asChild 
                     tooltip={item.label}
-                    className="group-data-[collapsible=icon]:justify-center p-0"
+                    className="group-data-[collapsible=icon]:justify-center p-0 transition-all duration-300"
                   >
                     <Link to={item.path} className="flex items-center gap-3">
                       <item.icon className="h-4 w-4 transition-all duration-300 ease-in-out text-foreground" />
-                      <span className="font-medium">{item.label}</span>
+                      <span className="font-medium transition-all duration-300">{item.label}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -111,11 +111,11 @@ const DashboardSidebar = () => {
                   <SidebarMenuButton 
                     asChild 
                     tooltip={item.label}
-                    className="group-data-[collapsible=icon]:justify-center p-0"
+                    className="group-data-[collapsible=icon]:justify-center p-0 transition-all duration-300"
                   >
                     <Link to={item.path} className="flex items-center gap-3">
                       <item.icon className="h-4 w-4 transition-all duration-300 ease-in-out text-foreground" />
-                      <span className="font-medium">{item.label}</span>
+                      <span className="font-medium transition-all duration-300">{item.label}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
