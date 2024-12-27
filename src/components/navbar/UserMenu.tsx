@@ -99,6 +99,7 @@ export const UserMenu = ({ userInitials, className }: UserMenuProps) => {
         description: "You have been signed out of your account",
       });
       
+      // Redirect to homepage after successful logout
       navigate('/');
     } catch (error: any) {
       toast({
@@ -106,6 +107,8 @@ export const UserMenu = ({ userInitials, className }: UserMenuProps) => {
         description: error.message,
         variant: "destructive",
       });
+      // Still redirect to homepage even if there's an error
+      navigate('/');
     }
   };
 
@@ -116,7 +119,7 @@ export const UserMenu = ({ userInitials, className }: UserMenuProps) => {
       <Popover>
         <HoverCardTrigger asChild>
           <PopoverTrigger asChild>
-            <Avatar className={className || "h-9 w-9 bg-[#F1F0FB] hover:opacity-90 transition-opacity border border-border cursor-pointer"}>
+            <Avatar className={className || "h-9 w-9 bg-[#9b87f5] hover:opacity-90 transition-opacity border border-border cursor-pointer"}>
               <AvatarFallback className="text-primary text-[11px] bg-transparent">
                 {userInitials}
               </AvatarFallback>
