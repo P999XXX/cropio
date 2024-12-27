@@ -37,7 +37,6 @@ const App = () => {
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/components" element={<Components />} />
-            <Route path="/team" element={<Dashboard />} />
             <Route path="/dashboard/*" element={<Dashboard />} />
           </Routes>
         </TooltipProvider>
