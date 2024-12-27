@@ -1,5 +1,6 @@
 import {
   Sidebar,
+  SidebarContent,
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
@@ -18,7 +19,7 @@ const DashboardSidebar = () => {
     >
       <SidebarHeader />
       
-      <div className="px-2 pt-2">
+      <SidebarContent className="px-2 pt-2">
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu className="transition-all duration-300 ease-in-out">
@@ -28,7 +29,7 @@ const DashboardSidebar = () => {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-      </div>
+      </SidebarContent>
 
       <SidebarFooter className="mt-auto mb-4">
         <SidebarGroup>

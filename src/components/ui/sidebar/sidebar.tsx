@@ -101,6 +101,13 @@ export const Sidebar = React.forwardRef<
               "flex h-full w-full flex-col bg-background text-foreground",
               "group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-border group-data-[variant=floating]:shadow"
             )}
+            style={{
+              ["--radix-dropdown-menu-content-transform-origin" as string]: "var(--radix-popper-transform-origin)",
+              ["--radix-dropdown-menu-content-available-width" as string]: "var(--radix-popper-available-width)",
+              ["--radix-dropdown-menu-content-available-height" as string]: "var(--radix-popper-available-height)",
+              ["--radix-dropdown-menu-trigger-width" as string]: "var(--radix-popper-anchor-width)",
+              ["--radix-dropdown-menu-trigger-height" as string]: "var(--radix-popper-anchor-height)",
+            }}
           >
             {children}
           </div>

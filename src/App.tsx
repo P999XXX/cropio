@@ -15,18 +15,6 @@ const SignIn = lazy(() => import("./pages/SignIn"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const Components = lazy(() => import("./pages/Components"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
-const DashboardTeam = lazy(() => import("./pages/dashboard/DashboardTeam"));
-const DashboardCertificates = lazy(() => import("./pages/dashboard/DashboardCertificates"));
-const DashboardProducts = lazy(() => import("./pages/dashboard/DashboardProducts"));
-const DashboardMarket = lazy(() => import("./pages/dashboard/DashboardMarket"));
-const DashboardTrading = lazy(() => import("./pages/dashboard/DashboardTrading"));
-const DashboardOrders = lazy(() => import("./pages/dashboard/DashboardOrders"));
-const DashboardReturns = lazy(() => import("./pages/dashboard/DashboardReturns"));
-const DashboardPayments = lazy(() => import("./pages/dashboard/DashboardPayments"));
-const DashboardReviews = lazy(() => import("./pages/dashboard/DashboardReviews"));
-const DashboardSettings = lazy(() => import("./pages/dashboard/DashboardSettings"));
-const DashboardFAQ = lazy(() => import("./pages/dashboard/DashboardFAQ"));
-const DashboardSupport = lazy(() => import("./pages/dashboard/DashboardSupport"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -68,18 +56,7 @@ const AppContent = () => {
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/components" element={<Components />} />
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/dashboard/team" element={<DashboardTeam />} />
-            <Route path="/dashboard/certificates" element={<DashboardCertificates />} />
-            <Route path="/dashboard/products" element={<DashboardProducts />} />
-            <Route path="/dashboard/market" element={<DashboardMarket />} />
-            <Route path="/dashboard/trading" element={<DashboardTrading />} />
-            <Route path="/dashboard/orders" element={<DashboardOrders />} />
-            <Route path="/dashboard/returns" element={<DashboardReturns />} />
-            <Route path="/dashboard/payments" element={<DashboardPayments />} />
-            <Route path="/dashboard/reviews" element={<DashboardReviews />} />
-            <Route path="/dashboard/settings" element={<DashboardSettings />} />
-            <Route path="/dashboard/faq" element={<DashboardFAQ />} />
-            <Route path="/dashboard/support" element={<DashboardSupport />} />
+            <Route path="/dashboard/*" element={<Dashboard />} />
           </Routes>
         </Suspense>
       </TooltipProvider>
