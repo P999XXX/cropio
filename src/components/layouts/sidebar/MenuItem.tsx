@@ -25,12 +25,14 @@ const MenuItem = ({ icon: Icon, label, path }: MenuItemProps) => {
           className={`flex items-center gap-3 relative w-full rounded-md px-2 py-1.5 transition-colors
             group-data-[collapsible=icon]:w-8 group-data-[collapsible=icon]:h-8 group-data-[collapsible=icon]:p-0
             group-data-[collapsible=icon]:hover:bg-transparent
-            ${isActive ? 'group-data-[collapsible=icon]:text-secondary-foreground text-secondary-foreground' : 'text-foreground'}
-            ${isActive ? 'group-data-[collapsible=none]:bg-secondary' : 'group-data-[collapsible=none]:hover:bg-secondary'}
+            ${isActive ? 'text-secondary-foreground' : 'text-foreground'}
+            group-data-[collapsible=none]:hover:bg-secondary
+            group-data-[collapsible=none]:data-[active=true]:bg-secondary
           `}
         >
           <div className={`w-8 h-8 flex items-center justify-center flex-shrink-0 rounded-md transition-colors
-            ${isActive ? 'group-data-[collapsible=icon]:bg-secondary' : 'group-data-[collapsible=icon]:hover:bg-secondary'}
+            group-data-[collapsible=icon]:hover:bg-secondary
+            group-data-[collapsible=icon]:data-[active=true]:bg-secondary
           `}>
             <Icon className="h-4 w-4 flex-shrink-0" />
           </div>
