@@ -8,10 +8,10 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
 } from "@/components/ui/select";
 import ReactCountryFlag from "react-country-flag";
 import { useToast } from "@/components/ui/use-toast";
+import { useState, useEffect } from "react";
 
 const languages = [
   { code: "en", name: "English", countryCode: "GB" },
@@ -29,22 +29,27 @@ interface MobileMenuContentProps {
 export const MobileMenuContent = ({ isDashboard, isDark, onToggleTheme, onClose }: MobileMenuContentProps) => {
   const location = useLocation();
   const { toast } = useToast();
+  const [selectedLang, setSelectedLang] = useState("en");
   
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem("preferredLanguage");
+    if (savedLanguage) setSelectedLang(savedLanguage);
+  }, []);
+
   const handleLanguageChange = (langCode: string) => {
-    const selectedLang = languages.find(l => l.code === langCode);
+    setSelectedLang(langCode);
     localStorage.setItem("preferredLanguage", langCode);
     
+    const selectedLang = languages.find(l => l.code === langCode);
     toast({
       title: "Language Changed",
       description: `Successfully switched to ${selectedLang?.name}`,
     });
-
-    window.location.reload();
   };
   
   if (!isDashboard) return null;
 
-  const currentLanguage = languages.find(l => l.code === (localStorage.getItem("preferredLanguage") || "en"));
+  const currentLanguage = languages.find(l => l.code === selectedLang);
 
   return (
     <div className="px-4 py-6 space-y-6">
@@ -70,10 +75,10 @@ export const MobileMenuContent = ({ isDashboard, isDark, onToggleTheme, onClose 
 
       <div className="space-y-3">
         <Select 
-          onValueChange={handleLanguageChange} 
-          value={currentLanguage?.code || "en"}
+          value={selectedLang}
+          onValueChange={handleLanguageChange}
         >
-          <SelectTrigger className="w-full p-0 border-0 h-[34px] hover:bg-secondary rounded-md focus:ring-0">
+          <SelectTrigger className="w-full p-0 border-0 h-[34px] hover:bg-secondary rounded-md focus:ring-0 focus:ring-offset-0">
             <div className="flex items-center gap-2 px-2 py-1.5 w-full text-sm">
               <ReactCountryFlag
                 countryCode={currentLanguage?.countryCode || "GB"}
@@ -86,12 +91,16 @@ export const MobileMenuContent = ({ isDashboard, isDark, onToggleTheme, onClose 
                   border: '1px solid rgba(0,0,0,0.1)',
                 }}
               />
-              <span>{currentLanguage?.name || "English"}</span>
+              <span>{currentLanguage?.name}</span>
             </div>
           </SelectTrigger>
           <SelectContent>
             {languages.map((lang) => (
-              <SelectItem key={lang.code} value={lang.code}>
+              <SelectItem 
+                key={lang.code} 
+                value={lang.code}
+                className="cursor-pointer"
+              >
                 <div className="flex items-center gap-2">
                   <ReactCountryFlag
                     countryCode={lang.countryCode}
