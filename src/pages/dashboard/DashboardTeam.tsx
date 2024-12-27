@@ -11,7 +11,7 @@ import { toast } from "sonner";
 const DashboardTeam = () => {
   const [isInviteDialogOpen, setIsInviteDialogOpen] = useState(false);
 
-  const { data: teamMembers, isLoading, error } = useQuery({
+  const { data: teamMembers, isLoading } = useQuery({
     queryKey: ["team-members"],
     queryFn: async () => {
       const { data: authData, error: authError } = await supabase.auth.getUser();
@@ -54,9 +54,11 @@ const DashboardTeam = () => {
     retry: 1, // Allow one retry
     retryDelay: 1000, // Wait 1 second before retrying
     staleTime: 1000 * 60, // Cache for 1 minute
-    onError: (error: Error) => {
-      console.error("Team members fetch error:", error);
-      toast.error("Failed to load team members. Please try again.");
+    meta: {
+      onError: (error: Error) => {
+        console.error("Team members fetch error:", error);
+        toast.error("Failed to load team members. Please try again.");
+      }
     }
   });
 
