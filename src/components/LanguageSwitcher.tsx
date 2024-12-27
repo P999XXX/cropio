@@ -64,7 +64,7 @@ export const LanguageSwitcher = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent 
         align="end" 
-        className="bg-background border shadow-lg z-[100] relative"
+        className="fixed bg-background border shadow-lg z-[100]"
         sideOffset={8}
       >
         {languages.map((lang) => (
