@@ -2,7 +2,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { MessageSquare, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useSidebar } from "@/components/ui/sidebar";
 import { Logo } from "./navbar/Logo";
