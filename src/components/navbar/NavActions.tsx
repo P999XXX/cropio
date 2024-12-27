@@ -12,7 +12,7 @@ interface NavActionsProps {
 
 export const NavActions = ({ isDark, onToggleTheme, userInitials }: NavActionsProps) => {
   return (
-    <div className="hidden md:flex items-center space-x-2">
+    <div className="hidden lg:flex items-center space-x-2">
       <LanguageSwitcher />
       <CurrencySwitcher />
       <ThemeToggle isDark={isDark} onToggle={onToggleTheme} />
