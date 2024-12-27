@@ -16,9 +16,11 @@ const MenuItem = ({ icon: Icon, label, path }: MenuItemProps) => {
         tooltip={label}
         className="group-data-[collapsible=icon]:justify-center p-0 transition-all duration-300"
       >
-        <Link to={path} className="flex items-center gap-3">
-          <Icon className="h-4 w-4 transition-all duration-300 ease-in-out text-foreground" />
-          <span className="font-medium transition-all duration-300">{label}</span>
+        <Link to={path} className="flex items-center gap-3 relative w-full">
+          <div className="min-w-[16px] flex justify-center">
+            <Icon className="h-4 w-4 transition-all duration-300 ease-in-out text-foreground" />
+          </div>
+          <span className="font-medium transition-all duration-300 opacity-100 group-data-[collapsible=icon]:opacity-0">{label}</span>
         </Link>
       </SidebarMenuButton>
     </SidebarMenuItem>

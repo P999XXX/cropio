@@ -22,7 +22,7 @@ const DashboardSidebar = () => {
       <SidebarContent className="px-2 pt-2">
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="transition-all duration-300 ease-in-out">
               {mainMenuItems.map((item) => (
                 <MenuItem key={item.label} {...item} />
               ))}
@@ -34,7 +34,7 @@ const DashboardSidebar = () => {
       <SidebarFooter className="mt-auto mb-4">
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="transition-all duration-300 ease-in-out">
               {bottomMenuItems.map((item) => (
                 <MenuItem key={item.label} {...item} />
               ))}
