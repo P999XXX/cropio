@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { Menu, PanelLeftOpen, PanelLeftClose } from "lucide-react";
+import { Menu, PanelLeftOpen, PanelLeftClose, MessageSquare, Globe, DollarSign } from "lucide-react";
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -17,6 +17,12 @@ const navItems = [
   { name: "Buyers", path: "/buyers" },
   { name: "Suppliers", path: "/suppliers" },
   { name: "FAQ", path: "/faq" },
+];
+
+const additionalMenuItems = [
+  { name: "Language", icon: Globe, path: "#" },
+  { name: "Currency", icon: DollarSign, path: "#" },
+  { name: "Messages", icon: MessageSquare, path: "#" },
 ];
 
 const Navbar = () => {
@@ -76,7 +82,7 @@ const Navbar = () => {
       </SheetTrigger>
       <SheetContent side="left" className="w-[300px] sm:w-[400px] z-[100]">
         <nav className="flex flex-col gap-4">
-          <div className="mb-4 pt-2">
+          <div className="h-header flex items-center">
             <span className="text-2xl font-geologica font-extrabold">
               cropio<span className="text-primary">.app</span>
             </span>
@@ -117,6 +123,17 @@ const Navbar = () => {
                 </Link>
               ))
             )}
+            <div className="my-4 border-t" />
+            {additionalMenuItems.map((item) => (
+              <Link
+                key={item.name}
+                to={item.path}
+                className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-secondary"
+              >
+                <item.icon className="h-4 w-4" />
+                <span>{item.name}</span>
+              </Link>
+            ))}
           </div>
         </nav>
       </SheetContent>
