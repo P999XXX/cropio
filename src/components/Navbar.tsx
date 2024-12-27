@@ -68,7 +68,7 @@ const Navbar = () => {
             )}
             <Link 
               to="/" 
-              className={`flex-shrink-0 ${isDashboard ? 'pl-0 md:pl-4' : ''} ${isDashboard && sidebarState === 'expanded' ? 'md:hidden' : ''}`}
+              className={`flex-shrink-0 ${isDashboard && sidebarState === 'collapsed' ? 'md:pl-20' : ''} ${isDashboard && sidebarState === 'expanded' ? 'md:hidden' : ''}`}
             >
               <span className="text-2xl font-geologica font-extrabold">
                 cropio<span className="text-primary">.app</span>
