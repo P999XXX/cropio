@@ -68,8 +68,8 @@ export const LanguageSwitcher = () => {
               countryCode={selectedCountry}
               svg
               style={{
-                width: '1.2em',
-                height: '1.2em',
+                width: '1.4em',
+                height: '1.4em',
                 borderRadius: '50%',
                 objectFit: 'cover',
                 border: '1px solid rgba(0,0,0,0.1)',
@@ -102,8 +102,8 @@ export const LanguageSwitcher = () => {
                     countryCode={lang.countryCode}
                     svg
                     style={{
-                      width: '1.2em',
-                      height: '1.2em',
+                      width: '1.4em',
+                      height: '1.4em',
                       borderRadius: '50%',
                       objectFit: 'cover',
                       border: '1px solid rgba(0,0,0,0.1)',
