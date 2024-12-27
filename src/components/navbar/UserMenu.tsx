@@ -21,6 +21,7 @@ interface UserProfile {
 
 export const UserMenu = ({ userInitials, className }: UserMenuProps) => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -63,9 +64,12 @@ export const UserMenu = ({ userInitials, className }: UserMenuProps) => {
   if (!userInitials) return null;
   
   return (
-    <HoverCard>
+    <HoverCard open={isOpen} onOpenChange={setIsOpen}>
       <HoverCardTrigger asChild>
-        <Avatar className={className || "h-9 w-9 bg-[#9b87f5] hover:opacity-90 transition-opacity border border-border"}>
+        <Avatar 
+          onClick={() => setIsOpen(!isOpen)}
+          className={className || "h-9 w-9 bg-[#9b87f5] hover:opacity-90 transition-opacity border border-border cursor-pointer"}
+        >
           <AvatarFallback className="text-primary-foreground text-[11px] bg-transparent">
             {userInitials}
           </AvatarFallback>
