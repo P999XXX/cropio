@@ -52,7 +52,31 @@ export const MobileMenuContent = ({ isDashboard, isDark, onToggleTheme, onClose 
   const availableLanguages = languages.filter(lang => lang.code !== selectedLang);
 
   return (
-    <div className="mobile-menu-content px-4 py-6 space-y-6 lg:hidden">
+    <div className="mobile-menu-content px-4 py-6 space-y-6 lg:hidden overflow-y-auto scrollbar-thin">
+      <style jsx global>{`
+        .scrollbar-thin {
+          scrollbar-width: thin;
+          scrollbar-color: hsl(var(--muted)) transparent;
+        }
+        
+        .scrollbar-thin::-webkit-scrollbar {
+          width: 6px;
+        }
+        
+        .scrollbar-thin::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+          background-color: hsl(var(--muted));
+          border-radius: 20px;
+        }
+        
+        .dark .scrollbar-thin::-webkit-scrollbar-thumb {
+          background-color: hsl(var(--muted));
+        }
+      `}</style>
+
       <div className="space-y-1">
         {mainMenuItems.map((item) => {
           const isActive = location.pathname === item.path;
