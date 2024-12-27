@@ -55,7 +55,7 @@ export const LanguageSwitcher = () => {
   }, []);
 
   return (
-    <div className="relative">
+    <div className="relative inline-block">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="icon" className="h-9 w-9">
@@ -64,21 +64,16 @@ export const LanguageSwitcher = () => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent 
-          align="end" 
-          className="bg-background border shadow-lg fixed"
-          sideOffset={8}
-          style={{ 
-            position: 'fixed',
-            zIndex: 999,
-            marginTop: '0.5rem',
-            right: 'auto'
-          }}
+          align="end"
+          alignOffset={0}
+          className="w-[200px] p-2"
+          forceMount
         >
           {languages.map((lang) => (
             <DropdownMenuItem
               key={lang.code}
               onClick={() => handleLanguageChange(lang.code)}
-              className="cursor-pointer hover:bg-muted"
+              className="cursor-pointer"
             >
               <span className="mr-2">{lang.flag}</span>
               {lang.name}

@@ -54,7 +54,7 @@ export const CurrencySwitcher = () => {
   const CurrentIcon = currencies.find(c => c.code === selectedCurrency)?.icon || DollarSign;
 
   return (
-    <div className="relative">
+    <div className="relative inline-block">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="icon" className="h-9 w-9">
@@ -63,15 +63,10 @@ export const CurrencySwitcher = () => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent 
-          align="end" 
-          className="bg-background border shadow-lg fixed"
-          sideOffset={8}
-          style={{ 
-            position: 'fixed',
-            zIndex: 999,
-            marginTop: '0.5rem',
-            right: 'auto'
-          }}
+          align="end"
+          alignOffset={0}
+          className="w-[200px] p-2"
+          forceMount
         >
           {currencies.map((currency) => {
             const Icon = currency.icon;
@@ -79,7 +74,7 @@ export const CurrencySwitcher = () => {
               <DropdownMenuItem
                 key={currency.code}
                 onClick={() => handleCurrencyChange(currency.code)}
-                className="cursor-pointer hover:bg-muted"
+                className="cursor-pointer"
               >
                 <Icon className="mr-2 h-4 w-4" />
                 {currency.name}
