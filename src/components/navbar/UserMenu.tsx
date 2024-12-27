@@ -56,7 +56,7 @@ const UserMenuContent = ({ profile, onLogout }: { profile: UserProfile | null, o
         variant="ghost" 
         size="sm"
         onClick={onLogout}
-        className="w-32 text-sm text-muted-foreground bg-red-500 hover:bg-red-500 transition-colors duration-200"
+        className="w-32 text-sm text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors duration-200"
       >
         <span className="flex-1">Sign out</span>
         <LogOut className="h-4 w-4 ml-2" />
@@ -75,40 +75,22 @@ export const UserMenu = ({ userInitials, className }: UserMenuProps) => {
   }, []);
 
   const fetchUserProfile = async () => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        const { data } = await supabase
-          .from('profiles')
-          .select('first_name, last_name, email, company_name, role')
-          .eq('id', user.id)
-          .single();
-        
-        if (data) {
-          setProfile(data);
-        }
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      const { data } = await supabase
+        .from('profiles')
+        .select('first_name, last_name, email, company_name, role')
+        .eq('id', user.id)
+        .single();
+      
+      if (data) {
+        setProfile(data);
       }
-    } catch (error) {
-      console.error("Error fetching profile:", error);
     }
   };
 
   const handleLogout = async () => {
     try {
-      // First check if we have a valid session
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session) {
-        // If no session exists, just redirect and show success message
-        toast({
-          title: "Already signed out",
-          description: "Your session has expired. Redirecting to home page.",
-        });
-        navigate('/');
-        return;
-      }
-
-      // If we have a session, attempt to sign out
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
       
@@ -119,17 +101,6 @@ export const UserMenu = ({ userInitials, className }: UserMenuProps) => {
       
       navigate('/');
     } catch (error: any) {
-      console.error("Logout error:", error);
-      // If we get a refresh token error, just redirect
-      if (error.message?.includes('refresh_token_not_found')) {
-        toast({
-          title: "Session expired",
-          description: "Your session has expired. Redirecting to home page.",
-        });
-        navigate('/');
-        return;
-      }
-      
       toast({
         title: "Error signing out",
         description: error.message,
