@@ -6,7 +6,7 @@ interface FormLabelProps {
 
 const FormLabel = ({ children }: FormLabelProps) => {
   return (
-    <BaseFormLabel className="!text-foreground">
+    <BaseFormLabel>
       {children}
     </BaseFormLabel>
   );
