@@ -37,14 +37,11 @@ const DashboardTeam = () => {
         .order('created_at', { ascending: false });
 
       if (fetchError) {
-        console.error("Team members fetch error:", fetchError);
         throw new Error(fetchError.message);
       }
 
       return data as TeamMember[];
     },
-    retry: 2,
-    retryDelay: 1000,
     meta: {
       onError: (error: Error) => {
         console.error("Failed to fetch team members:", error);
@@ -52,10 +49,6 @@ const DashboardTeam = () => {
       }
     }
   });
-
-  if (error) {
-    toast.error("Failed to load team members");
-  }
 
   return (
     <div className="team-management space-y-6">
