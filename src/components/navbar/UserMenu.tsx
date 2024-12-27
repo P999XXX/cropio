@@ -1,67 +1,44 @@
-import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { LogOut, User } from "lucide-react";
-import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
-import { useNavigate } from "react-router-dom";
+import { LogOut } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+import { useState, useEffect } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 interface UserMenuProps {
-  userInitials?: string;
+  userInitials: string;
   className?: string;
 }
 
+interface UserProfile {
+  first_name: string | null;
+  last_name: string | null;
+  email: string;
+}
+
 export const UserMenu = ({ userInitials, className }: UserMenuProps) => {
-  const [isHoverCardOpen, setIsHoverCardOpen] = useState(false);
-  const [userData, setUserData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    companyName: '',
-    role: ''
-  });
-  const navigate = useNavigate();
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const { toast } = useToast();
 
   useEffect(() => {
-    fetchUserData();
+    fetchUserProfile();
   }, []);
 
-  const fetchUserData = async () => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('first_name, last_name, email, company_name, role')
-          .eq('id', user.id)
-          .single();
-
-        if (profile) {
-          setUserData({
-            firstName: profile.first_name || '',
-            lastName: profile.last_name || '',
-            email: profile.email || '',
-            companyName: profile.company_name || '',
-            role: profile.role || ''
-          });
-        }
+  const fetchUserProfile = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      const { data } = await supabase
+        .from('profiles')
+        .select('first_name, last_name, email')
+        .eq('id', user.id)
+        .single();
+      
+      if (data) {
+        setProfile(data);
       }
-    } catch (error) {
-      console.error('Error fetching user data:', error);
     }
   };
 
@@ -70,87 +47,71 @@ export const UserMenu = ({ userInitials, className }: UserMenuProps) => {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
       
-      toast.success("Logged out successfully");
-      navigate("/signin");
-    } catch (error) {
-      console.error("Error logging out:", error);
-      toast.error("Error logging out. Please try again.");
+      toast({
+        title: "Logged out successfully",
+        description: "You have been logged out of your account",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error logging out",
+        description: error.message,
+        variant: "destructive",
+      });
     }
   };
 
+  if (!userInitials) return null;
+  
   return (
-    <div className="relative">
-      <HoverCard open={isHoverCardOpen} onOpenChange={setIsHoverCardOpen}>
-        <HoverCardTrigger asChild>
-          <Button
-            onClick={() => setIsHoverCardOpen(!isHoverCardOpen)}
-            variant="ghost"
-            size="icon"
-            className="relative h-8 w-8 rounded-full bg-primary/10"
-          >
-            <User className="h-4 w-4 text-primary" />
-            <span className="sr-only">Toggle user menu</span>
-          </Button>
-        </HoverCardTrigger>
-        <HoverCardContent align="end" className="w-64 pt-2">
-          <div className="space-y-4">
-            <div className="flex items-center gap-x-2">
-              <div className="rounded-full bg-primary/10 p-1">
-                <User className="h-8 w-8 text-primary" />
-              </div>
-              <div className="space-y-1">
-                <p className="text-sm font-medium">
-                  {userData.firstName} {userData.lastName}
-                </p>
-                <p className="text-xs text-muted-foreground">{userData.email}</p>
-              </div>
-            </div>
-            <div className="space-y-3">
-              <div className="flex flex-col space-y-1">
-                <span className="text-xs font-medium">Company</span>
-                <span className="text-xs text-muted-foreground">
-                  {userData.companyName}
-                </span>
-              </div>
-              <div className="flex flex-col space-y-1">
-                <span className="text-xs font-medium">Role</span>
-                <span className="text-xs text-muted-foreground">
-                  {userData.role}
-                </span>
-              </div>
-            </div>
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button 
-                  variant="ghost" 
-                  size="sm"
-                  className="text-xs w-fit justify-start text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors duration-200 dark:hover:text-destructive dark:text-muted-foreground dark:hover:bg-destructive/10 bg-secondary/50 h-7"
+    <HoverCard>
+      <HoverCardTrigger asChild>
+        <Avatar className={className || "h-9 w-9 bg-[#9b87f5] hover:opacity-90 transition-opacity border border-border"}>
+          <AvatarFallback className="text-primary-foreground text-[11px] bg-transparent">
+            {userInitials}
+          </AvatarFallback>
+        </Avatar>
+      </HoverCardTrigger>
+      <HoverCardContent className="w-80">
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <h4 className="text-sm font-semibold">
+              {profile?.first_name} {profile?.last_name}
+            </h4>
+            <p className="text-sm text-muted-foreground">
+              {profile?.email}
+            </p>
+          </div>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button 
+                variant="ghost" 
+                size="sm"
+                className="w-full justify-between text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors duration-200 dark:hover:text-destructive dark:text-muted-foreground dark:hover:bg-destructive/10"
+              >
+                Log out
+                <LogOut className="h-4 w-4 ml-2" />
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you sure you want to log out?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  You will need to log in again to access your account.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction 
+                  onClick={handleLogout}
+                  className="bg-destructive hover:bg-destructive/90 text-destructive-foreground"
                 >
                   Log out
-                  <LogOut className="h-3 w-3 ml-2" />
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    You will be logged out of your account.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <Button
-                    variant="destructive"
-                    onClick={handleLogout}
-                  >
-                    Log out
-                  </Button>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          </div>
-        </HoverCardContent>
-      </HoverCard>
-    </div>
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
+      </HoverCardContent>
+    </HoverCard>
   );
 };
