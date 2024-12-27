@@ -32,6 +32,23 @@ const Navbar = () => {
     const theme = localStorage.getItem("theme");
     setIsDark(theme === "dark");
     fetchUserProfile();
+
+    // Add media query listener to close menu on larger screens
+    const mediaQuery = window.matchMedia('(min-width: 768px)');
+    const handleMediaQueryChange = (e: MediaQueryListEvent | MediaQueryList) => {
+      if (e.matches) {
+        setIsOpen(false);
+      }
+    };
+
+    // Check initial state
+    handleMediaQueryChange(mediaQuery);
+
+    // Add listener for changes
+    mediaQuery.addEventListener('change', handleMediaQueryChange);
+
+    // Cleanup
+    return () => mediaQuery.removeEventListener('change', handleMediaQueryChange);
   }, []);
 
   const fetchUserProfile = async () => {
@@ -85,7 +102,7 @@ const Navbar = () => {
                   </SheetTrigger>
                   <SheetContent 
                     side="left" 
-                    className="w-[300px] sm:w-[400px] z-[200] p-0 overflow-y-auto fixed"
+                    className="w-[300px] sm:w-[400px] z-[200] p-0 overflow-y-auto custom-scrollbar fixed"
                   >
                     <MobileMenuHeader />
                     <MobileMenuContent 
