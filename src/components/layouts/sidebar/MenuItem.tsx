@@ -28,7 +28,7 @@ const MenuItem = ({ icon: Icon, label, path }: MenuItemProps) => {
             group-data-[collapsible=icon]:inline-flex
             group-data-[collapsible=icon]:flex-nowrap
             group-data-[collapsible=icon]:flex-col
-            group-data-[collapsible=icon]:justify-start
+            group-data-[collapsible=icon]:justify-center
             ${!isActive && 'hover:bg-secondary hover:text-primary'}
             ${isActive ? 'bg-secondary text-primary' : 'text-foreground'}
           `}
