@@ -14,52 +14,44 @@ const DashboardTeam = () => {
   const { data: teamMembers, isLoading, error } = useQuery({
     queryKey: ["team-members"],
     queryFn: async () => {
-      try {
-        const { data: authData, error: authError } = await supabase.auth.getUser();
-        if (authError) throw new Error("Authentication error: " + authError.message);
-        if (!authData.user) throw new Error("No authenticated user found");
+      const { data: authData, error: authError } = await supabase.auth.getUser();
+      if (authError) throw authError;
+      if (!authData.user) throw new Error("No authenticated user found");
 
-        // Clone the response data immediately to prevent stream reading issues
-        const { data, error: queryError } = await supabase
-          .from("team_members")
-          .select(`
-            id,
-            profile_id,
-            invited_by,
-            role,
-            email,
-            status,
-            created_at,
-            profile:profiles!team_members_profile_id_fkey (
-              first_name,
-              last_name,
-              email
-            ),
-            inviter:profiles!team_members_invited_by_fkey (
-              first_name,
-              last_name
-            )
-          `)
-          .order('created_at', { ascending: false })
-          .throwOnError(); // This ensures we get a proper error if the query fails
+      const { data, error: queryError } = await supabase
+        .from("team_members")
+        .select(`
+          id,
+          profile_id,
+          invited_by,
+          role,
+          email,
+          status,
+          created_at,
+          profile:profiles!team_members_profile_id_fkey (
+            first_name,
+            last_name,
+            email
+          ),
+          inviter:profiles!team_members_invited_by_fkey (
+            first_name,
+            last_name
+          )
+        `)
+        .order('created_at', { ascending: false });
 
-        if (queryError) throw new Error("Failed to fetch team members: " + queryError.message);
-        if (!data) throw new Error("No data returned from query");
+      if (queryError) throw queryError;
+      if (!data) throw new Error("No data returned from query");
 
-        // Immediately process and return the data
-        return data as TeamMember[];
-      } catch (error) {
-        console.error("Team members fetch error:", error);
-        throw error; // Re-throw to let React Query handle it
-      }
+      return data as TeamMember[];
     },
-    retry: false, // Disable retries since we're handling errors explicitly
-    staleTime: 1000 * 60, // Cache for 1 minute to prevent unnecessary refetches
+    retry: false,
+    staleTime: 1000 * 60,
   });
 
-  // Handle error display
   if (error) {
-    toast.error("Failed to load team members: " + (error as Error).message);
+    console.error("Team members fetch error:", error);
+    toast.error("Failed to load team members. Please try again.");
   }
 
   return (
