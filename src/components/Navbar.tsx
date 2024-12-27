@@ -1,30 +1,24 @@
-import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import { Menu, PanelLeftOpen, PanelLeftClose, MessageSquare, Globe, DollarSign, Sun, Moon } from "lucide-react";
-import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { MessageSquare, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { supabase } from "@/integrations/supabase/client";
+import { useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
+import { Link } from "react-router-dom";
+import { mainMenuItems, bottomMenuItems } from "./layouts/sidebar/menu-items";
 import { Logo } from "./navbar/Logo";
 import { NavActions } from "./navbar/NavActions";
 import { UserMenu } from "./navbar/UserMenu";
-import { mainMenuItems, bottomMenuItems } from "./layouts/sidebar/menu-items";
-import { Link } from "react-router-dom";
-import ReactCountryFlag from "react-country-flag";
-
-const navItems = [
-  { name: "Products", path: "/products" },
-  { name: "Functions", path: "/functions" },
-  { name: "Buyers", path: "/buyers" },
-  { name: "Suppliers", path: "/suppliers" },
-  { name: "FAQ", path: "/faq" },
-];
+import { MobileMenuButton } from "./navbar/MobileMenuButton";
+import { MobileMenuHeader } from "./navbar/MobileMenuHeader";
+import { MobileMenuLanguage } from "./navbar/MobileMenuLanguage";
+import { MobileMenuCurrency } from "./navbar/MobileMenuCurrency";
+import { CartButton } from "./navbar/CartButton";
 
 const Navbar = () => {
   const [isDark, setIsDark] = useState(false);
   const [userInitials, setUserInitials] = useState("");
-  const [selectedLang, setSelectedLang] = useState("en");
-  const [selectedCurrency, setSelectedCurrency] = useState("USD");
   const location = useLocation();
   const isDashboard = location.pathname.startsWith('/dashboard');
   
@@ -38,12 +32,7 @@ const Navbar = () => {
 
   useEffect(() => {
     const theme = localStorage.getItem("theme");
-    const savedLanguage = localStorage.getItem("preferredLanguage");
-    const savedCurrency = localStorage.getItem("preferredCurrency");
-    
     setIsDark(theme === "dark");
-    if (savedLanguage) setSelectedLang(savedLanguage);
-    if (savedCurrency) setSelectedCurrency(savedCurrency);
     fetchUserProfile();
   }, []);
 
@@ -74,153 +63,98 @@ const Navbar = () => {
     }
   };
 
-  const languages = {
-    en: { name: "English", countryCode: "GB" },
-    de: { name: "Deutsch", countryCode: "DE" },
-    es: { name: "Español", countryCode: "ES" },
-  };
-
-  const currencies = {
-    USD: "US Dollar",
-    EUR: "Euro",
-  };
-
-  const MobileMenu = () => (
-    <Sheet>
-      <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="md:hidden">
-          <Menu className="h-5 w-5" />
-          <span className="sr-only">Toggle menu</span>
-        </Button>
-      </SheetTrigger>
-      <SheetContent side="left" className="w-[300px] sm:w-[400px] z-[200] overflow-y-auto">
-        <nav className="flex flex-col gap-4 min-h-0">
-          <div className="h-header flex items-center">
-            <span className="text-2xl font-geologica font-extrabold">
-              cropio<span className="text-primary">.app</span>
-            </span>
-          </div>
-          <div className="flex flex-col gap-2 overflow-y-auto">
-            {isDashboard ? (
-              <>
-                {mainMenuItems.map((item) => (
-                  <Link
-                    key={item.label}
-                    to={item.path}
-                    className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-secondary"
-                  >
-                    <item.icon className="h-4 w-4" />
-                    <span>{item.label}</span>
-                  </Link>
-                ))}
-                <div className="my-4 border-t" />
-                <button
-                  onClick={() => {
-                    const newLang = selectedLang === "en" ? "de" : "en";
-                    setSelectedLang(newLang);
-                    localStorage.setItem("preferredLanguage", newLang);
-                  }}
-                  className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-secondary"
-                >
-                  <ReactCountryFlag
-                    countryCode={languages[selectedLang].countryCode}
-                    svg
-                    style={{
-                      width: '1.5em',
-                      height: '1.5em',
-                      borderRadius: '50%',
-                      objectFit: 'cover',
-                      border: '1px solid rgba(0,0,0,0.1)',
-                    }}
-                  />
-                  <span>{languages[selectedLang].name}</span>
-                </button>
-                <button
-                  onClick={() => {
-                    const newCurrency = selectedCurrency === "USD" ? "EUR" : "USD";
-                    setSelectedCurrency(newCurrency);
-                    localStorage.setItem("preferredCurrency", newCurrency);
-                  }}
-                  className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-secondary"
-                >
-                  <DollarSign className="h-4 w-4" />
-                  <span>{currencies[selectedCurrency]}</span>
-                </button>
-                <button
-                  onClick={toggleDarkMode}
-                  className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-secondary"
-                >
-                  {isDark ? (
-                    <Moon className="h-4 w-4" />
-                  ) : (
-                    <Sun className="h-4 w-4" />
-                  )}
-                  <span>{isDark ? 'Dark Mode' : 'Light Mode'}</span>
-                </button>
-                <div className="my-4 border-t" />
-                {bottomMenuItems.map((item) => (
-                  <Link
-                    key={item.label}
-                    to={item.path}
-                    className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-secondary"
-                  >
-                    <item.icon className="h-4 w-4" />
-                    <span>{item.label}</span>
-                  </Link>
-                ))}
-              </>
-            ) : (
-              navItems.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.path}
-                  className="px-2 py-1.5 rounded-md hover:bg-secondary"
-                >
-                  {item.name}
-                </Link>
-              ))
-            )}
-          </div>
-        </nav>
-      </SheetContent>
-    </Sheet>
-  );
-
   return (
     <nav className="fixed top-0 left-0 right-0 bg-background border-b border-border z-[51] shadow-[0_2px_8px_0_rgba(0,0,0,0.05)]">
       <div className={`w-full ${isDashboard ? 'px-4 md:px-8' : 'px-4 sm:px-6 lg:px-8'}`}>
         <div className="flex justify-between h-header">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             {isDashboard ? (
               <>
                 <SidebarTrigger 
                   icon={sidebarState === 'expanded' ? PanelLeftClose : PanelLeftOpen}
                   className="hidden md:block" 
                 />
-                <MobileMenu />
+                <MobileMenuButton />
               </>
             ) : (
-              <MobileMenu />
+              <MobileMenuButton />
             )}
             <Logo />
           </div>
 
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" className="h-9 w-9">
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" size="icon" className="h-8 w-8 md:h-9 md:w-9">
               <MessageSquare className="h-4 w-4" />
               <span className="sr-only">Open chat</span>
             </Button>
+            <CartButton />
             <NavActions 
               isDark={isDark} 
               onToggleTheme={toggleDarkMode} 
               userInitials={userInitials} 
             />
             <div className="md:hidden">
-              <UserMenu userInitials={userInitials} />
+              <UserMenu userInitials={userInitials} className="h-8 w-8 text-xs" />
             </div>
           </div>
         </div>
       </div>
+
+      <Sheet>
+        <SheetContent 
+          side="left" 
+          className="w-[300px] sm:w-[400px] z-[200] p-0 overflow-y-auto"
+        >
+          <MobileMenuHeader />
+          <div className="px-4 py-6 space-y-6">
+            {isDashboard && (
+              <>
+                <div className="space-y-1">
+                  {mainMenuItems.map((item) => (
+                    <Link
+                      key={item.label}
+                      to={item.path}
+                      className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-secondary"
+                    >
+                      <item.icon className="h-4 w-4" />
+                      <span>{item.label}</span>
+                    </Link>
+                  ))}
+                </div>
+
+                <div className="space-y-1">
+                  <MobileMenuLanguage />
+                  <MobileMenuCurrency />
+                  <button
+                    onClick={toggleDarkMode}
+                    className="flex items-center gap-2 px-2 py-1.5 w-full rounded-md hover:bg-secondary"
+                  >
+                    {isDark ? (
+                      <Moon className="h-4 w-4" />
+                    ) : (
+                      <Sun className="h-4 w-4" />
+                    )}
+                    <span>{isDark ? 'Dark Mode' : 'Light Mode'}</span>
+                  </button>
+                </div>
+
+                <div className="space-y-1">
+                  {bottomMenuItems.map((item) => (
+                    <Link
+                      key={item.label}
+                      to={item.path}
+                      className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-secondary"
+                    >
+                      <item.icon className="h-4 w-4" />
+                      <span>{item.label}</span>
+                    </Link>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+        </SheetContent>
+      </Sheet>
     </nav>
   );
 };
