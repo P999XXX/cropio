@@ -107,7 +107,10 @@ const Navbar = () => {
               userInitials={userInitials} 
             />
             <div className="md:hidden">
-              <UserMenu userInitials={userInitials} className="h-8 w-8" />
+              <UserMenu 
+                userInitials={userInitials} 
+                className="h-8 w-8 bg-[#9b87f5] hover:opacity-90 transition-opacity border border-border" 
+              />
             </div>
           </div>
         </div>
