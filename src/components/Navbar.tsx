@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { MessageSquare, PanelLeftOpen, PanelLeftClose } from "lucide-react";
+import { Menu, X, MessageSquare, PanelLeftOpen, PanelLeftClose } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useSidebar } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { supabase } from "@/integrations/supabase/client";
 import LanguageSwitcher from "./LanguageSwitcher";
 import CurrencySwitcher from "./CurrencySwitcher";
 import { ThemeToggle } from "./navbar/ThemeToggle";
 import { UserMenu } from "./navbar/UserMenu";
-import { MobileMenu } from "./navbar/MobileMenu";
+import { mainMenuItems, bottomMenuItems } from "./layouts/sidebar/menu-items";
 
 const navItems = [
   { name: "Products", path: "/products" },
@@ -20,9 +21,9 @@ const navItems = [
 ];
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const [isDark, setIsDark] = useState(false);
   const [userInitials, setUserInitials] = useState("");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
   const isDashboard = location.pathname.startsWith('/dashboard');
   
@@ -56,25 +57,85 @@ const Navbar = () => {
     }
   };
 
-  const updateThemeColors = (isDark: boolean) => {
-    const color = isDark ? '#1A1F2C' : '#FFFFFF';
-    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', color);
-    document.querySelector('meta[name="msapplication-navbutton-color"]')?.setAttribute('content', color);
-    document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]')?.setAttribute('content', color);
-  };
-
   const toggleDarkMode = () => {
     const newTheme = isDark ? "light" : "dark";
-    if (newTheme === "dark") {
-      document.documentElement.classList.add('dark');
-      updateThemeColors(true);
-    } else {
-      document.documentElement.classList.remove('dark');
-      updateThemeColors(false);
-    }
     localStorage.setItem("theme", newTheme);
     setIsDark(!isDark);
+    if (newTheme === "dark") {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
   };
+
+  const MobileMenu = () => (
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button variant="ghost" size="icon" className="md:hidden">
+          <Menu className="h-5 w-5" />
+          <span className="sr-only">Toggle menu</span>
+        </Button>
+      </SheetTrigger>
+      <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+        <nav className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2 pt-4">
+            {isDashboard ? (
+              <>
+                {mainMenuItems.map((item) => (
+                  <Link
+                    key={item.label}
+                    to={item.path}
+                    className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-secondary"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <item.icon className="h-4 w-4" />
+                    <span>{item.label}</span>
+                  </Link>
+                ))}
+                <div className="my-4 border-t" />
+                {bottomMenuItems.map((item) => (
+                  <Link
+                    key={item.label}
+                    to={item.path}
+                    className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-secondary"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <item.icon className="h-4 w-4" />
+                    <span>{item.label}</span>
+                  </Link>
+                ))}
+              </>
+            ) : (
+              navItems.map((item) => (
+                <Link
+                  key={item.name}
+                  to={item.path}
+                  className="px-2 py-1.5 rounded-md hover:bg-secondary"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {item.name}
+                </Link>
+              ))
+            )}
+          </div>
+          <div className="mt-4 flex flex-col gap-2">
+            <div className="flex items-center justify-between px-2">
+              <span>Theme</span>
+              <ThemeToggle isDark={isDark} onToggle={toggleDarkMode} />
+            </div>
+            <div className="flex items-center justify-between px-2">
+              <span>Language</span>
+              <LanguageSwitcher />
+            </div>
+            <div className="flex items-center justify-between px-2">
+              <span>Currency</span>
+              <CurrencySwitcher />
+            </div>
+          </div>
+        </nav>
+      </SheetContent>
+    </Sheet>
+  );
 
   return (
     <nav className="fixed top-0 left-0 right-0 bg-background border-b border-border z-[51] shadow-[0_2px_8px_0_rgba(0,0,0,0.05)]">
@@ -84,12 +145,12 @@ const Navbar = () => {
             {isDashboard && (
               <SidebarTrigger 
                 icon={sidebarState === 'expanded' ? PanelLeftClose : PanelLeftOpen}
-                className="block md:hidden" 
+                className="hidden md:block" 
               />
             )}
             <Link 
               to="/" 
-              className={`flex-shrink-0 ${isDashboard && sidebarState === 'collapsed' ? 'md:pl-16' : ''} ${isDashboard && sidebarState === 'expanded' ? 'md:hidden' : ''}`}
+              className="text-left"
             >
               <span className="text-2xl font-geologica font-extrabold">
                 cropio<span className="text-primary">.app</span>
@@ -129,22 +190,9 @@ const Navbar = () => {
             )}
           </div>
 
-          <div className="md:hidden flex items-center space-x-2">
-            <LanguageSwitcher />
-            <CurrencySwitcher />
-            <Button variant="ghost" size="icon" className="h-9 w-9">
-              <MessageSquare className="h-4 w-4" />
-            </Button>
-            <ThemeToggle isDark={isDark} onToggle={toggleDarkMode} />
+          <div className="md:hidden flex items-center gap-2">
             <UserMenu userInitials={userInitials} />
-            {!isDashboard && !userInitials && (
-              <MobileMenu 
-                isOpen={isOpen} 
-                setIsOpen={setIsOpen} 
-                navItems={navItems}
-                userInitials={userInitials}
-              />
-            )}
+            <MobileMenu />
           </div>
         </div>
       </div>

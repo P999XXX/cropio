@@ -15,7 +15,7 @@ const DashboardSidebar = () => {
     <Sidebar 
       variant="inset" 
       collapsible="icon"
-      className="fixed top-0 h-screen border-r border-border bg-background z-[99] overflow-hidden transition-all duration-300 ease-in-out"
+      className="fixed top-0 h-screen border-r border-border bg-background z-[99] overflow-hidden transition-all duration-300 ease-in-out hidden md:block"
     >
       <SidebarHeader />
       
