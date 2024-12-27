@@ -80,7 +80,7 @@ const Navbar = () => {
                   </SheetTrigger>
                   <SheetContent 
                     side="left" 
-                    className="w-[300px] sm:w-[400px] z-[200] p-0 overflow-y-auto"
+                    className="w-[300px] sm:w-[400px] z-[200] p-0 overflow-y-auto fixed"
                   >
                     <MobileMenuHeader />
                     <MobileMenuContent 
