@@ -1,5 +1,5 @@
 import { Sheet, SheetContent } from "@/components/ui/sheet";
-import { MessageSquare, Sun, Moon } from "lucide-react";
+import { MessageSquare, Sun, Moon, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useLocation } from "react-router-dom";
@@ -94,7 +94,7 @@ const Navbar = () => {
               userInitials={userInitials} 
             />
             <div className="md:hidden">
-              <UserMenu userInitials={userInitials} className="h-8 w-8 text-xs" />
+              <UserMenu userInitials={userInitials} />
             </div>
           </div>
         </div>
