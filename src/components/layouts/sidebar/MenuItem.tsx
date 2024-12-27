@@ -28,13 +28,13 @@ const MenuItem = ({ icon: Icon, label, path }: MenuItemProps) => {
             group-data-[collapsible=icon]:inline-flex
             group-data-[collapsible=icon]:flex-nowrap
             group-data-[collapsible=icon]:flex-col
-            group-data-[collapsible=icon]:justify-center
+            group-data-[collapsible=icon]:justify-start
             ${!isActive && 'hover:bg-secondary hover:text-primary'}
             ${isActive ? 'bg-secondary text-primary' : 'text-foreground'}
           `}
         >
           <div className={`inline-flex items-center justify-center w-10 h-10 flex-shrink-0 rounded-md transition-colors
-            group-data-[collapsible=icon]:w-full group-data-[collapsible=icon]:h-full group-data-[collapsible=icon]:pt-[3px]
+            group-data-[collapsible=icon]:w-full group-data-[collapsible=icon]:h-full 
             ${isActive ? 'bg-secondary text-primary' : 'hover:bg-secondary hover:text-primary'}
           `}>
             <Icon className="h-4 w-4" />
