@@ -1,11 +1,6 @@
 import { useState, useEffect } from "react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { DollarSign, EuroIcon } from "lucide-react";
+import { DollarSign, EuroIcon, RefreshCw } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
 
 const currencies = [
   { code: "USD", name: "US Dollar", icon: DollarSign },
@@ -14,45 +9,37 @@ const currencies = [
 
 export const MobileMenuCurrency = () => {
   const [selectedCurrency, setSelectedCurrency] = useState("USD");
+  const { toast } = useToast();
 
   useEffect(() => {
     const savedCurrency = localStorage.getItem("preferredCurrency");
     if (savedCurrency) setSelectedCurrency(savedCurrency);
   }, []);
 
-  const handleCurrencyChange = (currencyCode: string) => {
-    setSelectedCurrency(currencyCode);
-    localStorage.setItem("preferredCurrency", currencyCode);
+  const handleCurrencySwitch = () => {
+    const newCurrency = selectedCurrency === "USD" ? "EUR" : "USD";
+    setSelectedCurrency(newCurrency);
+    localStorage.setItem("preferredCurrency", newCurrency);
+    
+    toast({
+      title: "Currency Changed",
+      description: `Successfully switched to ${currencies.find(c => c.code === newCurrency)?.name}`,
+    });
   };
 
   const selectedCurrencyData = currencies.find(c => c.code === selectedCurrency);
   const CurrencyIcon = selectedCurrencyData?.icon || DollarSign;
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button className="flex items-center gap-2 px-2 py-1.5 w-full text-left hover:bg-secondary rounded-md text-sm">
-          <CurrencyIcon className="h-4 w-4" />
-          <span>{selectedCurrencyData?.name}</span>
-        </button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="w-[200px]">
-        {currencies.map((currency) => {
-          const Icon = currency.icon;
-          return (
-            <DropdownMenuItem
-              key={currency.code}
-              onClick={() => handleCurrencyChange(currency.code)}
-              className="text-sm"
-            >
-              <div className="flex items-center gap-2">
-                <Icon className="h-4 w-4" />
-                <span>{currency.name}</span>
-              </div>
-            </DropdownMenuItem>
-          );
-        })}
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <button 
+      onClick={handleCurrencySwitch}
+      className="flex items-center justify-between gap-2 px-2 py-1.5 w-full text-left hover:bg-secondary rounded-md text-sm"
+    >
+      <div className="flex items-center gap-2">
+        <CurrencyIcon className="h-4 w-4" />
+        <span>{selectedCurrencyData?.name}</span>
+      </div>
+      <RefreshCw className="h-4 w-4" />
+    </button>
   );
 };
