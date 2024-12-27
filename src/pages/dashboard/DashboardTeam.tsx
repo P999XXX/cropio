@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { TeamMembersTable } from "@/components/team/TeamMembersTable";
-import { InviteMemberDialog } from "@/components/team/invite/InviteMemberDialog";
+import { InviteMemberDialog } from "@/components/team/InviteMemberDialog";
 import { Button } from "@/components/ui/button";
 import { UserPlus } from "lucide-react";
 import { TeamMember } from "@/types/team";
@@ -14,49 +14,52 @@ const DashboardTeam = () => {
   const { data: teamMembers, isLoading, error } = useQuery({
     queryKey: ["team-members"],
     queryFn: async () => {
-      const { data: authData, error: authError } = await supabase.auth.getUser();
-      if (authError) {
-        throw new Error("Authentication error: " + authError.message);
+      try {
+        const { data: authData, error: authError } = await supabase.auth.getUser();
+        if (authError) throw new Error("Authentication error: " + authError.message);
+        if (!authData.user) throw new Error("No authenticated user found");
+
+        // Clone the response data immediately to prevent stream reading issues
+        const { data, error: queryError } = await supabase
+          .from("team_members")
+          .select(`
+            id,
+            profile_id,
+            invited_by,
+            role,
+            email,
+            status,
+            created_at,
+            profile:profiles!team_members_profile_id_fkey (
+              first_name,
+              last_name,
+              email
+            ),
+            inviter:profiles!team_members_invited_by_fkey (
+              first_name,
+              last_name
+            )
+          `)
+          .order('created_at', { ascending: false })
+          .throwOnError(); // This ensures we get a proper error if the query fails
+
+        if (queryError) throw new Error("Failed to fetch team members: " + queryError.message);
+        if (!data) throw new Error("No data returned from query");
+
+        // Immediately process and return the data
+        return data as TeamMember[];
+      } catch (error) {
+        console.error("Team members fetch error:", error);
+        throw error; // Re-throw to let React Query handle it
       }
-
-      if (!authData.user) {
-        throw new Error("No authenticated user found");
-      }
-
-      const { data, error: queryError } = await supabase
-        .from("team_members")
-        .select(`
-          id,
-          profile_id,
-          invited_by,
-          role,
-          email,
-          status,
-          created_at,
-          profile:profiles!team_members_profile_id_fkey (
-            first_name,
-            last_name,
-            email
-          ),
-          inviter:profiles!team_members_invited_by_fkey (
-            first_name,
-            last_name
-          )
-        `)
-        .order('created_at', { ascending: false });
-
-      if (queryError) {
-        console.error("Query error:", queryError);
-        throw new Error("Failed to fetch team members");
-      }
-
-      return data as TeamMember[];
     },
-    retry: 1,
+    retry: false, // Disable retries since we're handling errors explicitly
+    staleTime: 1000 * 60, // Cache for 1 minute to prevent unnecessary refetches
   });
 
+  // Handle error display
   if (error) {
-    toast.error("Failed to load team members");
+    toast.error("Failed to load team members: " + (error as Error).message);
   }
 
   return (
