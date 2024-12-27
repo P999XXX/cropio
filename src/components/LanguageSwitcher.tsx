@@ -63,7 +63,7 @@ export const LanguageSwitcher = () => {
         </HoverCardTrigger>
         <HoverCardContent 
           align="end" 
-          className="w-[200px] p-2 bg-muted animate-in zoom-in-95 duration-100"
+          className="w-[200px] p-2 bg-card text-card-foreground border border-border shadow-lg dark:shadow-none animate-in zoom-in-95 duration-100"
           sideOffset={4}
           side="bottom"
           avoidCollisions={false}
@@ -73,10 +73,10 @@ export const LanguageSwitcher = () => {
               <button
                 key={lang.code}
                 onClick={() => handleLanguageChange(lang.code)}
-                className={`flex w-full items-center px-2 py-1.5 text-sm rounded-md ${
+                className={`flex w-full items-center px-2 py-1.5 text-sm rounded-md transition-colors ${
                   selectedLang === lang.code 
-                    ? 'bg-accent text-accent-foreground' 
-                    : ''
+                    ? 'bg-primary text-primary-foreground dark:bg-primary dark:text-primary-foreground' 
+                    : 'hover:bg-muted dark:hover:bg-muted'
                 }`}
               >
                 <span className="mr-2">{lang.flag}</span>

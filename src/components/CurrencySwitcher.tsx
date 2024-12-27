@@ -63,7 +63,7 @@ export const CurrencySwitcher = () => {
         </HoverCardTrigger>
         <HoverCardContent 
           align="end"
-          className="w-[200px] p-2 bg-muted animate-in zoom-in-95 duration-100"
+          className="w-[200px] p-2 bg-card text-card-foreground border border-border shadow-lg dark:shadow-none animate-in zoom-in-95 duration-100"
           sideOffset={4}
           side="bottom"
           avoidCollisions={false}
@@ -75,10 +75,10 @@ export const CurrencySwitcher = () => {
                 <button
                   key={currency.code}
                   onClick={() => handleCurrencyChange(currency.code)}
-                  className={`flex w-full items-center px-2 py-1.5 text-sm rounded-md ${
+                  className={`flex w-full items-center px-2 py-1.5 text-sm rounded-md transition-colors ${
                     selectedCurrency === currency.code 
-                      ? 'bg-accent text-accent-foreground' 
-                      : ''
+                      ? 'bg-primary text-primary-foreground dark:bg-primary dark:text-primary-foreground' 
+                      : 'hover:bg-muted dark:hover:bg-muted'
                   }`}
                 >
                   <Icon className="mr-2 h-4 w-4" />
