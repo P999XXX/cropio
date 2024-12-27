@@ -1,20 +1,17 @@
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { MessageSquare, Sun, Moon, PanelLeftClose, PanelLeftOpen, Menu } from "lucide-react";
+import { MessageSquare, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
-import { Link } from "react-router-dom";
-import { mainMenuItems, bottomMenuItems } from "./layouts/sidebar/menu-items";
+import { useSidebar } from "@/components/ui/sidebar";
 import { Logo } from "./navbar/Logo";
 import { NavActions } from "./navbar/NavActions";
 import { UserMenu } from "./navbar/UserMenu";
-import { MobileMenuButton } from "./navbar/MobileMenuButton";
 import { MobileMenuHeader } from "./navbar/MobileMenuHeader";
-import { MobileMenuLanguage } from "./navbar/MobileMenuLanguage";
-import { MobileMenuCurrency } from "./navbar/MobileMenuCurrency";
 import { CartButton } from "./navbar/CartButton";
+import { DashboardSidebarTrigger } from "./navbar/DashboardSidebarTrigger";
+import { MobileMenuContent } from "./navbar/MobileMenuContent";
 
 const Navbar = () => {
   const [isDark, setIsDark] = useState(false);
@@ -68,12 +65,9 @@ const Navbar = () => {
       <div className={`w-full ${isDashboard ? 'px-4 md:px-8' : 'px-4 sm:px-6 lg:px-8'}`}>
         <div className="flex justify-between h-header">
           <div className="flex items-center gap-1">
-            {isDashboard ? (
+            {isDashboard && (
               <>
-                <SidebarTrigger 
-                  icon={sidebarState === 'expanded' ? PanelLeftClose : PanelLeftOpen}
-                  className="hidden md:block" 
-                />
+                <DashboardSidebarTrigger isExpanded={sidebarState === 'expanded'} />
                 <Sheet>
                   <SheetTrigger asChild>
                     <Button 
@@ -90,78 +84,14 @@ const Navbar = () => {
                     className="w-[300px] sm:w-[400px] z-[200] p-0 overflow-y-auto"
                   >
                     <MobileMenuHeader />
-                    <div className="px-4 py-6 space-y-6">
-                      {isDashboard && (
-                        <>
-                          <div className="space-y-1">
-                            {mainMenuItems.map((item) => (
-                              <Link
-                                key={item.label}
-                                to={item.path}
-                                className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-secondary"
-                              >
-                                <item.icon className="h-4 w-4" />
-                                <span>{item.label}</span>
-                              </Link>
-                            ))}
-                          </div>
-
-                          <div className="space-y-1">
-                            <MobileMenuLanguage />
-                            <MobileMenuCurrency />
-                            <button
-                              onClick={toggleDarkMode}
-                              className="flex items-center gap-2 px-2 py-1.5 w-full rounded-md hover:bg-secondary"
-                            >
-                              {isDark ? (
-                                <Moon className="h-4 w-4" />
-                              ) : (
-                                <Sun className="h-4 w-4" />
-                              )}
-                              <span>{isDark ? 'Dark Mode' : 'Light Mode'}</span>
-                            </button>
-                          </div>
-
-                          <div className="space-y-1">
-                            {bottomMenuItems.map((item) => (
-                              <Link
-                                key={item.label}
-                                to={item.path}
-                                className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-secondary"
-                              >
-                                <item.icon className="h-4 w-4" />
-                                <span>{item.label}</span>
-                              </Link>
-                            ))}
-                          </div>
-                        </>
-                      )}
-                    </div>
+                    <MobileMenuContent 
+                      isDashboard={isDashboard}
+                      isDark={isDark}
+                      onToggleTheme={toggleDarkMode}
+                    />
                   </SheetContent>
                 </Sheet>
               </>
-            ) : (
-              <Sheet>
-                <SheetTrigger asChild>
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    className="md:hidden p-0 hover:bg-transparent"
-                  >
-                    <Menu className="h-5 w-5" />
-                    <span className="sr-only">Toggle menu</span>
-                  </Button>
-                </SheetTrigger>
-                <SheetContent 
-                  side="left" 
-                  className="w-[300px] sm:w-[400px] z-[200] p-0 overflow-y-auto"
-                >
-                  <MobileMenuHeader />
-                  <div className="px-4 py-6 space-y-6">
-                    {/* Non-dashboard menu content */}
-                  </div>
-                </SheetContent>
-              </Sheet>
             )}
             <Logo />
           </div>
