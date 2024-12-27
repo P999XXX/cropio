@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import UserMenu from "./UserMenu";
+import { UserMenu } from "./UserMenu";
 import { ThemeToggle } from "./ThemeToggle";
 import LanguageSwitcher from "../LanguageSwitcher";
 import CurrencySwitcher from "../CurrencySwitcher";

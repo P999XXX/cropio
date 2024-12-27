@@ -68,7 +68,7 @@ const UserMenuContent = ({ profile, onLogout }: { profile: UserProfile | null, o
   </div>
 );
 
-export default function UserMenu({ userInitials, className }: UserMenuProps) {
+export const UserMenu = ({ userInitials, className }: UserMenuProps) => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const { toast } = useToast();
 
@@ -132,4 +132,4 @@ export default function UserMenu({ userInitials, className }: UserMenuProps) {
       </Popover>
     </HoverCard>
   );
-}
+};
