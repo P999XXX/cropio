@@ -26,8 +26,8 @@ const MenuItem = ({ icon: Icon, label, path }: MenuItemProps) => {
             flex items-center gap-3 relative w-full rounded-md px-2 py-1.5 transition-colors
             group-data-[collapsible=icon]:w-8 group-data-[collapsible=icon]:h-8 group-data-[collapsible=icon]:p-0
             group-data-[collapsible=icon]:hover:bg-transparent
-            group-data-[collapsible=none]:hover:bg-muted
-            group-data-[collapsible=none]:data-[active=true]:bg-muted
+            group-data-[collapsible=none]:hover:bg-[#1A1F2C]
+            group-data-[collapsible=none]:data-[active=true]:bg-[#1A1F2C]
             ${isActive ? 'text-primary' : 'text-foreground hover:text-primary'}
           `}
           data-active={isActive}
@@ -35,8 +35,8 @@ const MenuItem = ({ icon: Icon, label, path }: MenuItemProps) => {
           <div 
             className={`
               w-8 h-8 flex items-center justify-center flex-shrink-0 rounded-md transition-colors
-              group-data-[collapsible=icon]:hover:bg-muted
-              group-data-[collapsible=icon]:data-[active=true]:bg-muted
+              group-data-[collapsible=icon]:hover:bg-[#1A1F2C]
+              group-data-[collapsible=icon]:data-[active=true]:bg-[#1A1F2C]
             `}
             data-active={isActive}
           >
