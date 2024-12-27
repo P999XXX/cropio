@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Sun, Moon } from "lucide-react";
+import { Sun, Moon, ChevronDown } from "lucide-react";
 import { mainMenuItems, bottomMenuItems } from "../layouts/sidebar/menu-items";
 import { Separator } from "@/components/ui/separator";
 import { useState, useEffect } from "react";
@@ -75,20 +75,25 @@ export const MobileMenuContent = ({ isDashboard, isDark, onToggleTheme, onClose 
         <div className="space-y-1">
           <button
             onClick={() => setShowLanguages(!showLanguages)}
-            className="flex items-center gap-2 px-2 py-1.5 w-full text-left hover:bg-secondary rounded-md text-sm"
+            className="flex items-center justify-between gap-2 px-2 py-1.5 w-full text-left hover:bg-secondary rounded-md text-sm"
           >
-            <ReactCountryFlag
-              countryCode={currentLanguage?.countryCode || "GB"}
-              svg
-              style={{
-                width: '1.2em',
-                height: '1.2em',
-                borderRadius: '50%',
-                objectFit: 'cover',
-                border: '1px solid rgba(0,0,0,0.1)',
-              }}
+            <div className="flex items-center gap-2">
+              <ReactCountryFlag
+                countryCode={currentLanguage?.countryCode || "GB"}
+                svg
+                style={{
+                  width: '1.2em',
+                  height: '1.2em',
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                  border: '1px solid rgba(0,0,0,0.1)',
+                }}
+              />
+              <span>{currentLanguage?.name}</span>
+            </div>
+            <ChevronDown 
+              className={`h-4 w-4 transition-transform duration-200 ${showLanguages ? 'rotate-180' : ''}`}
             />
-            <span>{currentLanguage?.name}</span>
           </button>
           
           {showLanguages && (
