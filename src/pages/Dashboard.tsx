@@ -1,6 +1,6 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import DashboardLayout from "@/components/layouts/DashboardLayout";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 
 // Lazy load dashboard pages with prefetch
 const DashboardHome = lazy(() => import("./dashboard/DashboardHome" /* webpackChunkName: "dashboard-home" */));
