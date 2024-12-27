@@ -47,6 +47,7 @@ export const MobileMenuContent = ({ isDashboard, isDark, onToggleTheme, onClose 
   if (!isDashboard) return null;
 
   const currentLanguage = languages.find(l => l.code === selectedLang);
+  const availableLanguages = languages.filter(lang => lang.code !== selectedLang);
 
   return (
     <div className="mobile-menu-content px-4 py-6 space-y-6 lg:hidden">
@@ -92,12 +93,11 @@ export const MobileMenuContent = ({ isDashboard, isDark, onToggleTheme, onClose 
           
           {showLanguages && (
             <div className="ml-2 space-y-1 mt-1">
-              {languages.map((lang) => (
+              {availableLanguages.map((lang) => (
                 <button
                   key={lang.code}
                   onClick={() => handleLanguageChange(lang.code)}
-                  className={`flex items-center gap-2 px-2 py-1.5 w-full text-left rounded-md text-sm
-                    ${selectedLang === lang.code ? 'bg-primary text-primary-foreground' : 'hover:bg-secondary'}`}
+                  className="flex items-center gap-2 px-2 py-1.5 w-full text-left rounded-md text-sm hover:bg-secondary"
                 >
                   <ReactCountryFlag
                     countryCode={lang.countryCode}
