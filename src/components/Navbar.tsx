@@ -72,8 +72,7 @@ const Navbar = () => {
                   <SheetTrigger asChild>
                     <Button 
                       variant="ghost" 
-                      size="icon" 
-                      className="md:hidden p-0 hover:bg-transparent"
+                      className="md:hidden shadow-none !p-0 !w-auto !h-auto"
                     >
                       <Menu className="h-5 w-5" />
                       <span className="sr-only">Toggle menu</span>
