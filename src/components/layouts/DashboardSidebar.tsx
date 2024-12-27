@@ -15,18 +15,18 @@ import {
   LayoutDashboard,
   Users,
   Award,
-  Package,
-  ShoppingCart,
-  List,
+  Nut,
+  ChartCandlestick,
   ArrowLeftRight,
+  List,
+  RefreshCw,
   CreditCard,
+  Star,
   Settings,
   HelpCircle,
   Headset,
   PanelLeftOpen,
   PanelLeftClose,
-  Store,
-  MessageSquare,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -34,13 +34,13 @@ const mainMenuItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
   { icon: Users, label: "Team", path: "/dashboard/team" },
   { icon: Award, label: "Certificates", path: "/dashboard/certificates" },
-  { icon: Package, label: "Products", path: "/dashboard/products" },
-  { icon: Store, label: "Market", path: "/dashboard/market" },
-  { icon: ShoppingCart, label: "Trading", path: "/dashboard/trading" },
+  { icon: Nut, label: "Products", path: "/dashboard/products" },
+  { icon: ChartCandlestick, label: "Market", path: "/dashboard/market" },
+  { icon: ArrowLeftRight, label: "Trading", path: "/dashboard/trading" },
   { icon: List, label: "Orders", path: "/dashboard/orders" },
-  { icon: ArrowLeftRight, label: "Returns", path: "/dashboard/returns" },
+  { icon: RefreshCw, label: "Returns", path: "/dashboard/returns" },
   { icon: CreditCard, label: "Payments", path: "/dashboard/payments" },
-  { icon: MessageSquare, label: "Reviews", path: "/dashboard/reviews" },
+  { icon: Star, label: "Reviews", path: "/dashboard/reviews" },
 ];
 
 const bottomMenuItems = [
