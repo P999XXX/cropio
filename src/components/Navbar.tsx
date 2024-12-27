@@ -14,11 +14,13 @@ const Navbar = () => {
   const location = useLocation();
   const isDashboard = location.pathname.startsWith('/dashboard');
   
+  // Only use sidebar context if we're in dashboard
   let sidebarState;
   try {
     const { state } = useSidebar();
     sidebarState = state;
   } catch {
+    // Not within SidebarProvider (non-dashboard routes)
     sidebarState = null;
   }
 
@@ -56,7 +58,7 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="fixed top-0 right-0 bg-background border-b border-border z-[60] shadow-[0_2px_8px_0_rgba(0,0,0,0.05)] left-[var(--sidebar-width-icon)] transition-[left] duration-200 ease-linear">
+    <nav className={`fixed top-0 right-0 bg-background border-b border-border z-[51] shadow-[0_2px_8px_0_rgba(0,0,0,0.05)] ${isDashboard ? 'left-[var(--sidebar-width-icon)]' : 'left-0'} transition-[left] duration-200 ease-linear ${isDashboard && sidebarState === 'expanded' ? 'left-[var(--sidebar-width)]' : ''}`}>
       <div className={`w-full ${isDashboard ? 'px-12' : 'px-4 sm:px-6 lg:px-8'}`}>
         <div className="flex justify-between h-header">
           <div className="flex items-center gap-4">
@@ -86,6 +88,7 @@ const Navbar = () => {
             )}
           </div>
 
+          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-4">
             <LanguageSwitcher />
             <CurrencySwitcher />
@@ -116,6 +119,7 @@ const Navbar = () => {
             )}
           </div>
 
+          {/* Mobile menu button */}
           <div className="md:hidden flex items-center space-x-2">
             <LanguageSwitcher />
             <CurrencySwitcher />
@@ -147,6 +151,7 @@ const Navbar = () => {
         </div>
       </div>
 
+      {/* Mobile Navigation */}
       {!isDashboard && isOpen && (
         <div className="md:hidden animate-slide-in">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-background shadow-lg">
