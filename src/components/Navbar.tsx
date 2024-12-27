@@ -9,7 +9,6 @@ import CurrencySwitcher from "./CurrencySwitcher";
 import { ThemeToggle } from "./navbar/ThemeToggle";
 import { UserMenu } from "./navbar/UserMenu";
 import { MobileMenu } from "./navbar/MobileMenu";
-import { useState, useEffect } from "react";
 
 const navItems = [
   { name: "Products", path: "/products" },
@@ -22,9 +21,6 @@ const navItems = [
 const Navbar = () => {
   const location = useLocation();
   const isDashboard = location.pathname.startsWith('/dashboard');
-  const [isDark, setIsDark] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [userInitials, setUserInitials] = useState("");
   
   let sidebarState;
   try {
@@ -33,43 +29,6 @@ const Navbar = () => {
   } catch {
     sidebarState = null;
   }
-
-  useEffect(() => {
-    // Check theme on mount and when localStorage changes
-    const checkTheme = () => {
-      const theme = localStorage.getItem('theme');
-      setIsDark(theme === 'dark');
-    };
-    
-    checkTheme();
-    window.addEventListener('storage', checkTheme);
-    
-    return () => window.removeEventListener('storage', checkTheme);
-  }, []);
-
-  useEffect(() => {
-    // Get user data and set initials
-    const getUserData = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user?.user_metadata?.first_name && user?.user_metadata?.last_name) {
-        const initials = `${user.user_metadata.first_name[0]}${user.user_metadata.last_name[0]}`.toUpperCase();
-        setUserInitials(initials);
-      }
-    };
-    
-    getUserData();
-  }, []);
-
-  const handleThemeToggle = () => {
-    const newTheme = isDark ? 'light' : 'dark';
-    localStorage.setItem('theme', newTheme);
-    setIsDark(!isDark);
-    if (newTheme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 bg-background border-b border-border z-[51] shadow-[0_2px_8px_0_rgba(0,0,0,0.05)]">
@@ -112,8 +71,8 @@ const Navbar = () => {
               <MessageSquare className="h-4 w-4" />
               <span className="sr-only">Open chat</span>
             </Button>
-            <ThemeToggle isDark={isDark} onToggle={handleThemeToggle} />
-            <UserMenu userInitials={userInitials} />
+            <ThemeToggle />
+            <UserMenu />
             {!isDashboard && (
               <Link
                 to="/signin"
@@ -130,14 +89,13 @@ const Navbar = () => {
             <Button variant="ghost" size="icon" className="h-9 w-9">
               <MessageSquare className="h-4 w-4" />
             </Button>
-            <ThemeToggle isDark={isDark} onToggle={handleThemeToggle} />
-            <UserMenu userInitials={userInitials} />
+            <ThemeToggle />
+            <UserMenu />
             {!isDashboard && (
               <MobileMenu 
-                isOpen={isMobileMenuOpen}
-                setIsOpen={setIsMobileMenuOpen}
+                isOpen={false}
+                setIsOpen={() => {}}
                 navItems={navItems}
-                userInitials={userInitials}
               />
             )}
           </div>
