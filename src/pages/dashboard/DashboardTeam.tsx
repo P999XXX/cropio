@@ -14,51 +14,48 @@ const DashboardTeam = () => {
   const { data: teamMembers, isLoading } = useQuery({
     queryKey: ["team-members"],
     queryFn: async () => {
-      const { data: authData, error: authError } = await supabase.auth.getUser();
-      if (authError) {
-        throw new Error("Authentication error: " + authError.message);
-      }
-      if (!authData.user) {
-        throw new Error("No authenticated user found");
-      }
+      try {
+        const { data: authData, error: authError } = await supabase.auth.getUser();
+        if (authError) throw new Error("Authentication error: " + authError.message);
+        if (!authData.user) throw new Error("No authenticated user found");
 
-      const { data, error: queryError } = await supabase
-        .from("team_members")
-        .select(`
-          id,
-          profile_id,
-          invited_by,
-          role,
-          email,
-          status,
-          created_at,
-          profile:profiles!team_members_profile_id_fkey (
-            first_name,
-            last_name,
-            email
-          ),
-          inviter:profiles!team_members_invited_by_fkey (
-            first_name,
-            last_name
-          )
-        `)
-        .order('created_at', { ascending: false });
+        const { data, error } = await supabase
+          .from("team_members")
+          .select(`
+            id,
+            profile_id,
+            invited_by,
+            role,
+            email,
+            status,
+            created_at,
+            profile:profiles!team_members_profile_id_fkey (
+              first_name,
+              last_name,
+              email
+            ),
+            inviter:profiles!team_members_invited_by_fkey (
+              first_name,
+              last_name
+            )
+          `)
+          .order('created_at', { ascending: false });
 
-      if (queryError) {
-        throw new Error("Failed to fetch team members: " + queryError.message);
+        if (error) {
+          console.error("Team members fetch error:", error);
+          throw new Error(error.message);
+        }
+
+        return data as TeamMember[];
+      } catch (error) {
+        console.error("Team members fetch error:", error);
+        toast.error("Failed to load team members. Please try again.");
+        return [];
       }
-
-      return data as TeamMember[];
     },
     retry: 1,
     retryDelay: 1000,
     staleTime: 1000 * 60,
-    meta: {
-      onError: (error: Error) => {
-        console.error("Team members fetch error:", error);
-        toast.error("Failed to load team members. Please try again.");
-      }
-    }
   });
 
   return (
