@@ -53,12 +53,25 @@ export const LanguageSwitcher = () => {
     }
   }, []);
 
+  const selectedCountry = languages.find(l => l.code === selectedLang)?.countryCode || "GB";
+
   return (
     <div className="relative inline-block">
       <HoverCard openDelay={200} closeDelay={200}>
         <HoverCardTrigger asChild>
-          <Button variant="ghost" size="icon" className="h-9 w-9 font-medium uppercase">
-            {selectedLang}
+          <Button variant="ghost" size="icon" className="h-9 w-9">
+            <ReactCountryFlag
+              countryCode={selectedCountry}
+              svg
+              style={{
+                width: '1.5em',
+                height: '1.5em',
+                borderRadius: '50%',
+                objectFit: 'cover',
+                border: '1px solid rgba(0,0,0,0.1)',
+              }}
+              title={languages.find(l => l.code === selectedLang)?.name}
+            />
             <span className="sr-only">Toggle language</span>
           </Button>
         </HoverCardTrigger>
