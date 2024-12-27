@@ -73,7 +73,7 @@ const Navbar = () => {
                     <Button 
                       variant="ghost" 
                       size="icon" 
-                      className="md:hidden p-0 hover:bg-transparent"
+                      className="md:hidden p-0 hover:bg-transparent shadow-none bg-transparent"
                     >
                       <Menu className="h-5 w-5" />
                       <span className="sr-only">Toggle menu</span>
