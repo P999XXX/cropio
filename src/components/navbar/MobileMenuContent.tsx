@@ -9,9 +9,10 @@ interface MobileMenuContentProps {
   isDashboard: boolean;
   isDark: boolean;
   onToggleTheme: () => void;
+  onClose?: () => void;
 }
 
-export const MobileMenuContent = ({ isDashboard, isDark, onToggleTheme }: MobileMenuContentProps) => {
+export const MobileMenuContent = ({ isDashboard, isDark, onToggleTheme, onClose }: MobileMenuContentProps) => {
   const location = useLocation();
   
   if (!isDashboard) return null;
@@ -25,6 +26,7 @@ export const MobileMenuContent = ({ isDashboard, isDark, onToggleTheme }: Mobile
             <Link
               key={item.label}
               to={item.path}
+              onClick={onClose}
               className={`flex items-center gap-2 px-2 py-1.5 rounded-md text-sm
                 ${isActive ? 'bg-secondary' : 'hover:bg-secondary'}`}
             >
@@ -62,6 +64,7 @@ export const MobileMenuContent = ({ isDashboard, isDark, onToggleTheme }: Mobile
             <Link
               key={item.label}
               to={item.path}
+              onClick={onClose}
               className={`flex items-center gap-2 px-2 py-1.5 rounded-md text-sm
                 ${isActive ? 'bg-secondary' : 'hover:bg-secondary'}`}
             >
