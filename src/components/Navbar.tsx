@@ -78,9 +78,9 @@ const Navbar = () => {
 
   return (
     <nav className="fixed top-0 left-0 right-0 bg-background border-b border-border z-[51] shadow-[0_2px_8px_0_rgba(0,0,0,0.05)]">
-      <div className={`w-full ${isDashboard ? 'px-4 md:px-8' : 'px-4 sm:px-6 lg:px-8'}`}>
+      <div className={`w-full ${isDashboard ? 'px-2 sm:px-4 md:px-8' : 'px-4 sm:px-6 lg:px-8'}`}>
         <div className="flex justify-between h-header">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             {isDashboard && (
               <SidebarTrigger 
                 icon={sidebarState === 'expanded' ? PanelLeftClose : PanelLeftOpen}
@@ -91,7 +91,7 @@ const Navbar = () => {
               to="/" 
               className={`flex-shrink-0 ${isDashboard && sidebarState === 'collapsed' ? 'md:pl-16' : ''} ${isDashboard && sidebarState === 'expanded' ? 'md:hidden' : ''}`}
             >
-              <span className="text-2xl font-geologica font-extrabold">
+              <span className="text-xl sm:text-2xl font-geologica font-extrabold">
                 cropio<span className="text-primary">.app</span>
               </span>
             </Link>
@@ -130,8 +130,6 @@ const Navbar = () => {
           </div>
 
           <div className="md:hidden flex items-center space-x-2">
-            <LanguageSwitcher />
-            <CurrencySwitcher />
             <Button variant="ghost" size="icon" className="h-9 w-9">
               <MessageSquare className="h-4 w-4" />
             </Button>

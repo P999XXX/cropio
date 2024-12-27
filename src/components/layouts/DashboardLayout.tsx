@@ -10,12 +10,12 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   return (
     <SidebarProvider defaultOpen={false}>
       <div className="flex min-h-screen w-full bg-background">
-        <div className="transition-all duration-300 ease-in-out">
+        <div className="hidden md:block transition-all duration-300 ease-in-out">
           <DashboardSidebar />
         </div>
         <div className="flex-1 transition-all duration-300 ease-in-out">
           <Navbar />
-          <SidebarInset className="px-4 md:px-8 py-6">
+          <SidebarInset className="px-2 sm:px-4 md:px-8 py-4 sm:py-6">
             {children}
           </SidebarInset>
         </div>
