@@ -15,8 +15,12 @@ const DashboardTeam = () => {
     queryKey: ["team-members"],
     queryFn: async () => {
       const { data: authData, error: authError } = await supabase.auth.getUser();
-      if (authError) throw authError;
-      if (!authData.user) throw new Error("No authenticated user found");
+      if (authError) {
+        throw new Error("Authentication error: " + authError.message);
+      }
+      if (!authData.user) {
+        throw new Error("No authenticated user found");
+      }
 
       const { data, error: queryError } = await supabase
         .from("team_members")
@@ -38,21 +42,23 @@ const DashboardTeam = () => {
             last_name
           )
         `)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .throwOnError();
 
-      if (queryError) throw queryError;
-      if (!data) throw new Error("No data returned from query");
+      if (queryError) {
+        throw new Error("Failed to fetch team members: " + queryError.message);
+      }
 
       return data as TeamMember[];
     },
-    retry: false,
-    staleTime: 1000 * 60,
+    retry: 1, // Allow one retry
+    retryDelay: 1000, // Wait 1 second before retrying
+    staleTime: 1000 * 60, // Cache for 1 minute
+    onError: (error: Error) => {
+      console.error("Team members fetch error:", error);
+      toast.error("Failed to load team members. Please try again.");
+    }
   });
-
-  if (error) {
-    console.error("Team members fetch error:", error);
-    toast.error("Failed to load team members. Please try again.");
-  }
 
   return (
     <div className="team-management space-y-6">
