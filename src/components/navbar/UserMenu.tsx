@@ -69,20 +69,22 @@ export const UserMenu = ({ userInitials, className }: UserMenuProps) => {
   if (!userInitials) return null;
   
   return (
-    <HoverCard openDelay={0} closeDelay={200}>
-      <Popover>
+    <div className="relative">
+      <HoverCard openDelay={0} closeDelay={200}>
         <HoverCardTrigger asChild>
-          <PopoverTrigger asChild>
+          <div>
             <UserMenuTrigger userInitials={userInitials} className={className} />
-          </PopoverTrigger>
+          </div>
         </HoverCardTrigger>
-        <HoverCardContent className="w-80" align="end" side="bottom">
+        <HoverCardContent 
+          className="w-80 p-4" 
+          align="end" 
+          side="bottom" 
+          sideOffset={5}
+        >
           <UserProfileContent profile={profile} onLogout={handleLogout} />
         </HoverCardContent>
-        <PopoverContent className="w-80" align="end">
-          <UserProfileContent profile={profile} onLogout={handleLogout} />
-        </PopoverContent>
-      </Popover>
-    </HoverCard>
+      </HoverCard>
+    </div>
   );
 };

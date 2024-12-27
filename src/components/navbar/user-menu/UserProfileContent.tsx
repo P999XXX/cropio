@@ -22,7 +22,7 @@ export const UserProfileContent = ({ profile, onLogout }: UserProfileContentProp
         </AvatarFallback>
       </Avatar>
       <div className="space-y-1">
-        <h4 className="text-base font-semibold leading-none">
+        <h4 className="text-lg font-semibold leading-none">
           {profile?.first_name} {profile?.last_name}
         </h4>
         <p className="text-sm text-muted-foreground">
@@ -32,11 +32,11 @@ export const UserProfileContent = ({ profile, onLogout }: UserProfileContentProp
     </div>
     <div className="border-t border-border pt-4 space-y-2">
       <div className="text-sm">
-        <div className="flex justify-between">
+        <div className="flex justify-between py-1">
           <span className="text-muted-foreground">Company</span>
           <span className="font-medium">{profile?.company_name}</span>
         </div>
-        <div className="flex justify-between">
+        <div className="flex justify-between py-1">
           <span className="text-muted-foreground">Role</span>
           <span className="font-medium capitalize">{profile?.role}</span>
         </div>
