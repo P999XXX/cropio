@@ -62,7 +62,11 @@ export const LanguageSwitcher = () => {
           <span className="sr-only">Toggle language</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="bg-background border shadow-lg">
+      <DropdownMenuContent 
+        align="end" 
+        className="bg-background border shadow-lg z-[100] relative"
+        sideOffset={8}
+      >
         {languages.map((lang) => (
           <DropdownMenuItem
             key={lang.code}

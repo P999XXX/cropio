@@ -61,7 +61,11 @@ export const CurrencySwitcher = () => {
           <span className="sr-only">Toggle currency</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="bg-background border shadow-lg">
+      <DropdownMenuContent 
+        align="end" 
+        className="bg-background border shadow-lg z-[100] relative"
+        sideOffset={8}
+      >
         {currencies.map((currency) => {
           const Icon = currency.icon;
           return (
