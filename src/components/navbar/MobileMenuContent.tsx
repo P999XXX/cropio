@@ -71,10 +71,10 @@ export const MobileMenuContent = ({ isDashboard, isDark, onToggleTheme, onClose 
       <div className="space-y-3">
         <Select 
           onValueChange={handleLanguageChange} 
-          defaultValue={localStorage.getItem("preferredLanguage") || "en"}
+          value={currentLanguage?.code || "en"}
         >
           <SelectTrigger className="w-full p-0 border-0 h-[34px] hover:bg-secondary rounded-md focus:ring-0">
-            <div className="flex items-center gap-2 px-2 py-1.5 pr-5 w-full text-sm">
+            <div className="flex items-center gap-2 px-2 py-1.5 w-full text-sm">
               <ReactCountryFlag
                 countryCode={currentLanguage?.countryCode || "GB"}
                 svg
@@ -86,7 +86,7 @@ export const MobileMenuContent = ({ isDashboard, isDark, onToggleTheme, onClose 
                   border: '1px solid rgba(0,0,0,0.1)',
                 }}
               />
-              <SelectValue placeholder={currentLanguage?.name || "English"} />
+              <span>{currentLanguage?.name || "English"}</span>
             </div>
           </SelectTrigger>
           <SelectContent>
