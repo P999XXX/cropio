@@ -5,7 +5,6 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import { Globe } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
 export const LanguageContext = createContext({
@@ -57,8 +56,8 @@ export const LanguageSwitcher = () => {
     <div className="relative inline-block">
       <HoverCard openDelay={0} closeDelay={0}>
         <HoverCardTrigger asChild>
-          <Button variant="ghost" size="icon" className="h-9 w-9">
-            <Globe className="h-4 w-4" />
+          <Button variant="ghost" size="icon" className="h-9 w-9 font-medium uppercase">
+            {selectedLang}
             <span className="sr-only">Toggle language</span>
           </Button>
         </HoverCardTrigger>
