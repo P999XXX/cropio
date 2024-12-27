@@ -61,16 +61,26 @@ export const InviteMemberDialog = ({
   const inviteMutation = useMutation({
     mutationFn: async (values: InviteFormData) => {
       const { data: authData, error: authError } = await supabase.auth.getUser();
-      if (authError) throw new Error(authError.message);
+      if (authError) {
+        throw new Error("Authentication error: " + authError.message);
+      }
+
+      if (!authData.user) {
+        throw new Error("No authenticated user found");
+      }
 
       const { error: insertError } = await supabase.from("team_members").insert({
         email: values.email,
         role: values.role,
         invited_by: authData.user.id,
         profile_id: authData.user.id,
+        status: "pending",
       });
 
-      if (insertError) throw new Error(insertError.message);
+      if (insertError) {
+        throw new Error("Failed to create team member: " + insertError.message);
+      }
+
       return true;
     },
     onSuccess: () => {
@@ -81,7 +91,7 @@ export const InviteMemberDialog = ({
     },
     onError: (error: Error) => {
       console.error("Error inviting team member:", error);
-      toast.error(`Failed to invite team member: ${error.message}`);
+      toast.error(error.message);
     },
   });
 
