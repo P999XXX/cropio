@@ -86,11 +86,12 @@ export const UserMenu = ({ userInitials, className }: UserMenuProps) => {
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button 
-                variant="outline" 
-                className="w-full justify-start text-destructive hover:text-destructive hover:bg-destructive/10"
+                variant="ghost" 
+                size="sm"
+                className="w-full justify-between text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors duration-200"
               >
-                <LogOut className="mr-2 h-4 w-4" />
                 Log out
+                <LogOut className="h-4 w-4 ml-2" />
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
