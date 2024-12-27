@@ -2,9 +2,8 @@ import { Link } from "react-router-dom";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { LogOut } from "lucide-react";
+import { LogOut, User } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
@@ -23,48 +22,43 @@ interface UserProfile {
 }
 
 const UserMenuContent = ({ profile, onLogout }: { profile: UserProfile | null, onLogout: () => void }) => (
-  <div className="space-y-4">
-    <div className="space-y-2">
-      <h4 className="text-sm font-semibold">
-        {profile?.first_name} {profile?.last_name}
-      </h4>
-      <p className="text-sm text-muted-foreground">
-        {profile?.email}
-      </p>
-      <div className="text-sm text-muted-foreground">
-        <p>{profile?.company_name}</p>
-        <p className="capitalize">{profile?.role}</p>
+  <div className="flex flex-col space-y-4">
+    <div className="flex items-start space-x-4">
+      <Avatar className="h-10 w-10 bg-[#9b87f5]">
+        <AvatarFallback className="text-primary-foreground">
+          <User className="h-5 w-5" />
+        </AvatarFallback>
+      </Avatar>
+      <div className="space-y-1">
+        <h4 className="text-sm font-medium leading-none">
+          {profile?.first_name} {profile?.last_name}
+        </h4>
+        <p className="text-sm text-muted-foreground">
+          {profile?.email}
+        </p>
       </div>
     </div>
-    <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <Button 
-          variant="ghost" 
-          size="sm"
-          className="w-full justify-between text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors duration-200 dark:hover:text-destructive dark:text-muted-foreground dark:hover:bg-destructive/10"
-        >
-          Log out
-          <LogOut className="h-4 w-4 ml-2" />
-        </Button>
-      </AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Are you sure you want to log out?</AlertDialogTitle>
-          <AlertDialogDescription>
-            You will need to log in again to access your account.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction 
-            onClick={onLogout}
-            className="bg-destructive hover:bg-destructive/90 text-destructive-foreground"
-          >
-            Log out
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+    <div className="border-t border-border pt-4 space-y-2">
+      <div className="text-sm">
+        <div className="flex justify-between">
+          <span className="text-muted-foreground">Company</span>
+          <span className="font-medium">{profile?.company_name}</span>
+        </div>
+        <div className="flex justify-between">
+          <span className="text-muted-foreground">Role</span>
+          <span className="font-medium capitalize">{profile?.role}</span>
+        </div>
+      </div>
+    </div>
+    <Button 
+      variant="ghost" 
+      size="sm"
+      onClick={onLogout}
+      className="w-full justify-start text-sm text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors duration-200"
+    >
+      <LogOut className="h-4 w-4 mr-2" />
+      Sign out
+    </Button>
   </div>
 );
 
@@ -97,12 +91,12 @@ export const UserMenu = ({ userInitials, className }: UserMenuProps) => {
       if (error) throw error;
       
       toast({
-        title: "Logged out successfully",
-        description: "You have been logged out of your account",
+        title: "Signed out successfully",
+        description: "You have been signed out of your account",
       });
     } catch (error: any) {
       toast({
-        title: "Error logging out",
+        title: "Error signing out",
         description: error.message,
         variant: "destructive",
       });
