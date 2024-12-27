@@ -35,14 +35,12 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#0B4D3C", // Darker, more elegant green
-          foreground: "#FFFFFF",
-          hover: "#093D30", // Even darker shade for hover
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
-          DEFAULT: "#F1F0FB",
-          foreground: "#1A1F2C",
-          hover: "#E5E4F5",
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
         },
         success: {
           DEFAULT: "#4CAF50",
@@ -60,14 +58,12 @@ export default {
           hover: "#EA580C",
         },
         accent: {
-          DEFAULT: "#0B4D3C", // Updated to match primary
-          foreground: "#FFFFFF",
-          hover: "#093D30", // Updated to match primary hover
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
         },
         muted: {
-          DEFAULT: "#F8F9FA",
-          foreground: "#6C757D",
-          hover: "#E9ECEF",
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
