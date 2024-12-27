@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { TeamMembersTable } from "@/components/team/TeamMembersTable";
-import { InviteMemberDialog } from "@/components/team/InviteMemberDialog";
+import { InviteMemberDialog } from "@/components/team/invite/InviteMemberDialog";
 import { Button } from "@/components/ui/button";
 import { UserPlus } from "lucide-react";
 import { TeamMember } from "@/types/team";
@@ -42,8 +42,7 @@ const DashboardTeam = () => {
             last_name
           )
         `)
-        .order('created_at', { ascending: false })
-        .throwOnError();
+        .order('created_at', { ascending: false });
 
       if (queryError) {
         throw new Error("Failed to fetch team members: " + queryError.message);
@@ -51,9 +50,9 @@ const DashboardTeam = () => {
 
       return data as TeamMember[];
     },
-    retry: 1, // Allow one retry
-    retryDelay: 1000, // Wait 1 second before retrying
-    staleTime: 1000 * 60, // Cache for 1 minute
+    retry: 1,
+    retryDelay: 1000,
+    staleTime: 1000 * 60,
     meta: {
       onError: (error: Error) => {
         console.error("Team members fetch error:", error);
