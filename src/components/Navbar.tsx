@@ -52,18 +52,25 @@ const Navbar = () => {
   }, []);
 
   const fetchUserProfile = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (user) {
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('first_name, last_name')
-        .eq('id', user.id)
-        .single();
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('first_name, last_name')
+          .eq('id', user.id)
+          .single();
 
-      if (profile) {
-        const initials = `${profile.first_name?.[0] || ''}${profile.last_name?.[0] || ''}`.toUpperCase();
-        setUserInitials(initials || 'U');
+        if (profile) {
+          const initials = `${profile.first_name?.[0] || ''}${profile.last_name?.[0] || ''}`.toUpperCase();
+          setUserInitials(initials || 'U');
+        }
+      } else {
+        setUserInitials("");
       }
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
+      setUserInitials("");
     }
   };
 
@@ -130,10 +137,16 @@ const Navbar = () => {
               userInitials={userInitials} 
             />
             <div className="lg:hidden">
-              <UserMenu 
-                userInitials={userInitials} 
-                className="h-8 w-8 bg-[#9b87f5] hover:opacity-90 transition-opacity border border-border" 
-              />
+              {userInitials ? (
+                <UserMenu 
+                  userInitials={userInitials} 
+                  className="h-8 w-8 bg-[#9b87f5] hover:opacity-90 transition-opacity border border-border" 
+                />
+              ) : (
+                <Button asChild variant="default" size="sm" className="h-8">
+                  <Link to="/signin">Sign In</Link>
+                </Button>
+              )}
             </div>
           </div>
         </div>

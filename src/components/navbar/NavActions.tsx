@@ -3,6 +3,7 @@ import { UserMenu } from "./UserMenu";
 import { ThemeToggle } from "./ThemeToggle";
 import LanguageSwitcher from "../LanguageSwitcher";
 import CurrencySwitcher from "../CurrencySwitcher";
+import { Link } from "react-router-dom";
 
 interface NavActionsProps {
   isDark: boolean;
@@ -16,7 +17,13 @@ export const NavActions = ({ isDark, onToggleTheme, userInitials }: NavActionsPr
       <LanguageSwitcher />
       <CurrencySwitcher />
       <ThemeToggle isDark={isDark} onToggle={onToggleTheme} />
-      <UserMenu userInitials={userInitials} />
+      {userInitials ? (
+        <UserMenu userInitials={userInitials} />
+      ) : (
+        <Button asChild variant="default" size="sm">
+          <Link to="/signin">Sign In</Link>
+        </Button>
+      )}
     </div>
   );
 };
