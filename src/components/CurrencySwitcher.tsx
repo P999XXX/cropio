@@ -59,7 +59,7 @@ export const CurrencySwitcher = () => {
           <Button 
             variant="ghost" 
             size="icon" 
-            className="h-9 w-9 hover:bg-secondary"
+            className="h-9 w-9 hover:bg-secondary hover:text-secondary-foreground"
           >
             <CurrentIcon className="h-4 w-4" />
             <span className="sr-only">Toggle currency</span>
