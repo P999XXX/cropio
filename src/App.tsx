@@ -4,11 +4,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import Index from "@/pages/Index";
 import SignIn from "@/pages/SignIn";
 import SignUp from "@/pages/SignUp";
 import ResetPassword from "@/pages/ResetPassword";
-import Components from "@/pages/Components";
 import Dashboard from "@/pages/Dashboard";
 import ThemeHandler from "@/components/ThemeHandler";
 
@@ -32,11 +30,10 @@ const App = () => {
           <Toaster />
           <Sonner />
           <Routes>
-            <Route path="/" element={<Index />} />
+            <Route path="/" element={<SignIn />} />
             <Route path="/sign-in" element={<SignIn />} />
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="/components" element={<Components />} />
             <Route path="/dashboard/*" element={<Dashboard />} />
           </Routes>
         </TooltipProvider>
