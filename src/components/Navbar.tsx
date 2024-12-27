@@ -74,7 +74,7 @@ const Navbar = () => {
           <span className="sr-only">Toggle menu</span>
         </Button>
       </SheetTrigger>
-      <SheetContent side="left" className="w-[300px] sm:w-[400px]">
+      <SheetContent side="left" className="w-[300px] sm:w-[400px] z-[100]">
         <nav className="flex flex-col gap-4">
           <div className="flex flex-col gap-2 pt-4">
             {isDashboard ? (
