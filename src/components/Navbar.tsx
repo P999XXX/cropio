@@ -80,14 +80,14 @@ const Navbar = () => {
           <span className="sr-only">Toggle menu</span>
         </Button>
       </SheetTrigger>
-      <SheetContent side="left" className="w-[300px] sm:w-[400px] z-[100]">
-        <nav className="flex flex-col gap-4">
+      <SheetContent side="left" className="w-[300px] sm:w-[400px] z-[200] overflow-y-auto">
+        <nav className="flex flex-col gap-4 min-h-0">
           <div className="h-header flex items-center">
             <span className="text-2xl font-geologica font-extrabold">
               cropio<span className="text-primary">.app</span>
             </span>
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 overflow-y-auto">
             {isDashboard ? (
               <>
                 {mainMenuItems.map((item) => (
