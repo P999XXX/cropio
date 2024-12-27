@@ -22,7 +22,7 @@ export const UserProfileContent = ({ profile, onLogout }: UserProfileContentProp
         </AvatarFallback>
       </Avatar>
       <div className="space-y-1">
-        <h4 className="text-lg font-semibold leading-none">
+        <h4 className="text-base font-semibold leading-none">
           {profile?.first_name} {profile?.last_name}
         </h4>
         <p className="text-sm text-muted-foreground">
