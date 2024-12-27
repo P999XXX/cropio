@@ -94,7 +94,7 @@ const Navbar = () => {
               userInitials={userInitials} 
             />
             <div className="md:hidden">
-              <UserMenu userInitials={userInitials} />
+              <UserMenu userInitials={userInitials} className="h-8 w-8" />
             </div>
           </div>
         </div>
