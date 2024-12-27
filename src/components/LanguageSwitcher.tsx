@@ -26,16 +26,23 @@ export const LanguageSwitcher = () => {
   const { toast } = useToast();
 
   const handleLanguageChange = async (langCode: string) => {
+    if (langCode === selectedLang) return; // Don't reload if same language
+
     try {
       setSelectedLang(langCode);
       localStorage.setItem("preferredLanguage", langCode);
       
+      const langName = languages.find(l => l.code === langCode)?.name;
       toast({
         title: "Language Changed",
-        description: `Successfully switched to ${languages.find(l => l.code === langCode)?.name}`,
+        description: `Successfully switched to ${langName}`,
+        duration: 2000,
       });
 
-      window.location.reload();
+      // Add a small delay before reload to show the toast
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
     } catch (error) {
       console.error("Error changing language:", error);
       toast({
@@ -48,7 +55,7 @@ export const LanguageSwitcher = () => {
 
   useEffect(() => {
     const savedLanguage = localStorage.getItem("preferredLanguage");
-    if (savedLanguage) {
+    if (savedLanguage && languages.some(l => l.code === savedLanguage)) {
       setSelectedLang(savedLanguage);
     }
   }, []);
@@ -56,7 +63,7 @@ export const LanguageSwitcher = () => {
   const selectedCountry = languages.find(l => l.code === selectedLang)?.countryCode || "GB";
 
   return (
-    <div className="relative inline-block">
+    <div className="relative inline-block language-switcher">
       <HoverCard openDelay={200} closeDelay={200}>
         <HoverCardTrigger asChild>
           <Button 
@@ -81,20 +88,19 @@ export const LanguageSwitcher = () => {
         </HoverCardTrigger>
         <HoverCardContent 
           align="end" 
-          className="w-[200px] p-2 bg-card text-card-foreground border border-border shadow-lg dark:shadow-none animate-in zoom-in-95 duration-100"
+          className="w-[200px] p-2 bg-background border border-border shadow-lg dark:shadow-none animate-in zoom-in-95 duration-100"
           sideOffset={4}
           side="bottom"
-          avoidCollisions={false}
         >
-          <div className="space-y-2">
+          <div className="space-y-1">
             {languages.map((lang) => (
               <button
                 key={lang.code}
                 onClick={() => handleLanguageChange(lang.code)}
                 className={`flex w-full items-center px-2 py-1.5 text-sm rounded-md transition-colors ${
                   selectedLang === lang.code 
-                    ? 'bg-primary text-primary-foreground dark:bg-primary dark:text-primary-foreground' 
-                    : 'hover:bg-secondary hover:text-secondary-foreground dark:hover:bg-secondary dark:hover:text-secondary-foreground'
+                    ? 'bg-primary text-primary-foreground' 
+                    : 'hover:bg-secondary hover:text-secondary-foreground'
                 }`}
               >
                 <span className="mr-2">
