@@ -7,6 +7,7 @@ import { useSidebar } from "@/components/ui/sidebar";
 import LanguageSwitcher from "./LanguageSwitcher";
 import CurrencySwitcher from "./CurrencySwitcher";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,6 +22,8 @@ const Navbar = () => {
   } catch {
     sidebarState = null;
   }
+
+  const isCollapsed = sidebarState === 'collapsed';
 
   useEffect(() => {
     const theme = localStorage.getItem("theme");
@@ -57,7 +60,11 @@ const Navbar = () => {
 
   return (
     <nav className={`fixed top-0 left-0 right-0 bg-background border-b border-border z-[51] shadow-[0_2px_8px_0_rgba(0,0,0,0.05)]`}>
-      <div className={`w-full ${isDashboard ? 'px-4 md:px-8' : 'px-4 sm:px-6 lg:px-8'}`}>
+      <div className={cn(
+        'w-full',
+        isDashboard ? 'px-4 md:px-8' : 'px-4 sm:px-6 lg:px-8',
+        isDashboard && isCollapsed && 'md:pl-20' // Add 5rem padding when sidebar is collapsed on desktop
+      )}>
         <div className="flex justify-between h-header">
           <div className="flex items-center gap-4">
             {isDashboard && (
