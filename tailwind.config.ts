@@ -48,9 +48,9 @@ export default {
           hover: "#43A047",
         },
         destructive: {
-          DEFAULT: "#ea384c",
+          DEFAULT: "#ff6b6b",  // Changed to a lighter red
           foreground: "#FFFFFF",
-          hover: "#D32F2F",
+          hover: "#ff5252",    // Changed to a lighter hover red
         },
         warning: {
           DEFAULT: "#F97316",
