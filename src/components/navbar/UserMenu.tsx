@@ -65,15 +65,13 @@ export const UserMenu = ({ userInitials, className }: UserMenuProps) => {
   return (
     <HoverCard>
       <HoverCardTrigger asChild>
-        <Link to="/dashboard/settings" className="user-menu-hover-trigger">
-          <Avatar className={className || "h-9 w-9 bg-[#9b87f5] hover:opacity-90 transition-opacity border border-border"}>
-            <AvatarFallback className="text-primary-foreground text-[11px] bg-transparent">
-              {userInitials}
-            </AvatarFallback>
-          </Avatar>
-        </Link>
+        <Avatar className={className || "h-9 w-9 bg-[#9b87f5] hover:opacity-90 transition-opacity border border-border"}>
+          <AvatarFallback className="text-primary-foreground text-[11px] bg-transparent">
+            {userInitials}
+          </AvatarFallback>
+        </Avatar>
       </HoverCardTrigger>
-      <HoverCardContent className="w-80 user-menu-hover-content">
+      <HoverCardContent className="w-80">
         <div className="space-y-4">
           <div className="space-y-2">
             <h4 className="text-sm font-semibold">
