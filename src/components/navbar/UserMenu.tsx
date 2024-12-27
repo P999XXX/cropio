@@ -104,7 +104,7 @@ export const UserMenu = ({ userInitials, className }: UserMenuProps) => {
           </div>
         </HoverCardTrigger>
         <HoverCardContent 
-          className="w-80 p-4" 
+          className="w-64 p-4" 
           align="end" 
           side="bottom" 
           sideOffset={5}
