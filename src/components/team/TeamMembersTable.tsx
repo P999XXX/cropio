@@ -5,6 +5,17 @@ import { Grid3X3, LayoutList } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TeamCard } from "./card/TeamCard";
 import { useIsMobile } from "@/hooks/use-mobile";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { formatDistanceToNow } from "date-fns";
+import { cn } from "@/lib/utils";
 
 interface TeamMembersTableProps {
   teamMembers: TeamMember[];
@@ -14,7 +25,7 @@ interface TeamMembersTableProps {
 export const TeamMembersTable = ({ teamMembers, isLoading }: TeamMembersTableProps) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [roleFilter, setRoleFilter] = useState<string>("all");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("list");
   const isMobile = useIsMobile();
   
   const [sortConfig, setSortConfig] = useState<{
@@ -59,6 +70,28 @@ export const TeamMembersTable = ({ teamMembers, isLoading }: TeamMembersTablePro
       return 0;
     });
 
+  const getRoleBadgeVariant = (role: string) => {
+    switch (role) {
+      case "administrator":
+        return "default";
+      case "editor":
+        return "secondary";
+      default:
+        return "outline";
+    }
+  };
+
+  const getStatusBadgeVariant = (status: string) => {
+    switch (status) {
+      case "accepted":
+        return "success";
+      case "pending":
+        return "warning";
+      default:
+        return "destructive";
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -66,6 +99,29 @@ export const TeamMembersTable = ({ teamMembers, isLoading }: TeamMembersTablePro
       </div>
     );
   }
+
+  const renderTableHeader = (
+    label: string,
+    key: keyof TeamMember,
+    className?: string
+  ) => (
+    <TableHead
+      className={cn(
+        "cursor-pointer hover:text-primary transition-colors",
+        className
+      )}
+      onClick={() => handleSort(key)}
+    >
+      <div className="flex items-center gap-2">
+        {label}
+        {sortConfig.key === key && (
+          <span className="text-xs">
+            {sortConfig.direction === "asc" ? "↑" : "↓"}
+          </span>
+        )}
+      </div>
+    </TableHead>
+  );
 
   return (
     <div className="space-y-6 team-members-table">
@@ -99,21 +155,78 @@ export const TeamMembersTable = ({ teamMembers, isLoading }: TeamMembersTablePro
         )}
       </div>
 
-      <div className={`grid gap-6 ${
-        viewMode === "grid" 
-          ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" 
-          : "grid-cols-1"
-      }`}>
-        {filteredAndSortedMembers.map((member) => (
-          <TeamCard 
-            key={member.id} 
-            member={member} 
-            viewMode={viewMode}
-            onSort={handleSort}
-            sortConfig={sortConfig}
-          />
-        ))}
-      </div>
+      {viewMode === "list" ? (
+        <div className="rounded-lg border bg-card">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                {renderTableHeader("Member", "email")}
+                {renderTableHeader("Role", "role")}
+                {renderTableHeader("Status", "status")}
+                {renderTableHeader("Joined", "created_at")}
+                {renderTableHeader("Invited By", "invited_by", "text-right")}
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredAndSortedMembers.map((member) => (
+                <TableRow key={member.id} className="hover:bg-muted/50">
+                  <TableCell>
+                    <div className="flex flex-col">
+                      {member.status === "accepted" ? (
+                        <>
+                          <span className="font-medium">
+                            {member.profile?.first_name} {member.profile?.last_name}
+                          </span>
+                          <span className="text-sm text-muted-foreground">
+                            {member.profile?.email}
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          <span className="font-medium">Invited User</span>
+                          <span className="text-sm text-muted-foreground">
+                            {member.email}
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant={getRoleBadgeVariant(member.role)} className="rounded-full">
+                      {member.role}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant={getStatusBadgeVariant(member.status)} className="rounded-full">
+                      {member.status}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    {formatDistanceToNow(new Date(member.created_at), {
+                      addSuffix: true,
+                    })}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    {member.inviter?.first_name} {member.inviter?.last_name}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      ) : (
+        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+          {filteredAndSortedMembers.map((member) => (
+            <TeamCard 
+              key={member.id} 
+              member={member} 
+              viewMode={viewMode}
+              onSort={handleSort}
+              sortConfig={sortConfig}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
