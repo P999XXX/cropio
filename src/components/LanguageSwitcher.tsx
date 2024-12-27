@@ -1,19 +1,14 @@
-import { useState, createContext, useContext, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useToast } from "@/components/ui/use-toast";
 import ReactCountryFlag from "react-country-flag";
-
-export const LanguageContext = createContext({
-  currentLanguage: "en",
-  setLanguage: (lang: string) => {},
-});
-
-export const useLanguage = () => useContext(LanguageContext);
+import { useLanguage } from "@/components/LanguageSwitcher";
 
 const languages = [
   { code: "en", name: "English", countryCode: "GB" },
@@ -23,7 +18,6 @@ const languages = [
 
 export const LanguageSwitcher = () => {
   const [selectedLang, setSelectedLang] = useState("en");
-  const [open, setOpen] = useState(false);
   const { toast } = useToast();
   const { setLanguage } = useLanguage();
 
@@ -32,7 +26,6 @@ export const LanguageSwitcher = () => {
       setSelectedLang(langCode);
       setLanguage(langCode);
       localStorage.setItem("preferredLanguage", langCode);
-      setOpen(false);
       
       toast({
         title: "Language Changed",
@@ -56,19 +49,19 @@ export const LanguageSwitcher = () => {
     }
   }, [setLanguage]);
 
-  const selectedCountry = languages.find(l => l.code === selectedLang)?.countryCode || "GB";
+  const selectedLanguage = languages.find(l => l.code === selectedLang);
 
   return (
-    <div className="relative inline-block language-switcher">
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
+    <div className="language-switcher">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
           <Button 
             variant="ghost" 
             size="icon" 
             className="h-9 w-9 hover:bg-secondary hover:text-secondary-foreground transition-colors"
           >
             <ReactCountryFlag
-              countryCode={selectedCountry}
+              countryCode={selectedLanguage?.countryCode || "GB"}
               svg
               style={{
                 width: '1.4em',
@@ -77,47 +70,42 @@ export const LanguageSwitcher = () => {
                 objectFit: 'cover',
                 border: '1px solid rgba(0,0,0,0.1)',
               }}
-              title={languages.find(l => l.code === selectedLang)?.name}
+              title={selectedLanguage?.name}
             />
             <span className="sr-only">Toggle language</span>
           </Button>
-        </PopoverTrigger>
-        <PopoverContent 
+        </DropdownMenuTrigger>
+        <DropdownMenuContent 
           align="end" 
-          className="w-[200px] p-2 bg-card text-card-foreground border border-border shadow-lg dark:shadow-none animate-in zoom-in-95 duration-100"
-          sideOffset={4}
+          className="w-[200px] bg-popover"
         >
-          <div className="space-y-2">
-            {languages.map((lang) => (
-              <button
-                key={lang.code}
-                onClick={() => handleLanguageChange(lang.code)}
-                className={`flex w-full items-center px-2 py-1.5 text-sm rounded-md transition-colors ${
-                  selectedLang === lang.code 
-                    ? 'bg-primary text-primary-foreground dark:bg-primary dark:text-primary-foreground' 
-                    : 'hover:bg-secondary hover:text-secondary-foreground dark:hover:bg-secondary dark:hover:text-secondary-foreground'
-                }`}
-              >
-                <span className="mr-2">
-                  <ReactCountryFlag
-                    countryCode={lang.countryCode}
-                    svg
-                    style={{
-                      width: '1.4em',
-                      height: '1.4em',
-                      borderRadius: '50%',
-                      objectFit: 'cover',
-                      border: '1px solid rgba(0,0,0,0.1)',
-                    }}
-                    title={lang.name}
-                  />
-                </span>
-                {lang.name}
-              </button>
-            ))}
-          </div>
-        </PopoverContent>
-      </Popover>
+          {languages.map((lang) => (
+            <DropdownMenuItem
+              key={lang.code}
+              onClick={() => handleLanguageChange(lang.code)}
+              className={`flex items-center gap-2 px-2 py-1.5 text-sm cursor-pointer ${
+                selectedLang === lang.code 
+                  ? 'bg-primary/10 text-primary dark:bg-primary/20' 
+                  : 'hover:bg-secondary hover:text-secondary-foreground'
+              }`}
+            >
+              <ReactCountryFlag
+                countryCode={lang.countryCode}
+                svg
+                style={{
+                  width: '1.4em',
+                  height: '1.4em',
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                  border: '1px solid rgba(0,0,0,0.1)',
+                }}
+                title={lang.name}
+              />
+              <span>{lang.name}</span>
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 };
