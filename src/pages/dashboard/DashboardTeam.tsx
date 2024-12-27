@@ -2,10 +2,11 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { TeamMembersTable } from "@/components/team/TeamMembersTable";
-import { InviteMemberDialog } from "@/components/team/InviteMemberDialog";
+import { InviteMemberDialog } from "@/components/team/invite/InviteMemberDialog";
 import { Button } from "@/components/ui/button";
 import { UserPlus } from "lucide-react";
 import { TeamMember } from "@/types/team";
+import { toast } from "sonner";
 
 const DashboardTeam = () => {
   const [isInviteDialogOpen, setIsInviteDialogOpen] = useState(false);
@@ -13,6 +14,17 @@ const DashboardTeam = () => {
   const { data: teamMembers, isLoading } = useQuery({
     queryKey: ["team-members"],
     queryFn: async () => {
+      const { data: authData, error: authError } = await supabase.auth.getUser();
+      if (authError) {
+        toast.error("Authentication error: " + authError.message);
+        throw authError;
+      }
+
+      if (!authData.user) {
+        toast.error("No authenticated user found");
+        throw new Error("No authenticated user found");
+      }
+
       const { data, error } = await supabase
         .from("team_members")
         .select(`
@@ -29,7 +41,12 @@ const DashboardTeam = () => {
         `)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error("Query error:", error);
+        toast.error("Failed to fetch team members");
+        throw error;
+      }
+
       return data as TeamMember[];
     },
   });
