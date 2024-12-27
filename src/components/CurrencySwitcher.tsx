@@ -54,7 +54,7 @@ export const CurrencySwitcher = () => {
 
   return (
     <div className="relative inline-block">
-      <HoverCard>
+      <HoverCard openDelay={0} closeDelay={0}>
         <HoverCardTrigger asChild>
           <Button variant="ghost" size="icon" className="h-9 w-9">
             <CurrentIcon className="h-4 w-4" />
@@ -63,7 +63,7 @@ export const CurrencySwitcher = () => {
         </HoverCardTrigger>
         <HoverCardContent 
           align="end"
-          className="w-[200px] p-2 bg-muted"
+          className="w-[200px] p-2 bg-muted animate-in zoom-in-95 duration-100"
           sideOffset={8}
         >
           <div className="space-y-2">

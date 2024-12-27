@@ -18,7 +18,7 @@ export const useLanguage = () => useContext(LanguageContext);
 const languages = [
   { code: "en", name: "English", flag: "🇬🇧" },
   { code: "de", name: "Deutsch", flag: "🇩🇪" },
-  { code: "es", name: "Español", flag: "🇪🇸" },
+  { code:: "es", name: "Español", flag: "🇪🇸" },
 ];
 
 export const LanguageSwitcher = () => {
@@ -55,7 +55,7 @@ export const LanguageSwitcher = () => {
 
   return (
     <div className="relative inline-block">
-      <HoverCard>
+      <HoverCard openDelay={0} closeDelay={0}>
         <HoverCardTrigger asChild>
           <Button variant="ghost" size="icon" className="h-9 w-9">
             <Globe className="h-4 w-4" />
@@ -64,7 +64,7 @@ export const LanguageSwitcher = () => {
         </HoverCardTrigger>
         <HoverCardContent 
           align="end" 
-          className="w-[200px] p-2 bg-muted"
+          className="w-[200px] p-2 bg-muted animate-in zoom-in-95 duration-100"
           sideOffset={8}
         >
           <div className="space-y-2">
