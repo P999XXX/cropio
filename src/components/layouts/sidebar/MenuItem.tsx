@@ -24,12 +24,11 @@ const MenuItem = ({ icon: Icon, label, path }: MenuItemProps) => {
           to={path} 
           className={`flex items-center gap-3 relative w-full rounded-md px-2 py-1.5 transition-colors
             group-data-[collapsible=icon]:w-8 group-data-[collapsible=icon]:h-8 group-data-[collapsible=icon]:p-0
-            ${isActive ? 'text-secondary-foreground' : 'text-foreground'}
+            hover:bg-secondary hover:text-secondary-foreground
+            ${isActive ? 'bg-secondary text-secondary-foreground' : 'text-foreground'}
           `}
         >
-          <div className={`w-8 h-8 flex items-center justify-center flex-shrink-0 rounded-md transition-colors
-            ${isActive ? 'bg-secondary' : 'hover:bg-secondary group-data-[collapsible=icon]:hover:bg-secondary'}
-          `}>
+          <div className="w-8 h-8 flex items-center justify-center flex-shrink-0">
             <Icon className="h-4 w-4 flex-shrink-0" />
           </div>
           <span className="font-medium transition-all duration-300 opacity-100 group-data-[collapsible=icon]:opacity-0 truncate">
