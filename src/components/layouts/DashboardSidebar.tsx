@@ -25,6 +25,8 @@ import {
   Headset,
   PanelLeftOpen,
   PanelLeftClose,
+  Store,
+  MessageSquare,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -33,10 +35,12 @@ const mainMenuItems = [
   { icon: Users, label: "Team", path: "/dashboard/team" },
   { icon: Award, label: "Certificates", path: "/dashboard/certificates" },
   { icon: Package, label: "Products", path: "/dashboard/products" },
+  { icon: Store, label: "Market", path: "/dashboard/market" },
   { icon: ShoppingCart, label: "Trading", path: "/dashboard/trading" },
   { icon: List, label: "Orders", path: "/dashboard/orders" },
   { icon: ArrowLeftRight, label: "Returns", path: "/dashboard/returns" },
   { icon: CreditCard, label: "Payments", path: "/dashboard/payments" },
+  { icon: MessageSquare, label: "Reviews", path: "/dashboard/reviews" },
 ];
 
 const bottomMenuItems = [
