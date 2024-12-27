@@ -62,7 +62,7 @@ export const TeamTable = ({ members, sortConfig, onSort }: TeamTableProps) => {
             {renderTableHeader("Role", "role")}
             {renderTableHeader("Status", "status")}
             {renderTableHeader("Joined", "created_at")}
-            {renderTableHeader("Invited By", "invited_by", "text-right")}
+            {renderTableHeader("Invited By", "invited_by")}
             <TableHead className="w-[50px]"></TableHead>
           </TableRow>
         </TableHeader>
@@ -101,7 +101,7 @@ export const TeamTable = ({ members, sortConfig, onSort }: TeamTableProps) => {
                   addSuffix: true,
                 })}
               </TableCell>
-              <TableCell className="text-right">
+              <TableCell>
                 {member.inviter?.first_name} {member.inviter?.last_name}
               </TableCell>
               <TableCell>
