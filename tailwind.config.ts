@@ -26,7 +26,8 @@ export default {
         inter: ['Inter', 'sans-serif'],
       },
       fontSize: {
-        base: ['13px', '20px'],
+        // Updated base font size to be 5% smaller (from 13px to 12.35px)
+        base: ['12.35px', '19px'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -48,9 +49,9 @@ export default {
           hover: "#43A047",
         },
         destructive: {
-          DEFAULT: "#ff6b6b",  // Changed to a lighter red
+          DEFAULT: "#ff6b6b",
           foreground: "#FFFFFF",
-          hover: "#ff5252",    // Changed to a lighter hover red
+          hover: "#ff5252",
         },
         warning: {
           DEFAULT: "#F97316",
