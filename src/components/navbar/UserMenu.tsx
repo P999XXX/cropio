@@ -28,7 +28,6 @@ export const UserMenu = ({ userInitials, className }: UserMenuProps) => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
-  const queryClient = useQueryClient();
 
   useEffect(() => {
     fetchUserProfile();
@@ -49,31 +48,17 @@ export const UserMenu = ({ userInitials, className }: UserMenuProps) => {
     }
   };
 
-  const clearCacheAndLogout = async () => {
+  const handleSignOut = async () => {
     try {
-      // Clear all React Query cache
-      queryClient.clear();
-      
-      // Clear localStorage
-      localStorage.clear();
-      
-      // Clear sessionStorage
-      sessionStorage.clear();
-      
-      // Sign out from Supabase
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
       
       toast({
         title: "Signed out successfully",
-        description: "All cache and session data has been cleared",
       });
       
-      // Reset local state
       setProfile(null);
       setIsOpen(false);
-      
-      // Navigate to home page
       navigate('/');
     } catch (error: any) {
       toast({
@@ -109,7 +94,7 @@ export const UserMenu = ({ userInitials, className }: UserMenuProps) => {
           side="bottom" 
           sideOffset={5}
         >
-          <UserProfileContent profile={profile} onLogout={clearCacheAndLogout} />
+          <UserProfileContent profile={profile} onLogout={handleSignOut} />
         </HoverCardContent>
       </HoverCard>
     </div>
