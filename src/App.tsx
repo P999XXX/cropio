@@ -18,8 +18,8 @@ const Dashboard = lazy(() => import("./pages/Dashboard"));
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 60000, // 1 minute
-      gcTime: 300000, // 5 minutes (formerly cacheTime)
+      staleTime: 60000,
+      gcTime: 300000,
       retry: 1,
       refetchOnWindowFocus: false,
     },
