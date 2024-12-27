@@ -45,11 +45,17 @@ const DashboardTeam = () => {
     },
     retry: 2,
     retryDelay: 1000,
-    onError: (error) => {
-      console.error("Failed to fetch team members:", error);
-      toast.error("Failed to load team members. Please try again later.");
+    meta: {
+      onError: (error: Error) => {
+        console.error("Failed to fetch team members:", error);
+        toast.error("Failed to load team members. Please try again later.");
+      }
     }
   });
+
+  if (error) {
+    toast.error("Failed to load team members");
+  }
 
   return (
     <div className="team-management space-y-6">
