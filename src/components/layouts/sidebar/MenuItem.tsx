@@ -28,12 +28,12 @@ const MenuItem = ({ icon: Icon, label, path }: MenuItemProps) => {
             ${isActive ? 'bg-secondary text-primary' : 'text-foreground'}
           `}
         >
-          <div className={`w-10 h-10 flex items-center justify-center flex-shrink-0 rounded-md transition-colors
-            group-data-[collapsible=icon]:w-full group-data-[collapsible=icon]:h-full group-data-[collapsible=icon]:rounded-md
+          <div className={`flex items-center justify-center w-10 h-10 flex-shrink-0 rounded-md transition-colors
+            group-data-[collapsible=icon]:w-full group-data-[collapsible=icon]:h-full
             ${isActive ? 'bg-secondary text-primary' : 'hover:bg-secondary hover:text-primary'}
           `}>
             <div className="flex items-center justify-center w-full h-full">
-              <Icon className="h-4 w-4 flex-shrink-0" />
+              <Icon className="h-4 w-4" />
             </div>
           </div>
           <span className="font-medium transition-all duration-300 opacity-100 group-data-[collapsible=icon]:opacity-0 truncate">
