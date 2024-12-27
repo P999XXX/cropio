@@ -28,7 +28,7 @@ const MenuItem = ({ icon: Icon, label, path }: MenuItemProps) => {
             ${isActive ? 'bg-secondary text-primary group-data-[collapsible=icon]:bg-transparent' : 'text-foreground'}
           `}
         >
-          <div className={`w-8 h-8 flex items-center justify-center flex-shrink-0 rounded-md transition-colors
+          <div className={`w-8 h-8 flex items-center justify-center flex-shrink-0 rounded-md transition-colors p-1.5
             group-data-[collapsible=icon]:w-full group-data-[collapsible=icon]:h-full
             ${isActive ? 'group-data-[collapsible=icon]:bg-secondary group-data-[collapsible=icon]:text-primary' : 'group-data-[collapsible=icon]:hover:bg-secondary group-data-[collapsible=icon]:hover:text-primary'}
           `}>
