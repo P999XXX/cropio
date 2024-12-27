@@ -12,16 +12,15 @@ export const useInviteMember = (onSuccess: () => void) => {
       if (authError) throw new Error("Authentication error: " + authError.message);
       if (!authData.user) throw new Error("No authenticated user found");
 
-      // Check if this is the first team member
-      const { count, error: countError } = await supabase
+      // Check if this is the first team member using count
+      const { count } = await supabase
         .from("team_members")
         .select("*", { count: "exact", head: true })
         .eq("status", "accepted");
 
-      if (countError) throw new Error("Failed to check existing members: " + countError.message);
-
       const isFirstMember = count === 0;
 
+      // Insert new team member
       const { error: insertError } = await supabase
         .from("team_members")
         .insert({
@@ -30,8 +29,7 @@ export const useInviteMember = (onSuccess: () => void) => {
           invited_by: authData.user.id,
           profile_id: authData.user.id,
           status: isFirstMember ? "accepted" : "pending",
-        })
-        .single();
+        });
 
       if (insertError) {
         console.error("Insert error:", insertError);
