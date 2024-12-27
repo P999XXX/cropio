@@ -4,7 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState, Suspense, lazy, useEffect } from "react";
-import { LanguageContext } from "@/contexts/LanguageContext";
+import { LanguageContext } from "@/components/LanguageSwitcher";
 import AuthRedirectHandler from "@/components/auth/AuthRedirectHandler";
 import ThemeHandler from "@/components/ThemeHandler";
 
