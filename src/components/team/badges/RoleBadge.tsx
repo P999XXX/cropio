@@ -9,7 +9,7 @@ export const RoleBadge = ({ role }: RoleBadgeProps) => {
   return (
     <Badge 
       variant={getRoleBadgeVariant(role)} 
-      className="rounded-[5px] py-0 px-2"
+      className="rounded-[5px] py-0 px-2 font-medium"
     >
       {role}
     </Badge>
