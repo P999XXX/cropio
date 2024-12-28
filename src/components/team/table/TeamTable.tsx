@@ -23,7 +23,7 @@ interface TeamTableProps {
 
 export const TeamTable = ({ members, sortConfig, onSort }: TeamTableProps) => {
   return (
-    <div className="rounded-lg border bg-card w-full">
+    <div className="rounded-lg border bg-card w-full text-[0.775rem]">
       <Table>
         <TableHeader>
           <TeamTableHeaderRow sortConfig={sortConfig} onSort={onSort} />
@@ -58,12 +58,12 @@ export const TeamTable = ({ members, sortConfig, onSort }: TeamTableProps) => {
               <TableCell className="py-2">
                 <StatusBadge status={member.status} />
               </TableCell>
-              <TableCell className="py-2 text-[0.75rem]">
+              <TableCell className="py-2">
                 {formatDistanceToNow(new Date(member.created_at), {
                   addSuffix: true,
                 })}
               </TableCell>
-              <TableCell className="py-2 text-[0.75rem]">
+              <TableCell className="py-2">
                 {member.inviter?.first_name} {member.inviter?.last_name}
               </TableCell>
               <TableCell className="py-2">
