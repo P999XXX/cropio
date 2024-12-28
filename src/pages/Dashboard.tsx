@@ -4,7 +4,6 @@ import { lazy, Suspense } from "react";
 
 // Lazy load dashboard pages
 const DashboardHome = lazy(() => import("./dashboard/DashboardHome"));
-const DashboardTeam = lazy(() => import("./dashboard/DashboardTeam"));
 
 const Dashboard = () => {
   return (
@@ -16,7 +15,6 @@ const Dashboard = () => {
       }>
         <Routes>
           <Route path="/" element={<DashboardHome />} />
-          <Route path="/team" element={<DashboardTeam />} />
         </Routes>
       </Suspense>
     </DashboardLayout>

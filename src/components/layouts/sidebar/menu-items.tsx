@@ -1,6 +1,5 @@
 import {
   LayoutDashboard,
-  Users,
   Settings,
   HelpCircle,
   Headset,
@@ -8,7 +7,6 @@ import {
 
 export const mainMenuItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
-  { icon: Users, label: "Team", path: "/dashboard/team" },
 ];
 
 export const bottomMenuItems = [
