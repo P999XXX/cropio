@@ -65,7 +65,7 @@ const DashboardTeam = () => {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 w-full h-auto">
         <div className="space-y-1">
           <h1 className="text-2xl font-bold">Team Management</h1>
-          <p className="text-muted-foreground text-sm">
+          <p className="text-muted-foreground text-[0.775rem]">
             Manage your team members and their permissions
           </p>
         </div>
