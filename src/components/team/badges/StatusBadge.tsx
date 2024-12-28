@@ -10,7 +10,7 @@ export const StatusBadge = ({ status }: StatusBadgeProps) => {
   return (
     <Badge 
       variant={getStatusBadgeVariant(status)} 
-      className="rounded-full py-0.5 px-2"
+      className="rounded-[5px] py-0.5 px-2"
     >
       {status}
     </Badge>
