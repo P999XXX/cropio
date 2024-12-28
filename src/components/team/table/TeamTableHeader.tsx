@@ -1,6 +1,8 @@
 import { Search, Filter } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { MobileSortDropdown } from "./MobileSortDropdown";
+import { TeamMember } from "@/types/team";
 import {
   Popover,
   PopoverContent,
@@ -12,6 +14,11 @@ interface TeamTableHeaderProps {
   onSearchChange: (value: string) => void;
   roleFilter: string;
   onRoleFilterChange: (value: string) => void;
+  sortConfig: {
+    key: keyof TeamMember;
+    direction: "asc" | "desc";
+  };
+  onSort: (key: keyof TeamMember) => void;
 }
 
 export const TeamTableHeader = ({
@@ -19,6 +26,8 @@ export const TeamTableHeader = ({
   onSearchChange,
   roleFilter,
   onRoleFilterChange,
+  sortConfig,
+  onSort,
 }: TeamTableHeaderProps) => {
   const roles = [
     { value: "all", label: "All roles" },
@@ -67,6 +76,10 @@ export const TeamTableHeader = ({
             </div>
           </PopoverContent>
         </Popover>
+        <MobileSortDropdown 
+          sortConfig={sortConfig}
+          onSort={onSort}
+        />
       </div>
     </div>
   );

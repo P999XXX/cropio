@@ -45,6 +45,8 @@ export const TeamMembersTable = ({ teamMembers, isLoading, onInvite }: TeamMembe
           onSearchChange={setSearchTerm}
           roleFilter={roleFilter}
           onRoleFilterChange={setRoleFilter}
+          sortConfig={sortConfig}
+          onSort={handleSort}
         />
         
         {!isMobile && (
@@ -54,15 +56,6 @@ export const TeamMembersTable = ({ teamMembers, isLoading, onInvite }: TeamMembe
           />
         )}
       </div>
-
-      {isMobile && (
-        <div className="px-2">
-          <MobileSortDropdown 
-            sortConfig={sortConfig}
-            onSort={handleSort}
-          />
-        </div>
-      )}
 
       {paginatedMembers.length === 0 ? (
         <EmptyTeamState onInvite={onInvite} />
