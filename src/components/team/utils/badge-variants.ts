@@ -3,9 +3,9 @@ import { TeamMemberStatus } from "@/types/team";
 export const getStatusBadgeVariant = (status: TeamMemberStatus) => {
   switch (status) {
     case "accepted":
-      return "default" as const;
+      return "success" as const;
     case "pending":
-      return "secondary" as const;
+      return "warning" as const;
     default:
       return "destructive" as const;
   }

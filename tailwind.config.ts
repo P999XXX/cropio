@@ -26,7 +26,6 @@ export default {
         inter: ['Inter', 'sans-serif'],
       },
       fontSize: {
-        // Updated base font size to be 10% smaller (from 13px to 11.7px)
         base: ['11.7px', '18px'],
       },
       colors: {
@@ -44,19 +43,19 @@ export default {
           foreground: "hsl(var(--secondary-foreground))",
         },
         success: {
-          DEFAULT: "#4CAF50",
-          foreground: "#FFFFFF",
-          hover: "#43A047",
+          DEFAULT: "#F2FCE2",
+          foreground: "#2E7D32",
+          hover: "#E7F8D3",
         },
         destructive: {
-          DEFAULT: "#ff6b6b",
-          foreground: "#FFFFFF",
-          hover: "#ff5252",
+          DEFAULT: "#FFDEE2",
+          foreground: "#D32F2F",
+          hover: "#FFD5D9",
         },
         warning: {
-          DEFAULT: "#F97316",
-          foreground: "#FFFFFF",
-          hover: "#EA580C",
+          DEFAULT: "#FEF7CD",
+          foreground: "#ED6C02",
+          hover: "#FEF2B8",
         },
         accent: {
           DEFAULT: "hsl(var(--accent))",
