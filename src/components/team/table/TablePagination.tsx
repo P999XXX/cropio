@@ -55,25 +55,25 @@ export const TablePagination = ({
 
   return (
     <Pagination className="pagination-component mt-4">
-      <PaginationContent className="text-[75%] flex flex-row items-center gap-1">
+      <PaginationContent className="text-[0.775rem] flex flex-row items-center gap-1">
         <PaginationItem>
           <PaginationPrevious
             onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
-            className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+            className={`${currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"} text-[0.775rem]`}
           />
         </PaginationItem>
 
         {getPageNumbers().map((pageNum, index) =>
           pageNum === -1 ? (
             <PaginationItem key={`ellipsis-${index}`}>
-              <PaginationEllipsis />
+              <PaginationEllipsis className="text-[0.775rem]" />
             </PaginationItem>
           ) : (
             <PaginationItem key={pageNum}>
               <PaginationLink
                 isActive={pageNum === currentPage}
                 onClick={() => onPageChange(pageNum)}
-                className="cursor-pointer"
+                className="cursor-pointer text-[0.775rem]"
               >
                 {pageNum}
               </PaginationLink>
@@ -84,7 +84,7 @@ export const TablePagination = ({
         <PaginationItem>
           <PaginationNext
             onClick={() => currentPage < totalPages && onPageChange(currentPage + 1)}
-            className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+            className={`${currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"} text-[0.775rem]`}
           />
         </PaginationItem>
       </PaginationContent>
