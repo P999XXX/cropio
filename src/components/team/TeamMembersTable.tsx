@@ -6,6 +6,7 @@ import { ViewModeToggle } from "./table/ViewModeToggle";
 import { TablePagination } from "./table/TablePagination";
 import { useTeamTable } from "./hooks/useTeamTable";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { MobileSortDropdown } from "./table/MobileSortDropdown";
 
 interface TeamMembersTableProps {
   teamMembers: TeamMember[];
@@ -54,6 +55,15 @@ export const TeamMembersTable = ({ teamMembers, isLoading }: TeamMembersTablePro
           />
         )}
       </div>
+
+      {isMobile && (
+        <div className="px-2">
+          <MobileSortDropdown 
+            sortConfig={sortConfig}
+            onSort={handleSort}
+          />
+        </div>
+      )}
 
       {!isMobile && viewMode === "list" ? (
         <TeamTable 
