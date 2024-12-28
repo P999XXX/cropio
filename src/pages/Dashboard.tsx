@@ -15,8 +15,8 @@ const Dashboard = () => {
         </div>
       }>
         <Routes>
-          <Route path="/" element={<DashboardHome />} />
-          <Route path="/team" element={<DashboardTeam />} />
+          <Route index element={<DashboardHome />} />
+          <Route path="team" element={<DashboardTeam />} />
         </Routes>
       </Suspense>
     </DashboardLayout>
