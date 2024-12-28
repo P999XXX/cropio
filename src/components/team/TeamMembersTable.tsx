@@ -39,7 +39,7 @@ export const TeamMembersTable = ({ teamMembers, isLoading }: TeamMembersTablePro
   }
 
   return (
-    <div className="space-y-2 team-members-table w-full text-[0.775rem]">
+    <div className="space-y-2 team-members-table w-full">
       <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between bg-card rounded-lg p-2 shadow-sm w-full">
         <TeamTableHeader
           searchTerm={searchTerm}
