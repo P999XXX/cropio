@@ -58,12 +58,12 @@ export const TeamTable = ({ members, sortConfig, onSort }: TeamTableProps) => {
               <TableCell className="py-2">
                 <StatusBadge status={member.status} />
               </TableCell>
-              <TableCell className="py-2 text-sm">
+              <TableCell className="py-2 text-[0.65rem]">
                 {formatDistanceToNow(new Date(member.created_at), {
                   addSuffix: true,
                 })}
               </TableCell>
-              <TableCell className="py-2 text-sm">
+              <TableCell className="py-2 text-[0.65rem]">
                 {member.inviter?.first_name} {member.inviter?.last_name}
               </TableCell>
               <TableCell className="py-2">
