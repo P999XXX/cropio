@@ -10,7 +10,7 @@ export const ViewModeToggle = ({ viewMode, onViewModeChange }: ViewModeTogglePro
   return (
     <div className="flex items-center gap-2">
       <Button
-        variant={viewMode === "grid" ? "default" : "outline"}
+        variant={viewMode === "grid" ? "secondary" : "outline"}
         size="icon"
         onClick={() => onViewModeChange("grid")}
         className="w-8 h-8"
@@ -18,7 +18,7 @@ export const ViewModeToggle = ({ viewMode, onViewModeChange }: ViewModeTogglePro
         <Grid3X3 className="h-4 w-4" />
       </Button>
       <Button
-        variant={viewMode === "list" ? "default" : "outline"}
+        variant={viewMode === "list" ? "secondary" : "outline"}
         size="icon"
         onClick={() => onViewModeChange("list")}
         className="w-8 h-8"
