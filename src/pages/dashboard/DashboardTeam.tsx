@@ -80,7 +80,8 @@ const DashboardTeam = () => {
 
       <TeamMembersTable 
         teamMembers={teamMembers} 
-        isLoading={isLoading} 
+        isLoading={isLoading}
+        onInvite={() => setIsInviteDialogOpen(true)}
       />
 
       <InviteMemberDialog

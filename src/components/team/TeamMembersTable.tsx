@@ -13,9 +13,10 @@ import { TeamMembersGrid } from "./table/TeamMembersGrid";
 interface TeamMembersTableProps {
   teamMembers: TeamMember[];
   isLoading: boolean;
+  onInvite: () => void;
 }
 
-export const TeamMembersTable = ({ teamMembers, isLoading }: TeamMembersTableProps) => {
+export const TeamMembersTable = ({ teamMembers, isLoading, onInvite }: TeamMembersTableProps) => {
   const isMobile = useIsMobile();
   const {
     searchTerm,
@@ -64,7 +65,7 @@ export const TeamMembersTable = ({ teamMembers, isLoading }: TeamMembersTablePro
       )}
 
       {paginatedMembers.length === 0 ? (
-        <EmptyTeamState />
+        <EmptyTeamState onInvite={onInvite} />
       ) : !isMobile && viewMode === "list" ? (
         <TeamTable 
           members={paginatedMembers}
