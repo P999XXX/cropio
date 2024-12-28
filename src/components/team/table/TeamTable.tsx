@@ -44,7 +44,7 @@ export const TeamTable = ({ members, sortConfig, onSort }: TeamTableProps) => {
                     </>
                   ) : (
                     <>
-                      <span className="font-medium">Invited User</span>
+                      <span className="font-semibold">Invited User</span>
                       <span className="text-xs text-muted-foreground">
                         {member.email}
                       </span>
