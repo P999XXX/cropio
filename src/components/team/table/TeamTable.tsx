@@ -36,7 +36,7 @@ export const TeamTable = ({ members, sortConfig, onSort }: TeamTableProps) => {
         </TableHeader>
         <TableBody>
           {members.map((member) => (
-            <TableRow key={member.id} className="hover:bg-muted/50">
+            <TableRow key={member.id} className="hover:bg-[hsl(var(--muted)/0.5)]">
               <TableCell className="py-2">
                 <div className="flex items-center gap-3">
                   <Avatar className="h-8 w-8 bg-primary/10">
