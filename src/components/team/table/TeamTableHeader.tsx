@@ -1,12 +1,11 @@
 import { Search, Filter } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 interface TeamTableHeaderProps {
   searchTerm: string;
@@ -21,6 +20,13 @@ export const TeamTableHeader = ({
   roleFilter,
   onRoleFilterChange,
 }: TeamTableHeaderProps) => {
+  const roles = [
+    { value: "all", label: "All roles" },
+    { value: "administrator", label: "Administrator" },
+    { value: "editor", label: "Editor" },
+    { value: "readonly", label: "Read Only" },
+  ];
+
   return (
     <div className="flex flex-col sm:flex-row gap-4 w-full">
       <div className="relative flex-1 max-w-[333px]">
@@ -33,18 +39,34 @@ export const TeamTableHeader = ({
         />
       </div>
       <div className="flex gap-2 items-center">
-        <Filter className="h-4 w-4 text-muted-foreground" />
-        <Select value={roleFilter} onValueChange={onRoleFilterChange}>
-          <SelectTrigger className="w-[180px] bg-background/50 border-muted text-[0.775rem]">
-            <SelectValue placeholder="Filter by role" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all" className="text-[0.775rem]">All roles</SelectItem>
-            <SelectItem value="administrator" className="text-[0.775rem]">Administrator</SelectItem>
-            <SelectItem value="editor" className="text-[0.775rem]">Editor</SelectItem>
-            <SelectItem value="readonly" className="text-[0.775rem]">Read Only</SelectItem>
-          </SelectContent>
-        </Select>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button 
+              variant="outline" 
+              size="sm"
+              className="filter-dropdown-button w-[180px] justify-between text-[0.775rem] bg-background"
+            >
+              <div className="flex items-center gap-2">
+                <Filter className="h-4 w-4 text-muted-foreground" />
+                <span>{roles.find(r => r.value === roleFilter)?.label || "Filter by role"}</span>
+              </div>
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent align="end" className="w-[180px] p-0">
+            <div className="filter-role-options">
+              {roles.map(({ value, label }) => (
+                <Button
+                  key={value}
+                  variant="ghost"
+                  className="w-full justify-start text-[0.775rem] h-9"
+                  onClick={() => onRoleFilterChange(value)}
+                >
+                  {label}
+                </Button>
+              ))}
+            </div>
+          </PopoverContent>
+        </Popover>
       </div>
     </div>
   );

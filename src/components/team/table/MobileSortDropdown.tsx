@@ -1,12 +1,11 @@
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { ChevronDown } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 import { TeamMember } from "@/types/team";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 interface MobileSortDropdownProps {
   sortConfig: {
@@ -33,31 +32,36 @@ export const MobileSortDropdown = ({ sortConfig, onSort }: MobileSortDropdownPro
   };
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+    <Popover>
+      <PopoverTrigger asChild>
         <Button 
           variant="outline" 
           size="sm"
-          className="mobile-sort-dropdown w-full flex items-center justify-between text-[0.775rem]"
+          className="mobile-sort-dropdown w-full flex items-center justify-between text-[0.775rem] bg-background"
         >
           <span>Sort by: {getSortLabel(sortConfig.key)}</span>
-          <ChevronDown className="h-4 w-4 ml-2" />
+          <ArrowUpDown className="h-4 w-4 ml-2" />
         </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-[200px]">
-        <DropdownMenuItem onClick={() => onSort("email")} className="text-[0.775rem]">
-          Name/Email {sortConfig.key === "email" && (sortConfig.direction === "asc" ? "↑" : "↓")}
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => onSort("role")} className="text-[0.775rem]">
-          Role {sortConfig.key === "role" && (sortConfig.direction === "asc" ? "↑" : "↓")}
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => onSort("status")} className="text-[0.775rem]">
-          Status {sortConfig.key === "status" && (sortConfig.direction === "asc" ? "↑" : "↓")}
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => onSort("created_at")} className="text-[0.775rem]">
-          Join Date {sortConfig.key === "created_at" && (sortConfig.direction === "asc" ? "↑" : "↓")}
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+      </PopoverTrigger>
+      <PopoverContent align="end" className="w-[200px] p-0">
+        <div className="mobile-sort-options">
+          {[
+            { key: "email", label: "Name/Email" },
+            { key: "role", label: "Role" },
+            { key: "status", label: "Status" },
+            { key: "created_at", label: "Join Date" },
+          ].map(({ key, label }) => (
+            <Button
+              key={key}
+              variant="ghost"
+              className="w-full justify-start text-[0.775rem] h-9"
+              onClick={() => onSort(key as keyof TeamMember)}
+            >
+              {label} {sortConfig.key === key && (sortConfig.direction === "asc" ? "↑" : "↓")}
+            </Button>
+          ))}
+        </div>
+      </PopoverContent>
+    </Popover>
   );
 };
