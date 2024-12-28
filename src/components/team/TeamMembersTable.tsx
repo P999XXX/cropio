@@ -7,7 +7,7 @@ import { TablePagination } from "./table/TablePagination";
 import { useTeamTable } from "./hooks/useTeamTable";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { MobileSortDropdown } from "./table/MobileSortDropdown";
-import { Database } from "lucide-react";
+import { UserX } from "lucide-react";
 
 interface TeamMembersTableProps {
   teamMembers: TeamMember[];
@@ -68,8 +68,8 @@ export const TeamMembersTable = ({ teamMembers, isLoading }: TeamMembersTablePro
 
       {paginatedMembers.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-64 bg-card rounded-lg border gap-3">
-          <Database className="h-8 w-8 text-muted-foreground/50" strokeWidth={1.5} />
-          <p className="text-muted-foreground text-[0.775rem]">No data found</p>
+          <UserX className="h-8 w-8 text-muted-foreground/50" strokeWidth={1.5} />
+          <p className="text-muted-foreground text-[0.775rem]">No member found</p>
         </div>
       ) : !isMobile && viewMode === "list" ? (
         <TeamTable 
