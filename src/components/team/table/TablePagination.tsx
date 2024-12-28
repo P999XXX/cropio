@@ -55,7 +55,7 @@ export const TablePagination = ({
 
   return (
     <Pagination className="pagination-component mt-4">
-      <PaginationContent>
+      <PaginationContent className="text-[95%]">
         <PaginationItem>
           <PaginationPrevious
             onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
