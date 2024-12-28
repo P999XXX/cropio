@@ -65,7 +65,11 @@ export const TeamMembersTable = ({ teamMembers, isLoading }: TeamMembersTablePro
         </div>
       )}
 
-      {!isMobile && viewMode === "list" ? (
+      {paginatedMembers.length === 0 ? (
+        <div className="flex items-center justify-center h-64 bg-card rounded-lg border">
+          <p className="text-muted-foreground text-[0.775rem]">No data found</p>
+        </div>
+      ) : !isMobile && viewMode === "list" ? (
         <TeamTable 
           members={paginatedMembers}
           sortConfig={sortConfig}
