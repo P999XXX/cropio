@@ -14,10 +14,10 @@ export const getStatusBadgeVariant = (status: TeamMemberStatus) => {
 export const getRoleBadgeVariant = (role: string) => {
   switch (role) {
     case "administrator":
-      return "default" as const;
+      return "role-primary" as const;
     case "editor":
-      return "secondary" as const;
+      return "role-secondary" as const;
     default:
-      return "outline" as const;
+      return "role-default" as const;
   }
 };
