@@ -32,7 +32,7 @@ export const TeamTable = ({ members, sortConfig, onSort }: TeamTableProps) => {
           {members.map((member) => (
             <TableRow key={member.id} className="hover:bg-muted/50">
               <TableCell className="py-2">
-                <div className="flex flex-col gap-0.5">
+                <div className="flex flex-col">
                   {member.status === "accepted" ? (
                     <>
                       <span className="font-medium">
