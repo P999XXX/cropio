@@ -29,20 +29,20 @@ export const TeamTableHeader = ({
           placeholder="Search by name or email..."
           value={searchTerm}
           onChange={(e) => onSearchChange(e.target.value)}
-          className="pl-9 bg-background/50 border-muted"
+          className="pl-9 bg-background/50 border-muted text-[0.775rem]"
         />
       </div>
       <div className="flex gap-2 items-center">
         <Filter className="h-4 w-4 text-muted-foreground" />
         <Select value={roleFilter} onValueChange={onRoleFilterChange}>
-          <SelectTrigger className="w-[180px] bg-background/50 border-muted">
+          <SelectTrigger className="w-[180px] bg-background/50 border-muted text-[0.775rem]">
             <SelectValue placeholder="Filter by role" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All roles</SelectItem>
-            <SelectItem value="administrator">Administrator</SelectItem>
-            <SelectItem value="editor">Editor</SelectItem>
-            <SelectItem value="readonly">Read Only</SelectItem>
+            <SelectItem value="all" className="text-[0.775rem]">All roles</SelectItem>
+            <SelectItem value="administrator" className="text-[0.775rem]">Administrator</SelectItem>
+            <SelectItem value="editor" className="text-[0.775rem]">Editor</SelectItem>
+            <SelectItem value="readonly" className="text-[0.775rem]">Read Only</SelectItem>
           </SelectContent>
         </Select>
       </div>

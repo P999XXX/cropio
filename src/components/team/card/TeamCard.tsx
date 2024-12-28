@@ -34,7 +34,7 @@ export const TeamCard = ({ member, viewMode }: TeamCardProps) => {
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-3 min-w-0">
           <Avatar className="h-8 w-8 bg-primary/10">
-            <AvatarFallback className="text-xs">
+            <AvatarFallback className="text-[0.775rem]">
               {member.status === "accepted" 
                 ? getInitials(member.profile?.first_name, member.profile?.last_name)
                 : '??'
@@ -43,7 +43,7 @@ export const TeamCard = ({ member, viewMode }: TeamCardProps) => {
           </Avatar>
           <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <h3 className="font-medium truncate">
+              <h3 className="font-medium truncate text-[0.775rem]">
                 {member.status === "accepted" 
                   ? `${member.profile?.first_name} ${member.profile?.last_name}`
                   : "Invited User"
@@ -54,13 +54,13 @@ export const TeamCard = ({ member, viewMode }: TeamCardProps) => {
                 <StatusBadge status={member.status} />
               </div>
             </div>
-            <p className="text-xs text-muted-foreground truncate">
+            <p className="text-[0.775rem] text-muted-foreground truncate">
               {member.status === "accepted" ? member.profile?.email : member.email}
             </p>
           </div>
         </div>
         
-        <div className="flex items-center gap-3 text-xs text-muted-foreground shrink-0">
+        <div className="flex items-center gap-3 text-[0.775rem] text-muted-foreground shrink-0">
           <span className="hidden sm:block">
             {formatDistanceToNow(new Date(member.created_at), { addSuffix: true })}
           </span>
@@ -71,11 +71,11 @@ export const TeamCard = ({ member, viewMode }: TeamCardProps) => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem className="flex items-center gap-2">
+              <DropdownMenuItem className="flex items-center gap-2 text-[0.775rem]">
                 <UserCog className="h-4 w-4" />
                 Change Role
               </DropdownMenuItem>
-              <DropdownMenuItem className="flex items-center gap-2 text-destructive">
+              <DropdownMenuItem className="flex items-center gap-2 text-destructive text-[0.775rem]">
                 <UserX className="h-4 w-4" />
                 Remove Member
               </DropdownMenuItem>

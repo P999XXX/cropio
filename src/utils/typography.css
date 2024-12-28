@@ -8,6 +8,6 @@
   }
 
   input, button {
-    @apply text-sm;
+    @apply text-[0.775rem];
   }
 }

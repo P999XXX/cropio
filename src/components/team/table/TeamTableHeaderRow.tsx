@@ -18,7 +18,7 @@ export const TeamTableHeaderRow = ({ sortConfig, onSort }: TeamTableHeaderRowPro
   ) => (
     <TableHead
       className={cn(
-        "cursor-pointer hover:text-primary transition-colors py-2 text-xs font-medium",
+        "cursor-pointer hover:text-primary transition-colors py-2 text-[0.775rem] font-medium",
         className
       )}
       onClick={() => onSort(key)}
@@ -26,7 +26,7 @@ export const TeamTableHeaderRow = ({ sortConfig, onSort }: TeamTableHeaderRowPro
       <div className="flex items-center gap-1">
         {label}
         {sortConfig.key === key && (
-          <span className="text-xs">
+          <span className="text-[0.775rem]">
             {sortConfig.direction === "asc" ? "↑" : "↓"}
           </span>
         )}
