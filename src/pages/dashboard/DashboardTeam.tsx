@@ -62,7 +62,7 @@ const DashboardTeam = () => {
 
   return (
     <div className="team-management space-y-2 w-full px-0 sm:px-1">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 w-full">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 w-full min-h-[100px]">
         <div className="space-y-1">
           <h1 className="text-2xl font-bold">Team Management</h1>
           <p className="text-muted-foreground text-sm">
@@ -71,7 +71,7 @@ const DashboardTeam = () => {
         </div>
         <Button 
           onClick={() => setIsInviteDialogOpen(true)}
-          className="flex items-center gap-2 w-full md:w-auto md:text-xs md:h-fit md:py-2"
+          className="flex items-center gap-2 w-full md:w-auto md:text-xs md:h-fit md:py-2 mt-auto"
         >
           <UserPlus className="h-4 w-4" />
           Invite Member
