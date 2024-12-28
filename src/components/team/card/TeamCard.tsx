@@ -87,7 +87,7 @@ export const TeamCard = ({ member, viewMode }: TeamCardProps) => {
           <StatusBadge status={member.status} />
         </div>
       </CardContent>
-      <CardFooter className="flex justify-between text-[0.65rem] text-muted-foreground border-t pt-4">
+      <CardFooter className="flex justify-between text-[0.75rem] text-muted-foreground border-t pt-4">
         <span>
           Joined {formatDistanceToNow(new Date(member.created_at), {
             addSuffix: true,
