@@ -1,13 +1,14 @@
 import { TeamMember } from "@/types/team";
 import { TeamTableHeader } from "./table/TeamTableHeader";
-import { TeamCard } from "./card/TeamCard";
 import { TeamTable } from "./table/TeamTable";
 import { ViewModeToggle } from "./table/ViewModeToggle";
 import { TablePagination } from "./table/TablePagination";
 import { useTeamTable } from "./hooks/useTeamTable";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { MobileSortDropdown } from "./table/MobileSortDropdown";
-import { UserX } from "lucide-react";
+import { LoadingState } from "./table/LoadingState";
+import { EmptyTeamState } from "./table/EmptyTeamState";
+import { TeamMembersGrid } from "./table/TeamMembersGrid";
 
 interface TeamMembersTableProps {
   teamMembers: TeamMember[];
@@ -32,11 +33,7 @@ export const TeamMembersTable = ({ teamMembers, isLoading }: TeamMembersTablePro
   } = useTeamTable(teamMembers);
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-      </div>
-    );
+    return <LoadingState />;
   }
 
   return (
@@ -67,10 +64,7 @@ export const TeamMembersTable = ({ teamMembers, isLoading }: TeamMembersTablePro
       )}
 
       {paginatedMembers.length === 0 ? (
-        <div className="flex flex-col items-center justify-center h-64 bg-card rounded-lg border gap-3">
-          <UserX className="h-8 w-8 text-muted-foreground/50" strokeWidth={1.5} />
-          <p className="text-muted-foreground text-[0.775rem]">No member found</p>
-        </div>
+        <EmptyTeamState />
       ) : !isMobile && viewMode === "list" ? (
         <TeamTable 
           members={paginatedMembers}
@@ -78,17 +72,12 @@ export const TeamMembersTable = ({ teamMembers, isLoading }: TeamMembersTablePro
           onSort={handleSort}
         />
       ) : (
-        <div className="grid gap-1 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full">
-          {paginatedMembers.map((member) => (
-            <TeamCard 
-              key={member.id} 
-              member={member} 
-              viewMode={viewMode}
-              onSort={handleSort}
-              sortConfig={sortConfig}
-            />
-          ))}
-        </div>
+        <TeamMembersGrid 
+          members={paginatedMembers}
+          viewMode={viewMode}
+          sortConfig={sortConfig}
+          onSort={handleSort}
+        />
       )}
 
       {paginatedMembers.length > 0 && (
