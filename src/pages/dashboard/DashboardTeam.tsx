@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { TeamMembersTable } from "@/components/team/TeamMembersTable";
 import { InviteMemberDialog } from "@/components/team/InviteMemberDialog";
 import { Button } from "@/components/ui/button";
-import { UserPlus, Users } from "lucide-react";
+import { UserPlus } from "lucide-react";
 import { TeamMember } from "@/types/team";
 import { toast } from "sonner";
 
@@ -64,10 +64,7 @@ const DashboardTeam = () => {
     <div className="team-management space-y-2 w-full px-0 sm:px-1">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 w-full">
         <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <Users className="h-6 w-6 text-primary" />
-            <h1 className="text-2xl font-bold">Team Management</h1>
-          </div>
+          <h1 className="text-2xl font-bold">Team Management</h1>
           <p className="text-muted-foreground">
             Manage your team members and their permissions
           </p>
