@@ -55,7 +55,7 @@ export const TablePagination = ({
 
   return (
     <Pagination className="pagination-component mt-4">
-      <PaginationContent className="text-[90%] flex flex-row items-center gap-1">
+      <PaginationContent className="text-[75%] flex flex-row items-center gap-1">
         <PaginationItem>
           <PaginationPrevious
             onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
