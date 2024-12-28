@@ -29,32 +29,15 @@ export const TeamTableHeader = ({
 
   return (
     <div className="flex flex-col sm:flex-row gap-4 w-full">
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button 
-            variant="outline" 
-            size="sm"
-            className="search-button w-full sm:w-[300px] flex items-center justify-between text-[0.775rem] bg-background"
-          >
-            <div className="flex items-center gap-2">
-              <Search className="h-4 w-4 text-muted-foreground" />
-              <span className="truncate">{searchTerm || "Search members..."}</span>
-            </div>
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent align="start" className="w-[300px] p-4">
-          <div className="space-y-2">
-            <h4 className="font-medium text-sm">Search Members</h4>
-            <Input
-              placeholder="Search by name or email..."
-              value={searchTerm}
-              onChange={(e) => onSearchChange(e.target.value)}
-              className="w-full bg-background/50 border-muted [&::placeholder]:text-[0.775rem]"
-            />
-          </div>
-        </PopoverContent>
-      </Popover>
-      
+      <div className="relative flex-1 max-w-[333px]">
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <Input
+          placeholder="Search by name or email..."
+          value={searchTerm}
+          onChange={(e) => onSearchChange(e.target.value)}
+          className="pl-9 bg-background/50 border-muted [&::placeholder]:text-[0.775rem]"
+        />
+      </div>
       <div className="flex gap-2 items-center">
         <Popover>
           <PopoverTrigger asChild>
