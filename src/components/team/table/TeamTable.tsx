@@ -11,6 +11,7 @@ import { StatusBadge } from "../badges/StatusBadge";
 import { RoleBadge } from "../badges/RoleBadge";
 import { TeamTableHeaderRow } from "./TeamTableHeaderRow";
 import { TeamMemberActions } from "./TeamMemberActions";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 interface TeamTableProps {
   members: TeamMember[];
@@ -22,6 +23,11 @@ interface TeamTableProps {
 }
 
 export const TeamTable = ({ members, sortConfig, onSort }: TeamTableProps) => {
+  const getInitials = (firstName?: string, lastName?: string) => {
+    if (!firstName && !lastName) return '??';
+    return `${(firstName?.[0] || '').toUpperCase()}${(lastName?.[0] || '').toUpperCase()}`;
+  };
+
   return (
     <div className="rounded-lg border bg-card w-full">
       <Table>
@@ -32,24 +38,34 @@ export const TeamTable = ({ members, sortConfig, onSort }: TeamTableProps) => {
           {members.map((member) => (
             <TableRow key={member.id} className="hover:bg-muted/50">
               <TableCell className="py-2">
-                <div className="flex flex-col">
-                  {member.status === "accepted" ? (
-                    <>
-                      <span className="font-medium">
-                        {member.profile?.first_name} {member.profile?.last_name}
-                      </span>
-                      <span className="text-xs text-muted-foreground">
-                        {member.profile?.email}
-                      </span>
-                    </>
-                  ) : (
-                    <>
-                      <span className="font-semibold">Invited User</span>
-                      <span className="text-xs text-muted-foreground">
-                        {member.email}
-                      </span>
-                    </>
-                  )}
+                <div className="flex items-center gap-3">
+                  <Avatar className="h-8 w-8 bg-primary/10">
+                    <AvatarFallback className="text-[0.775rem]">
+                      {member.status === "accepted" 
+                        ? getInitials(member.profile?.first_name, member.profile?.last_name)
+                        : '??'
+                      }
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex flex-col">
+                    {member.status === "accepted" ? (
+                      <>
+                        <span className="font-medium">
+                          {member.profile?.first_name} {member.profile?.last_name}
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                          {member.profile?.email}
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="font-semibold">Invited User</span>
+                        <span className="text-xs text-muted-foreground">
+                          {member.email}
+                        </span>
+                      </>
+                    )}
+                  </div>
                 </div>
               </TableCell>
               <TableCell className="py-2">
