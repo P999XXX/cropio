@@ -1,16 +1,15 @@
 import { Badge } from "@/components/ui/badge";
-import { TeamMemberRole } from "@/types/team";
 import { getRoleBadgeVariant } from "../utils/badge-variants";
 
 interface RoleBadgeProps {
-  role: TeamMemberRole;
+  role: string;
 }
 
 export const RoleBadge = ({ role }: RoleBadgeProps) => {
   return (
     <Badge 
       variant={getRoleBadgeVariant(role)} 
-      className="rounded-full"
+      className="rounded-full text-xs py-0.5 px-2"
     >
       {role}
     </Badge>

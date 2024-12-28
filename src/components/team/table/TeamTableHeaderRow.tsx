@@ -18,12 +18,12 @@ export const TeamTableHeaderRow = ({ sortConfig, onSort }: TeamTableHeaderRowPro
   ) => (
     <TableHead
       className={cn(
-        "cursor-pointer hover:text-primary transition-colors",
+        "cursor-pointer hover:text-primary transition-colors py-2 text-xs font-medium",
         className
       )}
       onClick={() => onSort(key)}
     >
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1">
         {label}
         {sortConfig.key === key && (
           <span className="text-xs">
@@ -41,7 +41,7 @@ export const TeamTableHeaderRow = ({ sortConfig, onSort }: TeamTableHeaderRowPro
       {renderTableHeader("Status", "status")}
       {renderTableHeader("Joined", "created_at")}
       {renderTableHeader("Invited By", "invited_by")}
-      <TableHead className="w-[50px]"></TableHead>
+      <TableHead className="w-[50px] py-2"></TableHead>
     </TableRow>
   );
 };
