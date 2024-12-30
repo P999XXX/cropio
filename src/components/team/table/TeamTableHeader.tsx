@@ -19,6 +19,7 @@ interface TeamTableHeaderProps {
     direction: "asc" | "desc";
   };
   onSort: (key: keyof TeamMember) => void;
+  showSortButton?: boolean;
 }
 
 export const TeamTableHeader = ({
@@ -28,6 +29,7 @@ export const TeamTableHeader = ({
   onRoleFilterChange,
   sortConfig,
   onSort,
+  showSortButton = false,
 }: TeamTableHeaderProps) => {
   const roles = [
     { value: "all", label: "All roles" },
@@ -61,7 +63,7 @@ export const TeamTableHeader = ({
               </div>
             </Button>
           </PopoverTrigger>
-          <PopoverContent align="end" className="w-[180px] p-0">
+          <PopoverContent align="end" className="w-[180px] p-0 animate-fade-in">
             <div className="filter-role-options">
               {roles.map(({ value, label }) => (
                 <Button
@@ -76,12 +78,12 @@ export const TeamTableHeader = ({
             </div>
           </PopoverContent>
         </Popover>
-        <div className="block lg:hidden">
+        {showSortButton && (
           <MobileSortDropdown 
             sortConfig={sortConfig}
             onSort={onSort}
           />
-        </div>
+        )}
       </div>
     </div>
   );
