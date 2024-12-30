@@ -26,7 +26,7 @@ export default {
         inter: ['Inter', 'sans-serif'],
       },
       fontSize: {
-        base: ['0.775rem', '1.25rem'], // Updated base font size
+        base: ['0.775rem', '1.25rem'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -81,8 +81,12 @@ export default {
       },
       keyframes: {
         "fade-in": {
-          "0%": { opacity: "0", transform: "translateY(10px)" },
+          "0%": { opacity: "0", transform: "translateY(2px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        "fade-out": {
+          "0%": { opacity: "1", transform: "translateY(0)" },
+          "100%": { opacity: "0", transform: "translateY(2px)" },
         },
         "slide-in": {
           "0%": { transform: "translateX(-100%)" },
@@ -90,7 +94,8 @@ export default {
         },
       },
       animation: {
-        "fade-in": "fade-in 0.5s ease-out",
+        "fade-in": "fade-in 0.2s ease-out",
+        "fade-out": "fade-out 0.2s ease-out",
         "slide-in": "slide-in 0.3s ease-out",
       },
     },

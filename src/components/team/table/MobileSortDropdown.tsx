@@ -43,7 +43,7 @@ export const MobileSortDropdown = ({ sortConfig, onSort }: MobileSortDropdownPro
           <ArrowUpDown className="h-4 w-4 ml-2" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="end" className="w-[200px] p-0 animate-fade-in">
+      <PopoverContent align="end" className="w-[200px] p-0">
         <div className="mobile-sort-options">
           {[
             { key: "email", label: "Name/Email" },
