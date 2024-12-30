@@ -39,6 +39,36 @@ const SignIn = () => {
     }
   };
 
+  const handleGoogleSignIn = async () => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          queryParams: {
+            access_type: "offline",
+            prompt: "consent",
+          },
+        },
+      });
+
+      if (error) throw error;
+    } catch (error: any) {
+      toast.error(error.message || "Failed to sign in with Google");
+    }
+  };
+
+  const handleLinkedInSignIn = async () => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "linkedin",
+      });
+
+      if (error) throw error;
+    } catch (error: any) {
+      toast.error(error.message || "Failed to sign in with LinkedIn");
+    }
+  };
+
   const handleForgotPassword = async () => {
     setIsResetting(true);
     try {
@@ -61,23 +91,25 @@ const SignIn = () => {
     <SidebarProvider>
       <div className="min-h-screen bg-background">
         <Navbar />
-        <main className="flex min-h-[calc(100vh-64px)]">
+        <main className="flex min-h-[calc(100vh-64px)] w-full">
           <div className="flex-1 flex items-center justify-center w-full">
             <div className="w-full max-w-md px-4">
               {isMobile ? (
                 <SignInMobile
                   onSubmit={handleSignIn}
                   isLoading={isLoading}
+                  onGoogleSignIn={handleGoogleSignIn}
+                  onLinkedInSignIn={handleLinkedInSignIn}
                   onForgotPassword={() => setIsForgotPasswordOpen(true)}
                 />
               ) : (
-                <SignInCard>
-                  <SignInForm
-                    onSubmit={handleSignIn}
-                    isLoading={isLoading}
-                    onForgotPassword={() => setIsForgotPasswordOpen(true)}
-                  />
-                </SignInCard>
+                <SignInCard
+                  onSubmit={handleSignIn}
+                  isLoading={isLoading}
+                  onGoogleSignIn={handleGoogleSignIn}
+                  onLinkedInSignIn={handleLinkedInSignIn}
+                  onForgotPassword={() => setIsForgotPasswordOpen(true)}
+                />
               )}
             </div>
           </div>

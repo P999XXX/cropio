@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import StepOneForm from "@/components/auth/StepOneForm";
+import StepOneForm, { StepOneFormProps } from "@/components/auth/StepOneForm";
 import StepTwoForm, { StepTwoFormData } from "@/components/auth/StepTwoForm";
 import ThankYouDialog from "@/components/auth/ThankYouDialog";
 import SignUpHeader from "@/components/auth/SignUpHeader";
@@ -92,11 +92,11 @@ const SignUp = () => {
     <SidebarProvider>
       <div className="min-h-screen bg-background">
         <Navbar />
-        <main className="flex min-h-[calc(100vh-64px)]">
+        <main className="flex min-h-[calc(100vh-64px)] w-full">
           <div className="flex-1 flex items-center justify-center w-full">
             <div className="w-full max-w-md px-4">
               <SignUpHeader
-                currentStep={currentStep}
+                step={currentStep}
                 isMobile={isMobile}
               />
 
@@ -105,7 +105,6 @@ const SignUp = () => {
                   onSubmit={handleRoleSelect}
                   onGoogleSignUp={handleGoogleSignUp}
                   onLinkedInSignUp={handleLinkedInSignUp}
-                  selectedRole={selectedRole}
                 />
               ) : (
                 <StepTwoForm
