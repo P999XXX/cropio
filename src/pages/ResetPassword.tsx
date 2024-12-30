@@ -20,7 +20,7 @@ const ResetPassword = () => {
       <div className="min-h-screen bg-background">
         <Navbar />
         <div className="flex min-h-[calc(100vh-64px)] items-center justify-center p-4">
-          <div className="w-full max-w-md flex flex-col items-center">
+          <div className="w-full max-w-[500px] flex flex-col items-center">
             <ResetPasswordHeader firstName={firstName} isMobile={isMobile} />
 
             {isMobile ? (
@@ -44,7 +44,7 @@ const ResetPassword = () => {
         <ResetPasswordThankYouDialog
           open={showThankYou}
           onOpenChange={setShowThankYou}
-          userEmail="user@example.com" // This should ideally come from the auth state
+          userEmail="user@example.com"
         />
       </div>
     </SidebarProvider>
