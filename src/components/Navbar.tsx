@@ -2,7 +2,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { MessageSquare, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useSidebar } from "@/components/ui/sidebar";
 import { Logo } from "./navbar/Logo";
@@ -18,6 +18,7 @@ const Navbar = () => {
   const [userInitials, setUserInitials] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const isDashboard = location.pathname.startsWith('/dashboard');
   
   let sidebarState;
@@ -33,7 +34,6 @@ const Navbar = () => {
     setIsDark(theme === "dark");
     fetchUserProfile();
 
-    // Add media query listener to close menu on larger screens
     const mediaQuery = window.matchMedia('(min-width: 768px)');
     const handleMediaQueryChange = (e: MediaQueryListEvent | MediaQueryList) => {
       if (e.matches) {
@@ -41,13 +41,9 @@ const Navbar = () => {
       }
     };
 
-    // Check initial state
     handleMediaQueryChange(mediaQuery);
-
-    // Add listener for changes
     mediaQuery.addEventListener('change', handleMediaQueryChange);
 
-    // Cleanup
     return () => mediaQuery.removeEventListener('change', handleMediaQueryChange);
   }, []);
 
