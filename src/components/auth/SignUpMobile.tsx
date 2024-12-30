@@ -1,5 +1,5 @@
 import SignUpForm, { SignUpFormData } from "./SignUpForm";
-import SocialLoginSection from "./SocialLoginSection";
+import AuthProviders from "./AuthProviders";
 
 interface SignUpMobileProps {
   onSubmit: (values: SignUpFormData) => Promise<void>;
@@ -30,9 +30,10 @@ const SignUpMobile = ({
           </span>
         </div>
       </div>
-      <SocialLoginSection
-        onGoogleSignIn={onGoogleSignIn}
-        onLinkedInSignIn={onLinkedInSignIn}
+      <AuthProviders
+        onGoogleSignUp={onGoogleSignIn}
+        onLinkedInSignUp={onLinkedInSignIn}
+        variant="signup"
       />
       <div className="text-sm text-center text-muted-foreground pt-4">
         Already have an account?{" "}

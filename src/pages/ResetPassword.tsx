@@ -10,9 +10,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { Card, CardContent } from "@/components/ui/card";
 
 const ResetPassword = () => {
-  const [isLoading, setIsLoading] = useState(false);
   const [firstName, setFirstName] = useState("");
-  const navigate = useNavigate();
   const isMobile = useIsMobile();
 
   return (
