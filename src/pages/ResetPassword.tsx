@@ -1,61 +1,41 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-} from "@/components/ui/card";
 import Navbar from "@/components/Navbar";
-import { useIsMobile } from "@/hooks/use-mobile";
 import ResetPasswordForm from "@/components/auth/ResetPasswordForm";
 import ResetPasswordHeader from "@/components/auth/ResetPasswordHeader";
+import ResetPasswordThankYouDialog from "@/components/auth/ResetPasswordThankYouDialog";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card";
 import { SidebarProvider } from "@/components/ui/sidebar";
 
 const ResetPassword = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [showThankYou, setShowThankYou] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
-  const [firstName, setFirstName] = useState("");
 
-  useEffect(() => {
-    const handlePasswordReset = async () => {
-      const { data: { session }, error } = await supabase.auth.getSession();
-      
-      if (!session) {
-        const hashParams = new URLSearchParams(window.location.hash.substring(1));
-        const accessToken = hashParams.get('access_token');
-        const refreshToken = hashParams.get('refresh_token');
-        
-        if (accessToken && refreshToken) {
-          const { data, error } = await supabase.auth.setSession({
-            access_token: accessToken,
-            refresh_token: refreshToken
-          });
-          
-          if (error) {
-            console.error("Error setting session:", error);
-            navigate('/signin');
-            return;
-          }
-        } else {
-          navigate('/signin');
-          return;
-        }
-      }
+  const handleSubmit = async (values: { password: string }) => {
+    setIsLoading(true);
+    try {
+      const { error } = await supabase.auth.updateUser({
+        password: values.password,
+      });
 
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('first_name')
-        .single();
-      
-      if (profile?.first_name) {
-        setFirstName(profile.first_name);
-      }
-    };
-    
-    handlePasswordReset();
-  }, [navigate]);
+      if (error) throw error;
+
+      setShowThankYou(true);
+      toast.success("Password reset successfully!");
+    } catch (error: any) {
+      console.error("Reset password error:", error);
+      toast.error(error.message || "Failed to reset password");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <SidebarProvider>
@@ -65,7 +45,14 @@ const ResetPassword = () => {
           <div className="w-full max-w-md flex flex-col items-center">
             <ResetPasswordHeader firstName={firstName} isMobile={isMobile} />
 
-            <div className="md:block hidden w-full">
+            {isMobile ? (
+              <div className="w-full">
+                <ResetPasswordForm
+                  onSubmit={handleSubmit}
+                  isLoading={isLoading}
+                />
+              </div>
+            ) : (
               <Card className="w-full">
                 <CardHeader className="pb-2">
                   <CardDescription>
@@ -73,16 +60,19 @@ const ResetPassword = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="pt-2">
-                  <ResetPasswordForm isMobile={isMobile} />
+                  <ResetPasswordForm
+                    onSubmit={handleSubmit}
+                    isLoading={isLoading}
+                  />
                 </CardContent>
               </Card>
-            </div>
-
-            <div className="md:hidden block w-full space-y-4">
-              <ResetPasswordForm isMobile={isMobile} />
-            </div>
+            )}
           </div>
         </div>
+        <ResetPasswordThankYouDialog
+          open={showThankYou}
+          onOpenChange={setShowThankYou}
+        />
       </div>
     </SidebarProvider>
   );
