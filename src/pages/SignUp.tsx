@@ -67,18 +67,38 @@ const SignUp = () => {
           <div className="w-full md:w-[500px] py-8">
             <SignUpHeader />
 
-            {step === 1 ? (
-              <StepOneForm
-                onSubmit={handleStepOne}
-                onGoogleSignUp={handleGoogleSignIn}
-                onLinkedInSignUp={handleLinkedInSignIn}
-              />
+            {isMobile ? (
+              <div className="space-y-4">
+                {step === 1 ? (
+                  <StepOneForm
+                    onSubmit={handleStepOne}
+                    onGoogleSignUp={handleGoogleSignIn}
+                    onLinkedInSignUp={handleLinkedInSignIn}
+                  />
+                ) : (
+                  <StepTwoForm
+                    onSubmit={handleStepTwo}
+                    isLoading={isLoading}
+                    onBack={handleBack}
+                  />
+                )}
+              </div>
             ) : (
-              <StepTwoForm
-                onSubmit={handleStepTwo}
-                isLoading={isLoading}
-                onBack={handleBack}
-              />
+              <>
+                {step === 1 ? (
+                  <StepOneForm
+                    onSubmit={handleStepOne}
+                    onGoogleSignUp={handleGoogleSignIn}
+                    onLinkedInSignUp={handleLinkedInSignIn}
+                  />
+                ) : (
+                  <StepTwoForm
+                    onSubmit={handleStepTwo}
+                    isLoading={isLoading}
+                    onBack={handleBack}
+                  />
+                )}
+              </>
             )}
           </div>
         </main>

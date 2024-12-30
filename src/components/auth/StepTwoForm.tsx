@@ -9,6 +9,7 @@ import PasswordInput from "./PasswordInput";
 import { ArrowLeft } from "lucide-react";
 import PhoneInput from "./PhoneInput";
 import AgreementCheckbox from "./AgreementCheckbox";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const stepTwoSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -39,6 +40,7 @@ interface StepTwoFormProps {
 }
 
 const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
+  const isMobile = useIsMobile();
   const form = useForm<StepTwoFormData>({
     resolver: zodResolver(stepTwoSchema),
     defaultValues: {
@@ -55,89 +57,115 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
     },
   });
 
+  const formContent = (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <div className="grid gap-4 md:grid-cols-2">
+          <FormInput
+            form={form}
+            name="firstName"
+            label="First Name"
+            placeholder="Enter your first name"
+          />
+          <FormInput
+            form={form}
+            name="lastName"
+            label="Last Name"
+            placeholder="Enter your last name"
+          />
+        </div>
+
+        <FormInput
+          form={form}
+          name="companyName"
+          label="Company Name"
+          placeholder="Enter your company name"
+        />
+
+        <FormInput
+          form={form}
+          name="email"
+          label="Email"
+          type="email"
+          placeholder="Enter your email"
+        />
+
+        <PhoneInput form={form} />
+
+        <PasswordInput
+          form={form}
+          name="password"
+          label="Password"
+          description="Password must be at least 8 characters"
+        />
+
+        <PasswordInput
+          form={form}
+          name="confirmPassword"
+          label="Confirm Password"
+        />
+
+        <div className="space-y-2">
+          <AgreementCheckbox
+            form={form}
+            name="acceptTerms"
+            linkText="Terms and Conditions"
+            linkHref="/terms"
+          />
+          <AgreementCheckbox
+            form={form}
+            name="acceptPrivacy"
+            linkText="Privacy Policy"
+            linkHref="/privacy"
+          />
+        </div>
+
+        <Button type="submit" className="w-full" disabled={isLoading}>
+          {isLoading ? "Creating account..." : "Create account"}
+        </Button>
+      </form>
+    </Form>
+  );
+
+  const backButton = (
+    <Button
+      variant="ghost"
+      className="w-fit h-8 px-2 mb-2"
+      onClick={onBack}
+    >
+      <ArrowLeft className="h-4 w-4 mr-1" />
+      Back
+    </Button>
+  );
+
+  if (isMobile) {
+    return (
+      <div className="space-y-4">
+        {backButton}
+        <CardDescription className="text-muted-foreground">
+          Complete your registration
+        </CardDescription>
+        {formContent}
+        <div className="text-sm text-center text-muted-foreground">
+          Already have an account?{" "}
+          <a href="/signin" className="text-primary hover:underline font-medium">
+            Sign in
+          </a>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <Card className="md:min-w-[500px]">
       <CardHeader className="pb-2">
-        <Button
-          variant="ghost"
-          className="w-fit h-8 px-2 mb-2"
-          onClick={onBack}
-        >
-          <ArrowLeft className="h-4 w-4 mr-1" />
-          Back
-        </Button>
+        {backButton}
         <CardDescription>
           Complete your registration
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-2">
-              <FormInput
-                form={form}
-                name="firstName"
-                label="First Name"
-                placeholder="Enter your first name"
-              />
-              <FormInput
-                form={form}
-                name="lastName"
-                label="Last Name"
-                placeholder="Enter your last name"
-              />
-            </div>
-
-            <FormInput
-              form={form}
-              name="companyName"
-              label="Company Name"
-              placeholder="Enter your company name"
-            />
-
-            <FormInput
-              form={form}
-              name="email"
-              label="Email"
-              type="email"
-              placeholder="Enter your email"
-            />
-
-            <PhoneInput form={form} />
-
-            <PasswordInput
-              form={form}
-              name="password"
-              label="Password"
-              description="Password must be at least 8 characters"
-            />
-
-            <PasswordInput
-              form={form}
-              name="confirmPassword"
-              label="Confirm Password"
-            />
-
-            <div className="space-y-2">
-              <AgreementCheckbox
-                form={form}
-                name="acceptTerms"
-                linkText="Terms and Conditions"
-                linkHref="/terms"
-              />
-              <AgreementCheckbox
-                form={form}
-                name="acceptPrivacy"
-                linkText="Privacy Policy"
-                linkHref="/privacy"
-              />
-            </div>
-
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Creating account..." : "Create account"}
-            </Button>
-          </form>
-        </Form>
+        {formContent}
       </CardContent>
       <CardFooter>
         <div className="text-sm text-center w-full text-muted-foreground">
