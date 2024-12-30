@@ -34,10 +34,10 @@ export const InviteMemberDialog = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="dialog-content sm:max-w-[500px] p-6 gap-6 bg-background border border-border">
         <DialogHeader className="space-y-3">
-          <DialogTitle className="text-xl font-semibold tracking-tight">
+          <DialogTitle className="dialog-title">
             Invite Team Member
           </DialogTitle>
-          <DialogDescription className="text-[0.925rem] text-muted-foreground">
+          <DialogDescription className="dialog-description">
             Send an invitation to join your team. They'll receive an email with
             instructions.
           </DialogDescription>
