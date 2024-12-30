@@ -3,101 +3,37 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
 import { useIsMobile } from "@/hooks/use-mobile";
-import StepOneForm from "@/components/auth/StepOneForm";
-import StepTwoForm, { StepTwoFormData } from "@/components/auth/StepTwoForm";
-import ThankYouDialog from "@/components/auth/ThankYouDialog";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import SignUpCard from "@/components/auth/SignUpCard";
+import SignUpMobile from "@/components/auth/SignUpMobile";
 import SignUpHeader from "@/components/auth/SignUpHeader";
+import ThankYouDialog from "@/components/auth/ThankYouDialog";
+import { handleGoogleSignIn, handleLinkedInSignIn } from "@/utils/auth-handlers";
+import { errorToastStyle, successToastStyle } from "@/utils/toast-styles";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [currentStep, setCurrentStep] = useState(1);
-  const [selectedRole, setSelectedRole] = useState<"buyer" | "supplier">("buyer");
   const [showThankYou, setShowThankYou] = useState(false);
-  const [userEmail, setUserEmail] = useState("");
+  const [email, setEmail] = useState("");
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
-  const handleStepOne = (role: "buyer" | "supplier") => {
-    setSelectedRole(role);
-    setCurrentStep(2);
-  };
-
-  const handleBack = () => {
-    setCurrentStep(1);
-  };
-
-  const handleGoogleSignUp = async () => {
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          queryParams: {
-            access_type: 'offline',
-            prompt: 'consent',
-          },
-          redirectTo: `${window.location.origin}/auth/callback`,
-        },
-      });
-      if (error) throw error;
-    } catch (error: any) {
-      console.error("Google sign up error:", error);
-      toast.error(error.message || "Failed to sign up with Google");
-    }
-  };
-
-  const handleLinkedInSignUp = async () => {
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'linkedin',
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-        },
-      });
-      if (error) throw error;
-    } catch (error: any) {
-      console.error("LinkedIn sign up error:", error);
-      toast.error(error.message || "Failed to sign up with LinkedIn");
-    }
-  };
-
-  const handleStepTwo = async (values: StepTwoFormData) => {
+  const handleSignUp = async (values) => {
     setIsLoading(true);
     try {
-      const { data: authData, error: signUpError } = await supabase.auth.signUp({
+      const { error } = await supabase.auth.signUp({
         email: values.email,
         password: values.password,
-        options: {
-          data: {
-            first_name: values.firstName,
-            last_name: values.lastName,
-            company_name: values.companyName,
-            role: selectedRole,
-          },
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
-        },
       });
 
-      if (signUpError) throw signUpError;
+      if (error) throw error;
 
-      if (authData.user) {
-        setUserEmail(values.email);
-        setShowThankYou(true);
-        toast.success("Registration successful! Please check your email to confirm your account.");
-      } else {
-        throw new Error("No user data received");
-      }
+      toast.success("Successfully signed up!", successToastStyle);
+      setShowThankYou(true);
     } catch (error: any) {
       console.error("Sign up error:", error);
-      toast.error(error.message || "Failed to sign up");
+      toast.error(error.message || "Failed to sign up", errorToastStyle);
     } finally {
       setIsLoading(false);
     }
@@ -107,72 +43,31 @@ const SignUp = () => {
     <SidebarProvider>
       <div className="min-h-screen bg-background w-full">
         <Navbar />
-        <main className="w-full container flex min-h-[calc(100vh-64px)] items-start justify-center px-4 md:px-0 mt-8">
+        <main className="w-full container flex min-h-[calc(100vh-64px)] items-start justify-center px-4 md:px-0 mt-[57px]">
           <div className="w-full md:w-[500px] py-8">
             <SignUpHeader />
 
             {isMobile ? (
-              <div className="space-y-6">
-                {currentStep === 1 ? (
-                  <StepOneForm
-                    onSubmit={handleStepOne}
-                    onGoogleSignUp={handleGoogleSignUp}
-                    onLinkedInSignUp={handleLinkedInSignUp}
-                  />
-                ) : (
-                  <StepTwoForm 
-                    onSubmit={handleStepTwo} 
-                    isLoading={isLoading}
-                    onBack={handleBack}
-                  />
-                )}
-                <div className="text-sm text-center w-full text-muted-foreground">
-                  Already have an account?{" "}
-                  <a href="/signin" className="text-primary hover:underline font-medium">
-                    Sign in
-                  </a>
-                </div>
-              </div>
+              <SignUpMobile
+                onSubmit={handleSignUp}
+                isLoading={isLoading}
+                onGoogleSignIn={handleGoogleSignIn}
+                onLinkedInSignIn={handleLinkedInSignIn}
+              />
             ) : (
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardDescription>
-                    {currentStep === 1
-                      ? "Select how you'll use the platform"
-                      : "Enter your details to create an account"}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="pt-2">
-                  {currentStep === 1 ? (
-                    <StepOneForm
-                      onSubmit={handleStepOne}
-                      onGoogleSignUp={handleGoogleSignUp}
-                      onLinkedInSignUp={handleLinkedInSignUp}
-                    />
-                  ) : (
-                    <StepTwoForm 
-                      onSubmit={handleStepTwo} 
-                      isLoading={isLoading}
-                      onBack={handleBack}
-                    />
-                  )}
-                </CardContent>
-                <CardFooter className="flex flex-col space-y-4">
-                  <div className="text-sm text-center w-full text-muted-foreground">
-                    Already have an account?{" "}
-                    <a href="/signin" className="text-primary hover:underline font-medium">
-                      Sign in
-                    </a>
-                  </div>
-                </CardFooter>
-              </Card>
+              <SignUpCard
+                onSubmit={handleSignUp}
+                isLoading={isLoading}
+                onGoogleSignIn={handleGoogleSignIn}
+                onLinkedInSignIn={handleLinkedInSignIn}
+              />
             )}
           </div>
         </main>
         <ThankYouDialog
           open={showThankYou}
           onOpenChange={setShowThankYou}
-          userEmail={userEmail}
+          userEmail={email}
         />
       </div>
     </SidebarProvider>
