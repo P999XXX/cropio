@@ -29,10 +29,10 @@ const ForgotPasswordDialog = ({
 }: ForgotPasswordDialogProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="fixed left-[50%] top-[50%] z-50 grid w-[calc(100%-2rem)] max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg rounded-lg">
+      <DialogContent className="dialog-content">
         <DialogHeader>
-          <DialogTitle className="text-[1.3rem] font-semibold">Reset Password</DialogTitle>
-          <DialogDescription className="pt-4">
+          <DialogTitle className="dialog-title">Reset Password</DialogTitle>
+          <DialogDescription className="dialog-description">
             Enter your email address and we'll send you instructions to reset your password.
           </DialogDescription>
         </DialogHeader>
@@ -45,7 +45,7 @@ const ForgotPasswordDialog = ({
               placeholder="Enter your email"
               value={email}
               onChange={(e) => onEmailChange(e.target.value)}
-              className="h-10 px-3 py-2 text-sm rounded-md border border-input bg-background"
+              className="input-field"
             />
           </div>
         </div>
@@ -54,7 +54,7 @@ const ForgotPasswordDialog = ({
             onClick={onSubmit}
             disabled={isResetting}
             variant="primary"
-            className="order-1 sm:order-2 w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90"
+            className="dialog-button-primary"
           >
             {isResetting ? "Sending..." : "Send Instructions"}
           </Button>
@@ -62,7 +62,7 @@ const ForgotPasswordDialog = ({
             variant="secondary"
             onClick={() => onOpenChange(false)}
             disabled={isResetting}
-            className="order-2 sm:order-1 w-full sm:w-auto bg-secondary text-secondary-foreground hover:bg-secondary/80"
+            className="dialog-button-secondary"
           >
             Cancel
           </Button>
