@@ -66,7 +66,7 @@ const ResetPassword = () => {
             <ResetPasswordHeader firstName={firstName} isMobile={isMobile} />
 
             <div className="md:block hidden w-full">
-              <Card>
+              <Card className="w-full">
                 <CardHeader className="pb-2">
                   <CardDescription>
                     Please enter your new password
