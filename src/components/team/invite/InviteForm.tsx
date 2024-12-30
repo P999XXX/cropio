@@ -49,12 +49,12 @@ export const InviteForm = ({ onSubmit, isLoading, onCancel }: InviteFormProps) =
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-foreground text-sm font-medium">Email</FormLabel>
+              <FormLabel className="text-sm font-medium">Email</FormLabel>
               <FormControl>
                 <Input
                   placeholder="Enter email address"
                   type="email"
-                  className="h-10 px-3 py-2 text-sm rounded-md border border-input bg-background"
+                  className="h-9 px-3 py-1"
                   {...field}
                 />
               </FormControl>
@@ -68,13 +68,13 @@ export const InviteForm = ({ onSubmit, isLoading, onCancel }: InviteFormProps) =
           name="role"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-foreground text-sm font-medium">Role</FormLabel>
+              <FormLabel className="text-sm font-medium">Role</FormLabel>
               <Select
                 onValueChange={field.onChange}
                 defaultValue={field.value}
               >
                 <FormControl>
-                  <SelectTrigger className="h-10 px-3 py-2 text-sm rounded-md border border-input bg-background">
+                  <SelectTrigger className="h-9">
                     <SelectValue placeholder="Select a role" />
                   </SelectTrigger>
                 </FormControl>
@@ -95,7 +95,7 @@ export const InviteForm = ({ onSubmit, isLoading, onCancel }: InviteFormProps) =
             onClick={onCancel}
             disabled={isLoading}
             variant="secondary"
-            className="w-full sm:w-auto bg-secondary text-secondary-foreground hover:bg-secondary/80"
+            className="w-full sm:w-auto"
           >
             Cancel
           </Button>
@@ -103,7 +103,7 @@ export const InviteForm = ({ onSubmit, isLoading, onCancel }: InviteFormProps) =
             type="submit"
             disabled={isLoading}
             variant="primary"
-            className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90"
+            className="w-full sm:w-auto"
           >
             {isLoading ? "Sending..." : "Send Invitation"}
           </Button>
