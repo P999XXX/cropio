@@ -1,7 +1,7 @@
 import { TableHead, TableRow } from "@/components/ui/table";
 import { TeamMember } from "@/types/team";
 import { cn } from "@/lib/utils";
-import { ArrowDown, ArrowUp } from "lucide-react";
+import { ArrowUp, ArrowDown } from "lucide-react";
 
 interface TeamTableHeaderRowProps {
   sortConfig: {
@@ -19,22 +19,31 @@ export const TeamTableHeaderRow = ({ sortConfig, onSort }: TeamTableHeaderRowPro
   ) => (
     <TableHead
       className={cn(
-        "cursor-pointer hover:bg-primary/5 transition-colors py-3 text-[0.775rem] font-medium bg-primary/10 text-primary/85",
+        "cursor-pointer hover:bg-primary/5 transition-colors py-3 text-[0.775rem] font-medium bg-primary/10 text-primary/85 group",
         className
       )}
       onClick={() => onSort(key)}
     >
       <div className="flex items-center justify-between">
         <span>{label}</span>
-        {sortConfig.key === key && (
-          <span className="text-[0.775rem]">
-            {sortConfig.direction === "asc" ? (
-              <ArrowUp className="h-4 w-4" />
-            ) : (
-              <ArrowDown className="h-4 w-4" />
-            )}
-          </span>
-        )}
+        <div className="flex flex-col">
+          <ArrowUp 
+            className={cn(
+              "h-3 w-3 -mb-1",
+              sortConfig.key === key && sortConfig.direction === "asc" 
+                ? "text-primary" 
+                : "text-primary/40 group-hover:text-primary/60"
+            )} 
+          />
+          <ArrowDown 
+            className={cn(
+              "h-3 w-3",
+              sortConfig.key === key && sortConfig.direction === "desc" 
+                ? "text-primary" 
+                : "text-primary/40 group-hover:text-primary/60"
+            )} 
+          />
+        </div>
       </div>
     </TableHead>
   );

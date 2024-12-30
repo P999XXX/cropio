@@ -1,11 +1,12 @@
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUp, ArrowDown } from "lucide-react";
 import { TeamMember } from "@/types/team";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 
 interface MobileSortDropdownProps {
   sortConfig: {
@@ -40,7 +41,10 @@ export const MobileSortDropdown = ({ sortConfig, onSort }: MobileSortDropdownPro
           className="mobile-sort-dropdown w-full flex items-center justify-between text-[0.775rem] bg-background border-primary/20 hover:border-primary/30 hover:bg-primary/5 hover:text-foreground"
         >
           <span>Sort by: {getSortLabel(sortConfig.key)}</span>
-          <ArrowUpDown className="h-4 w-4 ml-2" />
+          <div className="flex flex-col ml-2">
+            <ArrowUp className="h-3 w-3 -mb-1 text-primary/40" />
+            <ArrowDown className="h-3 w-3 text-primary/40" />
+          </div>
         </Button>
       </PopoverTrigger>
       <PopoverContent align="end" className="w-[200px] p-0 bg-background">
@@ -54,10 +58,28 @@ export const MobileSortDropdown = ({ sortConfig, onSort }: MobileSortDropdownPro
             <Button
               key={key}
               variant="ghost"
-              className="w-full justify-start text-[0.775rem] h-9 hover:bg-primary/5 hover:text-foreground"
+              className="w-full justify-between text-[0.775rem] h-9 hover:bg-primary/5 hover:text-foreground group"
               onClick={() => onSort(key as keyof TeamMember)}
             >
-              {label} {sortConfig.key === key && (sortConfig.direction === "asc" ? "↑" : "↓")}
+              <span>{label}</span>
+              <div className="flex flex-col">
+                <ArrowUp 
+                  className={cn(
+                    "h-3 w-3 -mb-1",
+                    sortConfig.key === key && sortConfig.direction === "asc" 
+                      ? "text-primary" 
+                      : "text-primary/40 group-hover:text-primary/60"
+                  )} 
+                />
+                <ArrowDown 
+                  className={cn(
+                    "h-3 w-3",
+                    sortConfig.key === key && sortConfig.direction === "desc" 
+                      ? "text-primary" 
+                      : "text-primary/40 group-hover:text-primary/60"
+                  )} 
+                />
+              </div>
             </Button>
           ))}
         </div>
