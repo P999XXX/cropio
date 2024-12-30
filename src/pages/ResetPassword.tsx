@@ -62,10 +62,10 @@ const ResetPassword = () => {
       <div className="min-h-screen bg-background">
         <Navbar />
         <div className="flex min-h-[calc(100vh-64px)] items-center justify-center p-4">
-          <div className="w-full max-w-md">
+          <div className="w-full max-w-md flex flex-col items-center">
             <ResetPasswordHeader firstName={firstName} isMobile={isMobile} />
 
-            <div className="md:block hidden">
+            <div className="md:block hidden w-full">
               <Card>
                 <CardHeader className="pb-2">
                   <CardDescription>
@@ -78,7 +78,7 @@ const ResetPassword = () => {
               </Card>
             </div>
 
-            <div className="md:hidden block space-y-4">
+            <div className="md:hidden block w-full space-y-4">
               <ResetPasswordForm isMobile={isMobile} />
             </div>
           </div>

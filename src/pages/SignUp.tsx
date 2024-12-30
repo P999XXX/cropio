@@ -107,8 +107,8 @@ const SignUp = () => {
       <div className="min-h-screen bg-background">
         <Navbar />
         <div className="flex min-h-[calc(100vh-64px)] items-center justify-center p-4">
-          <div className="w-full max-w-md">
-            <div className={`space-y-2 ${isMobile ? 'text-left' : 'text-center'} mb-6`}>
+          <div className="w-full max-w-md flex flex-col items-center">
+            <div className={`space-y-2 ${isMobile ? 'text-left w-full' : 'text-center'} mb-6`}>
               <h1 className="text-2xl md:text-3xl font-bold">Register for Free!</h1>
               <p className="text-[14px] text-muted-foreground">
                 {currentStep === 1 ? "Choose Your Role" : "Complete Your Profile"}
@@ -116,7 +116,7 @@ const SignUp = () => {
             </div>
 
             {isMobile ? (
-              <div>
+              <div className="w-full">
                 {currentStep === 1 ? (
                   <StepOneForm
                     onSubmit={handleStepOne}
@@ -138,7 +138,7 @@ const SignUp = () => {
                 </div>
               </div>
             ) : (
-              <Card>
+              <Card className="w-full">
                 <CardHeader className="pb-2">
                   <CardDescription>
                     {currentStep === 1
