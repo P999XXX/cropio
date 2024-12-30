@@ -60,6 +60,7 @@ const ForgotPasswordDialog = ({
           <Button 
             onClick={onSubmit}
             disabled={isResetting}
+            variant="primary"
             className="w-full sm:w-auto"
           >
             {isResetting ? "Sending..." : "Send Instructions"}
