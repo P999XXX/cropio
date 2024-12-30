@@ -1,7 +1,7 @@
 import { TableHead, TableRow } from "@/components/ui/table";
 import { TeamMember } from "@/types/team";
 import { cn } from "@/lib/utils";
-import { Users, UserCheck, Clock, UserPlus } from "lucide-react";
+import { ArrowDown, ArrowUp } from "lucide-react";
 
 interface TeamTableHeaderRowProps {
   sortConfig: {
@@ -15,7 +15,6 @@ export const TeamTableHeaderRow = ({ sortConfig, onSort }: TeamTableHeaderRowPro
   const renderTableHeader = (
     label: string,
     key: keyof TeamMember,
-    icon: React.ReactNode,
     className?: string
   ) => (
     <TableHead
@@ -25,12 +24,15 @@ export const TeamTableHeaderRow = ({ sortConfig, onSort }: TeamTableHeaderRowPro
       )}
       onClick={() => onSort(key)}
     >
-      <div className="flex items-center gap-2">
-        {icon}
+      <div className="flex items-center justify-between">
         <span>{label}</span>
         {sortConfig.key === key && (
-          <span className="text-[0.775rem] ml-1">
-            {sortConfig.direction === "asc" ? "↑" : "↓"}
+          <span className="text-[0.775rem]">
+            {sortConfig.direction === "asc" ? (
+              <ArrowUp className="h-4 w-4" />
+            ) : (
+              <ArrowDown className="h-4 w-4" />
+            )}
           </span>
         )}
       </div>
@@ -39,11 +41,11 @@ export const TeamTableHeaderRow = ({ sortConfig, onSort }: TeamTableHeaderRowPro
 
   return (
     <TableRow>
-      {renderTableHeader("Member", "email", <Users className="h-4 w-4" />)}
-      {renderTableHeader("Role", "role", <UserCheck className="h-4 w-4" />)}
-      {renderTableHeader("Status", "status", <UserCheck className="h-4 w-4" />)}
-      {renderTableHeader("Joined", "created_at", <Clock className="h-4 w-4" />)}
-      {renderTableHeader("Invited By", "invited_by", <UserPlus className="h-4 w-4" />)}
+      {renderTableHeader("Member", "email")}
+      {renderTableHeader("Role", "role")}
+      {renderTableHeader("Status", "status")}
+      {renderTableHeader("Joined", "created_at")}
+      {renderTableHeader("Invited By", "invited_by")}
       <TableHead className="w-[50px] py-3 bg-primary/10"></TableHead>
     </TableRow>
   );
