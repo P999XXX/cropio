@@ -64,7 +64,6 @@ const StepOneForm = ({ onSubmit, onGoogleSignUp, onLinkedInSignUp }: StepOneForm
   if (isMobile) {
     return (
       <div className="space-y-4">
-        <SignUpHeader />
         <CardDescription className="text-muted-foreground text-center mb-4">
           Choose your account type to get started
         </CardDescription>
@@ -82,7 +81,6 @@ const StepOneForm = ({ onSubmit, onGoogleSignUp, onLinkedInSignUp }: StepOneForm
   return (
     <Card className="md:min-w-[500px]">
       <CardHeader className="pb-2">
-        <SignUpHeader />
         <CardDescription>
           Choose your account type to get started
         </CardDescription>
