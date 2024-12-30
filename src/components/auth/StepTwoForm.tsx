@@ -145,9 +145,11 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
   const baseContent = (
     <>
       {backButton}
-      <CardDescription className="text-muted-foreground">
-        Complete your registration
-      </CardDescription>
+      {!isMobile && (
+        <CardDescription className="text-muted-foreground">
+          Complete your registration
+        </CardDescription>
+      )}
       {formContent}
       <div className="text-sm text-center text-muted-foreground">
         Already have an account?{" "}
