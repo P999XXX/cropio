@@ -20,7 +20,7 @@ const currencies = [
   { code: "EUR", name: "Euro", icon: EuroIcon },
 ];
 
-export const CurrencySwitcher = () => {
+const CurrencySwitcher = () => {
   const [selectedCurrency, setSelectedCurrency] = useState("USD");
   const { toast } = useToast();
 
@@ -96,3 +96,5 @@ export const CurrencySwitcher = () => {
     </div>
   );
 };
+
+export default CurrencySwitcher;
