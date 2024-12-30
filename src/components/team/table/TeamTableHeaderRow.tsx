@@ -24,7 +24,7 @@ export const TeamTableHeaderRow = ({ sortConfig, onSort }: TeamTableHeaderRowPro
       )}
       onClick={() => onSort(key)}
     >
-      <div className="flex items-center justify-between">
+      <div className="flex items-center gap-2 justify-between">
         <span>{label}</span>
         <div className="flex flex-col">
           <ArrowUp 
@@ -32,7 +32,7 @@ export const TeamTableHeaderRow = ({ sortConfig, onSort }: TeamTableHeaderRowPro
               "h-3 w-3 -mb-1",
               sortConfig.key === key && sortConfig.direction === "asc" 
                 ? "text-primary" 
-                : "text-primary/40 group-hover:text-primary/60"
+                : "text-primary/20 group-hover:text-primary/40"
             )} 
           />
           <ArrowDown 
@@ -40,7 +40,7 @@ export const TeamTableHeaderRow = ({ sortConfig, onSort }: TeamTableHeaderRowPro
               "h-3 w-3",
               sortConfig.key === key && sortConfig.direction === "desc" 
                 ? "text-primary" 
-                : "text-primary/40 group-hover:text-primary/60"
+                : "text-primary/20 group-hover:text-primary/40"
             )} 
           />
         </div>

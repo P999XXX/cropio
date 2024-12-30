@@ -42,8 +42,8 @@ export const MobileSortDropdown = ({ sortConfig, onSort }: MobileSortDropdownPro
         >
           <span>Sort by: {getSortLabel(sortConfig.key)}</span>
           <div className="flex flex-col ml-2">
-            <ArrowUp className="h-3 w-3 -mb-1 text-primary/40" />
-            <ArrowDown className="h-3 w-3 text-primary/40" />
+            <ArrowUp className="h-3 w-3 -mb-1 text-primary/20" />
+            <ArrowDown className="h-3 w-3 text-primary/20" />
           </div>
         </Button>
       </PopoverTrigger>
@@ -68,7 +68,7 @@ export const MobileSortDropdown = ({ sortConfig, onSort }: MobileSortDropdownPro
                     "h-3 w-3 -mb-1",
                     sortConfig.key === key && sortConfig.direction === "asc" 
                       ? "text-primary" 
-                      : "text-primary/40 group-hover:text-primary/60"
+                      : "text-primary/20 group-hover:text-primary/40"
                   )} 
                 />
                 <ArrowDown 
@@ -76,7 +76,7 @@ export const MobileSortDropdown = ({ sortConfig, onSort }: MobileSortDropdownPro
                     "h-3 w-3",
                     sortConfig.key === key && sortConfig.direction === "desc" 
                       ? "text-primary" 
-                      : "text-primary/40 group-hover:text-primary/60"
+                      : "text-primary/20 group-hover:text-primary/40"
                   )} 
                 />
               </div>
