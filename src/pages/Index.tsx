@@ -1,27 +1,28 @@
-import { ArrowRight, Shield, Globe, TrendingUp } from "lucide-react";
 import { Link } from "react-router-dom";
-import Navbar from "@/components/Navbar";
+import { Button } from "@/components/ui/button";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import Navbar from "@/components/Navbar";
+import { Leaf, ShieldCheck, Users } from "lucide-react";
+
+const features = [
+  {
+    title: "Quality Assurance",
+    description: "Every product is verified and quality-checked by our expert team.",
+    icon: ShieldCheck,
+  },
+  {
+    title: "Global Network",
+    description: "Connect with verified buyers and sellers from around the world.",
+    icon: Users,
+  },
+  {
+    title: "Sustainable Trade",
+    description: "Supporting environmentally conscious agricultural practices.",
+    icon: Leaf,
+  },
+];
 
 const Index = () => {
-  const features = [
-    {
-      icon: Shield,
-      title: "Verified Suppliers",
-      description: "All suppliers are thoroughly vetted and certified",
-    },
-    {
-      icon: Globe,
-      title: "Global Network",
-      description: "Connect with suppliers and buyers worldwide",
-    },
-    {
-      icon: TrendingUp,
-      title: "Market Insights",
-      description: "Real-time price trends and market analysis",
-    },
-  ];
-
   return (
     <SidebarProvider>
       <div className="min-h-screen bg-background">
@@ -35,18 +36,19 @@ const Index = () => {
                   <span className="block text-primary">Agricultural Products</span>
                 </h1>
                 <p className="mt-3 max-w-md mx-auto text-base text-muted-foreground sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
-                  Connect directly with verified suppliers and buyers worldwide. 
-                  Streamline your agricultural trade with our secure platform.
+                  Connect directly with verified buyers and sellers worldwide.
+                  Trade agricultural products efficiently and securely.
                 </p>
                 <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
                   <div className="rounded-md shadow">
-                    <Link
-                      to="/signup"
-                      className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90 md:py-4 md:text-lg md:px-10"
-                    >
-                      Get Started
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </Link>
+                    <Button asChild className="w-full sm:w-auto" size="lg">
+                      <Link to="/signup">Get Started</Link>
+                    </Button>
+                  </div>
+                  <div className="mt-3 sm:mt-0 sm:ml-3">
+                    <Button asChild variant="outline" className="w-full sm:w-auto" size="lg">
+                      <Link to="/components">Learn More</Link>
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -60,7 +62,7 @@ const Index = () => {
                   Why Choose Cropio?
                 </h2>
                 <p className="mt-4 max-w-2xl text-xl text-muted-foreground lg:mx-auto">
-                  Our platform provides everything you need to succeed in agricultural trade
+                  We provide a secure and efficient platform for agricultural trade.
                 </p>
               </div>
 
@@ -74,10 +76,12 @@ const Index = () => {
                             <feature.icon className="h-6 w-6 text-white" />
                           </div>
                         </div>
-                        <div className="mt-8">
-                          <h3 className="text-lg font-medium text-foreground">{feature.title}</h3>
-                          <p className="mt-2 text-base text-muted-foreground">{feature.description}</p>
-                        </div>
+                        <h3 className="mt-4 text-lg font-medium text-foreground">
+                          {feature.title}
+                        </h3>
+                        <p className="mt-2 text-base text-muted-foreground">
+                          {feature.description}
+                        </p>
                       </div>
                     </div>
                   ))}

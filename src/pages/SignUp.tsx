@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -6,27 +5,56 @@ import StepOneForm from "@/components/auth/StepOneForm";
 import StepTwoForm, { StepTwoFormData } from "@/components/auth/StepTwoForm";
 import ThankYouDialog from "@/components/auth/ThankYouDialog";
 import SignUpHeader from "@/components/auth/SignUpHeader";
+import { useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import Navbar from "@/components/Navbar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 
 const SignUp = () => {
   const [currentStep, setCurrentStep] = useState(1);
-  const [selectedRole, setSelectedRole] = useState<"buyer" | "supplier">();
-  const [isLoading, setIsLoading] = useState(false);
   const [isThankYouOpen, setIsThankYouOpen] = useState(false);
-  const [userEmail, setUserEmail] = useState("");
+  const [formData, setFormData] = useState<StepTwoFormData>({
+    email: "",
+    password: "",
+    confirmPassword: "",
+    firstName: "",
+    lastName: "",
+    companyName: "",
+    role: "buyer",
+    phoneNumber: "",
+    agreement: false,
+  });
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
-  const handleRoleSelect = (role: "buyer" | "supplier") => {
-    setSelectedRole(role);
+  const handleStepOneSubmit = (data: Partial<StepTwoFormData>) => {
+    setFormData((prev) => ({ ...prev, ...data }));
     setCurrentStep(2);
   };
 
-  const handleBack = () => {
-    setCurrentStep(1);
-    setSelectedRole(undefined);
+  const handleStepTwoSubmit = async (data: StepTwoFormData) => {
+    try {
+      const finalData = { ...formData, ...data };
+      const { error } = await supabase.auth.signUp({
+        email: finalData.email,
+        password: finalData.password,
+        options: {
+          data: {
+            first_name: finalData.firstName,
+            last_name: finalData.lastName,
+            company_name: finalData.companyName,
+            role: finalData.role,
+            phone: finalData.phoneNumber,
+          },
+        },
+      });
+
+      if (error) throw error;
+
+      setIsThankYouOpen(true);
+    } catch (error: any) {
+      toast.error(error.message || "Failed to sign up");
+    }
   };
 
   const handleGoogleSignUp = async () => {
@@ -59,35 +87,6 @@ const SignUp = () => {
     }
   };
 
-  const handleSignUp = async (values: StepTwoFormData) => {
-    if (!selectedRole) return;
-
-    setIsLoading(true);
-    try {
-      const { error } = await supabase.auth.signUp({
-        email: values.email,
-        password: values.password,
-        options: {
-          data: {
-            first_name: values.firstName,
-            last_name: values.lastName,
-            company_name: values.companyName,
-            role: selectedRole,
-          },
-        },
-      });
-
-      if (error) throw error;
-
-      setUserEmail(values.email);
-      setIsThankYouOpen(true);
-    } catch (error: any) {
-      toast.error(error.message || "Failed to sign up");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   return (
     <SidebarProvider>
       <div className="min-h-screen bg-background">
@@ -99,18 +98,20 @@ const SignUp = () => {
                 step={currentStep}
                 isMobile={isMobile}
               />
-
               {currentStep === 1 ? (
                 <StepOneForm
-                  onSubmit={handleRoleSelect}
+                  onSubmit={handleStepOneSubmit}
                   onGoogleSignUp={handleGoogleSignUp}
                   onLinkedInSignUp={handleLinkedInSignUp}
+                  defaultValues={formData}
+                  isMobile={isMobile}
                 />
               ) : (
                 <StepTwoForm
-                  onSubmit={handleSignUp}
-                  isLoading={isLoading}
-                  onBack={handleBack}
+                  onSubmit={handleStepTwoSubmit}
+                  onBack={() => setCurrentStep(1)}
+                  defaultValues={formData}
+                  isMobile={isMobile}
                 />
               )}
             </div>
@@ -120,7 +121,7 @@ const SignUp = () => {
         <ThankYouDialog
           open={isThankYouOpen}
           onOpenChange={setIsThankYouOpen}
-          userEmail={userEmail}
+          userEmail={formData.email}
         />
       </div>
     </SidebarProvider>

@@ -91,9 +91,9 @@ const SignIn = () => {
     <SidebarProvider>
       <div className="min-h-screen bg-background">
         <Navbar />
-        <main className="flex min-h-[calc(100vh-64px)] w-full">
-          <div className="flex-1 flex items-center justify-center w-full">
-            <div className="w-full max-w-md px-4">
+        <main className="flex min-h-[calc(100vh-64px)]">
+          <div className="flex-1 flex items-center justify-center py-8 px-4 w-full">
+            <div className="w-full max-w-md">
               {isMobile ? (
                 <SignInMobile
                   onSubmit={handleSignIn}

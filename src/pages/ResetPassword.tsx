@@ -1,19 +1,19 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import ResetPasswordForm from "@/components/auth/ResetPasswordForm";
 import ResetPasswordHeader from "@/components/auth/ResetPasswordHeader";
+import ResetPasswordThankYouDialog from "@/components/auth/ResetPasswordThankYouDialog";
 import { useIsMobile } from "@/hooks/use-mobile";
 import Navbar from "@/components/Navbar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 
 const ResetPassword = () => {
-  const [firstName, setFirstName] = useState<string>("");
-  const navigate = useNavigate();
+  const [firstName, setFirstName] = useState("");
+  const [isThankYouOpen, setIsThankYouOpen] = useState(false);
   const isMobile = useIsMobile();
 
   useEffect(() => {
-    const getUser = async () => {
+    const fetchUserProfile = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         const { data: profile } = await supabase
@@ -28,7 +28,7 @@ const ResetPassword = () => {
       }
     };
 
-    getUser();
+    fetchUserProfile();
   }, []);
 
   return (
@@ -43,6 +43,11 @@ const ResetPassword = () => {
             </div>
           </div>
         </main>
+
+        <ResetPasswordThankYouDialog
+          open={isThankYouOpen}
+          onOpenChange={setIsThankYouOpen}
+        />
       </div>
     </SidebarProvider>
   );
