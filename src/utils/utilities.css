@@ -12,10 +12,10 @@
   }
 
   .auth-input {
-    @apply text-sm;
+    @apply text-sm w-full;
   }
 
   .auth-button {
-    @apply text-sm w-full;
+    @apply text-sm w-full h-9;
   }
 }

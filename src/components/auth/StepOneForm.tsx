@@ -97,7 +97,7 @@ const StepOneForm = ({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
         <FormField
           control={form.control}
           name="role"
@@ -107,7 +107,7 @@ const StepOneForm = ({
                 <RadioGroup
                   onValueChange={field.onChange}
                   defaultValue={field.value}
-                  className="grid grid-cols-1 gap-2"
+                  className="grid grid-cols-1 gap-4"
                 >
                   <RadioOption value="supplier" imageSrc={SUPPLIER_IMAGE} label="Supplier" />
                   <RadioOption value="buyer" imageSrc={BUYER_IMAGE} label="Buyer" />
@@ -125,7 +125,7 @@ const StepOneForm = ({
           )}
         />
 
-        <Button type="submit" className="auth-button">
+        <Button type="submit" className="auth-button w-full">
           Continue
         </Button>
 
