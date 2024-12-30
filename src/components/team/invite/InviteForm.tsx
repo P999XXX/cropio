@@ -89,23 +89,23 @@ export const InviteForm = ({ onSubmit, isLoading, onCancel }: InviteFormProps) =
           )}
         />
 
-        <div className="flex flex-col gap-3 mt-4 sm:flex-row sm:justify-end">
-          <Button
-            type="submit"
-            disabled={isLoading}
-            variant="primary"
-            className="order-1 sm:order-2 w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90"
-          >
-            {isLoading ? "Sending..." : "Send Invitation"}
-          </Button>
+        <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-4">
           <Button
             type="button"
             onClick={onCancel}
             disabled={isLoading}
             variant="secondary"
-            className="order-2 sm:order-1 w-full sm:w-auto bg-secondary text-secondary-foreground hover:bg-secondary/80"
+            className="w-full sm:w-auto bg-secondary text-secondary-foreground hover:bg-secondary/80"
           >
             Cancel
+          </Button>
+          <Button
+            type="submit"
+            disabled={isLoading}
+            variant="primary"
+            className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90"
+          >
+            {isLoading ? "Sending..." : "Send Invitation"}
           </Button>
         </div>
       </form>
