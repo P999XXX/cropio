@@ -2,7 +2,6 @@ import { TableHead, TableRow } from "@/components/ui/table";
 import { TeamMember } from "@/types/team";
 import { cn } from "@/lib/utils";
 import { ArrowDown, ArrowUp } from "lucide-react";
-import { ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 
 interface TeamTableHeaderRowProps {
   sortConfig: {
@@ -10,10 +9,9 @@ interface TeamTableHeaderRowProps {
     direction: "asc" | "desc";
   };
   onSort: (key: keyof TeamMember) => void;
-  sizes: number[];
 }
 
-export const TeamTableHeaderRow = ({ sortConfig, onSort, sizes }: TeamTableHeaderRowProps) => {
+export const TeamTableHeaderRow = ({ sortConfig, onSort }: TeamTableHeaderRowProps) => {
   const renderTableHeader = (
     label: string,
     key: keyof TeamMember,
@@ -43,26 +41,12 @@ export const TeamTableHeaderRow = ({ sortConfig, onSort, sizes }: TeamTableHeade
 
   return (
     <TableRow>
-      <ResizablePanelGroup direction="horizontal" className="w-full">
-        <ResizablePanel defaultSize={sizes[0]} minSize={20}>
-          {renderTableHeader("Member", "email")}
-        </ResizablePanel>
-        <ResizablePanel defaultSize={sizes[1]} minSize={10}>
-          {renderTableHeader("Role", "role")}
-        </ResizablePanel>
-        <ResizablePanel defaultSize={sizes[2]} minSize={10}>
-          {renderTableHeader("Status", "status")}
-        </ResizablePanel>
-        <ResizablePanel defaultSize={sizes[3]} minSize={10}>
-          {renderTableHeader("Joined", "created_at")}
-        </ResizablePanel>
-        <ResizablePanel defaultSize={sizes[4]} minSize={10}>
-          {renderTableHeader("Invited By", "invited_by")}
-        </ResizablePanel>
-        <ResizablePanel defaultSize={sizes[5]} minSize={5}>
-          <TableHead className="w-[50px] py-3 bg-primary/10"></TableHead>
-        </ResizablePanel>
-      </ResizablePanelGroup>
+      {renderTableHeader("Member", "email")}
+      {renderTableHeader("Role", "role")}
+      {renderTableHeader("Status", "status")}
+      {renderTableHeader("Joined", "created_at")}
+      {renderTableHeader("Invited By", "invited_by")}
+      <TableHead className="w-[50px] py-3 bg-primary/10"></TableHead>
     </TableRow>
   );
 };
