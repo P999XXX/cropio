@@ -50,11 +50,12 @@ export const InviteForm = ({ onSubmit, isLoading, onCancel }: InviteFormProps) =
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel className="text-foreground text-sm font-medium">Email</FormLabel>
               <FormControl>
                 <Input
                   placeholder="Enter email address"
                   type="email"
+                  className="h-10 px-3 py-2 text-sm rounded-md border border-input bg-background"
                   {...field}
                 />
               </FormControl>
@@ -68,13 +69,13 @@ export const InviteForm = ({ onSubmit, isLoading, onCancel }: InviteFormProps) =
           name="role"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Role</FormLabel>
+              <FormLabel className="text-foreground text-sm font-medium">Role</FormLabel>
               <Select
                 onValueChange={field.onChange}
                 defaultValue={field.value}
               >
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger className="h-10 px-3 py-2 text-sm rounded-md border border-input bg-background">
                     <SelectValue placeholder="Select a role" />
                   </SelectTrigger>
                 </FormControl>
@@ -89,16 +90,23 @@ export const InviteForm = ({ onSubmit, isLoading, onCancel }: InviteFormProps) =
           )}
         />
 
-        <div className="flex justify-end gap-3 pt-4">
+        <div className="flex flex-col gap-3 mt-4 sm:flex-row sm:justify-end">
+          <Button
+            type="submit"
+            disabled={isLoading}
+            variant="primary"
+            className="order-1 sm:order-2 w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90"
+          >
+            {isLoading ? "Sending..." : "Send Invitation"}
+          </Button>
           <Button
             type="button"
-            variant="outline"
             onClick={onCancel}
+            disabled={isLoading}
+            variant="secondary"
+            className="order-2 sm:order-1 w-full sm:w-auto bg-secondary text-secondary-foreground hover:bg-secondary/80"
           >
             Cancel
-          </Button>
-          <Button type="submit" disabled={isLoading}>
-            {isLoading ? "Inviting..." : "Send Invitation"}
           </Button>
         </div>
       </form>
