@@ -58,7 +58,7 @@ export const InviteForm = ({ onSubmit, isLoading, onCancel }: InviteFormProps) =
                 <FormControl>
                   <Input
                     placeholder="Enter first name"
-                    className="h-10 px-3 py-2 text-sm rounded-md border border-input bg-background"
+                    className="dialog-input"
                     {...field}
                   />
                 </FormControl>
@@ -76,7 +76,7 @@ export const InviteForm = ({ onSubmit, isLoading, onCancel }: InviteFormProps) =
                 <FormControl>
                   <Input
                     placeholder="Enter last name"
-                    className="h-10 px-3 py-2 text-sm rounded-md border border-input bg-background"
+                    className="dialog-input"
                     {...field}
                   />
                 </FormControl>
@@ -96,7 +96,7 @@ export const InviteForm = ({ onSubmit, isLoading, onCancel }: InviteFormProps) =
                 <Input
                   placeholder="Enter email address"
                   type="email"
-                  className="h-10 px-3 py-2 text-sm rounded-md border border-input bg-background"
+                  className="dialog-input"
                   {...field}
                 />
               </FormControl>
@@ -116,7 +116,7 @@ export const InviteForm = ({ onSubmit, isLoading, onCancel }: InviteFormProps) =
                 defaultValue={field.value}
               >
                 <FormControl>
-                  <SelectTrigger className="h-10 px-3 py-2 text-sm rounded-md border border-input bg-background">
+                  <SelectTrigger className="dialog-input">
                     <SelectValue placeholder="Select a role" />
                   </SelectTrigger>
                 </FormControl>
@@ -136,16 +136,14 @@ export const InviteForm = ({ onSubmit, isLoading, onCancel }: InviteFormProps) =
             type="button"
             onClick={onCancel}
             disabled={isLoading}
-            variant="secondary"
-            className="order-2 sm:order-1 w-full sm:w-auto bg-secondary text-secondary-foreground hover:bg-secondary/80"
+            className="dialog-button-secondary"
           >
             Cancel
           </Button>
           <Button
             type="submit"
             disabled={isLoading}
-            variant="primary"
-            className="order-1 sm:order-2 w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90"
+            className="dialog-button-primary"
           >
             {isLoading ? "Sending..." : "Send Invitation"}
           </Button>

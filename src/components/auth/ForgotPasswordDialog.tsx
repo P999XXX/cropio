@@ -4,7 +4,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -45,7 +44,7 @@ const ForgotPasswordDialog = ({
               placeholder="Enter your email"
               value={email}
               onChange={(e) => onEmailChange(e.target.value)}
-              className="input-field"
+              className="dialog-input"
             />
           </div>
         </div>
@@ -53,7 +52,6 @@ const ForgotPasswordDialog = ({
           <Button 
             onClick={onSubmit}
             disabled={isResetting}
-            variant="primary"
             className="dialog-button-primary"
           >
             {isResetting ? "Sending..." : "Send Instructions"}

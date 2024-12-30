@@ -4,9 +4,9 @@ import { supabase } from "@/integrations/supabase/client";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { InviteForm, InviteFormData } from "./InviteForm";
@@ -72,10 +72,10 @@ export const InviteMemberDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px] p-6 gap-6">
+      <DialogContent className="dialog-content">
         <DialogHeader>
-          <DialogTitle className="text-xl font-semibold">Invite Team Member</DialogTitle>
-          <DialogDescription className="text-sm text-muted-foreground">
+          <DialogTitle className="dialog-title">Invite Team Member</DialogTitle>
+          <DialogDescription className="dialog-description">
             Send an invitation to join your team. They'll receive an email with
             instructions.
           </DialogDescription>
