@@ -5,13 +5,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { useLocation, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useSidebar } from "@/components/ui/sidebar";
-import { Logo } from "./navbar/Logo";
-import { NavActions } from "./navbar/NavActions";
-import { UserMenu } from "./navbar/UserMenu";
-import { MobileMenuHeader } from "./navbar/MobileMenuHeader";
-import { CartButton } from "./navbar/CartButton";
-import { DashboardSidebarTrigger } from "./navbar/DashboardSidebarTrigger";
-import { MobileMenuContent } from "./navbar/MobileMenuContent";
+import { Logo } from "./Logo";
+import { NavActions } from "./NavActions";
+import { UserMenu } from "./UserMenu";
+import { MobileMenuHeader } from "./MobileMenuHeader";
+import { CartButton } from "./CartButton";
+import { DashboardSidebarTrigger } from "./DashboardSidebarTrigger";
+import { MobileMenuContent } from "./MobileMenuContent";
 
 const Navbar = () => {
   const [isDark, setIsDark] = useState(false);
