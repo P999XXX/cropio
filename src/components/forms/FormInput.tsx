@@ -14,15 +14,7 @@ interface FormInputProps {
   className?: string;
 }
 
-const FormInput = ({ 
-  form, 
-  name, 
-  label, 
-  placeholder, 
-  type = "text", 
-  description, 
-  className,
-}: FormInputProps) => {
+const FormInput = ({ form, name, label, placeholder, type = "text", description, className }: FormInputProps) => {
   return (
     <FormField
       control={form.control}
@@ -31,12 +23,7 @@ const FormInput = ({
         <FormItem className="space-y-1">
           <FormLabel>{label}</FormLabel>
           <FormControl>
-            <Input 
-              placeholder={placeholder} 
-              type={type} 
-              className={className}
-              {...field} 
-            />
+            <Input placeholder={placeholder} type={type} className={className} {...field} />
           </FormControl>
           <FormErrorMessage message={form.formState.errors[name]?.message as string} />
         </FormItem>

@@ -9,23 +9,18 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
+import { StepTwoFormData } from "./StepTwoForm";
 import FormErrorMessage from "@/components/forms/FormErrorMessage";
 
 interface PasswordInputProps {
-  form: UseFormReturn<any>;
-  name: string;
+  form: UseFormReturn<StepTwoFormData>;
+  name: "password" | "confirmPassword";
   label: string;
   description?: string;
   className?: string;
 }
 
-const PasswordInput = ({ 
-  form, 
-  name, 
-  label, 
-  description, 
-  className,
-}: PasswordInputProps) => {
+const PasswordInput = ({ form, name, label, description, className }: PasswordInputProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -41,7 +36,7 @@ const PasswordInput = ({
           <FormControl>
             <div className="relative">
               <Input
-                placeholder="Enter your password"
+                placeholder={`${name === "password" ? "Enter" : "Confirm"} your password`}
                 type={showPassword ? "text" : "password"}
                 className={className}
                 {...field}
@@ -59,9 +54,7 @@ const PasswordInput = ({
               </button>
             </div>
           </FormControl>
-          <FormErrorMessage 
-            message={form.formState.errors[name]?.message as string | undefined} 
-          />
+          <FormErrorMessage message={form.formState.errors[name]?.message} />
         </FormItem>
       )}
     />

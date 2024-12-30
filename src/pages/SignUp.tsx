@@ -7,6 +7,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
 } from "@/components/ui/card";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -105,16 +106,17 @@ const SignUp = () => {
     <SidebarProvider>
       <div className="min-h-screen bg-background">
         <Navbar />
-        <div className="flex min-h-[calc(100vh-64px)] items-center justify-center">
-          <div className="w-[500px] flex flex-col items-center">
-            <div className="space-y-2 text-center mb-6 w-full">
+        <div className="flex min-h-[calc(100vh-64px)] items-center justify-center p-4">
+          <div className="w-full max-w-md">
+            <div className={`space-y-2 ${isMobile ? 'text-left' : 'text-center'} mb-6`}>
               <h1 className="text-2xl md:text-3xl font-bold">Register for Free!</h1>
               <p className="text-[14px] text-muted-foreground">
                 {currentStep === 1 ? "Choose Your Role" : "Complete Your Profile"}
               </p>
             </div>
+
             {isMobile ? (
-              <div className="w-full">
+              <div>
                 {currentStep === 1 ? (
                   <StepOneForm
                     onSubmit={handleStepOne}
@@ -136,7 +138,7 @@ const SignUp = () => {
                 </div>
               </div>
             ) : (
-              <Card className="w-full">
+              <Card>
                 <CardHeader className="pb-2">
                   <CardDescription>
                     {currentStep === 1
@@ -158,13 +160,15 @@ const SignUp = () => {
                       onBack={handleBack}
                     />
                   )}
-                  <div className="text-sm text-center w-full text-muted-foreground mt-6">
+                </CardContent>
+                <CardFooter className="flex flex-col space-y-4">
+                  <div className="text-sm text-center w-full text-muted-foreground">
                     Already have an account?{" "}
                     <a href="/signin" className="text-primary hover:underline font-medium">
                       Sign in
                     </a>
                   </div>
-                </CardContent>
+                </CardFooter>
               </Card>
             )}
           </div>
