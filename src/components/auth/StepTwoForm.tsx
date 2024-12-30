@@ -7,6 +7,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader } from "@/co
 import FormInput from "@/components/forms/FormInput";
 import PasswordInput from "./PasswordInput";
 import { ArrowLeft } from "lucide-react";
+import PhoneInput from "./PhoneInput";
+import AgreementCheckbox from "./AgreementCheckbox";
 
 const stepTwoSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -15,6 +17,14 @@ const stepTwoSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(8, "Password must be at least 8 characters"),
   confirmPassword: z.string(),
+  phoneNumber: z.string().min(1, "Phone number is required"),
+  countryCode: z.string().min(1, "Country code is required"),
+  acceptTerms: z.boolean().refine((val) => val === true, {
+    message: "You must accept the terms and conditions",
+  }),
+  acceptPrivacy: z.boolean().refine((val) => val === true, {
+    message: "You must accept the privacy policy",
+  }),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match",
   path: ["confirmPassword"],
@@ -38,6 +48,10 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
       email: "",
       password: "",
       confirmPassword: "",
+      phoneNumber: "",
+      countryCode: "",
+      acceptTerms: false,
+      acceptPrivacy: false,
     },
   });
 
@@ -89,6 +103,8 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
               placeholder="Enter your email"
             />
 
+            <PhoneInput form={form} />
+
             <PasswordInput
               form={form}
               name="password"
@@ -101,6 +117,21 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
               name="confirmPassword"
               label="Confirm Password"
             />
+
+            <div className="space-y-2">
+              <AgreementCheckbox
+                form={form}
+                name="acceptTerms"
+                linkText="Terms and Conditions"
+                linkHref="/terms"
+              />
+              <AgreementCheckbox
+                form={form}
+                name="acceptPrivacy"
+                linkText="Privacy Policy"
+                linkHref="/privacy"
+              />
+            </div>
 
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? "Creating account..." : "Create account"}
