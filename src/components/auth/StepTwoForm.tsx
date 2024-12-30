@@ -142,26 +142,32 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
     </Button>
   );
 
+  const content = (
+    <>
+      {backButton}
+      <CardDescription className="text-muted-foreground">
+        Complete your registration
+      </CardDescription>
+      {formContent}
+      <div className="text-sm text-center text-muted-foreground">
+        Already have an account?{" "}
+        <a href="/signin" className="text-primary hover:underline font-medium">
+          Sign in
+        </a>
+      </div>
+    </>
+  );
+
   if (isMobile) {
     return (
-      <div className="space-y-4 bg-background">
-        {backButton}
-        <CardDescription className="text-muted-foreground">
-          Complete your registration
-        </CardDescription>
-        {formContent}
-        <div className="text-sm text-center text-muted-foreground">
-          Already have an account?{" "}
-          <a href="/signin" className="text-primary hover:underline font-medium">
-            Sign in
-          </a>
-        </div>
+      <div className="space-y-4 bg-background step-two-form-mobile">
+        {content}
       </div>
     );
   }
 
   return (
-    <Card className="md:min-w-[500px] bg-background">
+    <Card className="md:min-w-[500px] bg-background step-two-form-desktop">
       <CardHeader className="pb-2">
         {backButton}
         <CardDescription>
