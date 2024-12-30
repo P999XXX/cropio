@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader } from "@/components/ui/card";
+import { CardDescription } from "@/components/ui/card";
 import FormInput from "@/components/forms/FormInput";
 import PasswordInput from "./PasswordInput";
 import { ArrowLeft } from "lucide-react";
@@ -158,11 +158,11 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
     </>
   );
 
-  const commonStyles = "p-6 rounded-lg step-two-form bg-background";
+  const commonStyles = "rounded-lg step-two-form bg-background space-y-4";
 
   if (isMobile) {
     return (
-      <div className={`${commonStyles} step-two-form-mobile space-y-4`}>
+      <div className={`${commonStyles} step-two-form-mobile`}>
         {baseContent}
       </div>
     );
