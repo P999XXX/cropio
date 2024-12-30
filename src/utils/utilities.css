@@ -18,4 +18,20 @@
   .auth-button {
     @apply text-sm w-full;
   }
+
+  .auth-page {
+    @apply min-h-screen bg-background;
+  }
+
+  .auth-container {
+    @apply flex min-h-[calc(100vh-64px)] items-center justify-center p-4;
+  }
+
+  .auth-content {
+    @apply w-full max-w-md space-y-6;
+  }
+
+  .auth-header {
+    @apply space-y-2;
+  }
 }
