@@ -120,8 +120,12 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
           />
         </div>
 
-        <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? "Creating account..." : "Create account"}
+        <Button 
+          type="submit" 
+          className="w-full bg-primary text-primary-foreground hover:bg-primary/90" 
+          disabled={isLoading}
+        >
+          {isLoading ? "Creating account..." : "Create Account"}
         </Button>
       </form>
     </Form>
@@ -140,7 +144,7 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
 
   if (isMobile) {
     return (
-      <div className="space-y-4">
+      <div className="space-y-4 bg-background">
         {backButton}
         <CardDescription className="text-muted-foreground">
           Complete your registration
@@ -157,7 +161,7 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
   }
 
   return (
-    <Card className="md:min-w-[500px]">
+    <Card className="md:min-w-[500px] bg-background">
       <CardHeader className="pb-2">
         {backButton}
         <CardDescription>
