@@ -32,21 +32,21 @@ export const TablePagination = ({
         for (let i = 1; i <= 4; i++) {
           pages.push(i);
         }
-        pages.push(-1); // Ellipsis
+        pages.push(-1);
         pages.push(totalPages);
       } else if (currentPage >= totalPages - 2) {
         pages.push(1);
-        pages.push(-1); // Ellipsis
+        pages.push(-1);
         for (let i = totalPages - 3; i <= totalPages; i++) {
           pages.push(i);
         }
       } else {
         pages.push(1);
-        pages.push(-1); // Ellipsis
+        pages.push(-1);
         for (let i = currentPage - 1; i <= currentPage + 1; i++) {
           pages.push(i);
         }
-        pages.push(-1); // Ellipsis
+        pages.push(-1);
         pages.push(totalPages);
       }
     }
@@ -61,7 +61,7 @@ export const TablePagination = ({
             onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
             className={`${
               currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"
-            } text-[0.775rem] bg-secondary hover:bg-secondary/80 text-secondary-foreground`}
+            } text-[0.775rem] bg-background border-primary/20 hover:bg-primary/5 hover:border-primary/30 text-foreground`}
           />
         </PaginationItem>
 
@@ -77,8 +77,8 @@ export const TablePagination = ({
                 onClick={() => onPageChange(pageNum)}
                 className={`cursor-pointer text-[0.775rem] ${
                   pageNum === currentPage
-                    ? "bg-secondary/90 text-secondary-foreground"
-                    : "bg-secondary/50 text-secondary-foreground hover:bg-secondary/80"
+                    ? "bg-primary/10 border-primary/30 text-foreground"
+                    : "bg-background border-primary/20 text-foreground hover:bg-primary/5 hover:border-primary/30"
                 }`}
               >
                 {pageNum}
@@ -92,7 +92,7 @@ export const TablePagination = ({
             onClick={() => currentPage < totalPages && onPageChange(currentPage + 1)}
             className={`${
               currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"
-            } text-[0.775rem] bg-secondary hover:bg-secondary/80 text-secondary-foreground`}
+            } text-[0.775rem] bg-background border-primary/20 hover:bg-primary/5 hover:border-primary/30 text-foreground`}
           />
         </PaginationItem>
       </PaginationContent>

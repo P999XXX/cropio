@@ -46,7 +46,7 @@ export const TeamTableHeader = ({
           placeholder="Search by name or email..."
           value={searchTerm}
           onChange={(e) => onSearchChange(e.target.value)}
-          className="pl-9 bg-background h-9 border-secondary hover:border-secondary/80 focus:border-secondary text-foreground [&::placeholder]:text-muted-foreground [&::placeholder]:text-[0.775rem] rounded-md"
+          className="pl-9 bg-background h-9 border-primary/20 hover:border-primary/30 focus:border-primary text-foreground [&::placeholder]:text-muted-foreground [&::placeholder]:text-[0.775rem] rounded-md"
         />
       </div>
       <div className="flex gap-2 items-center">
@@ -55,7 +55,7 @@ export const TeamTableHeader = ({
             <Button 
               variant="outline" 
               size="sm"
-              className="filter-dropdown-button w-full lg:w-[180px] justify-between text-[0.775rem] bg-background border-secondary hover:bg-secondary/10 hover:text-foreground"
+              className="filter-dropdown-button w-full lg:w-[180px] justify-between text-[0.775rem] bg-background border-primary/20 hover:border-primary/30 hover:bg-primary/5 hover:text-foreground"
             >
               <div className="flex items-center gap-2">
                 <Filter className="h-4 w-4 text-muted-foreground" />
@@ -69,7 +69,7 @@ export const TeamTableHeader = ({
                 <Button
                   key={value}
                   variant="ghost"
-                  className="w-full justify-start text-[0.775rem] h-9 hover:bg-[#221F26] hover:text-foreground"
+                  className="w-full justify-start text-[0.775rem] h-9 hover:bg-primary/5 hover:text-foreground"
                   onClick={() => onRoleFilterChange(value)}
                 >
                   {label}

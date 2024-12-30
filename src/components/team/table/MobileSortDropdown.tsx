@@ -37,7 +37,7 @@ export const MobileSortDropdown = ({ sortConfig, onSort }: MobileSortDropdownPro
         <Button 
           variant="outline" 
           size="sm"
-          className="mobile-sort-dropdown w-full flex items-center justify-between text-[0.775rem] bg-background border-secondary hover:bg-secondary/10 hover:text-foreground"
+          className="mobile-sort-dropdown w-full flex items-center justify-between text-[0.775rem] bg-background border-primary/20 hover:border-primary/30 hover:bg-primary/5 hover:text-foreground"
         >
           <span>Sort by: {getSortLabel(sortConfig.key)}</span>
           <ArrowUpDown className="h-4 w-4 ml-2" />
@@ -54,7 +54,7 @@ export const MobileSortDropdown = ({ sortConfig, onSort }: MobileSortDropdownPro
             <Button
               key={key}
               variant="ghost"
-              className="w-full justify-start text-[0.775rem] h-9 hover:bg-[#221F26] hover:text-foreground"
+              className="w-full justify-start text-[0.775rem] h-9 hover:bg-primary/5 hover:text-foreground"
               onClick={() => onSort(key as keyof TeamMember)}
             >
               {label} {sortConfig.key === key && (sortConfig.direction === "asc" ? "↑" : "↓")}
