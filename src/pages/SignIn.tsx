@@ -9,6 +9,7 @@ import PasswordInput from "@/components/auth/PasswordInput";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Form } from "@/components/ui/form";
 
 const signInSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -20,6 +21,7 @@ type SignInFormData = z.infer<typeof signInSchema>;
 const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  
   const form = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -57,23 +59,29 @@ const SignIn = () => {
                 Sign in to your account
               </p>
             </div>
-            <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4 w-full">
-              <FormInput
-                form={form}
-                name="email"
-                label="Email"
-                type="email"
-                placeholder="Enter your email"
-              />
-              <PasswordInput
-                form={form}
-                name="password"
-                label="Password"
-              />
-              <button type="submit" className="auth-button w-full" disabled={isLoading}>
-                {isLoading ? "Signing in..." : "Sign in"}
-              </button>
-            </form>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4 w-full">
+                <FormInput
+                  form={form}
+                  name="email"
+                  label="Email"
+                  type="email"
+                  placeholder="Enter your email"
+                />
+                <PasswordInput
+                  form={form}
+                  name="password"
+                  label="Password"
+                />
+                <button
+                  type="submit"
+                  className="auth-button w-full"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Signing in..." : "Sign in"}
+                </button>
+              </form>
+            </Form>
             <div className="text-sm text-center w-full text-muted-foreground mt-6">
               Don't have an account?{" "}
               <a href="/signup" className="text-primary hover:underline font-medium">
