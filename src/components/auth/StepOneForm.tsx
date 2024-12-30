@@ -22,7 +22,7 @@ const stepOneSchema = z.object({
 
 type StepOneFormData = z.infer<typeof stepOneSchema>;
 
-interface StepOneFormProps {
+export interface StepOneFormProps {
   onSubmit: (role: "buyer" | "supplier") => void;
   onGoogleSignUp: () => void;
   onLinkedInSignUp: () => void;
