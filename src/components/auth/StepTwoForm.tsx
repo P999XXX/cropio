@@ -16,7 +16,11 @@ const stepTwoSchema = z.object({
   lastName: z.string().min(1, "Last name is required"),
   companyName: z.string().min(1, "Company name is required"),
   email: z.string().email("Invalid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
+  password: z.string()
+    .min(8, "Password must be at least 8 characters")
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+    .regex(/[0-9]/, "Password must contain at least one number"),
   confirmPassword: z.string(),
   phoneNumber: z.string().min(1, "Phone number is required"),
   countryCode: z.string().min(1, "Country code is required"),
@@ -59,7 +63,7 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
 
   const formContent = (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid gap-4 md:grid-cols-2">
           <FormInput
             form={form}
@@ -96,7 +100,7 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
           form={form}
           name="password"
           label="Password"
-          description="Password must be at least 8 characters"
+          description="Password must be at least 8 characters and contain uppercase, lowercase, and numbers"
         />
 
         <PasswordInput
@@ -127,6 +131,13 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
         >
           {isLoading ? "Creating account..." : "Create Account"}
         </Button>
+
+        <div className="text-sm text-center text-muted-foreground pt-4">
+          Already have an account?{" "}
+          <a href="/signin" className="text-primary hover:underline font-medium">
+            Sign in
+          </a>
+        </div>
       </form>
     </Form>
   );
@@ -146,17 +157,11 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
     <>
       {backButton}
       {!isMobile && (
-        <CardDescription className="text-muted-foreground">
+        <CardDescription className="text-muted-foreground mb-8">
           Complete your registration
         </CardDescription>
       )}
       {formContent}
-      <div className="text-sm text-center text-muted-foreground">
-        Already have an account?{" "}
-        <a href="/signin" className="text-primary hover:underline font-medium">
-          Sign in
-        </a>
-      </div>
     </>
   );
 
