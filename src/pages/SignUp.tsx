@@ -105,15 +105,14 @@ const SignUp = () => {
     <SidebarProvider>
       <div className="min-h-screen bg-background">
         <Navbar />
-        <div className="flex min-h-[calc(100vh-64px)] items-center justify-center p-4">
-          <div className="w-full min-w-[500px] max-w-[800px] flex flex-col items-center px-4">
+        <div className="flex min-h-[calc(100vh-64px)] items-center justify-center">
+          <div className="w-[500px] flex flex-col items-center">
             <div className="space-y-2 text-center mb-6 w-full">
               <h1 className="text-2xl md:text-3xl font-bold">Register for Free!</h1>
               <p className="text-[14px] text-muted-foreground">
                 {currentStep === 1 ? "Choose Your Role" : "Complete Your Profile"}
               </p>
             </div>
-
             {isMobile ? (
               <div className="w-full">
                 {currentStep === 1 ? (

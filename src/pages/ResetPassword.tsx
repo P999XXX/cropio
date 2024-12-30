@@ -16,13 +16,13 @@ const ResetPassword = () => {
     <SidebarProvider>
       <div className="min-h-screen bg-background">
         <Navbar />
-        <div className="flex min-h-[calc(100vh-64px)] items-center justify-center p-4">
-          <div className="w-full min-w-[500px] max-w-[800px] flex flex-col items-center px-4">
+        <div className="flex min-h-[calc(100vh-64px)] items-center justify-center">
+          <div className="w-[500px] flex flex-col items-center">
             <ResetPasswordHeader firstName={firstName} isMobile={isMobile} />
 
             {isMobile ? (
               <div className="w-full">
-                <ResetPasswordForm />
+                <ResetPasswordForm isMobile={isMobile} />
               </div>
             ) : (
               <Card className="w-full">
@@ -32,7 +32,7 @@ const ResetPassword = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="pt-2">
-                  <ResetPasswordForm />
+                  <ResetPasswordForm isMobile={isMobile} />
                 </CardContent>
               </Card>
             )}
