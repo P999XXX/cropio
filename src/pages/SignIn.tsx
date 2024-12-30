@@ -82,8 +82,8 @@ const SignIn = () => {
     <SidebarProvider>
       <div className="min-h-screen bg-background w-full">
         <Navbar />
-        <main className="w-full container flex min-h-[calc(100vh-64px)] items-center justify-center px-4 md:px-0">
-          <div className="w-full md:w-[500px] py-16">
+        <main className="w-full container flex min-h-[calc(100vh-64px)] items-start justify-center px-4 md:px-0 mt-8">
+          <div className="w-full md:w-[500px] py-8">
             <div className="space-y-2 text-center mb-8">
               <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">
                 {firstName ? `Welcome back ${firstName}!` : "Welcome back!"}
