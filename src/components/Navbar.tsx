@@ -19,7 +19,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const isDashboard = location.pathname.startsWith('/dashboard');
-  const { state } = useSidebar();
+  const sidebarContext = useSidebar();
 
   useEffect(() => {
     const theme = localStorage.getItem("theme");
@@ -82,9 +82,9 @@ const Navbar = () => {
       <div className={`w-full ${isDashboard ? 'px-4 md:px-8' : 'px-4 sm:px-6 lg:px-8'}`}>
         <div className="flex justify-between h-header">
           <div className="flex items-center gap-3">
-            {isDashboard && (
+            {isDashboard && sidebarContext && (
               <>
-                <DashboardSidebarTrigger isExpanded={state === 'expanded'} />
+                <DashboardSidebarTrigger isExpanded={sidebarContext.state === 'expanded'} />
                 <Sheet open={isOpen} onOpenChange={setIsOpen}>
                   <SheetTrigger asChild>
                     <Button 
