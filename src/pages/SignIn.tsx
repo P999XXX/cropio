@@ -6,20 +6,34 @@ import Navbar from "@/components/Navbar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import FormInput from "@/components/forms/FormInput";
 import PasswordInput from "@/components/auth/PasswordInput";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const signInSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(1, "Password is required"),
+});
+
+type SignInFormData = z.infer<typeof signInSchema>;
 
 const SignIn = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const form = useForm<SignInFormData>({
+    resolver: zodResolver(signInSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (values: SignInFormData) => {
     setIsLoading(true);
     try {
       const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+        email: values.email,
+        password: values.password,
       });
       if (error) throw error;
       navigate("/");
@@ -43,28 +57,18 @@ const SignIn = () => {
                 Sign in to your account
               </p>
             </div>
-            <form onSubmit={handleSubmit} className="space-y-4 w-full">
+            <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4 w-full">
               <FormInput
-                form={{
-                  formState: { errors: {} },
-                  control: { register: () => ({}) },
-                }}
+                form={form}
                 name="email"
                 label="Email"
                 type="email"
                 placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
               />
               <PasswordInput
-                form={{
-                  formState: { errors: {} },
-                  control: { register: () => ({}) },
-                }}
+                form={form}
                 name="password"
                 label="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
               />
               <button type="submit" className="auth-button w-full" disabled={isLoading}>
                 {isLoading ? "Signing in..." : "Sign in"}

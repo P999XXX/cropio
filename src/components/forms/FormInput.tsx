@@ -12,8 +12,6 @@ interface FormInputProps {
   type?: string;
   description?: string;
   className?: string;
-  value?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const FormInput = ({ 
@@ -24,8 +22,6 @@ const FormInput = ({
   type = "text", 
   description, 
   className,
-  value,
-  onChange 
 }: FormInputProps) => {
   return (
     <FormField
@@ -38,9 +34,7 @@ const FormInput = ({
             <Input 
               placeholder={placeholder} 
               type={type} 
-              className={className} 
-              value={value}
-              onChange={onChange}
+              className={className}
               {...field} 
             />
           </FormControl>

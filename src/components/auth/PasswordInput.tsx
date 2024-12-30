@@ -17,8 +17,6 @@ interface PasswordInputProps {
   label: string;
   description?: string;
   className?: string;
-  value?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const PasswordInput = ({ 
@@ -27,8 +25,6 @@ const PasswordInput = ({
   label, 
   description, 
   className,
-  value,
-  onChange 
 }: PasswordInputProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -48,8 +44,6 @@ const PasswordInput = ({
                 placeholder="Enter your password"
                 type={showPassword ? "text" : "password"}
                 className={className}
-                value={value}
-                onChange={onChange}
                 {...field}
               />
               <button
@@ -65,7 +59,9 @@ const PasswordInput = ({
               </button>
             </div>
           </FormControl>
-          <FormErrorMessage message={form.formState.errors[name]?.message} />
+          <FormErrorMessage 
+            message={form.formState.errors[name]?.message as string | undefined} 
+          />
         </FormItem>
       )}
     />
