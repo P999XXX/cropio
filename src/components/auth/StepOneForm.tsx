@@ -10,9 +10,9 @@ interface StepOneFormProps {
 
 const StepOneForm = ({ onSubmit, onGoogleSignUp, onLinkedInSignUp }: StepOneFormProps) => {
   return (
-    <Card className="md:min-w-[500px]">
+    <Card className="md:min-w-[500px] bg-card">
       <CardHeader className="pb-2">
-        <CardDescription>
+        <CardDescription className="text-muted-foreground">
           Choose your account type to get started
         </CardDescription>
       </CardHeader>
@@ -21,10 +21,10 @@ const StepOneForm = ({ onSubmit, onGoogleSignUp, onLinkedInSignUp }: StepOneForm
           <Button
             variant="outline"
             onClick={() => onSubmit("buyer")}
-            className="h-24 bg-background"
+            className="h-24 bg-background border-input"
           >
             <div className="flex flex-col items-center gap-2">
-              <span className="font-semibold">I'm a Buyer</span>
+              <span className="font-semibold text-foreground">I'm a Buyer</span>
               <span className="text-sm text-muted-foreground">
                 I want to purchase products
               </span>
@@ -33,10 +33,10 @@ const StepOneForm = ({ onSubmit, onGoogleSignUp, onLinkedInSignUp }: StepOneForm
           <Button
             variant="outline"
             onClick={() => onSubmit("supplier")}
-            className="h-24 bg-background"
+            className="h-24 bg-background border-input"
           >
             <div className="flex flex-col items-center gap-2">
-              <span className="font-semibold">I'm a Supplier</span>
+              <span className="font-semibold text-foreground">I'm a Supplier</span>
               <span className="text-sm text-muted-foreground">
                 I want to sell products
               </span>
@@ -46,10 +46,10 @@ const StepOneForm = ({ onSubmit, onGoogleSignUp, onLinkedInSignUp }: StepOneForm
 
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t" />
+            <span className="w-full border-t border-border" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-muted-foreground">
+            <span className="bg-card px-2 text-muted-foreground">
               Or continue with
             </span>
           </div>
@@ -62,9 +62,9 @@ const StepOneForm = ({ onSubmit, onGoogleSignUp, onLinkedInSignUp }: StepOneForm
         />
       </CardContent>
       <CardFooter>
-        <div className="text-sm text-center w-full text-muted-foreground">
-          Already have an account?{" "}
-          <a href="/signin" className="text-primary hover:underline font-medium">
+        <div className="text-sm text-center w-full">
+          <span className="text-muted-foreground">Already have an account?</span>{" "}
+          <a href="/signin" className="text-primary hover:text-primary/90 font-medium">
             Sign in
           </a>
         </div>

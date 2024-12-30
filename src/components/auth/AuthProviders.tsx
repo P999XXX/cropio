@@ -28,9 +28,9 @@ const AuthProviders = ({
   return (
     <div className="space-y-2">
       <Button 
-        variant="secondary" 
+        variant="outline" 
         onClick={() => handleSocialSignUp(onGoogleSignUp)} 
-        className="w-full flex items-center justify-center bg-white hover:bg-gray-50 md:bg-[#F1F1F1] md:hover:bg-[#E5E5E5] dark:bg-secondary/10 dark:hover:bg-secondary/20 text-foreground"
+        className="w-full flex items-center justify-center bg-background border-input text-foreground"
       >
         <div className="flex items-center">
           <GoogleIcon className="mr-2" />
@@ -41,9 +41,9 @@ const AuthProviders = ({
       </Button>
 
       <Button 
-        variant="secondary" 
+        variant="outline" 
         onClick={() => handleSocialSignUp(onLinkedInSignUp)} 
-        className="w-full flex items-center justify-center bg-white hover:bg-gray-50 md:bg-[#F1F1F1] md:hover:bg-[#E5E5E5] dark:bg-secondary/10 dark:hover:bg-secondary/20 text-foreground"
+        className="w-full flex items-center justify-center bg-background border-input text-foreground"
       >
         <div className="flex items-center">
           <LinkedInIcon className="mr-2" />

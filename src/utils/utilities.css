@@ -1,21 +1,21 @@
 @layer components {
   .form-label {
-    @apply text-foreground text-sm !important;
+    @apply text-foreground text-sm font-medium !important;
   }
 
   .form-error {
-    @apply text-destructive text-[11px] mt-1 flex items-center gap-1;
+    @apply text-destructive-foreground bg-destructive/10 text-[11px] mt-1 flex items-center gap-1 px-2 py-1 rounded;
   }
 
   .agreement-link {
-    @apply text-muted-foreground hover:text-foreground transition-colors font-medium;
+    @apply text-primary hover:text-primary/90 transition-none font-medium;
   }
 
   .auth-input {
-    @apply text-sm w-full;
+    @apply text-sm w-full bg-background border-input text-foreground;
   }
 
   .auth-button {
-    @apply text-sm w-full h-9;
+    @apply text-sm w-full h-9 text-primary-foreground bg-primary hover:bg-primary/90;
   }
 }
