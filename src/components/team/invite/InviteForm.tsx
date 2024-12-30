@@ -18,7 +18,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { TeamMemberRole } from "@/types/team";
 
 const inviteSchema = z.object({
   email: z.string().email("Invalid email address"),

@@ -1,7 +1,4 @@
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -11,32 +8,8 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { toast } from "sonner";
-import { TeamMemberRole } from "@/types/team";
-
-const inviteSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  role: z.enum(["administrator", "editor", "readonly"] as const),
-});
-
-type InviteFormData = z.infer<typeof inviteSchema>;
+import { InviteForm, InviteFormData } from "./InviteForm";
 
 interface InviteMemberDialogProps {
   open: boolean;
@@ -49,14 +22,6 @@ export const InviteMemberDialog = ({
 }: InviteMemberDialogProps) => {
   const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
-
-  const form = useForm<InviteFormData>({
-    resolver: zodResolver(inviteSchema),
-    defaultValues: {
-      email: "",
-      role: "readonly",
-    },
-  });
 
   const inviteMutation = useMutation({
     mutationFn: async (values: InviteFormData) => {
@@ -86,7 +51,6 @@ export const InviteMemberDialog = ({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["team-members"] });
       toast.success("Team member invited successfully");
-      form.reset();
       onOpenChange(false);
     },
     onError: (error: Error) => {
@@ -115,74 +79,11 @@ export const InviteMemberDialog = ({
           </DialogDescription>
         </DialogHeader>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-foreground text-sm font-medium">Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter email address"
-                      type="email"
-                      className="h-10 px-3 py-2 text-sm rounded-md border border-input bg-background"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="role"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-foreground text-sm font-medium">Role</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="h-10 px-3 py-2 text-sm rounded-md border border-input bg-background">
-                        <SelectValue placeholder="Select a role" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="readonly">Read Only</SelectItem>
-                      <SelectItem value="editor">Editor</SelectItem>
-                      <SelectItem value="administrator">Administrator</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <div className="flex flex-col gap-3 mt-4 sm:flex-row sm:justify-end">
-              <Button
-                type="submit"
-                disabled={isLoading}
-                variant="primary"
-                className="order-1 sm:order-2 w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90"
-              >
-                {isLoading ? "Sending..." : "Send Invitation"}
-              </Button>
-              <Button
-                type="button"
-                onClick={() => onOpenChange(false)}
-                disabled={isLoading}
-                variant="secondary"
-                className="order-2 sm:order-1 w-full sm:w-auto bg-secondary text-secondary-foreground hover:bg-secondary/80"
-              >
-                Cancel
-              </Button>
-            </div>
-          </form>
-        </Form>
+        <InviteForm 
+          onSubmit={onSubmit}
+          isLoading={isLoading}
+          onCancel={() => onOpenChange(false)}
+        />
       </DialogContent>
     </Dialog>
   );
