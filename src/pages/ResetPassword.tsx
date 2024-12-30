@@ -61,8 +61,8 @@ const ResetPassword = () => {
     <SidebarProvider>
       <div className="min-h-screen bg-background">
         <Navbar />
-        <div className={`container mx-auto px-4 ${isMobile ? 'pt-12' : 'pt-20'} flex items-${isMobile ? 'start' : 'center'} justify-center min-h-[calc(100vh-64px)]`}>
-          <div className={`max-w-md w-full ${isMobile ? 'mt-8' : 'my-8'}`}>
+        <div className="flex min-h-[calc(100vh-64px)] items-center justify-center px-4">
+          <div className="w-full max-w-md">
             <ResetPasswordHeader firstName={firstName} isMobile={isMobile} />
 
             <div className="md:block hidden">
