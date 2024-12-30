@@ -10,6 +10,7 @@ import { ArrowLeft } from "lucide-react";
 import PhoneInput from "./PhoneInput";
 import AgreementCheckbox from "./AgreementCheckbox";
 import { useIsMobile } from "@/hooks/use-mobile";
+import SignUpHeader from "./SignUpHeader";
 
 const stepTwoSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -174,6 +175,7 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
 
   return (
     <div className={`${commonStyles} step-two-form-desktop md:min-w-[500px]`}>
+      <SignUpHeader />
       {baseContent}
     </div>
   );
