@@ -28,9 +28,10 @@ type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
 
 interface ResetPasswordFormProps {
   isMobile: boolean;
+  onSubmit?: (email: string) => Promise<void>;
 }
 
-const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
+const ResetPasswordForm = ({ isMobile, onSubmit }: ResetPasswordFormProps) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [isTokenValid, setIsTokenValid] = useState(true);
@@ -60,7 +61,7 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
     },
   });
 
-  const onSubmit = async (values: ResetPasswordFormData) => {
+  const handleSubmit = async (values: ResetPasswordFormData) => {
     if (!isTokenValid) {
       toast.error("Your password reset link has expired. Please request a new one.");
       navigate("/signin");
@@ -102,7 +103,7 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
   return (
     <>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
           <PasswordInput
             form={form}
             name="password"
