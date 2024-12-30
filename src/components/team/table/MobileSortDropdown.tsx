@@ -38,7 +38,7 @@ export const MobileSortDropdown = ({ sortConfig, onSort }: MobileSortDropdownPro
         <Button 
           variant="outline" 
           size="sm"
-          className="mobile-sort-dropdown w-full flex items-center justify-between text-[0.775rem] bg-background border-primary/20 hover:border-primary/30 hover:bg-primary/5 hover:text-foreground"
+          className="mobile-sort-dropdown w-full lg:w-[180px] flex items-center justify-between text-[0.775rem] bg-background border-primary/20 hover:border-primary/30 hover:bg-primary/5 hover:text-foreground"
         >
           <span>Sort by: {getSortLabel(sortConfig.key)}</span>
           <div className="flex flex-col ml-[5px]">
@@ -47,7 +47,7 @@ export const MobileSortDropdown = ({ sortConfig, onSort }: MobileSortDropdownPro
           </div>
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="end" className="w-[200px] p-0 bg-background">
+      <PopoverContent align="end" className="w-[180px] p-0 bg-background">
         <div className="mobile-sort-options">
           {[
             { key: "email", label: "Name/Email" },
