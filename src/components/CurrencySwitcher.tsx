@@ -67,7 +67,7 @@ const CurrencySwitcher = () => {
         </HoverCardTrigger>
         <HoverCardContent 
           align="end"
-          className="w-[200px] p-2 bg-card text-card-foreground border-secondary shadow-lg dark:shadow-none animate-in zoom-in-95 duration-100"
+          className="w-[200px] p-2 bg-card text-card-foreground border-secondary shadow-lg dark:shadow-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95"
           sideOffset={4}
           side="bottom"
           avoidCollisions={false}
