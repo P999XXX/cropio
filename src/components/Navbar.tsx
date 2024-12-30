@@ -89,9 +89,10 @@ const Navbar = () => {
                   <SheetTrigger asChild>
                     <Button 
                       variant="ghost" 
-                      className="lg:hidden shadow-none !p-0 !w-auto !h-auto hover:bg-transparent hover:text-[#000000]"
+                      size="icon"
+                      className="h-8 w-8 md:h-9 md:w-9 lg:hidden hover:bg-secondary/80"
                     >
-                      <Menu className="h-5 w-5" />
+                      <Menu className="h-4 w-4" />
                       <span className="sr-only">Toggle menu</span>
                     </Button>
                   </SheetTrigger>
@@ -114,7 +115,11 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" className="h-8 w-8 md:h-9 md:w-9">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="h-8 w-8 md:h-9 md:w-9 hover:bg-secondary/80"
+            >
               <MessageSquare className="h-4 w-4" />
               <span className="sr-only">Open chat</span>
             </Button>
