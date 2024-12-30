@@ -4,10 +4,10 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 import { useIsMobile } from "@/hooks/use-mobile";
-import SignUpCard from "@/components/auth/SignUpCard";
-import SignUpMobile from "@/components/auth/SignUpMobile";
 import SignUpHeader from "@/components/auth/SignUpHeader";
 import ThankYouDialog from "@/components/auth/ThankYouDialog";
+import StepOneForm from "@/components/auth/StepOneForm";
+import StepTwoForm from "@/components/auth/StepTwoForm";
 import { handleGoogleSignIn, handleLinkedInSignIn } from "@/utils/auth-handlers";
 import { errorToastStyle, successToastStyle } from "@/utils/toast-styles";
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -16,19 +16,35 @@ const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showThankYou, setShowThankYou] = useState(false);
   const [email, setEmail] = useState("");
+  const [step, setStep] = useState(1);
+  const [selectedRole, setSelectedRole] = useState<"buyer" | "supplier">();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
-  const handleSignUp = async (values) => {
+  const handleStepOne = (role: "buyer" | "supplier") => {
+    setSelectedRole(role);
+    setStep(2);
+  };
+
+  const handleStepTwo = async (values: any) => {
     setIsLoading(true);
     try {
       const { error } = await supabase.auth.signUp({
         email: values.email,
         password: values.password,
+        options: {
+          data: {
+            first_name: values.firstName,
+            last_name: values.lastName,
+            company_name: values.companyName,
+            role: selectedRole,
+          },
+        },
       });
 
       if (error) throw error;
 
+      setEmail(values.email);
       toast.success("Successfully signed up!", successToastStyle);
       setShowThankYou(true);
     } catch (error: any) {
@@ -39,6 +55,10 @@ const SignUp = () => {
     }
   };
 
+  const handleBack = () => {
+    setStep(1);
+  };
+
   return (
     <SidebarProvider>
       <div className="min-h-screen bg-background w-full">
@@ -47,19 +67,17 @@ const SignUp = () => {
           <div className="w-full md:w-[500px] py-8">
             <SignUpHeader />
 
-            {isMobile ? (
-              <SignUpMobile
-                onSubmit={handleSignUp}
-                isLoading={isLoading}
-                onGoogleSignIn={handleGoogleSignIn}
-                onLinkedInSignIn={handleLinkedInSignIn}
+            {step === 1 ? (
+              <StepOneForm
+                onSubmit={handleStepOne}
+                onGoogleSignUp={handleGoogleSignIn}
+                onLinkedInSignUp={handleLinkedInSignIn}
               />
             ) : (
-              <SignUpCard
-                onSubmit={handleSignUp}
+              <StepTwoForm
+                onSubmit={handleStepTwo}
                 isLoading={isLoading}
-                onGoogleSignIn={handleGoogleSignIn}
-                onLinkedInSignIn={handleLinkedInSignIn}
+                onBack={handleBack}
               />
             )}
           </div>
