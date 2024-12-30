@@ -158,7 +158,9 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
     </>
   );
 
-  const commonStyles = "rounded-lg step-two-form bg-card border border-border shadow-sm p-6";
+  const commonStyles = isMobile 
+    ? "rounded-lg step-two-form bg-background space-y-4" 
+    : "rounded-lg step-two-form bg-card border border-border shadow-sm p-6";
 
   if (isMobile) {
     return (
