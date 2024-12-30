@@ -21,7 +21,7 @@ const StepOneForm = ({ onSubmit, onGoogleSignUp, onLinkedInSignUp }: StepOneForm
           <Button
             variant="outline"
             onClick={() => onSubmit("buyer")}
-            className="h-24 bg-background hover:bg-secondary/10"
+            className="h-24 bg-background"
           >
             <div className="flex flex-col items-center gap-2">
               <span className="font-semibold">I'm a Buyer</span>
@@ -33,7 +33,7 @@ const StepOneForm = ({ onSubmit, onGoogleSignUp, onLinkedInSignUp }: StepOneForm
           <Button
             variant="outline"
             onClick={() => onSubmit("supplier")}
-            className="h-24 bg-background hover:bg-secondary/10"
+            className="h-24 bg-background"
           >
             <div className="flex flex-col items-center gap-2">
               <span className="font-semibold">I'm a Supplier</span>
