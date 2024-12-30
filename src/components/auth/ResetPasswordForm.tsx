@@ -82,7 +82,6 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
         throw error;
       }
 
-      // Sign out after password reset to ensure clean state
       await supabase.auth.signOut();
       
       toast.success("Password successfully updated! Please sign in with your new password.");
@@ -116,7 +115,7 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
             label="Confirm Password"
           />
 
-          <Button type="submit" className="w-full" disabled={isLoading}>
+          <Button type="submit" className="w-full" variant="primary" disabled={isLoading}>
             {isLoading ? "Updating password..." : "Update Password"}
           </Button>
         </form>

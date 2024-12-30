@@ -3,16 +3,16 @@ import { Toggle } from "@/components/ui/toggle";
 
 interface ThemeToggleProps {
   isDark: boolean;
-  onToggle: () => void;
+  onToggleTheme: () => void;
 }
 
-export const ThemeToggle = ({ isDark, onToggle }: ThemeToggleProps) => {
+export const ThemeToggle = ({ isDark, onToggleTheme }: ThemeToggleProps) => {
   return (
     <Toggle
       variant="outline"
       size="sm"
       pressed={isDark}
-      onPressedChange={onToggle}
+      onPressedChange={onToggleTheme}
       aria-label="Toggle dark mode"
     >
       {isDark ? (
