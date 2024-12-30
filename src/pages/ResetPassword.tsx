@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
@@ -11,31 +11,9 @@ import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/
 import { SidebarProvider } from "@/components/ui/sidebar";
 
 const ResetPassword = () => {
-  const [isLoading, setIsLoading] = useState(false);
   const [showThankYou, setShowThankYou] = useState(false);
   const [firstName, setFirstName] = useState("");
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
   const isMobile = useIsMobile();
-
-  const handleSubmit = async (values: { password: string }) => {
-    setIsLoading(true);
-    try {
-      const { error } = await supabase.auth.updateUser({
-        password: values.password,
-      });
-
-      if (error) throw error;
-
-      setShowThankYou(true);
-      toast.success("Password reset successfully!");
-    } catch (error: any) {
-      console.error("Reset password error:", error);
-      toast.error(error.message || "Failed to reset password");
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   return (
     <SidebarProvider>
@@ -47,10 +25,7 @@ const ResetPassword = () => {
 
             {isMobile ? (
               <div className="w-full">
-                <ResetPasswordForm
-                  onSubmit={handleSubmit}
-                  isLoading={isLoading}
-                />
+                <ResetPasswordForm isMobile={isMobile} />
               </div>
             ) : (
               <Card className="w-full">
@@ -60,10 +35,7 @@ const ResetPassword = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="pt-2">
-                  <ResetPasswordForm
-                    onSubmit={handleSubmit}
-                    isLoading={isLoading}
-                  />
+                  <ResetPasswordForm isMobile={isMobile} />
                 </CardContent>
               </Card>
             )}
@@ -72,6 +44,7 @@ const ResetPassword = () => {
         <ResetPasswordThankYouDialog
           open={showThankYou}
           onOpenChange={setShowThankYou}
+          userEmail="user@example.com" // This should ideally come from the auth state
         />
       </div>
     </SidebarProvider>
