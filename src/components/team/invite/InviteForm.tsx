@@ -1,6 +1,6 @@
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 import {
   Form,
   FormControl,
@@ -19,24 +19,26 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 
-const inviteSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  email: z.string().email("Invalid email address"),
-  role: z.enum(["administrator", "editor", "readonly"] as const),
+const formSchema = z.object({
+  firstName: z.string().min(2, "First name must be at least 2 characters"),
+  lastName: z.string().min(2, "Last name must be at least 2 characters"),
+  email: z.string().email("Please enter a valid email address"),
+  role: z.enum(["administrator", "editor", "readonly"], {
+    required_error: "Please select a role",
+  }),
 });
 
-export type InviteFormData = z.infer<typeof inviteSchema>;
+export type InviteFormData = z.infer<typeof formSchema>;
 
 interface InviteFormProps {
-  onSubmit: (values: InviteFormData) => Promise<void>;
+  onSubmit: (values: InviteFormData) => void;
   isLoading: boolean;
   onCancel: () => void;
 }
 
 export const InviteForm = ({ onSubmit, isLoading, onCancel }: InviteFormProps) => {
   const form = useForm<InviteFormData>({
-    resolver: zodResolver(inviteSchema),
+    resolver: zodResolver(formSchema),
     defaultValues: {
       firstName: "",
       lastName: "",
@@ -47,37 +49,36 @@ export const InviteForm = ({ onSubmit, isLoading, onCancel }: InviteFormProps) =
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <div className="grid gap-4 sm:grid-cols-2">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <FormField
             control={form.control}
             name="firstName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="!text-foreground">First Name</FormLabel>
+                <FormLabel className="text-[0.925rem]">First Name</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Enter first name"
-                    className="dialog-input"
-                    {...field}
+                  <Input 
+                    {...field} 
+                    className="h-10 text-[0.925rem] bg-background border-input" 
+                    placeholder="John"
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name="lastName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="!text-foreground">Last Name</FormLabel>
+                <FormLabel className="text-[0.925rem]">Last Name</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Enter last name"
-                    className="dialog-input"
-                    {...field}
+                  <Input 
+                    {...field} 
+                    className="h-10 text-[0.925rem] bg-background border-input" 
+                    placeholder="Doe"
                   />
                 </FormControl>
                 <FormMessage />
@@ -91,13 +92,13 @@ export const InviteForm = ({ onSubmit, isLoading, onCancel }: InviteFormProps) =
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="!text-foreground">Email</FormLabel>
+              <FormLabel className="text-[0.925rem]">Email Address</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="Enter email address"
+                <Input 
+                  {...field} 
                   type="email"
-                  className="dialog-input"
-                  {...field}
+                  className="h-10 text-[0.925rem] bg-background border-input" 
+                  placeholder="john.doe@example.com"
                 />
               </FormControl>
               <FormMessage />
@@ -110,20 +111,17 @@ export const InviteForm = ({ onSubmit, isLoading, onCancel }: InviteFormProps) =
           name="role"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="!text-foreground">Role</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                defaultValue={field.value}
-              >
+              <FormLabel className="text-[0.925rem]">Role</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger className="dialog-input">
+                  <SelectTrigger className="h-10 text-[0.925rem] bg-background border-input">
                     <SelectValue placeholder="Select a role" />
                   </SelectTrigger>
                 </FormControl>
-                <SelectContent>
-                  <SelectItem value="readonly">Read Only</SelectItem>
-                  <SelectItem value="editor">Editor</SelectItem>
-                  <SelectItem value="administrator">Administrator</SelectItem>
+                <SelectContent className="bg-background border border-border">
+                  <SelectItem value="administrator" className="text-[0.925rem]">Administrator</SelectItem>
+                  <SelectItem value="editor" className="text-[0.925rem]">Editor</SelectItem>
+                  <SelectItem value="readonly" className="text-[0.925rem]">Read Only</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -131,21 +129,21 @@ export const InviteForm = ({ onSubmit, isLoading, onCancel }: InviteFormProps) =
           )}
         />
 
-        <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-4">
+        <div className="flex justify-end gap-3 pt-2">
           <Button
             type="button"
+            variant="outline"
             onClick={onCancel}
-            disabled={isLoading}
-            className="dialog-button-secondary"
+            className="h-10 px-4 text-[0.925rem]"
           >
             Cancel
           </Button>
           <Button
             type="submit"
             disabled={isLoading}
-            className="dialog-button-primary"
+            className="h-10 px-4 text-[0.925rem]"
           >
-            {isLoading ? "Sending..." : "Send Invitation"}
+            {isLoading ? "Inviting..." : "Send Invitation"}
           </Button>
         </div>
       </form>

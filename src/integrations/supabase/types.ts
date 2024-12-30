@@ -46,9 +46,11 @@ export type Database = {
         Row: {
           created_at: string
           email: string
+          first_name: string | null
           id: string
           invitation_token: string | null
           invited_by: string
+          last_name: string | null
           profile_id: string
           role: Database["public"]["Enums"]["team_member_role"]
           status: string
@@ -57,9 +59,11 @@ export type Database = {
         Insert: {
           created_at?: string
           email: string
+          first_name?: string | null
           id?: string
           invitation_token?: string | null
           invited_by: string
+          last_name?: string | null
           profile_id: string
           role?: Database["public"]["Enums"]["team_member_role"]
           status?: string
@@ -68,9 +72,11 @@ export type Database = {
         Update: {
           created_at?: string
           email?: string
+          first_name?: string | null
           id?: string
           invitation_token?: string | null
           invited_by?: string
+          last_name?: string | null
           profile_id?: string
           role?: Database["public"]["Enums"]["team_member_role"]
           status?: string
