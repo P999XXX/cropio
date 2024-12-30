@@ -2,36 +2,35 @@
 
 @layer base {
   :root {
-    --background: 220 33% 98%;
-    --foreground: 222 47% 11%;
+    --background: 0 0% 98%;
+    --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
-    --primary: 158 64% 18%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 220 16% 94%;
-    --secondary-foreground: 222 47% 11%;
-    --secondary-hover: 220 16% 90%;
-    --muted: 220 16% 94%;
-    --muted-foreground: 220 9% 40%;
-    --accent: 158 64% 18%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 164 75% 17%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 220 10% 92%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 164 75% 17%;
     --accent-foreground: 0 0% 100%;
-    --destructive: 0 84% 60%;
+    --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 100%;
     --success: 142 76% 36%;
     --success-foreground: 0 0% 100%;
-    --border: 220 13% 88%;
-    --input: 220 13% 88%;
-    --ring: 158 64% 18%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 222.2 84% 4.9%;
     --radius: 0.5rem;
   }
 
   @media (max-width: 768px) {
     :root {
-      --background: 220 33% 97%;
+      --background: 0 0% 96%;
     }
   }
 
@@ -40,7 +39,7 @@
   }
 
   body {
-    @apply bg-background text-foreground font-inter antialiased;
+    @apply bg-background text-foreground font-inter;
   }
 
   /* Remove default focus borders */
@@ -51,6 +50,6 @@
 
   /* Custom focus styles for accessibility */
   *:focus-visible {
-    @apply ring-2 ring-primary/50 ring-offset-1 ring-offset-background;
+    @apply ring-2 ring-secondary ring-offset-1 ring-offset-background;
   }
 }

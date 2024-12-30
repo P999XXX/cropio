@@ -19,7 +19,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const isDashboard = location.pathname.startsWith('/dashboard');
-  const sidebarContext = useSidebar();
+  const { state } = useSidebar();
 
   useEffect(() => {
     const theme = localStorage.getItem("theme");
@@ -82,16 +82,16 @@ const Navbar = () => {
       <div className={`w-full ${isDashboard ? 'px-4 md:px-8' : 'px-4 sm:px-6 lg:px-8'}`}>
         <div className="flex justify-between h-header">
           <div className="flex items-center gap-3">
-            {isDashboard && sidebarContext && (
+            {isDashboard && (
               <>
-                <DashboardSidebarTrigger isExpanded={sidebarContext.state === 'expanded'} />
+                <DashboardSidebarTrigger isExpanded={state === 'expanded'} />
                 <Sheet open={isOpen} onOpenChange={setIsOpen}>
                   <SheetTrigger asChild>
                     <Button 
                       variant="ghost" 
-                      className="lg:hidden shadow-none !p-0 !w-auto !h-auto hover:bg-transparent"
+                      className="lg:hidden shadow-none !p-0 !w-auto !h-auto hover:bg-transparent hover:text-[#000000]"
                     >
-                      <Menu className="h-5 w-5 text-muted-foreground" />
+                      <Menu className="h-5 w-5" />
                       <span className="sr-only">Toggle menu</span>
                     </Button>
                   </SheetTrigger>
@@ -115,7 +115,7 @@ const Navbar = () => {
 
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="icon" className="h-8 w-8 md:h-9 md:w-9">
-              <MessageSquare className="h-4 w-4 text-muted-foreground" />
+              <MessageSquare className="h-4 w-4" />
               <span className="sr-only">Open chat</span>
             </Button>
             <CartButton />
