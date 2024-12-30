@@ -1,73 +1,39 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Index from "./pages/Index";
-import SignIn from "./pages/SignIn";
-import SignUp from "./pages/SignUp";
-import ResetPassword from "./pages/ResetPassword";
-import Components from "./pages/Components";
-import DashboardLayout from "./components/layouts/DashboardLayout";
-import DashboardHome from "./pages/dashboard/DashboardHome";
-import DashboardTeam from "./pages/dashboard/DashboardTeam";
-import DashboardSettings from "./pages/dashboard/DashboardSettings";
-import DashboardFAQ from "./pages/dashboard/DashboardFAQ";
-import DashboardSupport from "./pages/dashboard/DashboardSupport";
-import DashboardSubscriptions from "./pages/dashboard/DashboardSubscriptions";
-import { Outlet } from "react-router-dom";
+import { useEffect } from "react";
+import { BrowserRouter } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ThemeProvider } from "next-themes";
+import { Toaster } from "sonner";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Index />,
-  },
-  {
-    path: "/signin",
-    element: <SignIn />,
-  },
-  {
-    path: "/signup",
-    element: <SignUp />,
-  },
-  {
-    path: "/reset-password",
-    element: <ResetPassword />,
-  },
-  {
-    path: "/components",
-    element: <Components />,
-  },
-  {
-    path: "/dashboard",
-    element: <DashboardLayout><Outlet /></DashboardLayout>,
-    children: [
-      {
-        path: "",
-        element: <DashboardHome />,
-      },
-      {
-        path: "team",
-        element: <DashboardTeam />,
-      },
-      {
-        path: "subscriptions",
-        element: <DashboardSubscriptions />,
-      },
-      {
-        path: "settings",
-        element: <DashboardSettings />,
-      },
-      {
-        path: "faq",
-        element: <DashboardFAQ />,
-      },
-      {
-        path: "support",
-        element: <DashboardSupport />,
-      },
-    ],
-  },
-]);
+import "./App.css";
+import Navbar from "./components/Navbar";
+import ThemeHandler from "./components/ThemeHandler";
+import { AppRoutes } from "./AppRoutes";
+
+const queryClient = new QueryClient();
 
 function App() {
-  return <RouterProvider router={router} />;
+  useEffect(() => {
+    // Your effect logic here
+  }, []);
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider defaultTheme="system" enableSystem>
+        <SidebarProvider>
+          <BrowserRouter>
+            <ThemeHandler>
+              <div className="min-h-screen bg-background font-sans antialiased">
+                <Navbar />
+                <AppRoutes />
+                <Toaster richColors closeButton position="top-right" />
+              </div>
+            </ThemeHandler>
+          </BrowserRouter>
+        </SidebarProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
+  );
 }
 
 export default App;
