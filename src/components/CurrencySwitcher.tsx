@@ -59,7 +59,7 @@ export const CurrencySwitcher = () => {
           <Button 
             variant="ghost" 
             size="icon" 
-            className="h-9 w-9 hover:bg-secondary hover:text-secondary-foreground transition-colors"
+            className="h-9 w-9 hover:bg-secondary/10 hover:text-secondary-foreground transition-colors"
           >
             <CurrentIcon className="h-4 w-4" />
             <span className="sr-only">Toggle currency</span>
@@ -81,8 +81,8 @@ export const CurrencySwitcher = () => {
                   onClick={() => handleCurrencyChange(currency.code)}
                   className={`flex w-full items-center px-2 py-1.5 text-sm rounded-md transition-colors ${
                     selectedCurrency === currency.code 
-                      ? 'bg-primary text-primary-foreground dark:bg-primary dark:text-primary-foreground' 
-                      : 'hover:bg-secondary hover:text-secondary-foreground dark:hover:bg-secondary dark:hover:text-secondary-foreground'
+                      ? 'bg-secondary text-secondary-foreground dark:bg-secondary dark:text-secondary-foreground' 
+                      : 'hover:bg-secondary/10 hover:text-secondary-foreground dark:hover:bg-secondary/10 dark:hover:text-secondary-foreground'
                   }`}
                 >
                   <Icon className="mr-2 h-4 w-4" />
@@ -96,5 +96,3 @@ export const CurrencySwitcher = () => {
     </div>
   );
 };
-
-export default CurrencySwitcher;
