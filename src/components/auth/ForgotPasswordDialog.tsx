@@ -49,12 +49,12 @@ const ForgotPasswordDialog = ({
             />
           </div>
         </div>
-        <DialogFooter className="flex flex-col-reverse sm:flex-row gap-3 mt-4">
+        <div className="flex flex-col gap-3 mt-4 sm:flex-row sm:justify-end">
           <Button 
             onClick={onSubmit}
             disabled={isResetting}
             variant="primary"
-            className="w-full sm:w-auto bg-primary text-primary-foreground hover:border-2 hover:border-primary"
+            className="order-1 sm:order-2 w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90"
           >
             {isResetting ? "Sending..." : "Send Instructions"}
           </Button>
@@ -62,11 +62,11 @@ const ForgotPasswordDialog = ({
             variant="outline"
             onClick={() => onOpenChange(false)}
             disabled={isResetting}
-            className="w-full sm:w-auto hover:border-2 hover:border-primary"
+            className="order-2 sm:order-1 w-full sm:w-auto hover:bg-secondary/80"
           >
             Cancel
           </Button>
-        </DialogFooter>
+        </div>
       </DialogContent>
     </Dialog>
   );
