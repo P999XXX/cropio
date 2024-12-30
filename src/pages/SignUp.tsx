@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card";
 import { useIsMobile } from "@/hooks/use-mobile";
 import StepOneForm from "@/components/auth/StepOneForm";
-import StepTwoForm from "@/components/auth/StepTwoForm";
+import StepTwoForm, { StepTwoFormData } from "@/components/auth/StepTwoForm";
 import ThankYouDialog from "@/components/auth/ThankYouDialog";
 import { SidebarProvider } from "@/components/ui/sidebar";
 
@@ -68,7 +68,7 @@ const SignUp = () => {
     }
   };
 
-  const handleStepTwo = async (values: any) => {
+  const handleStepTwo = async (values: StepTwoFormData) => {
     setIsLoading(true);
     try {
       const { data: authData, error: signUpError } = await supabase.auth.signUp({
@@ -106,9 +106,9 @@ const SignUp = () => {
     <SidebarProvider>
       <div className="min-h-screen bg-background">
         <Navbar />
-        <main className="flex min-h-[calc(100vh-64px)] items-center justify-center p-4">
-          <div className="w-full max-w-md space-y-6">
-            <div className={`space-y-2 ${isMobile ? 'text-left' : 'text-center'}`}>
+        <div className="flex min-h-[calc(100vh-64px)] items-center justify-center px-4">
+          <div className="w-full max-w-md">
+            <div className={`space-y-2 ${isMobile ? 'text-left' : 'text-center'} mb-6`}>
               <h1 className="text-2xl md:text-3xl font-bold">Register for Free!</h1>
               <p className="text-[14px] text-muted-foreground">
                 {currentStep === 1 ? "Choose Your Role" : "Complete Your Profile"}
@@ -121,7 +121,7 @@ const SignUp = () => {
                   <StepOneForm
                     onSubmit={handleStepOne}
                     onGoogleSignUp={handleGoogleSignUp}
-                    onLinkedInSignIn={handleLinkedInSignUp}
+                    onLinkedInSignUp={handleLinkedInSignUp}
                   />
                 ) : (
                   <StepTwoForm 
@@ -151,7 +151,7 @@ const SignUp = () => {
                     <StepOneForm
                       onSubmit={handleStepOne}
                       onGoogleSignUp={handleGoogleSignUp}
-                      onLinkedInSignIn={handleLinkedInSignUp}
+                      onLinkedInSignUp={handleLinkedInSignUp}
                     />
                   ) : (
                     <StepTwoForm 
@@ -172,7 +172,7 @@ const SignUp = () => {
               </Card>
             )}
           </div>
-        </main>
+        </div>
         <ThankYouDialog
           open={showThankYou}
           onOpenChange={setShowThankYou}

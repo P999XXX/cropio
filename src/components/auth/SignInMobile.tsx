@@ -17,7 +17,7 @@ const SignInMobile = ({
   onForgotPassword,
 }: SignInMobileProps) => {
   return (
-    <div className="space-y-6 bg-card p-6 rounded-lg border border-border">
+    <div className="space-y-4">
       <SignInForm 
         onSubmit={onSubmit} 
         isLoading={isLoading} 
@@ -25,10 +25,10 @@ const SignInMobile = ({
       />
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t border-border" />
+          <span className="w-full border-t" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-card px-2 text-muted-foreground">
+          <span className="bg-background px-2 text-muted-foreground">
             Or continue with
           </span>
         </div>
