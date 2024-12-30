@@ -1,7 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import { Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -47,7 +45,7 @@ const SignInForm = ({ onSubmit, isLoading, onForgotPassword }: SignInFormProps) 
           label="Password"
         />
 
-        <Button type="submit" className="w-full" disabled={isLoading}>
+        <Button type="submit" variant="primary" className="w-full" disabled={isLoading}>
           {isLoading ? "Signing in..." : "Sign in"}
         </Button>
 
