@@ -10,18 +10,18 @@ export const ViewModeToggle = ({ viewMode, onViewModeChange }: ViewModeTogglePro
   return (
     <div className="flex items-center gap-2">
       <Button
-        variant={viewMode === "grid" ? "secondary" : "outline"}
-        size="icon"
+        variant="outline"
+        size="sm"
         onClick={() => onViewModeChange("grid")}
-        className="w-8 h-8"
+        className={`${viewMode === "grid" ? "bg-secondary/10" : "bg-background"} border-secondary hover:bg-secondary/10 hover:text-foreground w-9 h-9`}
       >
         <Grid3X3 className="h-4 w-4" />
       </Button>
       <Button
-        variant={viewMode === "list" ? "secondary" : "outline"}
-        size="icon"
+        variant="outline"
+        size="sm"
         onClick={() => onViewModeChange("list")}
-        className="w-8 h-8"
+        className={`${viewMode === "list" ? "bg-secondary/10" : "bg-background"} border-secondary hover:bg-secondary/10 hover:text-foreground w-9 h-9`}
       >
         <LayoutList className="h-4 w-4" />
       </Button>

@@ -37,6 +37,8 @@ export const TeamMembersTable = ({ teamMembers, isLoading, onInvite }: TeamMembe
     return <LoadingState />;
   }
 
+  const showSortButton = isMobile || viewMode === "grid";
+
   return (
     <div className="space-y-2 team-members-table w-full">
       <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between bg-card rounded-lg p-2 shadow-sm w-full">
@@ -47,6 +49,7 @@ export const TeamMembersTable = ({ teamMembers, isLoading, onInvite }: TeamMembe
           onRoleFilterChange={setRoleFilter}
           sortConfig={sortConfig}
           onSort={handleSort}
+          showSortButton={showSortButton}
         />
         
         {!isMobile && (
@@ -66,12 +69,14 @@ export const TeamMembersTable = ({ teamMembers, isLoading, onInvite }: TeamMembe
           onSort={handleSort}
         />
       ) : (
-        <TeamMembersGrid 
-          members={paginatedMembers}
-          viewMode={viewMode}
-          sortConfig={sortConfig}
-          onSort={handleSort}
-        />
+        <div className="animate-fade-in">
+          <TeamMembersGrid 
+            members={paginatedMembers}
+            viewMode={viewMode}
+            sortConfig={sortConfig}
+            onSort={handleSort}
+          />
+        </div>
       )}
 
       {paginatedMembers.length > 0 && (
