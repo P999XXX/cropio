@@ -1,5 +1,5 @@
-import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
-import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Menu } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface DashboardSidebarTriggerProps {
   isExpanded: boolean;
@@ -7,9 +7,19 @@ interface DashboardSidebarTriggerProps {
 
 export const DashboardSidebarTrigger = ({ isExpanded }: DashboardSidebarTriggerProps) => {
   return (
-    <SidebarTrigger 
-      icon={isExpanded ? PanelLeftClose : PanelLeftOpen}
-      className="hidden lg:block" 
-    />
+    <Button 
+      variant="ghost" 
+      size="icon"
+      className="h-8 w-8 md:h-9 md:w-9 hidden lg:flex hover:bg-secondary/80"
+      onClick={() => {
+        const event = new CustomEvent('toggle-sidebar', {
+          detail: { isExpanded }
+        });
+        window.dispatchEvent(event);
+      }}
+    >
+      <Menu className="h-4 w-4" />
+      <span className="sr-only">Toggle sidebar</span>
+    </Button>
   );
 };
