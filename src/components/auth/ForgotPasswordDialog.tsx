@@ -38,13 +38,14 @@ const ForgotPasswordDialog = ({
         </DialogHeader>
         <div className="grid gap-4">
           <div className="space-y-2">
-            <Label htmlFor="reset-email">Email</Label>
+            <Label htmlFor="reset-email" className="text-foreground text-sm font-medium">Email</Label>
             <Input
               id="reset-email"
               type="email"
               placeholder="Enter your email"
               value={email}
               onChange={(e) => onEmailChange(e.target.value)}
+              className="auth-input h-9 px-3 py-1 text-sm rounded-md border border-input bg-background"
             />
           </div>
         </div>
@@ -53,7 +54,7 @@ const ForgotPasswordDialog = ({
             variant="outline"
             onClick={() => onOpenChange(false)}
             disabled={isResetting}
-            className="w-full sm:w-auto"
+            className="w-full sm:w-auto hover:border-2 hover:border-primary"
           >
             Cancel
           </Button>
@@ -61,7 +62,7 @@ const ForgotPasswordDialog = ({
             onClick={onSubmit}
             disabled={isResetting}
             variant="primary"
-            className="w-full sm:w-auto"
+            className="w-full sm:w-auto bg-primary text-primary-foreground hover:border-2 hover:border-primary"
           >
             {isResetting ? "Sending..." : "Send Instructions"}
           </Button>
