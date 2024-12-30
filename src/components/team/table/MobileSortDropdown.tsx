@@ -43,7 +43,7 @@ export const MobileSortDropdown = ({ sortConfig, onSort }: MobileSortDropdownPro
           <ArrowUpDown className="h-4 w-4 ml-2" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="end" className="w-[200px] p-0">
+      <PopoverContent align="end" className="w-[200px] p-0 bg-background">
         <div className="mobile-sort-options">
           {[
             { key: "email", label: "Name/Email" },
@@ -54,7 +54,7 @@ export const MobileSortDropdown = ({ sortConfig, onSort }: MobileSortDropdownPro
             <Button
               key={key}
               variant="ghost"
-              className="w-full justify-start text-[0.775rem] h-9 hover:bg-secondary/10 hover:text-foreground"
+              className="w-full justify-start text-[0.775rem] h-9 hover:bg-[#221F26] hover:text-foreground"
               onClick={() => onSort(key as keyof TeamMember)}
             >
               {label} {sortConfig.key === key && (sortConfig.direction === "asc" ? "↑" : "↓")}

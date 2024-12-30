@@ -13,7 +13,7 @@ export const ViewModeToggle = ({ viewMode, onViewModeChange }: ViewModeTogglePro
         variant="outline"
         size="sm"
         onClick={() => onViewModeChange("grid")}
-        className={`${viewMode === "grid" ? "bg-secondary/10" : "bg-background"} border-secondary hover:bg-secondary/10 hover:text-foreground w-9 h-9`}
+        className={`${viewMode === "grid" ? "bg-[#221F26]" : "bg-background"} border-secondary hover:bg-[#221F26] hover:text-foreground w-9 h-9`}
       >
         <Grid3X3 className="h-4 w-4" />
       </Button>
@@ -21,7 +21,7 @@ export const ViewModeToggle = ({ viewMode, onViewModeChange }: ViewModeTogglePro
         variant="outline"
         size="sm"
         onClick={() => onViewModeChange("list")}
-        className={`${viewMode === "list" ? "bg-secondary/10" : "bg-background"} border-secondary hover:bg-secondary/10 hover:text-foreground w-9 h-9`}
+        className={`${viewMode === "list" ? "bg-[#221F26]" : "bg-background"} border-secondary hover:bg-[#221F26] hover:text-foreground w-9 h-9`}
       >
         <LayoutList className="h-4 w-4" />
       </Button>

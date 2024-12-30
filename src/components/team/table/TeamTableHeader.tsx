@@ -63,13 +63,13 @@ export const TeamTableHeader = ({
               </div>
             </Button>
           </PopoverTrigger>
-          <PopoverContent align="end" className="w-[180px] p-0 animate-fade-in">
+          <PopoverContent align="end" className="w-[180px] p-0 animate-fade-in bg-background">
             <div className="filter-role-options">
               {roles.map(({ value, label }) => (
                 <Button
                   key={value}
                   variant="ghost"
-                  className="w-full justify-start text-[0.775rem] h-9 hover:bg-secondary/10 hover:text-foreground"
+                  className="w-full justify-start text-[0.775rem] h-9 hover:bg-[#221F26] hover:text-foreground"
                   onClick={() => onRoleFilterChange(value)}
                 >
                   {label}
