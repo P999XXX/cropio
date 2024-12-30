@@ -39,8 +39,8 @@ export default {
           foreground: "#ffffff",
         },
         secondary: {
-          DEFAULT: "#f1f1f1",
-          hover: "#e8e8e8",
+          DEFAULT: "#e9e9e9",
+          hover: "#e0e0e0",
           foreground: "#000000",
         },
         success: {
