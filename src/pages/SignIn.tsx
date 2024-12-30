@@ -6,17 +6,18 @@ import SignInMobile from "@/components/auth/SignInMobile";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { SignInFormData } from "@/components/auth/SignInForm";
 
 const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async (email: string, password: string) => {
+  const handleSubmit = async (values: SignInFormData) => {
     try {
       setIsLoading(true);
       const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+        email: values.email,
+        password: values.password,
       });
       if (error) throw error;
       navigate("/dashboard");
@@ -55,17 +56,9 @@ const SignIn = () => {
     }
   };
 
-  const handleForgotPassword = async (email: string) => {
-    try {
-      setIsLoading(true);
-      const { error } = await supabase.auth.resetPasswordForEmail(email);
-      if (error) throw error;
-      toast.success("Password reset email sent!");
-    } catch (error) {
-      toast.error("Failed to send reset password email.");
-    } finally {
-      setIsLoading(false);
-    }
+  const handleForgotPassword = () => {
+    // This will be handled by the ForgotPasswordDialog component
+    // which is already implemented in the SignInForm
   };
 
   return (
