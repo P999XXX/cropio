@@ -13,6 +13,8 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [resetEmail, setResetEmail] = useState("");
+  const [isResetting, setIsResetting] = useState(false);
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
@@ -33,6 +35,24 @@ const SignIn = () => {
       toast.error(error.message || "Failed to sign in");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handlePasswordReset = async () => {
+    setIsResetting(true);
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+      if (error) throw error;
+      
+      setShowForgotPassword(false);
+      toast.success("Reset instructions sent to your email!");
+    } catch (error: any) {
+      console.error("Reset password error:", error);
+      toast.error(error.message || "Failed to send reset instructions");
+    } finally {
+      setIsResetting(false);
     }
   };
 
@@ -105,6 +125,10 @@ const SignIn = () => {
         <ForgotPasswordDialog
           open={showForgotPassword}
           onOpenChange={setShowForgotPassword}
+          onSubmit={handlePasswordReset}
+          email={resetEmail}
+          onEmailChange={setResetEmail}
+          isResetting={isResetting}
         />
       </div>
     </SidebarProvider>
