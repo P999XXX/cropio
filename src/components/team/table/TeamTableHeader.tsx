@@ -37,8 +37,8 @@ export const TeamTableHeader = ({
   ];
 
   return (
-    <div className="flex flex-col sm:flex-row gap-4 w-full">
-      <div className="relative flex-1 max-w-[333px]">
+    <div className="flex flex-col lg:flex-row gap-4 w-full">
+      <div className="relative flex-1 max-w-full lg:max-w-[333px]">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
           placeholder="Search by name or email..."
@@ -53,7 +53,7 @@ export const TeamTableHeader = ({
             <Button 
               variant="outline" 
               size="sm"
-              className="filter-dropdown-button w-[180px] justify-between text-[0.775rem] bg-background"
+              className="filter-dropdown-button w-full lg:w-[180px] justify-between text-[0.775rem] bg-background"
             >
               <div className="flex items-center gap-2">
                 <Filter className="h-4 w-4 text-muted-foreground" />

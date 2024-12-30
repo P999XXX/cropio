@@ -18,7 +18,7 @@ export const TeamMembersGrid = ({
   onSort 
 }: TeamMembersGridProps) => {
   return (
-    <div className="grid gap-1 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full">
+    <div className="grid gap-1 grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 w-full">
       {members.map((member) => (
         <TeamCard 
           key={member.id} 

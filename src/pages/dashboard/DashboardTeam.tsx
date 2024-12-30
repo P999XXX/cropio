@@ -61,17 +61,17 @@ const DashboardTeam = () => {
   });
 
   return (
-    <div className="team-management space-y-2 w-full px-0 sm:px-1">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 w-full h-auto">
+    <div className="team-management space-y-2 w-full px-2 lg:px-1">
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-2 w-full h-auto">
         <div className="space-y-1">
-          <h1 className="text-2xl font-bold">Team Management</h1>
+          <h1 className="text-xl lg:text-2xl font-bold">Team Management</h1>
           <p className="text-muted-foreground text-[0.775rem]">
             Manage your team members and their permissions
           </p>
         </div>
         <Button 
           onClick={() => setIsInviteDialogOpen(true)}
-          className="flex items-center gap-2 w-full md:w-auto text-[0.775rem] md:h-fit md:py-2 mt-auto"
+          className="flex items-center gap-2 w-full lg:w-auto text-[0.775rem] lg:h-fit lg:py-2 mt-auto"
         >
           <UserPlus className="h-4 w-4" />
           Invite Member

@@ -39,7 +39,7 @@ export const TeamMembersTable = ({ teamMembers, isLoading, onInvite }: TeamMembe
 
   return (
     <div className="space-y-2 team-members-table w-full">
-      <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between bg-card rounded-lg p-2 shadow-sm w-full">
+      <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between bg-card rounded-lg p-2 shadow-sm w-full">
         <TeamTableHeader
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
