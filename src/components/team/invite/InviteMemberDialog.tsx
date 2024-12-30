@@ -6,7 +6,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { InviteForm } from "./InviteForm";
+import { InviteForm, type InviteFormData } from "./InviteForm";
 import { useInviteMember } from "./useInviteMember";
 
 interface InviteMemberDialogProps {
