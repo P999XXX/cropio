@@ -142,7 +142,7 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
     </Button>
   );
 
-  const content = (
+  const baseContent = (
     <>
       {backButton}
       <CardDescription className="text-muted-foreground">
@@ -158,34 +158,20 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
     </>
   );
 
+  const commonStyles = "p-6 rounded-lg step-two-form bg-background";
+
   if (isMobile) {
     return (
-      <div className="space-y-4 bg-background step-two-form-mobile">
-        {content}
+      <div className={`${commonStyles} step-two-form-mobile space-y-4`}>
+        {baseContent}
       </div>
     );
   }
 
   return (
-    <Card className="md:min-w-[500px] bg-background step-two-form-desktop">
-      <CardHeader className="pb-2">
-        {backButton}
-        <CardDescription>
-          Complete your registration
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        {formContent}
-      </CardContent>
-      <CardFooter>
-        <div className="text-sm text-center w-full text-muted-foreground">
-          Already have an account?{" "}
-          <a href="/signin" className="text-primary hover:underline font-medium">
-            Sign in
-          </a>
-        </div>
-      </CardFooter>
-    </Card>
+    <div className={`${commonStyles} step-two-form-desktop md:min-w-[500px]`}>
+      {baseContent}
+    </div>
   );
 };
 
