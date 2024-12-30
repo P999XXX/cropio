@@ -27,10 +27,9 @@ const Index = () => {
       <div className="min-h-screen bg-background">
         <Navbar />
         <main className="flex flex-col min-h-[calc(100vh-64px)]">
-          {/* Hero Section */}
           <div className="flex-1 flex items-center justify-center w-full py-12 md:py-20">
             <div className="w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-              <div className="text-center animate-fade-in">
+              <div className="text-center">
                 <h1 className="text-2xl tracking-tight font-extrabold text-foreground sm:text-3xl md:text-3xl">
                   <span className="block">The Global B2B Marketplace for</span>
                   <span className="block text-primary">Agricultural Products</span>
@@ -54,10 +53,9 @@ const Index = () => {
             </div>
           </div>
 
-          {/* Features Section */}
           <div className="w-full bg-secondary py-12">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="lg:text-center animate-fade-in">
+              <div className="lg:text-center">
                 <h2 className="text-2xl font-extrabold text-foreground sm:text-3xl">
                   Why Choose Cropio?
                 </h2>
@@ -69,7 +67,7 @@ const Index = () => {
               <div className="mt-10">
                 <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
                   {features.map((feature) => (
-                    <div key={feature.title} className="relative animate-fade-in">
+                    <div key={feature.title} className="relative">
                       <div className="bg-card rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
                         <div className="absolute -top-4 left-4">
                           <div className="rounded-full bg-primary p-3">
