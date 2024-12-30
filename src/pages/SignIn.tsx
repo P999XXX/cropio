@@ -7,9 +7,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { SignInFormData } from "@/components/auth/SignInForm";
+import ForgotPasswordDialog from "@/components/auth/ForgotPasswordDialog";
 
 const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [resetEmail, setResetEmail] = useState("");
+  const [isResetting, setIsResetting] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (values: SignInFormData) => {
@@ -57,8 +61,25 @@ const SignIn = () => {
   };
 
   const handleForgotPassword = () => {
-    // This will be handled by the ForgotPasswordDialog component
-    // which is already implemented in the SignInForm
+    setShowForgotPassword(true);
+  };
+
+  const handleResetPassword = async () => {
+    setIsResetting(true);
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+      if (error) throw error;
+      
+      setShowForgotPassword(false);
+      toast.success("Reset instructions sent! Please check your email.");
+    } catch (error: any) {
+      console.error("Reset password error:", error);
+      toast.error(error.message || "Failed to send reset instructions");
+    } finally {
+      setIsResetting(false);
+    }
   };
 
   return (
@@ -90,6 +111,14 @@ const SignIn = () => {
           </div>
         </div>
       </div>
+      <ForgotPasswordDialog
+        open={showForgotPassword}
+        onOpenChange={setShowForgotPassword}
+        onSubmit={handleResetPassword}
+        email={resetEmail}
+        onEmailChange={setResetEmail}
+        isResetting={isResetting}
+      />
     </div>
   );
 };
