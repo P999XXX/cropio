@@ -15,6 +15,7 @@ import StepOneForm from "@/components/auth/StepOneForm";
 import StepTwoForm, { StepTwoFormData } from "@/components/auth/StepTwoForm";
 import ThankYouDialog from "@/components/auth/ThankYouDialog";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import SignUpHeader from "@/components/auth/SignUpHeader";
 
 const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -108,12 +109,7 @@ const SignUp = () => {
         <Navbar />
         <div className="flex min-h-[calc(100vh-64px)] items-center justify-center px-4">
           <div className="w-full md:w-[500px]">
-            <div className={`space-y-2 ${isMobile ? 'text-left' : 'text-center'} mb-6`}>
-              <h1 className="text-2xl md:text-3xl font-bold">Register for Free!</h1>
-              <p className="text-[14px] text-muted-foreground">
-                {currentStep === 1 ? "Choose Your Role" : "Complete Your Profile"}
-              </p>
-            </div>
+            <SignUpHeader />
 
             {isMobile ? (
               <div className="space-y-6">
