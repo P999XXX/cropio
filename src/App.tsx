@@ -1,72 +1,45 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Index from "./pages/Index";
-import SignIn from "./pages/SignIn";
-import SignUp from "./pages/SignUp";
-import ResetPassword from "./pages/ResetPassword";
-import Components from "./pages/Components";
-import DashboardLayout from "./components/layouts/DashboardLayout";
-import DashboardHome from "./pages/dashboard/DashboardHome";
-import DashboardTeam from "./pages/dashboard/DashboardTeam";
-import DashboardSettings from "./pages/dashboard/DashboardSettings";
-import DashboardFAQ from "./pages/dashboard/DashboardFAQ";
-import DashboardSupport from "./pages/dashboard/DashboardSupport";
-import DashboardSubscriptions from "./pages/dashboard/DashboardSubscriptions";
+import { BrowserRouter } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import SignIn from "@/pages/SignIn";
+import SignUp from "@/pages/SignUp";
+import ResetPassword from "@/pages/ResetPassword";
+import Dashboard from "@/pages/Dashboard";
+import ThemeHandler from "@/components/ThemeHandler";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Index />,
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 0,
+      gcTime: 0,
+      retry: 1,
+      refetchOnWindowFocus: true,
+    },
   },
-  {
-    path: "/sign-in",
-    element: <SignIn />,
-  },
-  {
-    path: "/sign-up",
-    element: <SignUp />,
-  },
-  {
-    path: "/reset-password",
-    element: <ResetPassword />,
-  },
-  {
-    path: "/components",
-    element: <Components />,
-  },
-  {
-    path: "/dashboard",
-    element: <DashboardLayout />,
-    children: [
-      {
-        path: "",
-        element: <DashboardHome />,
-      },
-      {
-        path: "team",
-        element: <DashboardTeam />,
-      },
-      {
-        path: "subscriptions",
-        element: <DashboardSubscriptions />,
-      },
-      {
-        path: "settings",
-        element: <DashboardSettings />,
-      },
-      {
-        path: "faq",
-        element: <DashboardFAQ />,
-      },
-      {
-        path: "support",
-        element: <DashboardSupport />,
-      },
-    ],
-  },
-]);
+});
 
-function App() {
-  return <RouterProvider router={router} />;
-}
+const App = () => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <TooltipProvider>
+          <ThemeHandler />
+          <Toaster />
+          <Sonner />
+          <Routes>
+            <Route path="/" element={<SignIn />} />
+            <Route path="/sign-in" element={<SignIn />} />
+            <Route path="/sign-up" element={<SignUp />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/dashboard/*" element={<Dashboard />} />
+          </Routes>
+        </TooltipProvider>
+      </BrowserRouter>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
