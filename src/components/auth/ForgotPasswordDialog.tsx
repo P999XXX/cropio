@@ -62,7 +62,7 @@ const ForgotPasswordDialog = ({
             variant="outline"
             onClick={() => onOpenChange(false)}
             disabled={isResetting}
-            className="order-2 sm:order-1 w-full sm:w-auto hover:bg-muted/50 hover:border-transparent hover:text-foreground transition-colors"
+            className="order-2 sm:order-1 w-full sm:w-auto hover:bg-secondary/80"
           >
             Cancel
           </Button>
