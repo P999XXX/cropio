@@ -15,7 +15,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         </div>
         <div className="flex-1 transition-all duration-300 ease-in-out">
           <Navbar />
-          <SidebarInset className="px-4 lg:px-8 py-6 pt-20">
+          <SidebarInset className="px-1 lg:px-8 py-6 pt-20">
             {children}
           </SidebarInset>
         </div>
