@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import ResetPasswordForm from "@/components/auth/ResetPasswordForm";
 import ResetPasswordHeader from "@/components/auth/ResetPasswordHeader";
@@ -10,26 +10,13 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 const ResetPassword = () => {
   const [firstName, setFirstName] = useState("");
   const [isThankYouOpen, setIsThankYouOpen] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
   const isMobile = useIsMobile();
 
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('first_name')
-          .eq('id', user.id)
-          .single();
-
-        if (profile?.first_name) {
-          setFirstName(profile.first_name);
-        }
-      }
-    };
-
-    fetchUserProfile();
-  }, []);
+  const handleResetPassword = async (email: string) => {
+    setUserEmail(email);
+    setIsThankYouOpen(true);
+  };
 
   return (
     <SidebarProvider>
@@ -39,7 +26,10 @@ const ResetPassword = () => {
           <div className="flex-1 flex items-center justify-center py-8 px-4 w-full">
             <div className="w-full max-w-md">
               <ResetPasswordHeader firstName={firstName} isMobile={isMobile} />
-              <ResetPasswordForm isMobile={isMobile} />
+              <ResetPasswordForm 
+                isMobile={isMobile} 
+                onSubmit={handleResetPassword}
+              />
             </div>
           </div>
         </main>
@@ -47,6 +37,7 @@ const ResetPassword = () => {
         <ResetPasswordThankYouDialog
           open={isThankYouOpen}
           onOpenChange={setIsThankYouOpen}
+          userEmail={userEmail}
         />
       </div>
     </SidebarProvider>

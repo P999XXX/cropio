@@ -10,25 +10,28 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import Navbar from "@/components/Navbar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 
+type UserRole = "buyer" | "supplier";
+
 const SignUp = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isThankYouOpen, setIsThankYouOpen] = useState(false);
-  const [formData, setFormData] = useState<StepTwoFormData>({
+  const [formData, setFormData] = useState<StepTwoFormData & { role?: UserRole }>({
     email: "",
     password: "",
     confirmPassword: "",
     firstName: "",
     lastName: "",
     companyName: "",
-    role: "buyer",
+    countryCode: "+49",
     phoneNumber: "",
-    agreement: false,
+    acceptTerms: false,
+    acceptPrivacy: false,
   });
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
-  const handleStepOneSubmit = (data: Partial<StepTwoFormData>) => {
-    setFormData((prev) => ({ ...prev, ...data }));
+  const handleStepOneSubmit = (role: UserRole) => {
+    setFormData((prev) => ({ ...prev, role }));
     setCurrentStep(2);
   };
 
@@ -103,15 +106,12 @@ const SignUp = () => {
                   onSubmit={handleStepOneSubmit}
                   onGoogleSignUp={handleGoogleSignUp}
                   onLinkedInSignUp={handleLinkedInSignUp}
-                  defaultValues={formData}
-                  isMobile={isMobile}
                 />
               ) : (
                 <StepTwoForm
                   onSubmit={handleStepTwoSubmit}
                   onBack={() => setCurrentStep(1)}
-                  defaultValues={formData}
-                  isMobile={isMobile}
+                  isLoading={false}
                 />
               )}
             </div>
