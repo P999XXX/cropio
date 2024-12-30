@@ -15,20 +15,31 @@ const PhoneInput = ({ form }: PhoneInputProps) => {
   const [userCountry, setUserCountry] = useState<CountryCode>("DE");
 
   useEffect(() => {
-    fetch('https://ipapi.co/json/')
-      .then(response => response.json())
-      .then(data => {
+    const detectCountry = async () => {
+      try {
+        const response = await fetch('https://ipapi.co/json/');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
         const countryCode = data.country as CountryCode;
         const country = countries.find(c => c.country === countryCode);
         if (country) {
           form.setValue('countryCode', country.value);
           setUserCountry(countryCode);
         }
-      })
-      .catch(error => {
-        console.error('Error fetching country:', error);
-      });
-  }, []);
+      } catch (error) {
+        // Silently handle the error and keep the default DE value
+        console.debug('Could not detect country, using default:', error);
+        const defaultCountry = countries.find(c => c.country === 'DE');
+        if (defaultCountry) {
+          form.setValue('countryCode', defaultCountry.value);
+        }
+      }
+    };
+
+    detectCountry();
+  }, [form]);
 
   const selectedCountry = countries.find(
     (country) => country.value === form.watch("countryCode")
