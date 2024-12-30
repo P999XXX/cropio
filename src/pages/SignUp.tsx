@@ -107,8 +107,8 @@ const SignUp = () => {
     <SidebarProvider>
       <div className="min-h-screen bg-background">
         <Navbar />
-        <div className="flex min-h-[calc(100vh-64px)] items-center justify-center px-4">
-          <div className="w-full md:w-[500px]">
+        <main className="container flex min-h-[calc(100vh-64px)] items-center justify-center">
+          <div className="w-full md:w-[500px] py-16">
             <SignUpHeader />
 
             {isMobile ? (
@@ -168,7 +168,7 @@ const SignUp = () => {
               </Card>
             )}
           </div>
-        </div>
+        </main>
         <ThankYouDialog
           open={showThankYou}
           onOpenChange={setShowThankYou}
