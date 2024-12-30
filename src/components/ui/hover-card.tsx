@@ -1,3 +1,5 @@
+"use client"
+
 import * as React from "react"
 import * as HoverCardPrimitive from "@radix-ui/react-hover-card"
 
@@ -17,9 +19,9 @@ const HoverCardContent = React.forwardRef<
     sideOffset={sideOffset}
     className={cn(
       "z-50 w-64 rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-none",
-      "data-[state=open]:animate-in data-[state=closed]:animate-out",
-      "data-[state=closed]:opacity-0 data-[state=open]:opacity-100",
-      "transition-opacity duration-200",
+      "opacity-0 scale-95",
+      "data-[state=open]:opacity-100 data-[state=open]:scale-100",
+      "transition-all duration-150 ease-out",
       className
     )}
     {...props}

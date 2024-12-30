@@ -59,7 +59,9 @@ export const TablePagination = ({
         <PaginationItem>
           <PaginationPrevious
             onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
-            className={`${currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"} text-[0.775rem]`}
+            className={`${
+              currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"
+            } text-[0.775rem] bg-secondary hover:bg-secondary/80 text-secondary-foreground`}
           />
         </PaginationItem>
 
@@ -73,7 +75,11 @@ export const TablePagination = ({
               <PaginationLink
                 isActive={pageNum === currentPage}
                 onClick={() => onPageChange(pageNum)}
-                className="cursor-pointer text-[0.775rem]"
+                className={`cursor-pointer text-[0.775rem] ${
+                  pageNum === currentPage
+                    ? "bg-secondary/90 text-secondary-foreground"
+                    : "bg-secondary/50 text-secondary-foreground hover:bg-secondary/80"
+                }`}
               >
                 {pageNum}
               </PaginationLink>
@@ -84,7 +90,9 @@ export const TablePagination = ({
         <PaginationItem>
           <PaginationNext
             onClick={() => currentPage < totalPages && onPageChange(currentPage + 1)}
-            className={`${currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"} text-[0.775rem]`}
+            className={`${
+              currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"
+            } text-[0.775rem] bg-secondary hover:bg-secondary/80 text-secondary-foreground`}
           />
         </PaginationItem>
       </PaginationContent>
