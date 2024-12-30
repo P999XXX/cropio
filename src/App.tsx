@@ -11,6 +11,7 @@ import DashboardSettings from "./pages/dashboard/DashboardSettings";
 import DashboardFAQ from "./pages/dashboard/DashboardFAQ";
 import DashboardSupport from "./pages/dashboard/DashboardSupport";
 import DashboardSubscriptions from "./pages/dashboard/DashboardSubscriptions";
+import { Outlet } from "react-router-dom";
 
 const router = createBrowserRouter([
   {
@@ -35,7 +36,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <DashboardLayout />,
+    element: <DashboardLayout><Outlet /></DashboardLayout>,
     children: [
       {
         path: "",
