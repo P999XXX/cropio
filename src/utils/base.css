@@ -35,10 +35,21 @@
   }
 
   * {
-    @apply border-border;
+    @apply border-border transition-all duration-200;
   }
 
   body {
     @apply bg-background text-foreground font-inter;
+  }
+
+  /* Remove default focus borders */
+  *:focus {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Custom focus styles for accessibility */
+  *:focus-visible {
+    @apply ring-2 ring-secondary ring-offset-1 ring-offset-background;
   }
 }
