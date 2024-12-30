@@ -8,11 +8,9 @@ interface DashboardLayoutProps {
 
 const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   return (
-    <SidebarProvider defaultOpen={false}>
+    <SidebarProvider defaultOpen={true}>
       <div className="flex min-h-screen w-full bg-background">
-        <div className="transition-all duration-300 ease-in-out">
-          <DashboardSidebar />
-        </div>
+        <DashboardSidebar />
         <div className="flex-1 transition-all duration-300 ease-in-out">
           <Navbar />
           <SidebarInset className="px-1 lg:px-8 py-6 pt-20">

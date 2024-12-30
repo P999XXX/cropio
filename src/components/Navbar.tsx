@@ -2,7 +2,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { MessageSquare, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { useLocation, Link, useNavigate } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useSidebar } from "@/components/ui/sidebar";
 import { Logo } from "./navbar/Logo";
@@ -18,16 +18,8 @@ const Navbar = () => {
   const [userInitials, setUserInitials] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-  const navigate = useNavigate();
   const isDashboard = location.pathname.startsWith('/dashboard');
-  
-  let sidebarState;
-  try {
-    const { state } = useSidebar();
-    sidebarState = state;
-  } catch {
-    sidebarState = null;
-  }
+  const { state } = useSidebar();
 
   useEffect(() => {
     const theme = localStorage.getItem("theme");
@@ -92,7 +84,7 @@ const Navbar = () => {
           <div className="flex items-center gap-3">
             {isDashboard && (
               <>
-                <DashboardSidebarTrigger isExpanded={sidebarState === 'expanded'} />
+                <DashboardSidebarTrigger isExpanded={state === 'expanded'} />
                 <Sheet open={isOpen} onOpenChange={setIsOpen}>
                   <SheetTrigger asChild>
                     <Button 
