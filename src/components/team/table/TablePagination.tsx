@@ -61,7 +61,7 @@ export const TablePagination = ({
             onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
             className={`${
               currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"
-            } text-[0.775rem] bg-background border-primary/20 hover:bg-primary/5 hover:border-primary/30 text-foreground`}
+            } text-[0.775rem] bg-background border-primary/20 hover:bg-primary/5 hover:border-primary/30`}
           />
         </PaginationItem>
 
@@ -77,8 +77,8 @@ export const TablePagination = ({
                 onClick={() => onPageChange(pageNum)}
                 className={`cursor-pointer text-[0.775rem] ${
                   pageNum === currentPage
-                    ? "bg-primary/10 border-primary/30 text-foreground"
-                    : "bg-background border-primary/20 text-foreground hover:bg-primary/5 hover:border-primary/30"
+                    ? "bg-primary/10 border-primary/30"
+                    : "bg-background border-primary/20 hover:bg-primary/5 hover:border-primary/30"
                 }`}
               >
                 {pageNum}
@@ -92,7 +92,7 @@ export const TablePagination = ({
             onClick={() => currentPage < totalPages && onPageChange(currentPage + 1)}
             className={`${
               currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"
-            } text-[0.775rem] bg-background border-primary/20 hover:bg-primary/5 hover:border-primary/30 text-foreground`}
+            } text-[0.775rem] bg-background border-primary/20 hover:bg-primary/5 hover:border-primary/30`}
           />
         </PaginationItem>
       </PaginationContent>

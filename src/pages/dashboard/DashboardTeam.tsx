@@ -72,7 +72,7 @@ const DashboardTeam = () => {
         <Button 
           variant="primary"
           onClick={() => setIsInviteDialogOpen(true)}
-          className="flex items-center gap-2 w-full lg:w-auto text-[0.775rem] lg:h-fit lg:py-2 mt-auto"
+          className="flex items-center gap-2 w-full lg:w-auto text-[0.775rem] lg:h-fit lg:py-2"
         >
           <UserPlus className="h-4 w-4" />
           Invite Member
