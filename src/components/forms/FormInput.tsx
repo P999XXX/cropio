@@ -12,9 +12,21 @@ interface FormInputProps {
   type?: string;
   description?: string;
   className?: string;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const FormInput = ({ form, name, label, placeholder, type = "text", description, className }: FormInputProps) => {
+const FormInput = ({ 
+  form, 
+  name, 
+  label, 
+  placeholder, 
+  type = "text", 
+  description, 
+  className,
+  value,
+  onChange 
+}: FormInputProps) => {
   return (
     <FormField
       control={form.control}
@@ -23,7 +35,14 @@ const FormInput = ({ form, name, label, placeholder, type = "text", description,
         <FormItem className="space-y-1">
           <FormLabel>{label}</FormLabel>
           <FormControl>
-            <Input placeholder={placeholder} type={type} className={className} {...field} />
+            <Input 
+              placeholder={placeholder} 
+              type={type} 
+              className={className} 
+              value={value}
+              onChange={onChange}
+              {...field} 
+            />
           </FormControl>
           <FormErrorMessage message={form.formState.errors[name]?.message as string} />
         </FormItem>

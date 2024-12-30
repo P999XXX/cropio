@@ -4,9 +4,8 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card";
 import FormInput from "@/components/forms/FormInput";
-import PasswordInput from "./PasswordInput";
+import PasswordInput from "@/components/auth/PasswordInput";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -46,6 +45,11 @@ const SignIn = () => {
             </div>
             <form onSubmit={handleSubmit} className="space-y-4 w-full">
               <FormInput
+                form={{
+                  formState: { errors: {} },
+                  control: { register: () => ({}) },
+                }}
+                name="email"
                 label="Email"
                 type="email"
                 placeholder="Enter your email"
@@ -53,6 +57,11 @@ const SignIn = () => {
                 onChange={(e) => setEmail(e.target.value)}
               />
               <PasswordInput
+                form={{
+                  formState: { errors: {} },
+                  control: { register: () => ({}) },
+                }}
+                name="password"
                 label="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
