@@ -70,6 +70,7 @@ const DashboardTeam = () => {
           </p>
         </div>
         <Button 
+          variant="primary"
           onClick={() => setIsInviteDialogOpen(true)}
           className="flex items-center gap-2 w-full lg:w-auto text-[0.775rem] lg:h-fit lg:py-2 mt-auto"
         >
