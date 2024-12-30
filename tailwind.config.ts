@@ -39,8 +39,9 @@ export default {
           foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
-          DEFAULT: "hsl(240 3.7% 12%)", // Darkened from 15.9%
-          foreground: "hsl(var(--secondary-foreground))",
+          DEFAULT: "#dbdbdb",
+          hover: "#d5d5d5",
+          foreground: "#000000",
         },
         success: {
           DEFAULT: "#F2FCE2",
