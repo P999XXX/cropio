@@ -16,11 +16,11 @@ export const NavActions = ({ isDark, onToggleTheme, userInitials }: NavActionsPr
     <div className="hidden lg:flex items-center space-x-2">
       <LanguageSwitcher />
       <CurrencySwitcher />
-      <ThemeToggle isDark={isDark} onToggle={onToggleTheme} />
+      <ThemeToggle isDark={isDark} onToggleTheme={onToggleTheme} />
       {userInitials ? (
         <UserMenu userInitials={userInitials} />
       ) : (
-        <Button asChild variant="default" size="sm">
+        <Button asChild variant="primary" size="sm">
           <Link to="/signin">Sign In</Link>
         </Button>
       )}
