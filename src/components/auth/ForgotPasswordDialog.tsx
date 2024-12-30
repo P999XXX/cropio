@@ -59,10 +59,10 @@ const ForgotPasswordDialog = ({
             {isResetting ? "Sending..." : "Send Instructions"}
           </Button>
           <Button
-            variant="outline"
+            variant="secondary"
             onClick={() => onOpenChange(false)}
             disabled={isResetting}
-            className="order-2 sm:order-1 w-full sm:w-auto hover:bg-secondary/80"
+            className="order-2 sm:order-1 w-full sm:w-auto bg-secondary text-secondary-foreground hover:bg-secondary/80"
           >
             Cancel
           </Button>
