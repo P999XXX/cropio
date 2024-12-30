@@ -77,7 +77,7 @@ export const TablePagination = ({
                 onClick={() => onPageChange(pageNum)}
                 className={`cursor-pointer text-[0.775rem] ${
                   pageNum === currentPage
-                    ? "bg-primary/10 border-primary/30"
+                    ? "bg-background border-primary/30 pointer-events-none"
                     : "bg-background border-primary/20 hover:bg-primary/5 hover:border-primary/30"
                 }`}
               >
