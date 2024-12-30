@@ -82,10 +82,10 @@ const SignIn = () => {
     <SidebarProvider>
       <div className="min-h-screen bg-background">
         <Navbar />
-        <div className="flex min-h-[calc(100vh-64px)] items-center justify-center px-4">
-          <div className="w-full max-w-md">
-            <div className={`space-y-2 ${isMobile ? 'text-left' : 'text-center'} mb-6`}>
-              <h1 className="text-2xl md:text-3xl font-extrabold">
+        <main className="container flex min-h-[calc(100vh-64px)] items-center justify-center">
+          <div className="w-full md:w-[500px] py-16">
+            <div className="space-y-2 text-center mb-8">
+              <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">
                 {firstName ? `Welcome back ${firstName}!` : "Welcome back!"}
               </h1>
               <p className="text-[14px] text-muted-foreground">
@@ -111,7 +111,7 @@ const SignIn = () => {
               />
             )}
           </div>
-        </div>
+        </main>
         <ForgotPasswordDialog
           open={showForgotPassword}
           onOpenChange={setShowForgotPassword}
