@@ -77,7 +77,7 @@ export const TeamMembersTable = ({ teamMembers, isLoading, onInvite }: TeamMembe
             members={paginatedMembers}
             viewMode={viewMode}
             sortConfig={sortConfig}
-            onSort={onSort}
+            onSort={handleSort}
           />
         </div>
       )}
