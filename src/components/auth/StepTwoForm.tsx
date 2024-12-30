@@ -63,7 +63,7 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
 
   const formContent = (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
         <div className="grid gap-4 md:grid-cols-2">
           <FormInput
             form={form}
@@ -132,7 +132,7 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
           {isLoading ? "Creating account..." : "Create Account"}
         </Button>
 
-        <div className="text-sm text-center text-muted-foreground pt-4">
+        <div className="text-sm text-center text-muted-foreground pt-2">
           Already have an account?{" "}
           <a href="/signin" className="text-primary hover:underline font-medium">
             Sign in
@@ -157,7 +157,7 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
     <>
       {backButton}
       {!isMobile && (
-        <CardDescription className="text-muted-foreground mb-8">
+        <CardDescription className="text-muted-foreground mb-6">
           Complete your registration
         </CardDescription>
       )}
