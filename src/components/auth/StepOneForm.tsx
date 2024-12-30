@@ -19,11 +19,11 @@ const StepOneForm = ({ onSubmit, onGoogleSignUp, onLinkedInSignUp }: StepOneForm
         <Button
           variant="outline"
           onClick={() => onSubmit("buyer")}
-          className="h-24 bg-background border-input hover:bg-background hover:border-2 hover:border-primary transition-all"
+          className="h-28 px-6 bg-background border-input hover:bg-background hover:border-2 hover:border-primary transition-all"
         >
           <div className="flex flex-col items-center gap-2">
             <img 
-              src="/lovable-uploads/0aaa1e70-1712-4d31-a2b1-af6c7d6d14df.png" 
+              src="/lovable-uploads/977f591c-307c-470a-a365-6a048c8b3e26.png" 
               alt="Buyer Icon" 
               className="h-7 w-7 mb-1 object-contain"
             />
@@ -36,11 +36,11 @@ const StepOneForm = ({ onSubmit, onGoogleSignUp, onLinkedInSignUp }: StepOneForm
         <Button
           variant="outline"
           onClick={() => onSubmit("supplier")}
-          className="h-24 bg-background border-input hover:bg-background hover:border-2 hover:border-primary transition-all"
+          className="h-28 px-6 bg-background border-input hover:bg-background hover:border-2 hover:border-primary transition-all"
         >
           <div className="flex flex-col items-center gap-2">
             <img 
-              src="/lovable-uploads/977f591c-307c-470a-a365-6a048c8b3e26.png" 
+              src="/lovable-uploads/0aaa1e70-1712-4d31-a2b1-af6c7d6d14df.png" 
               alt="Supplier Icon" 
               className="h-7 w-7 mb-1 object-contain"
             />
