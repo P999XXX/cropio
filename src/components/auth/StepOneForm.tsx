@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import AuthProviders from "./AuthProviders";
 import { useIsMobile } from "@/hooks/use-mobile";
 import SignUpHeader from "./SignUpHeader";
-import { ShoppingCart, Factory } from "lucide-react";
 
 interface StepOneFormProps {
   onSubmit: (role: "buyer" | "supplier") => void;
@@ -23,7 +22,11 @@ const StepOneForm = ({ onSubmit, onGoogleSignUp, onLinkedInSignUp }: StepOneForm
           className="h-24 bg-background border-input hover:bg-background hover:border-2 hover:border-primary transition-all"
         >
           <div className="flex flex-col items-center gap-2">
-            <ShoppingCart className="h-6 w-6 text-primary mb-1" />
+            <img 
+              src="/lovable-uploads/0aaa1e70-1712-4d31-a2b1-af6c7d6d14df.png" 
+              alt="Buyer Icon" 
+              className="h-6 w-6 mb-1 object-contain"
+            />
             <span className="font-semibold text-foreground">I'm a Buyer</span>
             <span className="text-sm text-muted-foreground">
               I want to purchase products
@@ -36,7 +39,11 @@ const StepOneForm = ({ onSubmit, onGoogleSignUp, onLinkedInSignUp }: StepOneForm
           className="h-24 bg-background border-input hover:bg-background hover:border-2 hover:border-primary transition-all"
         >
           <div className="flex flex-col items-center gap-2">
-            <Factory className="h-6 w-6 text-primary mb-1" />
+            <img 
+              src="/lovable-uploads/977f591c-307c-470a-a365-6a048c8b3e26.png" 
+              alt="Supplier Icon" 
+              className="h-6 w-6 mb-1 object-contain"
+            />
             <span className="font-semibold text-foreground">I'm a Supplier</span>
             <span className="text-sm text-muted-foreground">
               I want to sell products
