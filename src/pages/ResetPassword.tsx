@@ -11,6 +11,7 @@ import Navbar from "@/components/Navbar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import ResetPasswordForm from "@/components/auth/ResetPasswordForm";
 import ResetPasswordHeader from "@/components/auth/ResetPasswordHeader";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 const ResetPassword = () => {
   const navigate = useNavigate();
@@ -21,7 +22,6 @@ const ResetPassword = () => {
     const handlePasswordReset = async () => {
       const { data: { session }, error } = await supabase.auth.getSession();
       
-      // If no session, try to get it from the URL
       if (!session) {
         const hashParams = new URLSearchParams(window.location.hash.substring(1));
         const accessToken = hashParams.get('access_token');
@@ -39,13 +39,11 @@ const ResetPassword = () => {
             return;
           }
         } else {
-          // No tokens found, redirect to signin
           navigate('/signin');
           return;
         }
       }
 
-      // Get user profile data
       const { data: profile } = await supabase
         .from('profiles')
         .select('first_name')
@@ -60,31 +58,33 @@ const ResetPassword = () => {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <div className={`container mx-auto px-4 ${isMobile ? 'pt-12' : 'pt-20'} flex items-${isMobile ? 'start' : 'center'} justify-center min-h-[calc(100vh-64px)]`}>
-        <div className={`max-w-md w-full ${isMobile ? 'mt-8' : 'my-8'}`}>
-          <ResetPasswordHeader firstName={firstName} isMobile={isMobile} />
+    <SidebarProvider>
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <div className={`container mx-auto px-4 ${isMobile ? 'pt-12' : 'pt-20'} flex items-${isMobile ? 'start' : 'center'} justify-center min-h-[calc(100vh-64px)]`}>
+          <div className={`max-w-md w-full ${isMobile ? 'mt-8' : 'my-8'}`}>
+            <ResetPasswordHeader firstName={firstName} isMobile={isMobile} />
 
-          <div className="md:block hidden">
-            <Card>
-              <CardHeader className="pb-2">
-                <CardDescription>
-                  Please enter your new password
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="pt-2">
-                <ResetPasswordForm isMobile={isMobile} />
-              </CardContent>
-            </Card>
-          </div>
+            <div className="md:block hidden">
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardDescription>
+                    Please enter your new password
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="pt-2">
+                  <ResetPasswordForm isMobile={isMobile} />
+                </CardContent>
+              </Card>
+            </div>
 
-          <div className="md:hidden block space-y-4">
-            <ResetPasswordForm isMobile={isMobile} />
+            <div className="md:hidden block space-y-4">
+              <ResetPasswordForm isMobile={isMobile} />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </SidebarProvider>
   );
 };
 

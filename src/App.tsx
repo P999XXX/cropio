@@ -11,7 +11,7 @@ import DashboardSettings from "./pages/dashboard/DashboardSettings";
 import DashboardFAQ from "./pages/dashboard/DashboardFAQ";
 import DashboardSupport from "./pages/dashboard/DashboardSupport";
 import DashboardSubscriptions from "./pages/dashboard/DashboardSubscriptions";
-import { Outlet } from "react-router-dom";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 const router = createBrowserRouter([
   {
@@ -36,33 +36,63 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <DashboardLayout><Outlet /></DashboardLayout>,
-    children: [
-      {
-        path: "",
-        element: <DashboardHome />,
-      },
-      {
-        path: "team",
-        element: <DashboardTeam />,
-      },
-      {
-        path: "subscriptions",
-        element: <DashboardSubscriptions />,
-      },
-      {
-        path: "settings",
-        element: <DashboardSettings />,
-      },
-      {
-        path: "faq",
-        element: <DashboardFAQ />,
-      },
-      {
-        path: "support",
-        element: <DashboardSupport />,
-      },
-    ],
+    element: (
+      <SidebarProvider defaultOpen={true}>
+        <DashboardLayout>
+          <DashboardHome />
+        </DashboardLayout>
+      </SidebarProvider>
+    ),
+  },
+  {
+    path: "/dashboard/team",
+    element: (
+      <SidebarProvider defaultOpen={true}>
+        <DashboardLayout>
+          <DashboardTeam />
+        </DashboardLayout>
+      </SidebarProvider>
+    ),
+  },
+  {
+    path: "/dashboard/subscriptions",
+    element: (
+      <SidebarProvider defaultOpen={true}>
+        <DashboardLayout>
+          <DashboardSubscriptions />
+        </DashboardLayout>
+      </SidebarProvider>
+    ),
+  },
+  {
+    path: "/dashboard/settings",
+    element: (
+      <SidebarProvider defaultOpen={true}>
+        <DashboardLayout>
+          <DashboardSettings />
+        </DashboardLayout>
+      </SidebarProvider>
+    ),
+  },
+  {
+    path: "/dashboard/faq",
+    element: (
+      <SidebarProvider defaultOpen={true}>
+        <DashboardLayout>
+          <DashboardFAQ />
+        </DashboardLayout>
+      </SidebarProvider>
+    ),
+  },
+  {
+    path: "/dashboard/support",
+    element: (
+      <SidebarProvider defaultOpen={true}>
+        <DashboardLayout>
+          <DashboardSupport />
+        </DashboardLayout>
+      </SidebarProvider>
+    ),
   },
 ]);
 

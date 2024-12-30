@@ -11,6 +11,7 @@ import ResetPasswordThankYouDialog from "@/components/auth/ResetPasswordThankYou
 import { SignInFormData } from "@/components/auth/SignInForm";
 import { handleGoogleSignIn, handleLinkedInSignIn, handlePasswordReset } from "@/utils/auth-handlers";
 import { errorToastStyle, successToastStyle } from "@/utils/toast-styles";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -23,7 +24,6 @@ const SignIn = () => {
   const isMobile = useIsMobile();
 
   useEffect(() => {
-    // Check URL hash for error message
     const hashParams = new URLSearchParams(window.location.hash.replace('#', ''));
     const errorDescription = hashParams.get('error_description');
     
@@ -79,52 +79,54 @@ const SignIn = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <div className={`container mx-auto px-4 pt-20 flex items-${isMobile ? 'start' : 'center'} justify-center min-h-[calc(100vh-64px)]`}>
-        <div className="max-w-md w-full">
-          <div className={`space-y-2 ${isMobile ? 'text-left' : 'text-center'} mb-6`}>
-            <h1 className="text-2xl md:text-3xl font-extrabold">
-              {firstName ? `Welcome back ${firstName}!` : "Welcome back!"}
-            </h1>
-            <p className="text-[14px] text-muted-foreground">
-              Please sign in to continue
-            </p>
-          </div>
+    <SidebarProvider>
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <div className={`container mx-auto px-4 pt-20 flex items-${isMobile ? 'start' : 'center'} justify-center min-h-[calc(100vh-64px)]`}>
+          <div className="max-w-md w-full">
+            <div className={`space-y-2 ${isMobile ? 'text-left' : 'text-center'} mb-6`}>
+              <h1 className="text-2xl md:text-3xl font-extrabold">
+                {firstName ? `Welcome back ${firstName}!` : "Welcome back!"}
+              </h1>
+              <p className="text-[14px] text-muted-foreground">
+                Please sign in to continue
+              </p>
+            </div>
 
-          {isMobile ? (
-            <SignInMobile
-              onSubmit={handleSignIn}
-              isLoading={isLoading}
-              onGoogleSignIn={handleGoogleSignIn}
-              onLinkedInSignIn={handleLinkedInSignIn}
-              onForgotPassword={handleForgotPassword}
-            />
-          ) : (
-            <SignInCard
-              onSubmit={handleSignIn}
-              isLoading={isLoading}
-              onGoogleSignIn={handleGoogleSignIn}
-              onLinkedInSignIn={handleLinkedInSignIn}
-              onForgotPassword={handleForgotPassword}
-            />
-          )}
+            {isMobile ? (
+              <SignInMobile
+                onSubmit={handleSignIn}
+                isLoading={isLoading}
+                onGoogleSignIn={handleGoogleSignIn}
+                onLinkedInSignIn={handleLinkedInSignIn}
+                onForgotPassword={handleForgotPassword}
+              />
+            ) : (
+              <SignInCard
+                onSubmit={handleSignIn}
+                isLoading={isLoading}
+                onGoogleSignIn={handleGoogleSignIn}
+                onLinkedInSignIn={handleLinkedInSignIn}
+                onForgotPassword={handleForgotPassword}
+              />
+            )}
+          </div>
         </div>
+        <ForgotPasswordDialog
+          open={showForgotPassword}
+          onOpenChange={setShowForgotPassword}
+          onSubmit={handleResetPasswordRequest}
+          email={resetEmail}
+          onEmailChange={setResetEmail}
+          isResetting={isResetting}
+        />
+        <ResetPasswordThankYouDialog
+          open={showResetThankYou}
+          onOpenChange={setShowResetThankYou}
+          userEmail={resetEmail}
+        />
       </div>
-      <ForgotPasswordDialog
-        open={showForgotPassword}
-        onOpenChange={setShowForgotPassword}
-        onSubmit={handleResetPasswordRequest}
-        email={resetEmail}
-        onEmailChange={setResetEmail}
-        isResetting={isResetting}
-      />
-      <ResetPasswordThankYouDialog
-        open={showResetThankYou}
-        onOpenChange={setShowResetThankYou}
-        userEmail={resetEmail}
-      />
-    </div>
+    </SidebarProvider>
   );
 };
 

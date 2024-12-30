@@ -14,6 +14,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import StepOneForm from "@/components/auth/StepOneForm";
 import StepTwoForm, { StepTwoFormData } from "@/components/auth/StepTwoForm";
 import ThankYouDialog from "@/components/auth/ThankYouDialog";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -70,7 +71,6 @@ const SignUp = () => {
   const handleStepTwo = async (values: StepTwoFormData) => {
     setIsLoading(true);
     try {
-      // Sign up the user with Supabase
       const { data: authData, error: signUpError } = await supabase.auth.signUp({
         email: values.email,
         password: values.password,
@@ -90,7 +90,6 @@ const SignUp = () => {
         throw signUpError;
       }
 
-      // If signup was successful
       if (authData.user) {
         setUserEmail(values.email);
         setShowThankYou(true);
@@ -175,19 +174,21 @@ const SignUp = () => {
   );
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <div className={`container mx-auto px-4 ${isMobile ? 'pt-12' : 'pt-20'} flex items-${isMobile ? 'start' : 'center'} justify-center min-h-[calc(100vh-64px)]`}>
-        <div className={`max-w-md w-full ${isMobile ? 'mt-8' : 'my-8'}`}>
-          <FormContent />
+    <SidebarProvider>
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <div className={`container mx-auto px-4 ${isMobile ? 'pt-12' : 'pt-20'} flex items-${isMobile ? 'start' : 'center'} justify-center min-h-[calc(100vh-64px)]`}>
+          <div className={`max-w-md w-full ${isMobile ? 'mt-8' : 'my-8'}`}>
+            <FormContent />
+          </div>
         </div>
+        <ThankYouDialog
+          open={showThankYou}
+          onOpenChange={setShowThankYou}
+          userEmail={userEmail}
+        />
       </div>
-      <ThankYouDialog
-        open={showThankYou}
-        onOpenChange={setShowThankYou}
-        userEmail={userEmail}
-      />
-    </div>
+    </SidebarProvider>
   );
 };
 
