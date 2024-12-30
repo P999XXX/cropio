@@ -105,9 +105,9 @@ const SignUp = () => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background w-full">
         <Navbar />
-        <main className="container flex min-h-[calc(100vh-64px)] items-center justify-center">
+        <main className="w-full container flex min-h-[calc(100vh-64px)] items-center justify-center px-4 md:px-0">
           <div className="w-full md:w-[500px] py-16">
             <SignUpHeader />
 
