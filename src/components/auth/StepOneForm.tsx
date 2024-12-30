@@ -14,16 +14,16 @@ import AuthProviders from "./AuthProviders";
 import { AlertCircle } from "lucide-react";
 import { memo } from "react";
 
-export type UserRole = "buyer" | "supplier";
-
 const stepOneSchema = z.object({
-  role: z.enum(["buyer", "supplier"] as const, {
+  role: z.enum(["buyer", "supplier"], {
     required_error: "Choose your role",
   }),
 });
 
-export interface StepOneFormProps {
-  onSubmit: (role: UserRole) => void;
+type StepOneFormData = z.infer<typeof stepOneSchema>;
+
+interface StepOneFormProps {
+  onSubmit: (role: "buyer" | "supplier") => void;
   onGoogleSignUp: () => void;
   onLinkedInSignUp: () => void;
 }
@@ -84,14 +84,14 @@ const StepOneForm = ({
   onGoogleSignUp,
   onLinkedInSignUp,
 }: StepOneFormProps) => {
-  const form = useForm<z.infer<typeof stepOneSchema>>({
+  const form = useForm<StepOneFormData>({
     resolver: zodResolver(stepOneSchema),
     defaultValues: {
       role: undefined,
     },
   });
 
-  const handleSubmit = (data: z.infer<typeof stepOneSchema>) => {
+  const handleSubmit = (data: StepOneFormData) => {
     onSubmit(data.role);
   };
 

@@ -1,18 +1,11 @@
-interface SignUpHeaderProps {
-  step: number;
-  isMobile: boolean;
-}
+import { Leaf } from "lucide-react";
 
-const SignUpHeader = ({ step, isMobile }: SignUpHeaderProps) => {
+const SignUpHeader = () => {
   return (
-    <div className="text-center mb-6">
-      <h1 className="text-2xl font-semibold mb-2">
-        {step === 1 ? "Choose your role" : "Create your account"}
-      </h1>
-      <p className="text-muted-foreground">
-        {step === 1
-          ? "Select how you'll be using our platform"
-          : "Fill in your information to get started"}
+    <div className="space-y-2 text-center md:text-left">
+      <h1 className="text-2xl md:text-3xl font-semibold">Sign Up</h1>
+      <p className="text-[14px] text-muted-foreground">
+        Create your account to get started
       </p>
     </div>
   );

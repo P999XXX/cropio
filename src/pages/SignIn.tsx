@@ -1,26 +1,55 @@
-import { useState } from "react";
-import SignInForm from "@/components/auth/SignInForm";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import Navbar from "@/components/Navbar";
+import { useIsMobile } from "@/hooks/use-mobile";
 import SignInCard from "@/components/auth/SignInCard";
 import SignInMobile from "@/components/auth/SignInMobile";
-import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
 import ForgotPasswordDialog from "@/components/auth/ForgotPasswordDialog";
-import ThankYouDialog from "@/components/auth/ThankYouDialog";
-import { useIsMobile } from "@/hooks/use-mobile";
-import Navbar from "@/components/Navbar";
+import ResetPasswordThankYouDialog from "@/components/auth/ResetPasswordThankYouDialog";
+import { SignInFormData } from "@/components/auth/SignInForm";
+import { handleGoogleSignIn, handleLinkedInSignIn, handlePasswordReset } from "@/utils/auth-handlers";
+import { errorToastStyle, successToastStyle } from "@/utils/toast-styles";
 import { SidebarProvider } from "@/components/ui/sidebar";
 
 const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
-  const [isThankYouOpen, setIsThankYouOpen] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [showResetThankYou, setShowResetThankYou] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
   const [isResetting, setIsResetting] = useState(false);
+  const [firstName, setFirstName] = useState("");
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
-  const handleSignIn = async (values: { email: string; password: string }) => {
+  useEffect(() => {
+    const hashParams = new URLSearchParams(window.location.hash.replace('#', ''));
+    const errorDescription = hashParams.get('error_description');
+    
+    if (errorDescription === 'Email link is invalid or has expired') {
+      toast.error("Your password reset link has expired. Please request a new one.", errorToastStyle);
+    }
+
+    const getFirstName = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('first_name')
+          .eq('id', session.user.id)
+          .single();
+        
+        if (profile?.first_name) {
+          setFirstName(profile.first_name);
+        }
+      }
+    };
+    
+    getFirstName();
+  }, []);
+
+  const handleSignIn = async (values: SignInFormData) => {
     setIsLoading(true);
     try {
       const { error } = await supabase.auth.signInWithPassword({
@@ -30,103 +59,70 @@ const SignIn = () => {
 
       if (error) throw error;
 
-      toast.success("Signed in successfully!");
+      toast.success("Successfully signed in!", successToastStyle);
       navigate("/dashboard");
     } catch (error: any) {
-      toast.error(error.message || "Failed to sign in");
+      console.error("Sign in error:", error);
+      toast.error(error.message || "Failed to sign in", errorToastStyle);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleGoogleSignIn = async () => {
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          queryParams: {
-            access_type: "offline",
-            prompt: "consent",
-          },
-        },
-      });
-
-      if (error) throw error;
-    } catch (error: any) {
-      toast.error(error.message || "Failed to sign in with Google");
-    }
-  };
-
-  const handleLinkedInSignIn = async () => {
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "linkedin",
-      });
-
-      if (error) throw error;
-    } catch (error: any) {
-      toast.error(error.message || "Failed to sign in with LinkedIn");
-    }
+  const handleResetPasswordRequest = async () => {
+    return handlePasswordReset(resetEmail, setIsResetting, setShowForgotPassword, setShowResetThankYou);
   };
 
   const handleForgotPassword = async () => {
-    setIsResetting(true);
-    try {
-      const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
-        redirectTo: `${window.location.origin}/reset-password`,
-      });
-
-      if (error) throw error;
-
-      setIsForgotPasswordOpen(false);
-      setIsThankYouOpen(true);
-    } catch (error: any) {
-      toast.error(error.message || "Failed to send reset instructions");
-    } finally {
-      setIsResetting(false);
-    }
+    setShowForgotPassword(true);
+    return Promise.resolve();
   };
 
   return (
     <SidebarProvider>
       <div className="min-h-screen bg-background">
         <Navbar />
-        <main className="flex min-h-[calc(100vh-64px)]">
-          <div className="flex-1 flex items-center justify-center py-8 px-4 w-full">
-            <div className="w-full max-w-md">
-              {isMobile ? (
-                <SignInMobile
-                  onSubmit={handleSignIn}
-                  isLoading={isLoading}
-                  onGoogleSignIn={handleGoogleSignIn}
-                  onLinkedInSignIn={handleLinkedInSignIn}
-                  onForgotPassword={() => setIsForgotPasswordOpen(true)}
-                />
-              ) : (
-                <SignInCard
-                  onSubmit={handleSignIn}
-                  isLoading={isLoading}
-                  onGoogleSignIn={handleGoogleSignIn}
-                  onLinkedInSignIn={handleLinkedInSignIn}
-                  onForgotPassword={() => setIsForgotPasswordOpen(true)}
-                />
-              )}
+        <main className="flex min-h-[calc(100vh-64px)] items-center justify-center p-4">
+          <div className="w-full max-w-md space-y-6">
+            <div className={`space-y-2 ${isMobile ? 'text-left' : 'text-center'}`}>
+              <h1 className="text-2xl md:text-3xl font-extrabold text-foreground">
+                {firstName ? `Welcome back ${firstName}!` : "Welcome back!"}
+              </h1>
+              <p className="text-[14px] text-muted-foreground">
+                Please sign in to continue
+              </p>
             </div>
+
+            {isMobile ? (
+              <SignInMobile
+                onSubmit={handleSignIn}
+                isLoading={isLoading}
+                onGoogleSignIn={handleGoogleSignIn}
+                onLinkedInSignIn={handleLinkedInSignIn}
+                onForgotPassword={handleForgotPassword}
+              />
+            ) : (
+              <SignInCard
+                onSubmit={handleSignIn}
+                isLoading={isLoading}
+                onGoogleSignIn={handleGoogleSignIn}
+                onLinkedInSignIn={handleLinkedInSignIn}
+                onForgotPassword={handleForgotPassword}
+              />
+            )}
           </div>
         </main>
-
         <ForgotPasswordDialog
-          open={isForgotPasswordOpen}
-          onOpenChange={setIsForgotPasswordOpen}
-          onSubmit={handleForgotPassword}
+          open={showForgotPassword}
+          onOpenChange={setShowForgotPassword}
+          onSubmit={handleResetPasswordRequest}
           email={resetEmail}
           onEmailChange={setResetEmail}
           isResetting={isResetting}
         />
-
-        <ThankYouDialog
-          open={isThankYouOpen}
-          onOpenChange={setIsThankYouOpen}
+        <ResetPasswordThankYouDialog
+          open={showResetThankYou}
+          onOpenChange={setShowResetThankYou}
           userEmail={resetEmail}
         />
       </div>
