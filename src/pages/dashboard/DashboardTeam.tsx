@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { TeamMembersTable } from "@/components/team/TeamMembersTable";
-import { InviteMemberDialog } from "@/components/team/InviteMemberDialog";
+import { InviteMemberDialog } from "@/components/team/invite/InviteMemberDialog";
 import { Button } from "@/components/ui/button";
 import { UserPlus } from "lucide-react";
 import { TeamMember } from "@/types/team";
