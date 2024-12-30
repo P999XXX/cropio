@@ -25,12 +25,9 @@ const StepOneForm = ({ onSubmit, onGoogleSignUp, onLinkedInSignUp }: StepOneForm
             <img 
               src="/lovable-uploads/977f591c-307c-470a-a365-6a048c8b3e26.png" 
               alt="Buyer Icon" 
-              className="h-8 w-8 mb-1 object-contain"
+              className="h-9 w-9 mb-1 object-contain"
             />
             <span className="font-semibold text-foreground">I'm a Buyer</span>
-            <span className="text-sm text-muted-foreground">
-              I want to purchase products
-            </span>
           </div>
         </Button>
         <Button
@@ -42,12 +39,9 @@ const StepOneForm = ({ onSubmit, onGoogleSignUp, onLinkedInSignUp }: StepOneForm
             <img 
               src="/lovable-uploads/0aaa1e70-1712-4d31-a2b1-af6c7d6d14df.png" 
               alt="Supplier Icon" 
-              className="h-8 w-8 mb-1 object-contain"
+              className="h-9 w-9 mb-1 object-contain"
             />
             <span className="font-semibold text-foreground">I'm a Supplier</span>
-            <span className="text-sm text-muted-foreground">
-              I want to sell products
-            </span>
           </div>
         </Button>
       </div>
