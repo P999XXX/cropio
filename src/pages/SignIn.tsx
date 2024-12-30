@@ -9,7 +9,6 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { SignInFormData } from "@/components/auth/SignInForm";
 import ForgotPasswordDialog from "@/components/auth/ForgotPasswordDialog";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader } from "@/components/ui/card";
 
 const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -97,7 +96,7 @@ const SignIn = () => {
         <Navbar />
         <div className="flex min-h-[calc(100vh-64px)] items-center justify-center p-4">
           <div className="w-full max-w-md flex flex-col items-center">
-            <div className={`space-y-2 ${isMobile ? 'text-left w-full' : 'text-center'} mb-6`}>
+            <div className="space-y-2 text-center mb-6">
               <h1 className="text-2xl md:text-3xl font-bold">Welcome Back!</h1>
               <p className="text-[14px] text-muted-foreground">
                 Sign in to your account
@@ -105,38 +104,23 @@ const SignIn = () => {
             </div>
 
             {isMobile ? (
-              <SignInMobile
+              <div className="w-full">
+                <SignInMobile
+                  onSubmit={handleSubmit}
+                  isLoading={isLoading}
+                  onGoogleSignIn={handleGoogleSignIn}
+                  onLinkedInSignIn={handleLinkedInSignIn}
+                  onForgotPassword={() => setShowForgotPassword(true)}
+                />
+              </div>
+            ) : (
+              <SignInCard
                 onSubmit={handleSubmit}
                 isLoading={isLoading}
                 onGoogleSignIn={handleGoogleSignIn}
                 onLinkedInSignIn={handleLinkedInSignIn}
                 onForgotPassword={() => setShowForgotPassword(true)}
               />
-            ) : (
-              <Card className="w-full">
-                <CardHeader className="pb-2">
-                  <CardDescription>
-                    Enter your credentials to sign in
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="pt-2">
-                  <SignInCard
-                    onSubmit={handleSubmit}
-                    isLoading={isLoading}
-                    onGoogleSignIn={handleGoogleSignIn}
-                    onLinkedInSignIn={handleLinkedInSignIn}
-                    onForgotPassword={() => setShowForgotPassword(true)}
-                  />
-                </CardContent>
-                <CardFooter className="flex flex-col space-y-4">
-                  <div className="text-sm text-center w-full text-muted-foreground">
-                    Don't have an account?{" "}
-                    <a href="/signup" className="text-primary hover:underline font-medium">
-                      Sign up
-                    </a>
-                  </div>
-                </CardFooter>
-              </Card>
             )}
           </div>
         </div>

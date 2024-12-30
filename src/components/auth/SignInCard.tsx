@@ -1,4 +1,4 @@
-import { Card, CardContent, CardDescription, CardFooter, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card";
 import SignInForm, { SignInFormData } from "./SignInForm";
 import SocialLoginSection from "./SocialLoginSection";
 
@@ -18,7 +18,7 @@ const SignInCard = ({
   onForgotPassword,
 }: SignInCardProps) => {
   return (
-    <Card className="md:min-w-[500px]">
+    <Card className="w-full">
       <CardHeader className="pb-2">
         <CardDescription>
           Enter your email and password to sign in
@@ -44,15 +44,13 @@ const SignInCard = ({
           onGoogleSignIn={onGoogleSignIn}
           onLinkedInSignIn={onLinkedInSignIn}
         />
-      </CardContent>
-      <CardFooter>
         <div className="text-sm text-center w-full text-muted-foreground">
           Don't have an account?{" "}
           <a href="/signup" className="text-primary hover:underline font-medium">
             Sign up
           </a>
         </div>
-      </CardFooter>
+      </CardContent>
     </Card>
   );
 };

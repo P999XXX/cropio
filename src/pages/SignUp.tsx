@@ -7,7 +7,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
 } from "@/components/ui/card";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -108,7 +107,7 @@ const SignUp = () => {
         <Navbar />
         <div className="flex min-h-[calc(100vh-64px)] items-center justify-center p-4">
           <div className="w-full max-w-md flex flex-col items-center">
-            <div className={`space-y-2 ${isMobile ? 'text-left w-full' : 'text-center'} mb-6`}>
+            <div className="space-y-2 text-center mb-6">
               <h1 className="text-2xl md:text-3xl font-bold">Register for Free!</h1>
               <p className="text-[14px] text-muted-foreground">
                 {currentStep === 1 ? "Choose Your Role" : "Complete Your Profile"}
@@ -160,15 +159,13 @@ const SignUp = () => {
                       onBack={handleBack}
                     />
                   )}
-                </CardContent>
-                <CardFooter className="flex flex-col space-y-4">
-                  <div className="text-sm text-center w-full text-muted-foreground">
+                  <div className="text-sm text-center w-full text-muted-foreground mt-6">
                     Already have an account?{" "}
                     <a href="/signin" className="text-primary hover:underline font-medium">
                       Sign in
                     </a>
                   </div>
-                </CardFooter>
+                </CardContent>
               </Card>
             )}
           </div>
