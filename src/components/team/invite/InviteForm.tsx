@@ -20,6 +20,8 @@ import {
 import { Button } from "@/components/ui/button";
 
 const inviteSchema = z.object({
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
   email: z.string().email("Invalid email address"),
   role: z.enum(["administrator", "editor", "readonly"] as const),
 });
@@ -36,6 +38,8 @@ export const InviteForm = ({ onSubmit, isLoading, onCancel }: InviteFormProps) =
   const form = useForm<InviteFormData>({
     resolver: zodResolver(inviteSchema),
     defaultValues: {
+      firstName: "",
+      lastName: "",
       email: "",
       role: "readonly",
     },
@@ -44,6 +48,44 @@ export const InviteForm = ({ onSubmit, isLoading, onCancel }: InviteFormProps) =
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <div className="grid gap-4 sm:grid-cols-2">
+          <FormField
+            control={form.control}
+            name="firstName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="!text-foreground">First Name</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Enter first name"
+                    className="h-10 px-3 py-2 text-sm rounded-md border border-input bg-background"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="lastName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="!text-foreground">Last Name</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Enter last name"
+                    className="h-10 px-3 py-2 text-sm rounded-md border border-input bg-background"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
         <FormField
           control={form.control}
           name="email"

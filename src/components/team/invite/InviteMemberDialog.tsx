@@ -40,6 +40,8 @@ export const InviteMemberDialog = ({
         invited_by: authData.user.id,
         profile_id: authData.user.id,
         status: "pending",
+        first_name: values.firstName,
+        last_name: values.lastName,
       });
 
       if (insertError) {
@@ -70,10 +72,10 @@ export const InviteMemberDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="dialog-content">
+      <DialogContent className="sm:max-w-[500px] p-6 gap-6">
         <DialogHeader>
-          <DialogTitle className="dialog-title">Invite Team Member</DialogTitle>
-          <DialogDescription className="dialog-description">
+          <DialogTitle className="text-xl font-semibold">Invite Team Member</DialogTitle>
+          <DialogDescription className="text-sm text-muted-foreground">
             Send an invitation to join your team. They'll receive an email with
             instructions.
           </DialogDescription>
