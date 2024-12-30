@@ -61,25 +61,29 @@ const ResetPassword = () => {
     <SidebarProvider>
       <div className="min-h-screen bg-background">
         <Navbar />
-        <div className={`container mx-auto px-4 ${isMobile ? 'pt-12' : 'pt-20'} flex items-${isMobile ? 'start' : 'center'} justify-center min-h-[calc(100vh-64px)]`}>
-          <div className={`max-w-md w-full ${isMobile ? 'mt-8' : 'my-8'}`}>
-            <ResetPasswordHeader firstName={firstName} isMobile={isMobile} />
+        <div className="flex min-h-[calc(100vh-64px)]">
+          <div className="flex-1 flex flex-col">
+            <div className={`container mx-auto px-4 flex flex-col ${isMobile ? 'pt-8' : 'justify-center'} flex-1`}>
+              <div className={`w-full max-w-md mx-auto ${isMobile ? '' : 'my-8'}`}>
+                <ResetPasswordHeader firstName={firstName} isMobile={isMobile} />
 
-            <div className="md:block hidden">
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardDescription>
-                    Please enter your new password
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="pt-2">
+                <div className="md:block hidden">
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardDescription>
+                        Please enter your new password
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="pt-2">
+                      <ResetPasswordForm isMobile={isMobile} />
+                    </CardContent>
+                  </Card>
+                </div>
+
+                <div className="md:hidden block space-y-4">
                   <ResetPasswordForm isMobile={isMobile} />
-                </CardContent>
-              </Card>
-            </div>
-
-            <div className="md:hidden block space-y-4">
-              <ResetPasswordForm isMobile={isMobile} />
+                </div>
+              </div>
             </div>
           </div>
         </div>
