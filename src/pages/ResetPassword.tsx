@@ -1,7 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import ResetPasswordHeader from "@/components/auth/ResetPasswordHeader";

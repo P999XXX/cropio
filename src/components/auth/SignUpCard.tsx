@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader } from "@/components/ui/card";
 import SignUpForm, { SignUpFormData } from "./SignUpForm";
-import AuthProviders from "./AuthProviders";
+import SocialLoginSection from "./SocialLoginSection";
 
 interface SignUpCardProps {
   onSubmit: (values: SignUpFormData) => Promise<void>;
@@ -37,10 +37,9 @@ const SignUpCard = ({
             </span>
           </div>
         </div>
-        <AuthProviders
-          onGoogleSignUp={onGoogleSignIn}
-          onLinkedInSignUp={onLinkedInSignIn}
-          variant="signup"
+        <SocialLoginSection
+          onGoogleSignIn={onGoogleSignIn}
+          onLinkedInSignIn={onLinkedInSignIn}
         />
       </CardContent>
       <CardFooter>
