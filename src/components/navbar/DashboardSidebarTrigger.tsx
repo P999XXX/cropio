@@ -7,13 +7,17 @@ interface DashboardSidebarTriggerProps {
 }
 
 export const DashboardSidebarTrigger = ({ isExpanded }: DashboardSidebarTriggerProps) => {
-  const { toggle } = useSidebar();
+  const { state, setOpen } = useSidebar();
+  
+  const handleToggle = () => {
+    setOpen(!isExpanded);
+  };
 
   return (
     <Button
       variant="ghost"
       size="icon"
-      onClick={toggle}
+      onClick={handleToggle}
       className="hidden lg:flex h-8 w-8 md:h-9 md:w-9"
     >
       <Menu className="h-4 w-4 text-muted-foreground" />
