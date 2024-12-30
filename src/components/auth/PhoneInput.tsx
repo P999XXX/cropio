@@ -2,10 +2,11 @@ import { FormLabel } from "@/components/ui/form";
 import { UseFormReturn } from "react-hook-form";
 import { StepTwoFormData } from "./StepTwoForm";
 import { countries } from "./phone/countries";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CountryCode } from 'libphonenumber-js';
 import PhoneNumberInput from "./phone/PhoneNumberInput";
 import CountrySelector from "./phone/CountrySelector";
+import { supabase } from "@/integrations/supabase/client";
 
 interface PhoneInputProps {
   form: UseFormReturn<StepTwoFormData>;
@@ -14,13 +15,32 @@ interface PhoneInputProps {
 const PhoneInput = ({ form }: PhoneInputProps) => {
   const [userCountry, setUserCountry] = useState<CountryCode>("DE");
 
-  // Set default country code on mount
-  useState(() => {
-    const defaultCountry = countries.find(c => c.country === 'DE');
-    if (defaultCountry) {
-      form.setValue('countryCode', defaultCountry.value);
-    }
-  });
+  useEffect(() => {
+    const detectCountry = async () => {
+      try {
+        const { data, error } = await supabase.functions.invoke('detect-country');
+        
+        if (error) throw error;
+        
+        if (data?.country) {
+          const countryCode = data.country as CountryCode;
+          const country = countries.find(c => c.country === countryCode);
+          if (country) {
+            form.setValue('countryCode', country.value);
+            setUserCountry(countryCode);
+          }
+        }
+      } catch (error) {
+        console.debug('Could not detect country, using default:', error);
+        const defaultCountry = countries.find(c => c.country === 'DE');
+        if (defaultCountry) {
+          form.setValue('countryCode', defaultCountry.value);
+        }
+      }
+    };
+
+    detectCountry();
+  }, [form]);
 
   const selectedCountry = countries.find(
     (country) => country.value === form.watch("countryCode")
