@@ -44,7 +44,7 @@ export const TeamTableHeader = ({
           placeholder="Search by name or email..."
           value={searchTerm}
           onChange={(e) => onSearchChange(e.target.value)}
-          className="pl-9 bg-background/50 border-muted hover:border-primary/30 focus:border-primary/50 transition-colors [&::placeholder]:text-[0.775rem] rounded-md"
+          className="pl-9 bg-background/50 border-muted hover:border-primary/30 focus:border-primary/50 transition-colors [&::placeholder]:text-[0.775rem] rounded-md h-9"
         />
       </div>
       <div className="flex gap-2 items-center">
