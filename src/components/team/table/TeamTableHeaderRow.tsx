@@ -1,6 +1,7 @@
 import { TableHead, TableRow } from "@/components/ui/table";
 import { TeamMember } from "@/types/team";
 import { cn } from "@/lib/utils";
+import { Users, UserCheck, Clock, UserPlus } from "lucide-react";
 
 interface TeamTableHeaderRowProps {
   sortConfig: {
@@ -14,19 +15,21 @@ export const TeamTableHeaderRow = ({ sortConfig, onSort }: TeamTableHeaderRowPro
   const renderTableHeader = (
     label: string,
     key: keyof TeamMember,
+    icon: React.ReactNode,
     className?: string
   ) => (
     <TableHead
       className={cn(
-        "cursor-pointer hover:text-primary transition-colors py-2 text-[0.775rem] font-medium bg-slate-100 dark:bg-slate-800",
+        "cursor-pointer hover:bg-primary/5 transition-colors py-3 text-[0.775rem] font-medium bg-primary/10 text-foreground",
         className
       )}
       onClick={() => onSort(key)}
     >
-      <div className="flex items-center gap-1">
-        {label}
+      <div className="flex items-center gap-2">
+        {icon}
+        <span>{label}</span>
         {sortConfig.key === key && (
-          <span className="text-[0.775rem]">
+          <span className="text-[0.775rem] ml-1">
             {sortConfig.direction === "asc" ? "↑" : "↓"}
           </span>
         )}
@@ -36,12 +39,12 @@ export const TeamTableHeaderRow = ({ sortConfig, onSort }: TeamTableHeaderRowPro
 
   return (
     <TableRow>
-      {renderTableHeader("Member", "email")}
-      {renderTableHeader("Role", "role")}
-      {renderTableHeader("Status", "status")}
-      {renderTableHeader("Joined", "created_at")}
-      {renderTableHeader("Invited By", "invited_by")}
-      <TableHead className="w-[50px] py-2 bg-slate-100 dark:bg-slate-800"></TableHead>
+      {renderTableHeader("Member", "email", <Users className="h-4 w-4" />)}
+      {renderTableHeader("Role", "role", <UserCheck className="h-4 w-4" />)}
+      {renderTableHeader("Status", "status", <UserCheck className="h-4 w-4" />)}
+      {renderTableHeader("Joined", "created_at", <Clock className="h-4 w-4" />)}
+      {renderTableHeader("Invited By", "invited_by", <UserPlus className="h-4 w-4" />)}
+      <TableHead className="w-[50px] py-3 bg-primary/10"></TableHead>
     </TableRow>
   );
 };
