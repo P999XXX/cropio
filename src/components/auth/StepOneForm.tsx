@@ -1,6 +1,5 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Leaf } from "lucide-react";
 import AuthProviders from "./AuthProviders";
 import { useIsMobile } from "@/hooks/use-mobile";
 import SignUpHeader from "./SignUpHeader";
