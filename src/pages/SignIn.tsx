@@ -90,6 +90,14 @@ const SignIn = () => {
       <div className="container relative min-h-[calc(100vh-var(--header-height))] items-center justify-center md:grid lg:max-w-none lg:px-0">
         <div className="lg:p-8">
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+            <div className="flex flex-col space-y-2 text-center">
+              <h1 className="text-2xl font-semibold tracking-tight">
+                Welcome back
+              </h1>
+              <p className="text-sm text-muted-foreground">
+                Sign in to your account to continue
+              </p>
+            </div>
             <div className="hidden md:block">
               <SignInCard 
                 onSubmit={handleSubmit}
