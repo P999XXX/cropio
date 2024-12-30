@@ -7,31 +7,13 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import ResetPasswordHeader from "@/components/auth/ResetPasswordHeader";
 import ResetPasswordForm from "@/components/auth/ResetPasswordForm";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import { Card, CardContent } from "@/components/ui/card";
 
 const ResetPassword = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [firstName, setFirstName] = useState("");
   const navigate = useNavigate();
   const isMobile = useIsMobile();
-
-  const handleResetPassword = async (values: { password: string; confirmPassword: string }) => {
-    setIsLoading(true);
-    try {
-      const { error } = await supabase.auth.updateUser({
-        password: values.password,
-      });
-
-      if (error) throw error;
-
-      toast.success("Password reset successfully!");
-      navigate("/signin");
-    } catch (error: any) {
-      console.error("Reset password error:", error);
-      toast.error(error.message || "Failed to reset password");
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   return (
     <SidebarProvider>
@@ -44,19 +26,13 @@ const ResetPassword = () => {
             <div className="md:block hidden">
               <Card>
                 <CardContent className="pt-6">
-                  <ResetPasswordForm
-                    onSubmit={handleResetPassword}
-                    isLoading={isLoading}
-                  />
+                  <ResetPasswordForm isMobile={isMobile} />
                 </CardContent>
               </Card>
             </div>
 
             <div className="md:hidden block">
-              <ResetPasswordForm
-                onSubmit={handleResetPassword}
-                isLoading={isLoading}
-              />
+              <ResetPasswordForm isMobile={isMobile} />
             </div>
           </div>
         </main>
