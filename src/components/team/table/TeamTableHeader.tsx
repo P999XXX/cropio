@@ -1,24 +1,16 @@
-import { Search, Filter } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { MobileSortDropdown } from "./MobileSortDropdown";
-import { TeamMember } from "@/types/team";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { RoleFilter } from "./RoleFilter";
+import { SortConfig } from "../hooks/useTeamTable";
+import { ArrowUpDown } from "lucide-react";
 
 interface TeamTableHeaderProps {
   searchTerm: string;
   onSearchChange: (value: string) => void;
   roleFilter: string;
   onRoleFilterChange: (value: string) => void;
-  sortConfig: {
-    key: keyof TeamMember;
-    direction: "asc" | "desc";
-  };
-  onSort: (key: keyof TeamMember) => void;
+  sortConfig: SortConfig;
+  onSort: (key: string) => void;
   showSortButton?: boolean;
 }
 
@@ -29,62 +21,31 @@ export const TeamTableHeader = ({
   onRoleFilterChange,
   sortConfig,
   onSort,
-  showSortButton = true,
+  showSortButton,
 }: TeamTableHeaderProps) => {
-  const roles = [
-    { value: "all", label: "All roles" },
-    { value: "administrator", label: "Administrator" },
-    { value: "editor", label: "Editor" },
-    { value: "readonly", label: "Read Only" },
-  ];
-
   return (
-    <div className="flex flex-col lg:flex-row gap-4 w-full">
-      <div className="relative flex-1 max-w-full lg:max-w-[333px] team-search-container">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input
-          placeholder="Search by name or email..."
-          value={searchTerm}
-          onChange={(e) => onSearchChange(e.target.value)}
-          className="pl-9 h-9 text-[0.775rem]"
+    <div className="flex flex-col lg:flex-row gap-2 items-start lg:items-center">
+      <Input
+        placeholder="Search team members..."
+        value={searchTerm}
+        onChange={(e) => onSearchChange(e.target.value)}
+        className="w-full lg:w-64 bg-success text-success-foreground placeholder:text-success-foreground/60"
+      />
+      <div className="flex gap-2 w-full lg:w-auto">
+        <RoleFilter
+          value={roleFilter}
+          onChange={onRoleFilterChange}
+          className="bg-success text-success-foreground hover:bg-success-hover flex-1 lg:flex-none"
         />
-      </div>
-      <div className="flex gap-2 items-center">
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button 
-              variant="outline" 
-              size="sm"
-              className="filter-dropdown-button w-full lg:w-[180px] justify-between text-[0.775rem]"
-            >
-              <div className="flex items-center gap-2">
-                <Filter className="h-4 w-4 text-muted-foreground" />
-                <span>{roles.find(r => r.value === roleFilter)?.label || "Filter by role"}</span>
-              </div>
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent align="end" className="w-[180px] p-0">
-            <div className="filter-role-options">
-              {roles.map(({ value, label }) => (
-                <Button
-                  key={value}
-                  variant="ghost"
-                  className="w-full justify-start text-[0.775rem] h-9"
-                  onClick={() => onRoleFilterChange(value)}
-                >
-                  {label}
-                </Button>
-              ))}
-            </div>
-          </PopoverContent>
-        </Popover>
         {showSortButton && (
-          <div className="block">
-            <MobileSortDropdown 
-              sortConfig={sortConfig}
-              onSort={onSort}
-            />
-          </div>
+          <Button
+            variant="ghost"
+            onClick={() => onSort("name")}
+            className="bg-success text-success-foreground hover:bg-success-hover"
+          >
+            Sort
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
         )}
       </div>
     </div>
