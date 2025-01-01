@@ -40,8 +40,8 @@ export default {
           foreground: "#ffffff",
         },
         secondary: {
-          DEFAULT: "#f5f5f5",
-          hover: "#e9e9e9",
+          DEFAULT: "#eeeeee",
+          hover: "#e2e2e2",
           foreground: "#000000",
         },
         success: {
