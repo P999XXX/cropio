@@ -1,17 +1,17 @@
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { MessageSquare, Menu } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { supabase } from "@/integrations/supabase/client";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useSidebar } from "@/components/ui/sidebar";
 import { Logo } from "./navbar/Logo";
 import { NavActions } from "./navbar/NavActions";
-import { UserMenu } from "./navbar/UserMenu";
 import { MobileMenuHeader } from "./navbar/MobileMenuHeader";
 import { CartButton } from "./navbar/CartButton";
 import { DashboardSidebarTrigger } from "./navbar/DashboardSidebarTrigger";
 import { MobileMenuContent } from "./navbar/MobileMenuContent";
+import { ChatButton } from "./navbar/ChatButton";
+import { MobileNavButton } from "./navbar/MobileNavButton";
+import { MobileUserMenu } from "./navbar/MobileUserMenu";
 
 const Navbar = () => {
   const [isDark, setIsDark] = useState(false);
@@ -86,16 +86,7 @@ const Navbar = () => {
               <>
                 <DashboardSidebarTrigger isExpanded={state === 'expanded'} />
                 <Sheet open={isOpen} onOpenChange={setIsOpen}>
-                  <SheetTrigger asChild>
-                    <Button 
-                      variant="secondary" 
-                      size="icon"
-                      className="h-8 w-8 md:h-9 md:w-9 lg:hidden text-foreground hover:text-foreground"
-                    >
-                      <Menu className="h-4 w-4" />
-                      <span className="sr-only">Toggle menu</span>
-                    </Button>
-                  </SheetTrigger>
+                  <MobileNavButton />
                   <SheetContent 
                     side="left" 
                     className="w-[300px] sm:w-[400px] z-[200] p-0 overflow-y-auto custom-scrollbar fixed"
@@ -115,32 +106,14 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center gap-2">
-            <Button 
-              variant="secondary" 
-              size="icon" 
-              className="h-8 w-8 md:h-9 md:w-9 text-foreground hover:text-foreground"
-            >
-              <MessageSquare className="h-4 w-4" />
-              <span className="sr-only">Open chat</span>
-            </Button>
+            <ChatButton />
             <CartButton />
             <NavActions 
               isDark={isDark} 
               onToggleTheme={toggleDarkMode} 
               userInitials={userInitials} 
             />
-            <div className="lg:hidden">
-              {userInitials ? (
-                <UserMenu 
-                  userInitials={userInitials} 
-                  className="h-8 w-8 bg-[#9b87f5] hover:opacity-90 transition-opacity border border-border text-white" 
-                />
-              ) : (
-                <Button asChild variant="primary" size="sm" className="h-8">
-                  <Link to="/signin">Sign In</Link>
-                </Button>
-              )}
-            </div>
+            <MobileUserMenu userInitials={userInitials} />
           </div>
         </div>
       </div>
