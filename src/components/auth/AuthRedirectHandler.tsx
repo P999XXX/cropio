@@ -22,20 +22,30 @@ const AuthRedirectHandler = () => {
         const searchParams = new URLSearchParams(currentUrl.search);
         console.log("Search params:", Object.fromEntries(searchParams.entries()));
         
-        // Check for recovery token in both hash and search params
+        // Check for tokens in both hash and search params
         const accessToken = hashParams.get('access_token') || searchParams.get('access_token');
-        const type = hashParams.get('type') || searchParams.get('type');
         const refreshToken = hashParams.get('refresh_token') || searchParams.get('refresh_token');
+        const type = hashParams.get('type') || searchParams.get('type');
         
-        console.log("Token check:", { accessToken: !!accessToken, type });
-        
+        console.log("Token check:", { 
+          hasAccessToken: !!accessToken, 
+          hasRefreshToken: !!refreshToken, 
+          type 
+        });
+
+        // Handle recovery flow
         if (type === 'recovery' && accessToken) {
           console.log("Valid recovery token detected - redirecting to reset-password");
-          if (refreshToken) {
-            await supabase.auth.setSession({
+          if (accessToken && refreshToken) {
+            const { error } = await supabase.auth.setSession({
               access_token: accessToken,
               refresh_token: refreshToken
             });
+            
+            if (error) {
+              console.error("Error setting session:", error);
+              throw error;
+            }
           }
           navigate('/reset-password');
           return;
@@ -44,11 +54,38 @@ const AuthRedirectHandler = () => {
         // Handle email confirmation
         if (currentUrl.pathname.includes('/auth/callback')) {
           console.log("Auth callback detected");
-          if (type === 'email_confirmation') {
-            const { data: { session }, error } = await supabase.auth.getSession();
-            console.log("Email confirmation - Session check:", { session: !!session, error });
-            
-            if (!error && session) {
+          
+          // Get the current session
+          const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+          console.log("Session check:", { hasSession: !!session, error: sessionError });
+          
+          if (sessionError) {
+            console.error("Session error:", sessionError);
+            throw sessionError;
+          }
+
+          if (session) {
+            if (type === 'email_confirmation') {
+              navigate('/signin');
+            } else {
+              navigate('/dashboard');
+            }
+          } else {
+            // If no session, try to exchange the tokens
+            if (accessToken && refreshToken) {
+              const { error: setSessionError } = await supabase.auth.setSession({
+                access_token: accessToken,
+                refresh_token: refreshToken
+              });
+              
+              if (setSessionError) {
+                console.error("Error setting session:", setSessionError);
+                throw setSessionError;
+              }
+              
+              navigate('/dashboard');
+            } else {
+              console.log("No tokens found - redirecting to signin");
               navigate('/signin');
             }
           }
