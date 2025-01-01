@@ -52,7 +52,8 @@ const ForgotPasswordDialog = ({
           <Button 
             onClick={onSubmit}
             disabled={isResetting}
-            className="dialog-button-primary"
+            variant="primary"
+            className="order-1 sm:order-2 w-full sm:w-auto"
           >
             {isResetting ? "Sending..." : "Send Instructions"}
           </Button>
@@ -60,7 +61,7 @@ const ForgotPasswordDialog = ({
             variant="secondary"
             onClick={() => onOpenChange(false)}
             disabled={isResetting}
-            className="dialog-button-secondary"
+            className="order-2 sm:order-1 w-full sm:w-auto"
           >
             Cancel
           </Button>
