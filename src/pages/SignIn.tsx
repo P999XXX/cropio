@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -24,30 +24,31 @@ const SignIn = () => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
-  useEffect(() => {
-    const initializePage = async () => {
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session?.user) {
-          const { data: profile } = await supabase
-            .from('profiles')
-            .select('first_name')
-            .eq('id', session.user.id)
-            .single();
-          
-          if (profile?.first_name) {
-            setFirstName(profile.first_name);
-          }
+  // Memoized initialization function
+  const initializePage = useCallback(async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('first_name')
+          .eq('id', session.user.id)
+          .single();
+        
+        if (profile?.first_name) {
+          setFirstName(profile.first_name);
         }
-      } catch (error) {
-        console.error("Error initializing page:", error);
-      } finally {
-        setPageLoaded(true);
       }
-    };
-
-    initializePage();
+    } catch (error) {
+      console.error("Error initializing page:", error);
+    } finally {
+      setPageLoaded(true);
+    }
   }, []);
+
+  useEffect(() => {
+    initializePage();
+  }, [initializePage]);
 
   const handleSignIn = async (values: SignInFormData) => {
     setIsLoading(true);
@@ -80,8 +81,17 @@ const SignIn = () => {
 
   if (!pageLoaded) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-background">
-        <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
+      <div 
+        className="flex items-center justify-center min-h-screen bg-background"
+        role="status"
+        aria-label="Loading"
+      >
+        <div 
+          className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"
+          aria-hidden="true"
+        >
+          <span className="sr-only">Loading...</span>
+        </div>
       </div>
     );
   }
