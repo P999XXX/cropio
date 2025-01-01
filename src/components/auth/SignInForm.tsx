@@ -37,22 +37,19 @@ const SignInForm = ({ onSubmit, isLoading, onForgotPassword }: SignInFormProps) 
           label="Email"
           type="email"
           placeholder="Enter your email"
-          aria-label="Email input"
         />
 
         <PasswordInput
           form={form}
           name="password"
           label="Password"
-          aria-label="Password input"
         />
 
         <Button 
           type="submit" 
           variant="primary" 
-          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+          className="w-full"
           disabled={isLoading}
-          aria-label={isLoading ? "Signing in..." : "Sign in"}
         >
           {isLoading ? "Signing in..." : "Sign in"}
         </Button>
@@ -60,8 +57,7 @@ const SignInForm = ({ onSubmit, isLoading, onForgotPassword }: SignInFormProps) 
         <button
           type="button"
           onClick={onForgotPassword}
-          className="text-sm text-primary hover:text-primary/90 hover:underline block w-full text-center"
-          aria-label="Forgot password"
+          className="text-sm text-primary hover:underline block w-full text-center"
         >
           Forgot your password?
         </button>

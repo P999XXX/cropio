@@ -39,28 +39,22 @@ const PasswordInput = ({ form, name, label, description, className }: PasswordIn
                 placeholder={`${name === "password" ? "Enter" : "Confirm"} your password`}
                 type={showPassword ? "text" : "password"}
                 className={className}
-                aria-invalid={!!form.formState.errors[name]}
-                aria-describedby={`${name}-error`}
                 {...field}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary/30"
-                aria-label={showPassword ? "Hide password" : "Show password"}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
               >
                 {showPassword ? (
-                  <EyeOff className="h-4 w-4" aria-hidden="true" />
+                  <EyeOff className="h-4 w-4" />
                 ) : (
-                  <Eye className="h-4 w-4" aria-hidden="true" />
+                  <Eye className="h-4 w-4" />
                 )}
               </button>
             </div>
           </FormControl>
-          <FormErrorMessage 
-            message={form.formState.errors[name]?.message} 
-            id={`${name}-error`}
-          />
+          <FormErrorMessage message={form.formState.errors[name]?.message} />
         </FormItem>
       )}
     />

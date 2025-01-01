@@ -1,22 +1,13 @@
-import { createHashRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import DashboardLayout from "./components/layouts/DashboardLayout";
 
-// Lazy load all pages with preloading for better performance
+// Lazy load all pages
 const Index = lazy(() => import("./pages/Index"));
-const SignIn = lazy(() => {
-  const module = import("./pages/SignIn");
-  return module;
-});
-const SignUp = lazy(() => {
-  const module = import("./pages/SignUp");
-  return module;
-});
-const ResetPassword = lazy(() => {
-  const module = import("./pages/ResetPassword");
-  return module;
-});
+const SignIn = lazy(() => import("./pages/SignIn"));
+const SignUp = lazy(() => import("./pages/SignUp"));
+const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const Components = lazy(() => import("./pages/Components"));
 const DashboardHome = lazy(() => import("./pages/dashboard/DashboardHome"));
 const DashboardTeam = lazy(() => import("./pages/dashboard/DashboardTeam"));
@@ -25,23 +16,14 @@ const DashboardFAQ = lazy(() => import("./pages/dashboard/DashboardFAQ"));
 const DashboardSupport = lazy(() => import("./pages/dashboard/DashboardSupport"));
 const DashboardSubscriptions = lazy(() => import("./pages/dashboard/DashboardSubscriptions"));
 
-// Enhanced loading spinner with ARIA attributes for accessibility
+// Loading component
 const LoadingSpinner = () => (
-  <div 
-    className="flex items-center justify-center min-h-screen bg-background"
-    role="status"
-    aria-label="Loading"
-  >
-    <div 
-      className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"
-      aria-hidden="true"
-    >
-      <span className="sr-only">Loading...</span>
-    </div>
+  <div className="flex items-center justify-center min-h-screen">
+    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
   </div>
 );
 
-const router = createHashRouter([
+const router = createBrowserRouter([
   {
     path: "/",
     element: (
@@ -157,11 +139,7 @@ const router = createHashRouter([
 ]);
 
 function App() {
-  return (
-    <Suspense fallback={<LoadingSpinner />}>
-      <RouterProvider router={router} />
-    </Suspense>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;

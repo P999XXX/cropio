@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -12,11 +12,9 @@ import { SignInFormData } from "@/components/auth/SignInForm";
 import { handleGoogleSignIn, handleLinkedInSignIn, handlePasswordReset } from "@/utils/auth-handlers";
 import { errorToastStyle, successToastStyle } from "@/utils/toast-styles";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import LoadingSpinner from "@/components/ui/loading-spinner";
 
 const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [isInitializing, setIsInitializing] = useState(true);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [showResetThankYou, setShowResetThankYou] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
@@ -25,118 +23,60 @@ const SignIn = () => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
-  const checkSession = useCallback(async () => {
-    try {
-      const { data: { session }, error } = await supabase.auth.getSession();
-      if (error) {
-        console.error("Session check error:", error);
-        return null;
-      }
-      return session;
-    } catch (error) {
-      console.error("Session check failed:", error);
-      return null;
+  useEffect(() => {
+    const hashParams = new URLSearchParams(window.location.hash.replace('#', ''));
+    const errorDescription = hashParams.get('error_description');
+    
+    if (errorDescription === 'Email link is invalid or has expired') {
+      toast.error("Your password reset link has expired. Please request a new one.", errorToastStyle);
     }
-  }, []);
 
-  const handleAuthStateChange = useCallback(async (event: string, session: any) => {
-    console.log("Auth state changed:", event, session?.user?.id);
-    if (event === 'SIGNED_IN' && session) {
-      try {
-        const { data: profile, error: profileError } = await supabase
+    const getFirstName = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        const { data: profile } = await supabase
           .from('profiles')
           .select('first_name')
           .eq('id', session.user.id)
           .single();
         
-        if (profileError) {
-          console.error("Profile fetch error:", profileError);
-        } else if (profile?.first_name) {
+        if (profile?.first_name) {
           setFirstName(profile.first_name);
         }
-        
-        navigate('/dashboard');
-      } catch (error) {
-        console.error("Profile fetch error:", error);
-      }
-    }
-  }, [navigate]);
-
-  useEffect(() => {
-    let authListener: any;
-
-    const setupAuth = async () => {
-      console.log("Setting up auth listener...");
-      
-      // Check for existing session
-      const session = await checkSession();
-      if (session) {
-        console.log("Existing session found, redirecting...");
-        handleAuthStateChange('SIGNED_IN', session);
-      }
-
-      // Set up auth state change listener
-      const { data: { subscription } } = await supabase.auth.onAuthStateChange(handleAuthStateChange);
-      authListener = subscription;
-
-      setIsInitializing(false);
-    };
-
-    setupAuth();
-
-    return () => {
-      if (authListener) {
-        console.log("Cleaning up auth listener...");
-        authListener.unsubscribe();
       }
     };
-  }, [checkSession, handleAuthStateChange]);
-
-  const handleSignIn = useCallback(async (values: SignInFormData) => {
-    console.log("Attempting sign in...");
-    setIsLoading(true);
     
+    getFirstName();
+  }, []);
+
+  const handleSignIn = async (values: SignInFormData) => {
+    setIsLoading(true);
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { error } = await supabase.auth.signInWithPassword({
         email: values.email,
         password: values.password,
       });
 
-      if (error) {
-        console.error("Sign in error:", error);
-        throw error;
-      }
+      if (error) throw error;
 
-      console.log("Sign in successful:", data.user?.id);
       toast.success("Successfully signed in!", successToastStyle);
+      navigate("/dashboard");
     } catch (error: any) {
       console.error("Sign in error:", error);
       toast.error(error.message || "Failed to sign in", errorToastStyle);
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  };
 
-  const handleResetPasswordRequest = useCallback(async () => {
+  const handleResetPasswordRequest = async () => {
     return handlePasswordReset(resetEmail, setIsResetting, setShowForgotPassword, setShowResetThankYou);
-  }, [resetEmail]);
+  };
 
-  const handleForgotPassword = useCallback(() => {
+  const handleForgotPassword = async () => {
     setShowForgotPassword(true);
     return Promise.resolve();
-  }, []);
-
-  const welcomeMessage = useMemo(() => {
-    return firstName ? `Welcome back ${firstName}!` : "Welcome back!";
-  }, [firstName]);
-
-  if (isInitializing) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <LoadingSpinner size="lg" aria-label="Initializing application" />
-      </div>
-    );
-  }
+  };
 
   return (
     <SidebarProvider>
@@ -146,7 +86,7 @@ const SignIn = () => {
           <div className="w-full md:w-[500px] py-8">
             <div className={`space-y-2 mb-8 ${isMobile ? "text-left" : "text-center"}`}>
               <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">
-                {welcomeMessage}
+                {firstName ? `Welcome back ${firstName}!` : "Welcome back!"}
               </h1>
               <p className="text-[14px] text-muted-foreground">
                 Please sign in to continue
