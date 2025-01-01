@@ -88,9 +88,9 @@ const Navbar = () => {
                 <Sheet open={isOpen} onOpenChange={setIsOpen}>
                   <SheetTrigger asChild>
                     <Button 
-                      variant="ghost" 
+                      variant="secondary" 
                       size="icon"
-                      className="h-8 w-8 md:h-9 md:w-9 lg:hidden hover:bg-secondary/80"
+                      className="h-8 w-8 md:h-9 md:w-9 lg:hidden text-foreground hover:text-foreground"
                     >
                       <Menu className="h-4 w-4" />
                       <span className="sr-only">Toggle menu</span>
@@ -116,9 +116,9 @@ const Navbar = () => {
 
           <div className="flex items-center gap-2">
             <Button 
-              variant="ghost" 
+              variant="secondary" 
               size="icon" 
-              className="h-8 w-8 md:h-9 md:w-9 hover:bg-secondary/80"
+              className="h-8 w-8 md:h-9 md:w-9 text-foreground hover:text-foreground"
             >
               <MessageSquare className="h-4 w-4" />
               <span className="sr-only">Open chat</span>

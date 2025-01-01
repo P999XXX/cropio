@@ -57,9 +57,9 @@ const CurrencySwitcher = () => {
       <HoverCard openDelay={200} closeDelay={200}>
         <HoverCardTrigger asChild>
           <Button 
-            variant="ghost" 
+            variant="secondary" 
             size="icon" 
-            className="h-9 w-9 hover:bg-secondary/10 hover:text-foreground transition-colors"
+            className="h-8 w-8 md:h-9 md:w-9 text-foreground hover:text-foreground"
           >
             <CurrentIcon className="h-4 w-4" />
             <span className="sr-only">Toggle currency</span>
@@ -67,7 +67,7 @@ const CurrencySwitcher = () => {
         </HoverCardTrigger>
         <HoverCardContent 
           align="end"
-          className="w-[200px] p-2 bg-card text-card-foreground border-secondary shadow-lg dark:shadow-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95"
+          className="w-[200px] p-2 bg-card text-card-foreground border-secondary shadow-lg dark:shadow-none"
           sideOffset={4}
           side="bottom"
           avoidCollisions={false}
@@ -82,7 +82,7 @@ const CurrencySwitcher = () => {
                   className={`flex w-full items-center px-2 py-1.5 text-sm rounded-md transition-colors ${
                     selectedCurrency === currency.code 
                       ? 'bg-secondary text-foreground' 
-                      : 'hover:bg-secondary/10 hover:text-foreground'
+                      : 'hover:bg-secondary/10 text-foreground hover:text-foreground'
                   }`}
                 >
                   <Icon className="mr-2 h-4 w-4" />
