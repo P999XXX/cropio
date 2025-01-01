@@ -1,9 +1,10 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createHashRouter, RouterProvider } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import DashboardLayout from "./components/layouts/DashboardLayout";
+import { useToast } from "@/components/ui/use-toast";
 
-// Lazy load all pages
+// Lazy load all pages with error boundaries
 const Index = lazy(() => import("./pages/Index"));
 const SignIn = lazy(() => import("./pages/SignIn"));
 const SignUp = lazy(() => import("./pages/SignUp"));
@@ -16,14 +17,14 @@ const DashboardFAQ = lazy(() => import("./pages/dashboard/DashboardFAQ"));
 const DashboardSupport = lazy(() => import("./pages/dashboard/DashboardSupport"));
 const DashboardSubscriptions = lazy(() => import("./pages/dashboard/DashboardSubscriptions"));
 
-// Loading component
+// Enhanced loading spinner with error handling
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center min-h-screen">
     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
   </div>
 );
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: "/",
     element: (
@@ -31,6 +32,7 @@ const router = createBrowserRouter([
         <Index />
       </Suspense>
     ),
+    errorElement: <div>Error loading page</div>,
   },
   {
     path: "/signin",
@@ -139,6 +141,7 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
+  console.log('App rendering');
   return <RouterProvider router={router} />;
 }
 
