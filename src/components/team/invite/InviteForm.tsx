@@ -118,7 +118,7 @@ export const InviteForm = ({ onSubmit, isLoading, onCancel }: InviteFormProps) =
                     <SelectValue placeholder="Select a role" />
                   </SelectTrigger>
                 </FormControl>
-                <SelectContent className="bg-background border border-border">
+                <SelectContent className="bg-background border border-border z-[200]">
                   <SelectItem value="administrator" className="text-[0.925rem]">Administrator</SelectItem>
                   <SelectItem value="editor" className="text-[0.925rem]">Editor</SelectItem>
                   <SelectItem value="readonly" className="text-[0.925rem]">Read Only</SelectItem>
