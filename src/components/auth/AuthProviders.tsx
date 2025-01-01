@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import GoogleIcon from "@/components/icons/GoogleIcon";
 import LinkedInIcon from "@/components/icons/LinkedInIcon";
 import { toast } from "sonner";
+import { memo } from "react";
 
 interface AuthProvidersProps {
   onGoogleSignUp: () => void;
@@ -10,7 +11,7 @@ interface AuthProvidersProps {
   variant?: "signup" | "signin";
 }
 
-const AuthProviders = ({
+const AuthProviders = memo(({
   onGoogleSignUp,
   onLinkedInSignUp,
   selectedRole,
@@ -30,7 +31,8 @@ const AuthProviders = ({
       <Button 
         variant="secondary"
         onClick={() => handleSocialSignUp(onGoogleSignUp)} 
-        className="w-full flex items-center justify-center"
+        className="w-full flex items-center justify-center bg-secondary hover:bg-secondary/90 text-secondary-foreground"
+        aria-label={`${variant === "signup" ? "Sign up" : "Sign in"} with Google`}
       >
         <div className="flex items-center">
           <GoogleIcon className="mr-2" />
@@ -43,7 +45,8 @@ const AuthProviders = ({
       <Button 
         variant="secondary"
         onClick={() => handleSocialSignUp(onLinkedInSignUp)} 
-        className="w-full flex items-center justify-center"
+        className="w-full flex items-center justify-center bg-secondary hover:bg-secondary/90 text-secondary-foreground"
+        aria-label={`${variant === "signup" ? "Sign up" : "Sign in"} with LinkedIn`}
       >
         <div className="flex items-center">
           <LinkedInIcon className="mr-2" />
@@ -54,6 +57,8 @@ const AuthProviders = ({
       </Button>
     </div>
   );
-};
+});
+
+AuthProviders.displayName = "AuthProviders";
 
 export default AuthProviders;

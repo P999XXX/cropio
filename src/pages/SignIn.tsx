@@ -20,37 +20,42 @@ const SignIn = () => {
   const [resetEmail, setResetEmail] = useState("");
   const [isResetting, setIsResetting] = useState(false);
   const [firstName, setFirstName] = useState("");
-  const [pageLoaded, setPageLoaded] = useState(false);
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
-  // Memoized initialization function
-  const initializePage = useCallback(async () => {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user) {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('first_name')
-          .eq('id', session.user.id)
-          .single();
-        
-        if (profile?.first_name) {
-          setFirstName(profile.first_name);
-        }
-      }
-    } catch (error) {
-      console.error("Error initializing page:", error);
-    } finally {
-      setPageLoaded(true);
-    }
-  }, []);
-
+  // Optimized initialization with proper error handling
   useEffect(() => {
-    initializePage();
-  }, [initializePage]);
+    const initializeAuth = async () => {
+      try {
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        if (sessionError) throw sessionError;
 
-  const handleSignIn = async (values: SignInFormData) => {
+        if (session?.user) {
+          const { data: profile, error: profileError } = await supabase
+            .from('profiles')
+            .select('first_name')
+            .eq('id', session.user.id)
+            .single();
+          
+          if (profileError) throw profileError;
+          if (profile?.first_name) {
+            setFirstName(profile.first_name);
+          }
+          
+          // Redirect to dashboard if already authenticated
+          navigate('/dashboard');
+        }
+      } catch (error: any) {
+        console.error("Auth initialization error:", error);
+        toast.error("Failed to initialize authentication", errorToastStyle);
+      }
+    };
+
+    initializeAuth();
+  }, [navigate]);
+
+  // Memoized sign in handler
+  const handleSignIn = useCallback(async (values: SignInFormData) => {
     setIsLoading(true);
     try {
       const { error } = await supabase.auth.signInWithPassword({
@@ -68,33 +73,16 @@ const SignIn = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [navigate]);
 
-  const handleResetPasswordRequest = async () => {
+  const handleResetPasswordRequest = useCallback(async () => {
     return handlePasswordReset(resetEmail, setIsResetting, setShowForgotPassword, setShowResetThankYou);
-  };
+  }, [resetEmail]);
 
-  const handleForgotPassword = async () => {
+  const handleForgotPassword = useCallback(async () => {
     setShowForgotPassword(true);
     return Promise.resolve();
-  };
-
-  if (!pageLoaded) {
-    return (
-      <div 
-        className="flex items-center justify-center min-h-screen bg-background"
-        role="status"
-        aria-label="Loading"
-      >
-        <div 
-          className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"
-          aria-hidden="true"
-        >
-          <span className="sr-only">Loading...</span>
-        </div>
-      </div>
-    );
-  }
+  }, []);
 
   return (
     <SidebarProvider>
