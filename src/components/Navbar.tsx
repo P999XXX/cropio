@@ -136,7 +136,7 @@ const Navbar = () => {
                   className="h-8 w-8 bg-[#9b87f5] hover:opacity-90 transition-opacity border border-border text-white" 
                 />
               ) : (
-                <Button asChild variant="default" size="sm" className="h-8">
+                <Button asChild variant="primary" size="sm" className="h-8">
                   <Link to="/signin">Sign In</Link>
                 </Button>
               )}
