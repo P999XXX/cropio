@@ -61,7 +61,7 @@ const DashboardTeam = () => {
   });
 
   return (
-    <div className="team-management space-y-6 w-full px-8">
+    <div className="team-management space-y-2 w-full px-1 lg:px-1">
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-2 w-full h-auto">
         <div className="space-y-1">
           <h1 className="text-xl lg:text-2xl font-bold">Team Management</h1>
