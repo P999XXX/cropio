@@ -57,9 +57,9 @@ const CurrencySwitcher = () => {
       <HoverCard openDelay={200} closeDelay={200}>
         <HoverCardTrigger asChild>
           <Button 
-            variant="secondary" 
+            variant="ghost" 
             size="icon" 
-            className="h-9 w-9"
+            className="h-9 w-9 hover:bg-secondary/10 hover:text-foreground transition-colors"
           >
             <CurrentIcon className="h-4 w-4" />
             <span className="sr-only">Toggle currency</span>
