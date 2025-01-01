@@ -30,7 +30,7 @@ const AuthProviders = ({
       <Button 
         variant="secondary"
         onClick={() => handleSocialSignUp(onGoogleSignUp)} 
-        className="w-[100%] sm:w-[50%] flex items-center justify-center"
+        className="w-full flex items-center justify-center"
       >
         <div className="flex items-center">
           <GoogleIcon className="mr-2" />
@@ -43,7 +43,7 @@ const AuthProviders = ({
       <Button 
         variant="secondary"
         onClick={() => handleSocialSignUp(onLinkedInSignUp)} 
-        className="w-[100%] sm:w-[50%] flex items-center justify-center"
+        className="w-full flex items-center justify-center"
       >
         <div className="flex items-center">
           <LinkedInIcon className="mr-2" />
