@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { RoleFilter } from "./RoleFilter";
-import { SortConfig } from "../hooks/useTeamTable";
+import { TeamMember } from "@/types/team";
 import { ArrowUpDown } from "lucide-react";
 
 interface TeamTableHeaderProps {
@@ -9,7 +9,10 @@ interface TeamTableHeaderProps {
   onSearchChange: (value: string) => void;
   roleFilter: string;
   onRoleFilterChange: (value: string) => void;
-  sortConfig: SortConfig;
+  sortConfig: {
+    key: keyof TeamMember;
+    direction: "asc" | "desc";
+  };
   onSort: (key: string) => void;
   showSortButton?: boolean;
 }
