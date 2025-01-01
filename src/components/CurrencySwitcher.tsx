@@ -81,8 +81,8 @@ const CurrencySwitcher = () => {
                   onClick={() => handleCurrencyChange(currency.code)}
                   className={`flex w-full items-center px-2 py-1.5 text-sm rounded-md transition-colors ${
                     selectedCurrency === currency.code 
-                      ? 'bg-secondary text-foreground' 
-                      : 'hover:bg-secondary/10 text-foreground hover:text-foreground'
+                      ? 'bg-secondary-hover text-foreground' 
+                      : 'hover:bg-secondary-hover text-foreground hover:text-foreground'
                   }`}
                 >
                   <Icon className="mr-2 h-4 w-4" />
