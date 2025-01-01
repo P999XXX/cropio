@@ -25,49 +25,63 @@ const SignIn = () => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
-  // Memoized initialization function
+  // Enhanced initialization function with better error handling
   const initializeAuth = useCallback(async () => {
     try {
       const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-      if (sessionError) throw sessionError;
+      
+      if (sessionError) {
+        console.error("Session error:", sessionError);
+        setIsInitializing(false);
+        return;
+      }
 
       if (session?.user) {
-        const { data: profile, error: profileError } = await supabase
-          .from('profiles')
-          .select('first_name')
-          .eq('id', session.user.id)
-          .single();
-        
-        if (profileError) throw profileError;
-        if (profile?.first_name) {
-          setFirstName(profile.first_name);
+        try {
+          const { data: profile, error: profileError } = await supabase
+            .from('profiles')
+            .select('first_name')
+            .eq('id', session.user.id)
+            .single();
+          
+          if (profileError) {
+            console.error("Profile fetch error:", profileError);
+          } else if (profile?.first_name) {
+            setFirstName(profile.first_name);
+          }
+          
+          navigate('/dashboard');
+        } catch (error) {
+          console.error("Profile processing error:", error);
         }
-        
-        navigate('/dashboard');
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error("Auth initialization error:", error);
-      toast.error("Failed to initialize authentication", errorToastStyle);
     } finally {
       setIsInitializing(false);
     }
   }, [navigate]);
 
   useEffect(() => {
+    console.log("Initializing authentication...");
     initializeAuth();
   }, [initializeAuth]);
 
-  // Memoized sign in handler
   const handleSignIn = useCallback(async (values: SignInFormData) => {
+    console.log("Attempting sign in...");
     setIsLoading(true);
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email: values.email,
         password: values.password,
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error("Sign in error:", error);
+        throw error;
+      }
 
+      console.log("Sign in successful:", data);
       toast.success("Successfully signed in!", successToastStyle);
       navigate("/dashboard");
     } catch (error: any) {
@@ -87,7 +101,6 @@ const SignIn = () => {
     return Promise.resolve();
   }, []);
 
-  // Memoized welcome message
   const welcomeMessage = useMemo(() => {
     return firstName ? `Welcome back ${firstName}!` : "Welcome back!";
   }, [firstName]);

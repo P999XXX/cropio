@@ -16,12 +16,12 @@ interface AuthProvidersProps {
 const AuthProviders = memo(({
   onGoogleSignUp,
   onLinkedInSignUp,
-  selectedRole,
   variant = "signup",
   isLoading = false,
 }: AuthProvidersProps) => {
   const handleSocialSignUp = async (callback: () => void, provider: string) => {
     try {
+      console.log(`Attempting ${provider} sign in...`);
       await callback();
     } catch (error: any) {
       console.error(`${variant === "signup" ? "Sign up" : "Sign in"} error:`, error);
