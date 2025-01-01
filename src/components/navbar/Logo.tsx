@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export const Logo = () => {
   return (
-    <Link to="/" className="text-left md:mt-0 mt-[-2px]">
+    <Link to="/" className="text-left md:mt-0 mt-[-2px] pl-1 lg:pl-0">
       <span className="text-2xl font-geologica font-extrabold">
         cropio<span className="text-primary">.app</span>
       </span>
