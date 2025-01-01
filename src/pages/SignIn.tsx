@@ -25,51 +25,80 @@ const SignIn = () => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
-  // Enhanced initialization function with better error handling
-  const initializeAuth = useCallback(async () => {
+  const checkSession = useCallback(async () => {
     try {
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      const { data: { session }, error } = await supabase.auth.getSession();
       
-      if (sessionError) {
-        console.error("Session error:", sessionError);
+      if (error) {
+        console.error("Session check error:", error);
+        return null;
+      }
+      
+      return session;
+    } catch (error) {
+      console.error("Session check failed:", error);
+      return null;
+    }
+  }, []);
+
+  const initializeAuth = useCallback(async () => {
+    console.log("Starting auth initialization...");
+    try {
+      const session = await checkSession();
+      
+      if (!session) {
+        console.log("No active session found");
         setIsInitializing(false);
         return;
       }
 
-      if (session?.user) {
-        try {
-          const { data: profile, error: profileError } = await supabase
-            .from('profiles')
-            .select('first_name')
-            .eq('id', session.user.id)
-            .single();
-          
-          if (profileError) {
-            console.error("Profile fetch error:", profileError);
-          } else if (profile?.first_name) {
-            setFirstName(profile.first_name);
-          }
-          
-          navigate('/dashboard');
-        } catch (error) {
-          console.error("Profile processing error:", error);
-        }
+      console.log("Session found, fetching profile...");
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('first_name')
+        .eq('id', session.user.id)
+        .single();
+      
+      if (profileError) {
+        console.error("Profile fetch error:", profileError);
+      } else if (profile?.first_name) {
+        setFirstName(profile.first_name);
       }
+      
+      navigate('/dashboard');
     } catch (error) {
       console.error("Auth initialization error:", error);
     } finally {
       setIsInitializing(false);
     }
-  }, [navigate]);
+  }, [navigate, checkSession]);
 
   useEffect(() => {
-    console.log("Initializing authentication...");
-    initializeAuth();
-  }, [initializeAuth]);
+    const setupAuth = async () => {
+      console.log("Setting up auth listener...");
+      const { data: { subscription } } = await supabase.auth.onAuthStateChange(
+        async (event, session) => {
+          console.log("Auth state changed:", event, session?.user?.id);
+          if (event === 'SIGNED_IN' && session) {
+            navigate('/dashboard');
+          }
+        }
+      );
+
+      initializeAuth();
+
+      return () => {
+        subscription.unsubscribe();
+      };
+    };
+
+    setupAuth();
+  }, [initializeAuth, navigate]);
 
   const handleSignIn = useCallback(async (values: SignInFormData) => {
     console.log("Attempting sign in...");
     setIsLoading(true);
+    
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email: values.email,
@@ -81,16 +110,15 @@ const SignIn = () => {
         throw error;
       }
 
-      console.log("Sign in successful:", data);
+      console.log("Sign in successful:", data.user?.id);
       toast.success("Successfully signed in!", successToastStyle);
-      navigate("/dashboard");
     } catch (error: any) {
       console.error("Sign in error:", error);
       toast.error(error.message || "Failed to sign in", errorToastStyle);
     } finally {
       setIsLoading(false);
     }
-  }, [navigate]);
+  }, []);
 
   const handleResetPasswordRequest = useCallback(async () => {
     return handlePasswordReset(resetEmail, setIsResetting, setShowForgotPassword, setShowResetThankYou);
