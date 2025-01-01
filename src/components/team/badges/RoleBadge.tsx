@@ -8,8 +8,8 @@ interface RoleBadgeProps {
 export const RoleBadge = ({ role }: RoleBadgeProps) => {
   return (
     <Badge 
-      variant={getRoleBadgeVariant(role)} 
-      className="rounded-[5px] py-0 px-2 font-medium"
+      variant="outline"
+      className="rounded-[5px] py-0.5 px-2 font-medium text-[0.7rem] bg-primary/5 text-primary border-primary/20"
     >
       {role}
     </Badge>

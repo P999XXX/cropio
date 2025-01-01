@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Grid3X3, LayoutList } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface ViewModeToggleProps {
   viewMode: "grid" | "list";
@@ -13,7 +14,10 @@ export const ViewModeToggle = ({ viewMode, onViewModeChange }: ViewModeTogglePro
         variant="outline"
         size="sm"
         onClick={() => onViewModeChange("grid")}
-        className={`${viewMode === "grid" ? "bg-primary/5 border-primary/30" : "bg-background border-primary/20"} hover:bg-primary/5 hover:border-primary/30 hover:text-foreground w-9 h-9`}
+        className={cn(
+          "w-9 h-9",
+          viewMode === "grid" && "bg-primary/5 border-primary/30"
+        )}
       >
         <Grid3X3 className="h-4 w-4" />
       </Button>
@@ -21,7 +25,10 @@ export const ViewModeToggle = ({ viewMode, onViewModeChange }: ViewModeTogglePro
         variant="outline"
         size="sm"
         onClick={() => onViewModeChange("list")}
-        className={`${viewMode === "list" ? "bg-primary/5 border-primary/30" : "bg-background border-primary/20"} hover:bg-primary/5 hover:border-primary/30 hover:text-foreground w-9 h-9`}
+        className={cn(
+          "w-9 h-9",
+          viewMode === "list" && "bg-primary/5 border-primary/30"
+        )}
       >
         <LayoutList className="h-4 w-4" />
       </Button>
