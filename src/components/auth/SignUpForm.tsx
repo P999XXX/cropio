@@ -1,17 +1,27 @@
-import { Button } from "@/components/ui/button";
-import { Form } from "@/components/ui/form";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import FormInput from "@/components/forms/FormInput";
-import PasswordInput from "./PasswordInput";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import { FormInput } from "@/components/forms/FormInput";
+import { PasswordInput } from "./PasswordInput";
+import { AgreementCheckbox } from "./AgreementCheckbox";
 
-const signUpSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+const schema = z.object({
+  email: z.string().email("Please enter a valid email address"),
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters")
+    .regex(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+      "Password must contain at least one uppercase letter, one lowercase letter, and one number"
+    ),
+  agreement: z.boolean().refine((val) => val === true, {
+    message: "You must agree to the terms and conditions",
+  }),
 });
 
-export type SignUpFormData = z.infer<typeof signUpSchema>;
+export type SignUpFormData = z.infer<typeof schema>;
 
 interface SignUpFormProps {
   onSubmit: (values: SignUpFormData) => Promise<void>;
@@ -19,41 +29,46 @@ interface SignUpFormProps {
 }
 
 const SignUpForm = ({ onSubmit, isLoading }: SignUpFormProps) => {
-  const form = useForm<SignUpFormData>({
-    resolver: zodResolver(signUpSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
+  const [showPassword, setShowPassword] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignUpFormData>({
+    resolver: zodResolver(schema),
   });
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <FormInput
-          form={form}
-          name="email"
-          label="Email"
-          type="email"
-          placeholder="Enter your email"
-        />
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <FormInput
+        type="email"
+        label="Email"
+        error={errors.email?.message}
+        {...register("email")}
+      />
+      <PasswordInput
+        showPassword={showPassword}
+        onTogglePassword={() => setShowPassword(!showPassword)}
+        error={errors.password?.message}
+        {...register("password")}
+        label="Password"
+      />
 
-        <PasswordInput
-          form={form}
-          name="password"
-          label="Password"
-        />
+      <Button 
+        type="submit" 
+        variant="primary"
+        className="w-full text-[0.775rem] sm:text-[0.775rem] md:text-[0.775rem]" 
+        disabled={isLoading}
+      >
+        {isLoading ? "Signing up..." : "Sign up"}
+      </Button>
 
-        <Button 
-          type="submit" 
-          variant="primary"
-          className="w-full text-[0.775rem]" 
-          disabled={isLoading}
-        >
-          {isLoading ? "Signing up..." : "Sign up"}
-        </Button>
-      </form>
-    </Form>
+      <AgreementCheckbox
+        error={errors.agreement?.message}
+        {...register("agreement")}
+      />
+    </form>
   );
 };
 
