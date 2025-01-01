@@ -129,19 +129,20 @@ export const InviteForm = ({ onSubmit, isLoading, onCancel }: InviteFormProps) =
           )}
         />
 
-        <div className="flex justify-end gap-3 pt-2">
+        <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
           <Button
             type="button"
-            variant="outline"
+            variant="secondary"
             onClick={onCancel}
-            className="h-10 px-4 text-[0.925rem]"
+            className="order-2 sm:order-1 w-full sm:w-auto h-10 px-4 text-[0.925rem]"
           >
             Cancel
           </Button>
           <Button
             type="submit"
+            variant="primary"
             disabled={isLoading}
-            className="h-10 px-4 text-[0.925rem]"
+            className="order-1 sm:order-2 w-full sm:w-auto h-10 px-4 text-[0.925rem]"
           >
             {isLoading ? "Inviting..." : "Send Invitation"}
           </Button>
