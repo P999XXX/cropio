@@ -35,7 +35,8 @@ const ThankYouDialog = ({ open, onOpenChange, userEmail }: ThankYouDialogProps) 
         <div className="flex flex-col sm:flex-row gap-3 mt-4 sm:justify-end">
           <Button
             onClick={() => navigate("/")}
-            className="dialog-button-primary"
+            variant="primary"
+            className="w-full text-primary-foreground hover:bg-primary-hover"
           >
             Back to Homepage
           </Button>
