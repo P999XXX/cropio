@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -16,8 +15,11 @@ const schema = z.object({
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
       "Password must contain at least one uppercase letter, one lowercase letter, and one number"
     ),
-  agreement: z.boolean().refine((val) => val === true, {
-    message: "You must agree to the terms and conditions",
+  acceptTerms: z.boolean().refine((val) => val === true, {
+    message: "You must accept the terms and conditions",
+  }),
+  acceptPrivacy: z.boolean().refine((val) => val === true, {
+    message: "You must accept the privacy policy",
   }),
 });
 
@@ -29,30 +31,45 @@ interface SignUpFormProps {
 }
 
 const SignUpForm = ({ onSubmit, isLoading }: SignUpFormProps) => {
-  const [showPassword, setShowPassword] = useState(false);
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<SignUpFormData>({
+  const form = useForm<SignUpFormData>({
     resolver: zodResolver(schema),
+    defaultValues: {
+      email: "",
+      password: "",
+      acceptTerms: false,
+      acceptPrivacy: false,
+    },
   });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
       <FormInput
-        type="email"
+        form={form}
+        name="email"
         label="Email"
-        error={errors.email?.message}
-        {...register("email")}
+        type="email"
+        placeholder="Enter your email"
       />
+
       <PasswordInput
-        showPassword={showPassword}
-        onTogglePassword={() => setShowPassword(!showPassword)}
-        error={errors.password?.message}
-        {...register("password")}
+        form={form}
+        name="password"
         label="Password"
+        description="Password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter, and one number"
+      />
+
+      <AgreementCheckbox
+        form={form}
+        name="acceptTerms"
+        linkText="Terms and Conditions"
+        linkHref="/terms"
+      />
+
+      <AgreementCheckbox
+        form={form}
+        name="acceptPrivacy"
+        linkText="Privacy Policy"
+        linkHref="/privacy"
       />
 
       <Button 
@@ -63,11 +80,6 @@ const SignUpForm = ({ onSubmit, isLoading }: SignUpFormProps) => {
       >
         {isLoading ? "Signing up..." : "Sign up"}
       </Button>
-
-      <AgreementCheckbox
-        error={errors.agreement?.message}
-        {...register("agreement")}
-      />
     </form>
   );
 };
