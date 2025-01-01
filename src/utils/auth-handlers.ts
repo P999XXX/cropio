@@ -44,9 +44,24 @@ export const handlePasswordReset = async (
 ) => {
   setIsResetting(true);
   try {
+    // Check if the email exists in the profiles table
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('email')
+      .eq('email', resetEmail)
+      .maybeSingle();
+
+    if (profileError) throw profileError;
+
+    if (!profile) {
+      toast.error("No account found with this email address.", errorToastStyle);
+      return;
+    }
+
     const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
       redirectTo: `${window.location.origin}/reset-password`,
     });
+    
     if (error) throw error;
     
     setShowForgotPassword(false);

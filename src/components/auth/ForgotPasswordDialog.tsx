@@ -8,6 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useState } from "react";
 
 interface ForgotPasswordDialogProps {
   open: boolean;
@@ -26,6 +27,21 @@ const ForgotPasswordDialog = ({
   onEmailChange,
   isResetting,
 }: ForgotPasswordDialogProps) => {
+  const [error, setError] = useState("");
+
+  const handleSubmit = async () => {
+    setError("");
+    if (!email) {
+      setError("Please enter your email address");
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError("Please enter a valid email address");
+      return;
+    }
+    await onSubmit();
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="dialog-content">
@@ -43,14 +59,18 @@ const ForgotPasswordDialog = ({
               type="email"
               placeholder="Enter your email"
               value={email}
-              onChange={(e) => onEmailChange(e.target.value)}
+              onChange={(e) => {
+                onEmailChange(e.target.value);
+                setError("");
+              }}
               className="dialog-input"
             />
+            {error && <p className="text-sm text-destructive">{error}</p>}
           </div>
         </div>
         <div className="flex flex-col gap-3 mt-4 sm:flex-row sm:justify-end">
           <Button 
-            onClick={onSubmit}
+            onClick={handleSubmit}
             disabled={isResetting}
             className="dialog-button-primary"
           >
