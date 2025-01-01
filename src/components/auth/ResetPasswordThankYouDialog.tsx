@@ -31,10 +31,11 @@ const ResetPasswordThankYouDialog = ({ open, onOpenChange, userEmail }: ResetPas
             </p>
           </DialogDescription>
         </DialogHeader>
-        <div className="flex flex-col sm:flex-row gap-3 mt-4 sm:justify-end">
+        <div className="flex justify-end mt-4">
           <Button
             onClick={() => navigate("/")}
-            className="dialog-button-primary"
+            variant="primary"
+            className="w-fit"
           >
             Back to Homepage
           </Button>
