@@ -3,7 +3,7 @@ import { UserMenu } from "./UserMenu";
 import { ThemeToggle } from "./ThemeToggle";
 import LanguageSwitcher from "../LanguageSwitcher";
 import CurrencySwitcher from "../CurrencySwitcher";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 interface NavActionsProps {
   isDark: boolean;
@@ -12,6 +12,9 @@ interface NavActionsProps {
 }
 
 export const NavActions = ({ isDark, onToggleTheme, userInitials }: NavActionsProps) => {
+  const location = useLocation();
+  const isSignInPage = location.pathname === '/signin';
+
   return (
     <div className="hidden lg:flex items-center space-x-2">
       <LanguageSwitcher />
@@ -20,8 +23,15 @@ export const NavActions = ({ isDark, onToggleTheme, userInitials }: NavActionsPr
       {userInitials ? (
         <UserMenu userInitials={userInitials} />
       ) : (
-        <Button asChild variant="primary" size="sm">
-          <Link to="/signin">Sign In</Link>
+        <Button 
+          asChild 
+          variant={isSignInPage ? "outline" : "primary"} 
+          size="sm"
+          className={`${isSignInPage ? 'bg-white text-primary border-primary hover:bg-white hover:text-primary/90' : ''}`}
+        >
+          <Link to={isSignInPage ? "/signup" : "/signin"}>
+            {isSignInPage ? "Sign Up" : "Sign In"}
+          </Link>
         </Button>
       )}
     </div>

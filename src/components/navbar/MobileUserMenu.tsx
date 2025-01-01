@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { UserMenu } from "./UserMenu";
 
 interface MobileUserMenuProps {
@@ -7,6 +7,9 @@ interface MobileUserMenuProps {
 }
 
 export const MobileUserMenu = ({ userInitials }: MobileUserMenuProps) => {
+  const location = useLocation();
+  const isSignInPage = location.pathname === '/signin';
+
   return (
     <div className="lg:hidden">
       {userInitials ? (
@@ -15,8 +18,15 @@ export const MobileUserMenu = ({ userInitials }: MobileUserMenuProps) => {
           className="h-8 w-8 bg-[#9b87f5] hover:opacity-90 transition-opacity border border-border text-white" 
         />
       ) : (
-        <Button asChild variant="primary" size="sm" className="h-8">
-          <Link to="/signin">Sign In</Link>
+        <Button 
+          asChild 
+          variant={isSignInPage ? "outline" : "primary"} 
+          size="sm" 
+          className={`h-8 ${isSignInPage ? 'bg-white text-primary border-primary hover:bg-white hover:text-primary/90' : ''}`}
+        >
+          <Link to={isSignInPage ? "/signup" : "/signin"}>
+            {isSignInPage ? "Sign Up" : "Sign In"}
+          </Link>
         </Button>
       )}
     </div>
