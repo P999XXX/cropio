@@ -40,7 +40,7 @@ export default {
           foreground: "#ffffff",
         },
         secondary: {
-          DEFAULT: "transparent",
+          DEFAULT: "#f5f5f5",
           hover: "#e9e9e9",
           foreground: "#000000",
         },
