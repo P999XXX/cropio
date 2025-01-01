@@ -1,45 +1,77 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Index from "./pages/Index";
-import SignIn from "./pages/SignIn";
-import SignUp from "./pages/SignUp";
-import ResetPassword from "./pages/ResetPassword";
-import Components from "./pages/Components";
-import DashboardLayout from "./components/layouts/DashboardLayout";
-import DashboardHome from "./pages/dashboard/DashboardHome";
-import DashboardTeam from "./pages/dashboard/DashboardTeam";
-import DashboardSettings from "./pages/dashboard/DashboardSettings";
-import DashboardFAQ from "./pages/dashboard/DashboardFAQ";
-import DashboardSupport from "./pages/dashboard/DashboardSupport";
-import DashboardSubscriptions from "./pages/dashboard/DashboardSubscriptions";
+import { lazy, Suspense } from "react";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import DashboardLayout from "./components/layouts/DashboardLayout";
+
+// Lazy load all pages
+const Index = lazy(() => import("./pages/Index"));
+const SignIn = lazy(() => import("./pages/SignIn"));
+const SignUp = lazy(() => import("./pages/SignUp"));
+const ResetPassword = lazy(() => import("./pages/ResetPassword"));
+const Components = lazy(() => import("./pages/Components"));
+const DashboardHome = lazy(() => import("./pages/dashboard/DashboardHome"));
+const DashboardTeam = lazy(() => import("./pages/dashboard/DashboardTeam"));
+const DashboardSettings = lazy(() => import("./pages/dashboard/DashboardSettings"));
+const DashboardFAQ = lazy(() => import("./pages/dashboard/DashboardFAQ"));
+const DashboardSupport = lazy(() => import("./pages/dashboard/DashboardSupport"));
+const DashboardSubscriptions = lazy(() => import("./pages/dashboard/DashboardSubscriptions"));
+
+// Loading component
+const LoadingSpinner = () => (
+  <div className="flex items-center justify-center min-h-screen">
+    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+  </div>
+);
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Index />,
+    element: (
+      <Suspense fallback={<LoadingSpinner />}>
+        <Index />
+      </Suspense>
+    ),
   },
   {
     path: "/signin",
-    element: <SignIn />,
+    element: (
+      <Suspense fallback={<LoadingSpinner />}>
+        <SignIn />
+      </Suspense>
+    ),
   },
   {
     path: "/signup",
-    element: <SignUp />,
+    element: (
+      <Suspense fallback={<LoadingSpinner />}>
+        <SignUp />
+      </Suspense>
+    ),
   },
   {
     path: "/reset-password",
-    element: <ResetPassword />,
+    element: (
+      <Suspense fallback={<LoadingSpinner />}>
+        <ResetPassword />
+      </Suspense>
+    ),
   },
   {
     path: "/components",
-    element: <Components />,
+    element: (
+      <Suspense fallback={<LoadingSpinner />}>
+        <Components />
+      </Suspense>
+    ),
   },
   {
     path: "/dashboard",
     element: (
       <SidebarProvider defaultOpen={true}>
         <DashboardLayout>
-          <DashboardHome />
+          <Suspense fallback={<LoadingSpinner />}>
+            <DashboardHome />
+          </Suspense>
         </DashboardLayout>
       </SidebarProvider>
     ),
@@ -49,7 +81,9 @@ const router = createBrowserRouter([
     element: (
       <SidebarProvider defaultOpen={true}>
         <DashboardLayout>
-          <DashboardTeam />
+          <Suspense fallback={<LoadingSpinner />}>
+            <DashboardTeam />
+          </Suspense>
         </DashboardLayout>
       </SidebarProvider>
     ),
@@ -59,7 +93,9 @@ const router = createBrowserRouter([
     element: (
       <SidebarProvider defaultOpen={true}>
         <DashboardLayout>
-          <DashboardSubscriptions />
+          <Suspense fallback={<LoadingSpinner />}>
+            <DashboardSubscriptions />
+          </Suspense>
         </DashboardLayout>
       </SidebarProvider>
     ),
@@ -69,7 +105,9 @@ const router = createBrowserRouter([
     element: (
       <SidebarProvider defaultOpen={true}>
         <DashboardLayout>
-          <DashboardSettings />
+          <Suspense fallback={<LoadingSpinner />}>
+            <DashboardSettings />
+          </Suspense>
         </DashboardLayout>
       </SidebarProvider>
     ),
@@ -79,7 +117,9 @@ const router = createBrowserRouter([
     element: (
       <SidebarProvider defaultOpen={true}>
         <DashboardLayout>
-          <DashboardFAQ />
+          <Suspense fallback={<LoadingSpinner />}>
+            <DashboardFAQ />
+          </Suspense>
         </DashboardLayout>
       </SidebarProvider>
     ),
@@ -89,7 +129,9 @@ const router = createBrowserRouter([
     element: (
       <SidebarProvider defaultOpen={true}>
         <DashboardLayout>
-          <DashboardSupport />
+          <Suspense fallback={<LoadingSpinner />}>
+            <DashboardSupport />
+          </Suspense>
         </DashboardLayout>
       </SidebarProvider>
     ),
