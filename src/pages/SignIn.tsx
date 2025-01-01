@@ -20,33 +20,33 @@ const SignIn = () => {
   const [resetEmail, setResetEmail] = useState("");
   const [isResetting, setIsResetting] = useState(false);
   const [firstName, setFirstName] = useState("");
+  const [pageLoaded, setPageLoaded] = useState(false);
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
   useEffect(() => {
-    const hashParams = new URLSearchParams(window.location.hash.replace('#', ''));
-    const errorDescription = hashParams.get('error_description');
-    
-    if (errorDescription === 'Email link is invalid or has expired') {
-      toast.error("Your password reset link has expired. Please request a new one.", errorToastStyle);
-    }
-
-    const getFirstName = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user) {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('first_name')
-          .eq('id', session.user.id)
-          .single();
-        
-        if (profile?.first_name) {
-          setFirstName(profile.first_name);
+    const initializePage = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session?.user) {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('first_name')
+            .eq('id', session.user.id)
+            .single();
+          
+          if (profile?.first_name) {
+            setFirstName(profile.first_name);
+          }
         }
+      } catch (error) {
+        console.error("Error initializing page:", error);
+      } finally {
+        setPageLoaded(true);
       }
     };
-    
-    getFirstName();
+
+    initializePage();
   }, []);
 
   const handleSignIn = async (values: SignInFormData) => {
@@ -77,6 +77,14 @@ const SignIn = () => {
     setShowForgotPassword(true);
     return Promise.resolve();
   };
+
+  if (!pageLoaded) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-background">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
+      </div>
+    );
+  }
 
   return (
     <SidebarProvider>

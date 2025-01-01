@@ -16,10 +16,10 @@ const DashboardFAQ = lazy(() => import("./pages/dashboard/DashboardFAQ"));
 const DashboardSupport = lazy(() => import("./pages/dashboard/DashboardSupport"));
 const DashboardSubscriptions = lazy(() => import("./pages/dashboard/DashboardSubscriptions"));
 
-// Loading component
+// Loading component with a more visible spinner
 const LoadingSpinner = () => (
-  <div className="flex items-center justify-center min-h-screen">
-    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+  <div className="flex items-center justify-center min-h-screen bg-background">
+    <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
   </div>
 );
 
@@ -139,7 +139,11 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <RouterProvider router={router} />
+    </Suspense>
+  );
 }
 
 export default App;
