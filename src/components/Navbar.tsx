@@ -90,7 +90,7 @@ const Navbar = () => {
                     <Button 
                       variant="ghost" 
                       size="icon"
-                      className="h-8 w-8 md:h-9 md:w-9 lg:hidden hover:bg-secondary/80 text-foreground hover:text-foreground"
+                      className="h-8 w-8 md:h-9 md:w-9 lg:hidden hover:bg-secondary/80"
                     >
                       <Menu className="h-4 w-4" />
                       <span className="sr-only">Toggle menu</span>
@@ -118,7 +118,7 @@ const Navbar = () => {
             <Button 
               variant="ghost" 
               size="icon" 
-              className="h-8 w-8 md:h-9 md:w-9 hover:bg-secondary/80 text-foreground hover:text-foreground"
+              className="h-8 w-8 md:h-9 md:w-9 hover:bg-secondary/80"
             >
               <MessageSquare className="h-4 w-4" />
               <span className="sr-only">Open chat</span>
@@ -133,10 +133,10 @@ const Navbar = () => {
               {userInitials ? (
                 <UserMenu 
                   userInitials={userInitials} 
-                  className="h-8 w-8 bg-primary hover:bg-primary/90 transition-colors border border-border text-white" 
+                  className="h-8 w-8 bg-[#9b87f5] hover:opacity-90 transition-opacity border border-border text-white" 
                 />
               ) : (
-                <Button asChild variant="primary" size="sm" className="h-8 text-[13px]">
+                <Button asChild variant="default" size="sm" className="h-8">
                   <Link to="/signin">Sign In</Link>
                 </Button>
               )}

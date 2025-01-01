@@ -7,16 +7,10 @@ interface StatusBadgeProps {
 }
 
 export const StatusBadge = ({ status }: StatusBadgeProps) => {
-  const variant = getStatusBadgeVariant(status);
-  
   return (
     <Badge 
-      variant="outline"
-      className={`rounded-[5px] py-0.5 px-2 font-medium text-[0.7rem] ${
-        status === 'accepted' ? 'bg-success text-success-foreground border-success-foreground/20' :
-        status === 'pending' ? 'bg-warning text-warning-foreground border-warning-foreground/20' :
-        'bg-destructive text-destructive-foreground border-destructive-foreground/20'
-      }`}
+      variant={getStatusBadgeVariant(status)} 
+      className="rounded-[5px] py-0 px-2 font-medium"
     >
       {status}
     </Badge>

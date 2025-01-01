@@ -9,7 +9,6 @@ import { MobileSortDropdown } from "./table/MobileSortDropdown";
 import { LoadingState } from "./table/LoadingState";
 import { EmptyTeamState } from "./table/EmptyTeamState";
 import { TeamMembersGrid } from "./table/TeamMembersGrid";
-import { memo } from "react";
 
 interface TeamMembersTableProps {
   teamMembers: TeamMember[];
@@ -17,7 +16,7 @@ interface TeamMembersTableProps {
   onInvite: () => void;
 }
 
-export const TeamMembersTable = memo(({ teamMembers, isLoading, onInvite }: TeamMembersTableProps) => {
+export const TeamMembersTable = ({ teamMembers, isLoading, onInvite }: TeamMembersTableProps) => {
   const isMobile = useIsMobile();
   const {
     searchTerm,
@@ -92,6 +91,4 @@ export const TeamMembersTable = memo(({ teamMembers, isLoading, onInvite }: Team
       )}
     </div>
   );
-});
-
-TeamMembersTable.displayName = "TeamMembersTable";
+};

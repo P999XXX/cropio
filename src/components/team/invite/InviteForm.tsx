@@ -118,7 +118,7 @@ export const InviteForm = ({ onSubmit, isLoading, onCancel }: InviteFormProps) =
                     <SelectValue placeholder="Select a role" />
                   </SelectTrigger>
                 </FormControl>
-                <SelectContent className="bg-background border border-border z-[200]">
+                <SelectContent className="bg-background border border-border">
                   <SelectItem value="administrator" className="text-[0.925rem]">Administrator</SelectItem>
                   <SelectItem value="editor" className="text-[0.925rem]">Editor</SelectItem>
                   <SelectItem value="readonly" className="text-[0.925rem]">Read Only</SelectItem>
@@ -129,22 +129,21 @@ export const InviteForm = ({ onSubmit, isLoading, onCancel }: InviteFormProps) =
           )}
         />
 
-        <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
+        <div className="flex flex-col gap-3 mt-4 sm:flex-row sm:justify-end">
+          <Button
+            type="submit"
+            disabled={isLoading}
+            className="h-10 px-4 text-[0.925rem]"
+          >
+            {isLoading ? "Inviting..." : "Send Invitation"}
+          </Button>
           <Button
             type="button"
             variant="secondary"
             onClick={onCancel}
-            className="order-2 sm:order-1 w-full sm:w-auto h-10 px-4 text-[0.925rem]"
+            className="h-10 px-4 text-[0.925rem]"
           >
             Cancel
-          </Button>
-          <Button
-            type="submit"
-            variant="primary"
-            disabled={isLoading}
-            className="order-1 sm:order-2 w-full sm:w-auto h-10 px-4 text-[0.925rem]"
-          >
-            {isLoading ? "Inviting..." : "Send Invitation"}
           </Button>
         </div>
       </form>

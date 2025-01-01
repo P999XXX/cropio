@@ -1,79 +1,45 @@
-import { createHashRouter, RouterProvider } from "react-router-dom";
-import { lazy, Suspense } from "react";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Index from "./pages/Index";
+import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
+import ResetPassword from "./pages/ResetPassword";
+import Components from "./pages/Components";
 import DashboardLayout from "./components/layouts/DashboardLayout";
-import { useToast } from "@/components/ui/use-toast";
+import DashboardHome from "./pages/dashboard/DashboardHome";
+import DashboardTeam from "./pages/dashboard/DashboardTeam";
+import DashboardSettings from "./pages/dashboard/DashboardSettings";
+import DashboardFAQ from "./pages/dashboard/DashboardFAQ";
+import DashboardSupport from "./pages/dashboard/DashboardSupport";
+import DashboardSubscriptions from "./pages/dashboard/DashboardSubscriptions";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
-// Lazy load all pages with error boundaries
-const Index = lazy(() => import("./pages/Index"));
-const SignIn = lazy(() => import("./pages/SignIn"));
-const SignUp = lazy(() => import("./pages/SignUp"));
-const ResetPassword = lazy(() => import("./pages/ResetPassword"));
-const Components = lazy(() => import("./pages/Components"));
-const DashboardHome = lazy(() => import("./pages/dashboard/DashboardHome"));
-const DashboardTeam = lazy(() => import("./pages/dashboard/DashboardTeam"));
-const DashboardSettings = lazy(() => import("./pages/dashboard/DashboardSettings"));
-const DashboardFAQ = lazy(() => import("./pages/dashboard/DashboardFAQ"));
-const DashboardSupport = lazy(() => import("./pages/dashboard/DashboardSupport"));
-const DashboardSubscriptions = lazy(() => import("./pages/dashboard/DashboardSubscriptions"));
-
-// Enhanced loading spinner with error handling
-const LoadingSpinner = () => (
-  <div className="flex items-center justify-center min-h-screen">
-    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-  </div>
-);
-
-const router = createHashRouter([
+const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <Suspense fallback={<LoadingSpinner />}>
-        <Index />
-      </Suspense>
-    ),
-    errorElement: <div>Error loading page</div>,
+    element: <Index />,
   },
   {
     path: "/signin",
-    element: (
-      <Suspense fallback={<LoadingSpinner />}>
-        <SignIn />
-      </Suspense>
-    ),
+    element: <SignIn />,
   },
   {
     path: "/signup",
-    element: (
-      <Suspense fallback={<LoadingSpinner />}>
-        <SignUp />
-      </Suspense>
-    ),
+    element: <SignUp />,
   },
   {
     path: "/reset-password",
-    element: (
-      <Suspense fallback={<LoadingSpinner />}>
-        <ResetPassword />
-      </Suspense>
-    ),
+    element: <ResetPassword />,
   },
   {
     path: "/components",
-    element: (
-      <Suspense fallback={<LoadingSpinner />}>
-        <Components />
-      </Suspense>
-    ),
+    element: <Components />,
   },
   {
     path: "/dashboard",
     element: (
       <SidebarProvider defaultOpen={true}>
         <DashboardLayout>
-          <Suspense fallback={<LoadingSpinner />}>
-            <DashboardHome />
-          </Suspense>
+          <DashboardHome />
         </DashboardLayout>
       </SidebarProvider>
     ),
@@ -83,9 +49,7 @@ const router = createHashRouter([
     element: (
       <SidebarProvider defaultOpen={true}>
         <DashboardLayout>
-          <Suspense fallback={<LoadingSpinner />}>
-            <DashboardTeam />
-          </Suspense>
+          <DashboardTeam />
         </DashboardLayout>
       </SidebarProvider>
     ),
@@ -95,9 +59,7 @@ const router = createHashRouter([
     element: (
       <SidebarProvider defaultOpen={true}>
         <DashboardLayout>
-          <Suspense fallback={<LoadingSpinner />}>
-            <DashboardSubscriptions />
-          </Suspense>
+          <DashboardSubscriptions />
         </DashboardLayout>
       </SidebarProvider>
     ),
@@ -107,9 +69,7 @@ const router = createHashRouter([
     element: (
       <SidebarProvider defaultOpen={true}>
         <DashboardLayout>
-          <Suspense fallback={<LoadingSpinner />}>
-            <DashboardSettings />
-          </Suspense>
+          <DashboardSettings />
         </DashboardLayout>
       </SidebarProvider>
     ),
@@ -119,9 +79,7 @@ const router = createHashRouter([
     element: (
       <SidebarProvider defaultOpen={true}>
         <DashboardLayout>
-          <Suspense fallback={<LoadingSpinner />}>
-            <DashboardFAQ />
-          </Suspense>
+          <DashboardFAQ />
         </DashboardLayout>
       </SidebarProvider>
     ),
@@ -131,9 +89,7 @@ const router = createHashRouter([
     element: (
       <SidebarProvider defaultOpen={true}>
         <DashboardLayout>
-          <Suspense fallback={<LoadingSpinner />}>
-            <DashboardSupport />
-          </Suspense>
+          <DashboardSupport />
         </DashboardLayout>
       </SidebarProvider>
     ),
@@ -141,7 +97,6 @@ const router = createHashRouter([
 ]);
 
 function App() {
-  console.log('App rendering');
   return <RouterProvider router={router} />;
 }
 

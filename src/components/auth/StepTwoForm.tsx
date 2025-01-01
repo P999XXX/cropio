@@ -124,24 +124,13 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
           />
         </div>
 
-        <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
-          <Button 
-            type="submit" 
-            variant="primary"
-            className="order-1 sm:order-2 w-full sm:w-auto" 
-            disabled={isLoading}
-          >
-            {isLoading ? "Creating account..." : "Create Account"}
-          </Button>
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={onBack}
-            className="order-2 sm:order-1 w-full sm:w-auto"
-          >
-            Back
-          </Button>
-        </div>
+        <Button 
+          type="submit" 
+          className="w-full bg-primary text-primary-foreground hover:bg-primary/90" 
+          disabled={isLoading}
+        >
+          {isLoading ? "Creating account..." : "Create Account"}
+        </Button>
 
         <div className="text-sm text-center text-muted-foreground pt-2">
           Already have an account?{" "}

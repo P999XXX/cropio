@@ -34,8 +34,7 @@ const ResetPasswordThankYouDialog = ({ open, onOpenChange, userEmail }: ResetPas
         <div className="flex flex-col sm:flex-row gap-3 mt-4 sm:justify-end">
           <Button
             onClick={() => navigate("/")}
-            variant="primary"
-            className="w-full text-primary-foreground hover:bg-primary-hover"
+            className="dialog-button-primary"
           >
             Back to Homepage
           </Button>

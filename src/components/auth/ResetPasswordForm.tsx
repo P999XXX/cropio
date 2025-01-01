@@ -115,24 +115,9 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
             label="Confirm Password"
           />
 
-          <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
-            <Button 
-              type="submit" 
-              variant="primary"
-              className="order-1 sm:order-2 w-full sm:w-auto" 
-              disabled={isLoading}
-            >
-              {isLoading ? "Updating password..." : "Update Password"}
-            </Button>
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={() => navigate("/signin")}
-              className="order-2 sm:order-1 w-full sm:w-auto"
-            >
-              Cancel
-            </Button>
-          </div>
+          <Button type="submit" className="w-full" variant="primary" disabled={isLoading}>
+            {isLoading ? "Updating password..." : "Update Password"}
+          </Button>
         </form>
       </Form>
       <div className="text-sm text-center text-muted-foreground mt-4">

@@ -26,9 +26,9 @@ const AuthProviders = ({
   };
 
   return (
-    <div className="space-y-2 w-full">
+    <div className="space-y-2">
       <Button 
-        variant="secondary"
+        variant="default"
         onClick={() => handleSocialSignUp(onGoogleSignUp)} 
         className="w-full flex items-center justify-center"
       >
@@ -41,7 +41,7 @@ const AuthProviders = ({
       </Button>
 
       <Button 
-        variant="secondary"
+        variant="default"
         onClick={() => handleSocialSignUp(onLinkedInSignUp)} 
         className="w-full flex items-center justify-center"
       >
