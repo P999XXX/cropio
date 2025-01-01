@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -12,9 +12,11 @@ import { SignInFormData } from "@/components/auth/SignInForm";
 import { handleGoogleSignIn, handleLinkedInSignIn, handlePasswordReset } from "@/utils/auth-handlers";
 import { errorToastStyle, successToastStyle } from "@/utils/toast-styles";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import LoadingSpinner from "@/components/ui/loading-spinner";
 
 const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isInitializing, setIsInitializing] = useState(true);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [showResetThankYou, setShowResetThankYou] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
@@ -23,36 +25,37 @@ const SignIn = () => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
-  // Optimized initialization with proper error handling
-  useEffect(() => {
-    const initializeAuth = async () => {
-      try {
-        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-        if (sessionError) throw sessionError;
+  // Memoized initialization function
+  const initializeAuth = useCallback(async () => {
+    try {
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      if (sessionError) throw sessionError;
 
-        if (session?.user) {
-          const { data: profile, error: profileError } = await supabase
-            .from('profiles')
-            .select('first_name')
-            .eq('id', session.user.id)
-            .single();
-          
-          if (profileError) throw profileError;
-          if (profile?.first_name) {
-            setFirstName(profile.first_name);
-          }
-          
-          // Redirect to dashboard if already authenticated
-          navigate('/dashboard');
+      if (session?.user) {
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('first_name')
+          .eq('id', session.user.id)
+          .single();
+        
+        if (profileError) throw profileError;
+        if (profile?.first_name) {
+          setFirstName(profile.first_name);
         }
-      } catch (error: any) {
-        console.error("Auth initialization error:", error);
-        toast.error("Failed to initialize authentication", errorToastStyle);
+        
+        navigate('/dashboard');
       }
-    };
-
-    initializeAuth();
+    } catch (error: any) {
+      console.error("Auth initialization error:", error);
+      toast.error("Failed to initialize authentication", errorToastStyle);
+    } finally {
+      setIsInitializing(false);
+    }
   }, [navigate]);
+
+  useEffect(() => {
+    initializeAuth();
+  }, [initializeAuth]);
 
   // Memoized sign in handler
   const handleSignIn = useCallback(async (values: SignInFormData) => {
@@ -79,10 +82,23 @@ const SignIn = () => {
     return handlePasswordReset(resetEmail, setIsResetting, setShowForgotPassword, setShowResetThankYou);
   }, [resetEmail]);
 
-  const handleForgotPassword = useCallback(async () => {
+  const handleForgotPassword = useCallback(() => {
     setShowForgotPassword(true);
     return Promise.resolve();
   }, []);
+
+  // Memoized welcome message
+  const welcomeMessage = useMemo(() => {
+    return firstName ? `Welcome back ${firstName}!` : "Welcome back!";
+  }, [firstName]);
+
+  if (isInitializing) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <LoadingSpinner size="lg" aria-label="Initializing application" />
+      </div>
+    );
+  }
 
   return (
     <SidebarProvider>
@@ -92,7 +108,7 @@ const SignIn = () => {
           <div className="w-full md:w-[500px] py-8">
             <div className={`space-y-2 mb-8 ${isMobile ? "text-left" : "text-center"}`}>
               <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">
-                {firstName ? `Welcome back ${firstName}!` : "Welcome back!"}
+                {welcomeMessage}
               </h1>
               <p className="text-[14px] text-muted-foreground">
                 Please sign in to continue
