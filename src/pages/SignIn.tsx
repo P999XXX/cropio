@@ -28,12 +28,10 @@ const SignIn = () => {
   const checkSession = useCallback(async () => {
     try {
       const { data: { session }, error } = await supabase.auth.getSession();
-      
       if (error) {
         console.error("Session check error:", error);
         return null;
       }
-      
       return session;
     } catch (error) {
       console.error("Session check failed:", error);
@@ -41,59 +39,58 @@ const SignIn = () => {
     }
   }, []);
 
-  const initializeAuth = useCallback(async () => {
-    console.log("Starting auth initialization...");
-    try {
-      const session = await checkSession();
-      
-      if (!session) {
-        console.log("No active session found");
-        setIsInitializing(false);
-        return;
+  const handleAuthStateChange = useCallback(async (event: string, session: any) => {
+    console.log("Auth state changed:", event, session?.user?.id);
+    if (event === 'SIGNED_IN' && session) {
+      try {
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('first_name')
+          .eq('id', session.user.id)
+          .single();
+        
+        if (profileError) {
+          console.error("Profile fetch error:", profileError);
+        } else if (profile?.first_name) {
+          setFirstName(profile.first_name);
+        }
+        
+        navigate('/dashboard');
+      } catch (error) {
+        console.error("Profile fetch error:", error);
       }
-
-      console.log("Session found, fetching profile...");
-      const { data: profile, error: profileError } = await supabase
-        .from('profiles')
-        .select('first_name')
-        .eq('id', session.user.id)
-        .single();
-      
-      if (profileError) {
-        console.error("Profile fetch error:", profileError);
-      } else if (profile?.first_name) {
-        setFirstName(profile.first_name);
-      }
-      
-      navigate('/dashboard');
-    } catch (error) {
-      console.error("Auth initialization error:", error);
-    } finally {
-      setIsInitializing(false);
     }
-  }, [navigate, checkSession]);
+  }, [navigate]);
 
   useEffect(() => {
+    let authListener: any;
+
     const setupAuth = async () => {
       console.log("Setting up auth listener...");
-      const { data: { subscription } } = await supabase.auth.onAuthStateChange(
-        async (event, session) => {
-          console.log("Auth state changed:", event, session?.user?.id);
-          if (event === 'SIGNED_IN' && session) {
-            navigate('/dashboard');
-          }
-        }
-      );
+      
+      // Check for existing session
+      const session = await checkSession();
+      if (session) {
+        console.log("Existing session found, redirecting...");
+        handleAuthStateChange('SIGNED_IN', session);
+      }
 
-      initializeAuth();
+      // Set up auth state change listener
+      const { data: { subscription } } = await supabase.auth.onAuthStateChange(handleAuthStateChange);
+      authListener = subscription;
 
-      return () => {
-        subscription.unsubscribe();
-      };
+      setIsInitializing(false);
     };
 
     setupAuth();
-  }, [initializeAuth, navigate]);
+
+    return () => {
+      if (authListener) {
+        console.log("Cleaning up auth listener...");
+        authListener.unsubscribe();
+      }
+    };
+  }, [checkSession, handleAuthStateChange]);
 
   const handleSignIn = useCallback(async (values: SignInFormData) => {
     console.log("Attempting sign in...");
