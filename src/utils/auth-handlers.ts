@@ -54,8 +54,7 @@ export const handlePasswordReset = async (
     if (profileError) throw profileError;
 
     if (!profile) {
-      toast.error("No account found with this email address.", errorToastStyle);
-      return;
+      throw new Error("No account found with this email address");
     }
 
     const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
@@ -69,7 +68,7 @@ export const handlePasswordReset = async (
     toast.success("Reset instructions sent!", successToastStyle);
   } catch (error: any) {
     console.error("Reset password error:", error);
-    toast.error(error.message || "Failed to send reset instructions", errorToastStyle);
+    throw error;
   } finally {
     setIsResetting(false);
   }

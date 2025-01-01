@@ -39,7 +39,11 @@ const ForgotPasswordDialog = ({
       setError("Please enter a valid email address");
       return;
     }
-    await onSubmit();
+    try {
+      await onSubmit();
+    } catch (error: any) {
+      setError(error.message || "An error occurred while resetting password");
+    }
   };
 
   return (
@@ -65,7 +69,7 @@ const ForgotPasswordDialog = ({
               }}
               className="dialog-input"
             />
-            {error && <p className="text-sm text-destructive">{error}</p>}
+            {error && <p className="text-sm text-destructive-foreground">{error}</p>}
           </div>
         </div>
         <div className="flex flex-col gap-3 mt-4 sm:flex-row sm:justify-end">
