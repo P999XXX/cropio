@@ -31,6 +31,7 @@ const AuthProviders = ({
         variant="secondary"
         onClick={() => handleSocialSignUp(onGoogleSignUp)} 
         className="w-full flex items-center justify-center bg-secondary hover:bg-secondary-hover"
+        type="button"
       >
         <div className="flex items-center">
           <GoogleIcon className="mr-2" />
@@ -44,6 +45,7 @@ const AuthProviders = ({
         variant="secondary"
         onClick={() => handleSocialSignUp(onLinkedInSignUp)} 
         className="w-full flex items-center justify-center bg-secondary hover:bg-secondary-hover"
+        type="button"
       >
         <div className="flex items-center">
           <LinkedInIcon className="mr-2" />
