@@ -44,7 +44,12 @@ const SignUpForm = ({ onSubmit, isLoading }: SignUpFormProps) => {
           label="Password"
         />
 
-        <Button type="submit" className="auth-button" disabled={isLoading}>
+        <Button 
+          type="submit" 
+          variant="primary"
+          className="w-full text-[0.775rem]" 
+          disabled={isLoading}
+        >
           {isLoading ? "Signing up..." : "Sign up"}
         </Button>
       </form>
