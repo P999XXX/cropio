@@ -28,9 +28,9 @@ const AuthProviders = ({
   return (
     <div className="space-y-2">
       <Button 
-        variant="outline"
+        variant="secondary"
         onClick={() => handleSocialSignUp(onGoogleSignUp)} 
-        className="w-full flex items-center justify-center bg-background hover:bg-secondary dark:bg-gray-950 dark:hover:bg-gray-900 border border-input"
+        className="w-full flex items-center justify-center"
         type="button"
       >
         <div className="flex items-center">
@@ -42,9 +42,9 @@ const AuthProviders = ({
       </Button>
 
       <Button 
-        variant="outline"
+        variant="secondary"
         onClick={() => handleSocialSignUp(onLinkedInSignUp)} 
-        className="w-full flex items-center justify-center bg-background hover:bg-secondary dark:bg-gray-950 dark:hover:bg-gray-900 border border-input"
+        className="w-full flex items-center justify-center"
         type="button"
       >
         <div className="flex items-center">
