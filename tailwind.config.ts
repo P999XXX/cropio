@@ -41,7 +41,7 @@ export default {
         },
         secondary: {
           DEFAULT: "transparent",
-          hover: "#f3f3f3",
+          hover: "#e9e9e9",
           foreground: "#000000",
         },
         success: {
