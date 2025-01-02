@@ -48,7 +48,7 @@ export const handlePasswordReset = async (
       if (!errorMessage.includes('Too many reset attempts')) {
         setShowForgotPassword(false);
       }
-      return;
+      throw resetError;
     }
 
     // If password reset was successful
