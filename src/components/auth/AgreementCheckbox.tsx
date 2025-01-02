@@ -10,7 +10,7 @@ import FormErrorMessage from "@/components/forms/FormErrorMessage";
 
 interface AgreementCheckboxProps {
   form: UseFormReturn<StepTwoFormData>;
-  name: keyof Pick<StepTwoFormData, "acceptTerms" | "acceptPrivacy">;
+  name: "acceptTerms" | "acceptPrivacy";
   linkText: string;
   linkHref: string;
 }

@@ -6,6 +6,7 @@ import { Form } from "@/components/ui/form";
 import FormInput from "@/components/forms/FormInput";
 import PasswordInput from "./PasswordInput";
 import { ArrowLeft } from "lucide-react";
+import AgreementCheckbox from "./AgreementCheckbox";
 
 const stepTwoSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -16,7 +17,13 @@ const stepTwoSchema = z.object({
     .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
     .regex(/[a-z]/, "Password must contain at least one lowercase letter")
     .regex(/[0-9]/, "Password must contain at least one number"),
-  confirmPassword: z.string()
+  confirmPassword: z.string(),
+  acceptTerms: z.boolean().refine(val => val === true, {
+    message: "You must accept the terms and conditions",
+  }),
+  acceptPrivacy: z.boolean().refine(val => val === true, {
+    message: "You must accept the privacy policy",
+  }),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match",
   path: ["confirmPassword"],
@@ -39,6 +46,8 @@ const StepTwoForm = ({ onSubmit, onBack, isLoading }: StepTwoFormProps) => {
       email: "",
       password: "",
       confirmPassword: "",
+      acceptTerms: false,
+      acceptPrivacy: false,
     },
   });
 
@@ -89,6 +98,21 @@ const StepTwoForm = ({ onSubmit, onBack, isLoading }: StepTwoFormProps) => {
               form={form}
               name="confirmPassword"
               label="Confirm Password"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <AgreementCheckbox
+              form={form}
+              name="acceptTerms"
+              linkText="Terms and Conditions"
+              linkHref="/terms"
+            />
+            <AgreementCheckbox
+              form={form}
+              name="acceptPrivacy"
+              linkText="Privacy Policy"
+              linkHref="/privacy"
             />
           </div>
 
