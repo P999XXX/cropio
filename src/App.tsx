@@ -18,8 +18,13 @@ import DashboardSubscriptions from "./pages/dashboard/DashboardSubscriptions";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import AuthRedirectHandler from "./components/auth/AuthRedirectHandler";
 
-// Protected Route wrapper component
+// Temporarily disabled auth checks for development
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  // Development mode: directly render children without auth checks
+  return children;
+  
+  // Original auth logic commented out for later use
+  /*
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -56,10 +61,11 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   if (isLoading) {
-    return null; // Or a loading spinner
+    return null;
   }
 
   return isAuthenticated ? children : <Navigate to="/signin" replace />;
+  */
 };
 
 const router = createBrowserRouter([
