@@ -9,21 +9,12 @@ import ThankYouDialog from "@/components/auth/ThankYouDialog";
 import StepOneForm from "@/components/auth/StepOneForm";
 import StepTwoForm from "@/components/auth/StepTwoForm";
 import { handleGoogleSignIn, handleLinkedInSignIn } from "@/utils/auth-handlers";
+import { errorToastStyle, successToastStyle } from "@/utils/toast-styles";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogAction,
-} from "@/components/ui/alert-dialog";
 
 const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showThankYou, setShowThankYou] = useState(false);
-  const [showErrorDialog, setShowErrorDialog] = useState(false);
   const [email, setEmail] = useState("");
   const [step, setStep] = useState(1);
   const [selectedRole, setSelectedRole] = useState<"buyer" | "supplier">();
@@ -35,33 +26,9 @@ const SignUp = () => {
     setStep(2);
   };
 
-  const checkEmailExists = async (email: string) => {
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('email')
-      .eq('email', email)
-      .maybeSingle();
-
-    if (error) {
-      console.error('Error checking email:', error);
-      return false;
-    }
-
-    return !!data;
-  };
-
   const handleStepTwo = async (values: any) => {
     setIsLoading(true);
     try {
-      // Check if email exists
-      const emailExists = await checkEmailExists(values.email);
-      if (emailExists) {
-        setEmail(values.email);
-        setShowErrorDialog(true);
-        setIsLoading(false);
-        return;
-      }
-
       const { error } = await supabase.auth.signUp({
         email: values.email,
         password: values.password,
@@ -78,19 +45,11 @@ const SignUp = () => {
       if (error) throw error;
 
       setEmail(values.email);
-      toast.success("Successfully signed up!", {
-        className: "bg-primary text-white",
-        description: "Please check your email to verify your account.",
-        duration: 5000,
-      });
+      toast.success("Successfully signed up!", successToastStyle);
       setShowThankYou(true);
     } catch (error: any) {
       console.error("Sign up error:", error);
-      toast.error("Failed to sign up", {
-        className: "bg-destructive text-destructive-foreground",
-        description: error.message,
-        duration: 5000,
-      });
+      toast.error(error.message || "Failed to sign up", errorToastStyle);
     } finally {
       setIsLoading(false);
     }
@@ -109,7 +68,7 @@ const SignUp = () => {
             <SignUpHeader step={step} />
 
             {isMobile ? (
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {step === 1 ? (
                   <StepOneForm
                     onSubmit={handleStepOne}
@@ -143,43 +102,11 @@ const SignUp = () => {
             )}
           </div>
         </main>
-
         <ThankYouDialog
-          open={showThankYou && !showErrorDialog}
+          open={showThankYou}
           onOpenChange={setShowThankYou}
           userEmail={email}
         />
-
-        <AlertDialog open={showErrorDialog} onOpenChange={setShowErrorDialog}>
-          <AlertDialogContent className="signup-error-dialog">
-            <AlertDialogHeader>
-              <AlertDialogTitle className="text-lg font-semibold">
-                Email Already Exists
-              </AlertDialogTitle>
-              <AlertDialogDescription className="mt-2">
-                An account with the email <span className="font-medium">{email}</span> already exists. 
-                Please try signing in instead or use a different email address.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogAction 
-                onClick={() => {
-                  setShowErrorDialog(false);
-                  navigate("/signin");
-                }}
-                className="bg-primary hover:bg-primary/90"
-              >
-                Go to Sign In
-              </AlertDialogAction>
-              <AlertDialogAction 
-                onClick={() => setShowErrorDialog(false)}
-                className="bg-secondary hover:bg-secondary/90"
-              >
-                Try Different Email
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
       </div>
     </SidebarProvider>
   );
