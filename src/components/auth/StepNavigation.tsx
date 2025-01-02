@@ -28,7 +28,7 @@ const StepNavigation = ({ currentStep, steps }: StepNavigationProps) => {
               )}
             </div>
             <span
-              className={`text-xs mt-1 text-center md:text-[0.8rem] ${
+              className={`text-xs mt-1 whitespace-nowrap md:text-sm ${
                 index + 1 === currentStep ? "text-primary" : "text-muted-foreground"
               }`}
             >
@@ -37,7 +37,7 @@ const StepNavigation = ({ currentStep, steps }: StepNavigationProps) => {
           </div>
           {index < steps.length - 1 && (
             <div
-              className={`w-12 h-[2px] mx-2 ${
+              className={`w-8 md:w-12 h-[2px] mx-1 md:mx-2 ${
                 index + 1 < currentStep ? "bg-primary" : "bg-secondary"
               }`}
             />
