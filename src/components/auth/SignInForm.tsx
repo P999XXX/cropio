@@ -47,7 +47,7 @@ const SignInForm = ({ onSubmit, isLoading, onForgotPassword }: SignInFormProps) 
 
         <Button 
           type="submit" 
-          className="w-full text-[13px] mt-6 auth-button" 
+          className="w-full text-[0.775rem] mt-6 bg-primary hover:bg-primary/90 text-primary-foreground" 
           disabled={isLoading}
         >
           {isLoading ? "Signing in..." : "Sign in"}
@@ -56,7 +56,7 @@ const SignInForm = ({ onSubmit, isLoading, onForgotPassword }: SignInFormProps) 
         <button
           type="button"
           onClick={onForgotPassword}
-          className="text-sm text-primary hover:underline block w-full text-center mt-2"
+          className="text-[0.775rem] text-primary hover:underline block w-full text-center mt-2"
         >
           Forgot your password?
         </button>

@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ForgotPasswordDialogProps {
   open: boolean;
@@ -45,6 +46,12 @@ const ForgotPasswordDialog = ({
     }
     
     try {
+      const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+
+      if (resetError) throw resetError;
+      
       await onSubmit();
       setIsRateLimited(false);
     } catch (error: any) {
