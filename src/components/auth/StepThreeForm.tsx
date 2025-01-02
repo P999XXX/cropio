@@ -42,16 +42,6 @@ const StepThreeForm = ({ onSubmit, onBack, isLoading }: StepThreeFormProps) => {
 
   return (
     <div className="space-y-6 bg-card p-6 rounded-lg border border-border">
-      <Button
-        variant="ghost"
-        size="sm"
-        className="text-foreground hover:bg-transparent hover:text-foreground/80 p-0"
-        onClick={onBack}
-      >
-        <ArrowLeft className="h-4 w-4 mr-1" />
-        Back
-      </Button>
-
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormInput
@@ -88,13 +78,25 @@ const StepThreeForm = ({ onSubmit, onBack, isLoading }: StepThreeFormProps) => {
 
           <PhoneInput form={form} />
 
-          <Button 
-            type="submit" 
-            className="w-full"
-            disabled={isLoading}
-          >
-            {isLoading ? "Saving..." : "Continue"}
-          </Button>
+          <div className="flex flex-col-reverse sm:flex-row gap-3 sm:gap-4 pt-2">
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={onBack}
+              className="w-full sm:w-auto order-2 sm:order-1"
+            >
+              <ArrowLeft className="h-4 w-4 mr-1" />
+              Back
+            </Button>
+            <Button 
+              type="submit" 
+              variant="primary"
+              className="w-full sm:w-auto order-1 sm:order-2"
+              disabled={isLoading}
+            >
+              {isLoading ? "Saving..." : "Continue"}
+            </Button>
+          </div>
         </form>
       </Form>
     </div>

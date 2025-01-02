@@ -28,7 +28,7 @@ const StepNavigation = ({ currentStep, steps }: StepNavigationProps) => {
               )}
             </div>
             <span
-              className={`text-xs mt-1 ${
+              className={`text-xs mt-1 text-center md:text-[0.8rem] ${
                 index + 1 === currentStep ? "text-primary" : "text-muted-foreground"
               }`}
             >
