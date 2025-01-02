@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
@@ -24,8 +24,20 @@ const SignIn = () => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const { loadingStates, setLoading } = useLoadingStates();
+  const [searchParams] = useSearchParams();
 
   useAuthSession();
+
+  useEffect(() => {
+    // Check for error parameter in URL
+    const error = searchParams.get('error');
+    if (error) {
+      // Show error toast if there's an error parameter
+      toast.error("Password reset link is invalid or has expired. Please request a new one.", errorToastStyle);
+      // Clear the error from URL
+      navigate('/signin', { replace: true });
+    }
+  }, [searchParams, navigate]);
 
   useEffect(() => {
     const getFirstName = async () => {
@@ -60,11 +72,9 @@ const SignIn = () => {
       if (error) {
         if (error.message.includes('Invalid login credentials')) {
           toast.error("Invalid email or password. Please try again.", errorToastStyle);
-          // Only clear password on invalid credentials
           values.password = '';
         } else {
           toast.error(getErrorMessage(error), errorToastStyle);
-          // Clear both fields on other errors
           values.email = '';
           values.password = '';
         }
