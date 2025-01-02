@@ -26,9 +26,32 @@ const SignUp = () => {
     setStep(2);
   };
 
+  const checkEmailExists = async (email: string) => {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('email')
+      .eq('email', email)
+      .maybeSingle();
+
+    if (error) {
+      console.error('Error checking email:', error);
+      return false;
+    }
+
+    return !!data;
+  };
+
   const handleStepTwo = async (values: any) => {
     setIsLoading(true);
     try {
+      // Check if email exists
+      const emailExists = await checkEmailExists(values.email);
+      if (emailExists) {
+        toast.error("An account with this email already exists", errorToastStyle);
+        setIsLoading(false);
+        return;
+      }
+
       const { error } = await supabase.auth.signUp({
         email: values.email,
         password: values.password,
