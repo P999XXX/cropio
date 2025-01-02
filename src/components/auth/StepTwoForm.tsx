@@ -3,7 +3,8 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import { Form } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormDescription } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { CardDescription } from "@/components/ui/card";
 import FormInput from "@/components/forms/FormInput";
 import PasswordInput from "./PasswordInput";
@@ -12,6 +13,7 @@ import PhoneInput from "./PhoneInput";
 import AgreementCheckbox from "./AgreementCheckbox";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { supabase } from "@/integrations/supabase/client";
+import FormErrorMessage from "@/components/forms/FormErrorMessage";
 
 const stepTwoSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
