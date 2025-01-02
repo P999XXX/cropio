@@ -4,6 +4,8 @@ import { Label } from "@/components/ui/label";
 import { Upload, X } from "lucide-react";
 import { UseFormReturn } from "react-hook-form";
 import { StepFourFormData } from "../StepFourForm";
+import { useState, useCallback } from "react";
+import { cn } from "@/lib/utils";
 
 interface DocumentUploadProps {
   form: UseFormReturn<StepFourFormData>;
@@ -13,10 +15,60 @@ interface DocumentUploadProps {
 }
 
 const DocumentUpload = ({ form, selectedFiles, onFileChange, onRemoveFile }: DocumentUploadProps) => {
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handleDragEnter = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  }, []);
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  }, []);
+
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  }, []);
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const files = Array.from(e.dataTransfer.files);
+    const allowedTypes = ['.pdf', '.doc', '.docx'];
+    const validFiles = files.filter(file => 
+      allowedTypes.some(type => file.name.toLowerCase().endsWith(type))
+    );
+
+    if (validFiles.length > 0) {
+      const event = {
+        target: {
+          files: validFiles
+        }
+      } as unknown as React.ChangeEvent<HTMLInputElement>;
+      onFileChange(event);
+    }
+  }, [onFileChange]);
+
   return (
     <div className="space-y-2">
       <Label>Company Documents</Label>
-      <div className="border-2 border-dashed border-border rounded-lg p-4">
+      <div
+        className={cn(
+          "border-2 border-dashed border-border rounded-lg p-4 transition-colors",
+          isDragging && "border-primary bg-primary/5",
+          "document-upload-container"
+        )}
+        onDragEnter={handleDragEnter}
+        onDragLeave={handleDragLeave}
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
+      >
         <Input
           type="file"
           accept=".pdf,.doc,.docx"
@@ -29,9 +81,18 @@ const DocumentUpload = ({ form, selectedFiles, onFileChange, onRemoveFile }: Doc
           htmlFor="company-documents"
           className="flex flex-col items-center justify-center cursor-pointer"
         >
-          <Upload className="h-8 w-8 text-muted-foreground mb-2" />
-          <span className="text-sm text-muted-foreground">
-            Upload company documents (VAT & Tax verification)
+          <Upload className={cn(
+            "h-8 w-8 mb-2",
+            isDragging ? "text-primary" : "text-muted-foreground"
+          )} />
+          <span className={cn(
+            "text-sm",
+            isDragging ? "text-primary" : "text-muted-foreground"
+          )}>
+            {isDragging 
+              ? "Drop your files here"
+              : "Upload company documents (VAT & Tax verification)"
+            }
           </span>
           <span className="text-xs text-muted-foreground mt-1">
             PDF, DOC, DOCX up to 10MB each
