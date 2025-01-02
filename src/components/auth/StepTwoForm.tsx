@@ -52,8 +52,8 @@ const StepTwoForm = ({ onSubmit, onBack, isLoading }: StepTwoFormProps) => {
   });
 
   return (
-    <div className="space-y-6 md:bg-card md:p-6 md:rounded-lg md:border md:border-border">
-      <h3 className="text-lg font-semibold">Personal Information</h3>
+    <div className="space-y-6 md:bg-card md:p-6 md:rounded-lg md:border md:border-border md:max-w-2xl md:mx-auto">
+      <h3 className="text-lg font-semibold text-left md:text-center">Personal Information</h3>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
