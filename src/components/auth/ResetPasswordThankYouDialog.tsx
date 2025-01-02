@@ -19,12 +19,12 @@ const ResetPasswordThankYouDialog = ({ open, onOpenChange, userEmail }: ResetPas
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="dialog-content">
+      <DialogContent className="dialog-content sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="dialog-title">Email Sent!</DialogTitle>
-          <DialogDescription className="dialog-description">
+          <DialogTitle className="text-xl font-semibold tracking-tight">Email Sent!</DialogTitle>
+          <DialogDescription className="text-muted-foreground text-sm mt-1.5">
             <p>
-              We've sent password reset instructions to <span className="font-medium">{userEmail}</span>.
+              We've sent password reset instructions to <span className="font-medium text-foreground">{userEmail}</span>.
             </p>
             <p className="mt-2">
               Please check your inbox and spam folder.

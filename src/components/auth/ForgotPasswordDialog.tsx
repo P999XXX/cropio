@@ -62,16 +62,16 @@ const ForgotPasswordDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="dialog-content">
+      <DialogContent className="dialog-content sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="dialog-title">Reset Password</DialogTitle>
-          <DialogDescription className="dialog-description mb-3">
+          <DialogTitle className="text-xl font-semibold tracking-tight">Reset Password</DialogTitle>
+          <DialogDescription className="text-muted-foreground text-sm mt-1.5">
             Enter your email address and we'll send you instructions to reset your password.
           </DialogDescription>
         </DialogHeader>
-        <div className="space-y-3">
+        <div className="space-y-3 mt-2">
           <div className="space-y-2">
-            <Label htmlFor="reset-email" className="text-foreground text-sm font-medium">Email</Label>
+            <Label htmlFor="reset-email" className="text-sm font-medium">Email</Label>
             <Input
               id="reset-email"
               type="email"
@@ -82,18 +82,18 @@ const ForgotPasswordDialog = ({
                 setError("");
                 setIsRateLimited(false);
               }}
-              className={`flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${error ? 'border-destructive' : 'border-input'}`}
+              className={`h-10 ${error ? 'border-destructive focus-visible:ring-destructive' : ''}`}
             />
             {error && (
-              <Alert variant="destructive" className="border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>{error}</AlertDescription>
+              <Alert variant="destructive" className="border-2 border-destructive/20 bg-destructive/10 dark:bg-destructive/20 shadow-sm">
+                <AlertCircle className="h-4 w-4 text-destructive" />
+                <AlertDescription className="ml-2 text-destructive font-medium">{error}</AlertDescription>
               </Alert>
             )}
             {isRateLimited && (
-              <Alert className="border-warning/50 text-warning dark:border-warning [&>svg]:text-warning">
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>
+              <Alert className="border-2 border-warning/20 bg-warning/10 dark:bg-warning/20 shadow-sm">
+                <AlertCircle className="h-4 w-4 text-warning" />
+                <AlertDescription className="ml-2 text-warning font-medium">
                   Please wait a few minutes before requesting another reset email.
                 </AlertDescription>
               </Alert>

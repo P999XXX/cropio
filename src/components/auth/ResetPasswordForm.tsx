@@ -36,7 +36,6 @@ type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
 
 const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [sessionChecked, setSessionChecked] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -53,19 +52,28 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
       try {
         const { data: { session }, error: sessionError } = await supabase.auth.getSession();
 
-        if (sessionError || !session) {
+        if (sessionError) {
           console.error("Session error:", sessionError);
           setError("Your password reset link has expired. Please request a new one.");
-          navigate('/signin?error=expired_token');
+          setTimeout(() => {
+            navigate('/signin?error=expired_token');
+          }, 2000);
           return;
         }
 
-        console.log("Session established successfully");
-        setSessionChecked(true);
+        if (!session) {
+          setError("Invalid or expired reset link. Please request a new one.");
+          setTimeout(() => {
+            navigate('/signin?error=invalid_token');
+          }, 2000);
+          return;
+        }
       } catch (error) {
         console.error("Session check error:", error);
-        setError("An error occurred. Please try again.");
-        navigate('/signin?error=unexpected');
+        setError("An unexpected error occurred. Please try again.");
+        setTimeout(() => {
+          navigate('/signin?error=unexpected');
+        }, 2000);
       }
     };
 
@@ -73,12 +81,9 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
   }, [navigate]);
 
   const onSubmit = async (values: ResetPasswordFormData) => {
-    if (!sessionChecked) {
-      setError("Please wait while we verify your session.");
-      return;
-    }
-
     setIsLoading(true);
+    setError("");
+
     try {
       const { error: updateError } = await supabase.auth.updateUser({
         password: values.password,
@@ -104,9 +109,9 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         {error && (
-          <Alert variant="destructive" className="border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive">
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>{error}</AlertDescription>
+          <Alert variant="destructive" className="border-2 border-destructive/20 bg-destructive/10 dark:bg-destructive/20 shadow-sm">
+            <AlertCircle className="h-4 w-4 text-destructive" />
+            <AlertDescription className="ml-2 text-destructive font-medium">{error}</AlertDescription>
           </Alert>
         )}
         <PasswordInput
