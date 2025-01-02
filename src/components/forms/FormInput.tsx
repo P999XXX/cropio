@@ -12,13 +12,24 @@ interface FormInputProps {
   type?: string;
   description?: string;
   className?: string;
+  rules?: Record<string, any>;
 }
 
-const FormInput = ({ form, name, label, placeholder, type = "text", description, className }: FormInputProps) => {
+const FormInput = ({ 
+  form, 
+  name, 
+  label, 
+  placeholder, 
+  type = "text", 
+  description, 
+  className,
+  rules 
+}: FormInputProps) => {
   return (
     <FormField
       control={form.control}
       name={name}
+      rules={rules}
       render={({ field }) => (
         <FormItem className="space-y-1">
           <FormLabel>{label}</FormLabel>
