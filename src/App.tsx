@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
@@ -13,6 +13,35 @@ import DashboardSupport from "./pages/dashboard/DashboardSupport";
 import DashboardSubscriptions from "./pages/dashboard/DashboardSubscriptions";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import AuthRedirectHandler from "./components/auth/AuthRedirectHandler";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+
+// Protected Route wrapper component
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setIsAuthenticated(!!session);
+    };
+
+    checkAuth();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setIsAuthenticated(!!session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  // Show nothing while checking authentication
+  if (isAuthenticated === null) {
+    return null;
+  }
+
+  return isAuthenticated ? children : <Navigate to="/signin" replace />;
+};
 
 const router = createBrowserRouter([
   {
@@ -42,61 +71,73 @@ const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: (
-      <SidebarProvider defaultOpen={true}>
-        <DashboardLayout>
-          <DashboardHome />
-        </DashboardLayout>
-      </SidebarProvider>
+      <ProtectedRoute>
+        <SidebarProvider defaultOpen={true}>
+          <DashboardLayout>
+            <DashboardHome />
+          </DashboardLayout>
+        </SidebarProvider>
+      </ProtectedRoute>
     ),
   },
   {
     path: "/dashboard/team",
     element: (
-      <SidebarProvider defaultOpen={true}>
-        <DashboardLayout>
-          <DashboardTeam />
-        </DashboardLayout>
-      </SidebarProvider>
+      <ProtectedRoute>
+        <SidebarProvider defaultOpen={true}>
+          <DashboardLayout>
+            <DashboardTeam />
+          </DashboardLayout>
+        </SidebarProvider>
+      </ProtectedRoute>
     ),
   },
   {
     path: "/dashboard/subscriptions",
     element: (
-      <SidebarProvider defaultOpen={true}>
-        <DashboardLayout>
-          <DashboardSubscriptions />
-        </DashboardLayout>
-      </SidebarProvider>
+      <ProtectedRoute>
+        <SidebarProvider defaultOpen={true}>
+          <DashboardLayout>
+            <DashboardSubscriptions />
+          </DashboardLayout>
+        </SidebarProvider>
+      </ProtectedRoute>
     ),
   },
   {
     path: "/dashboard/settings",
     element: (
-      <SidebarProvider defaultOpen={true}>
-        <DashboardLayout>
-          <DashboardSettings />
-        </DashboardLayout>
-      </SidebarProvider>
+      <ProtectedRoute>
+        <SidebarProvider defaultOpen={true}>
+          <DashboardLayout>
+            <DashboardSettings />
+          </DashboardLayout>
+        </SidebarProvider>
+      </ProtectedRoute>
     ),
   },
   {
     path: "/dashboard/faq",
     element: (
-      <SidebarProvider defaultOpen={true}>
-        <DashboardLayout>
-          <DashboardFAQ />
-        </DashboardLayout>
-      </SidebarProvider>
+      <ProtectedRoute>
+        <SidebarProvider defaultOpen={true}>
+          <DashboardLayout>
+            <DashboardFAQ />
+          </DashboardLayout>
+        </SidebarProvider>
+      </ProtectedRoute>
     ),
   },
   {
     path: "/dashboard/support",
     element: (
-      <SidebarProvider defaultOpen={true}>
-        <DashboardLayout>
-          <DashboardSupport />
-        </DashboardLayout>
-      </SidebarProvider>
+      <ProtectedRoute>
+        <SidebarProvider defaultOpen={true}>
+          <DashboardLayout>
+            <DashboardSupport />
+          </DashboardLayout>
+        </SidebarProvider>
+      </ProtectedRoute>
     ),
   },
 ]);
