@@ -4,11 +4,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import FormInput from "@/components/forms/FormInput";
-import { ArrowLeft, ArrowRight, Upload } from "lucide-react";
+import { ArrowLeft, ArrowRight, Upload, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useSignupStore } from "@/store/signupStore";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useState } from "react";
 
 const stepFourSchema = z.object({
   bankName: z.string()
@@ -45,6 +46,7 @@ interface StepFourFormProps {
 
 const StepFourForm = ({ onSubmit, onBack, isLoading }: StepFourFormProps) => {
   const { formData, updateFormData } = useSignupStore();
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
   const form = useForm<StepFourFormData>({
     resolver: zodResolver(stepFourSchema),
@@ -61,8 +63,20 @@ const StepFourForm = ({ onSubmit, onBack, isLoading }: StepFourFormProps) => {
   });
 
   const handleSubmit = (values: StepFourFormData) => {
-    updateFormData(values);
-    onSubmit(values);
+    updateFormData({ ...values, documents: selectedFiles });
+    onSubmit({ ...values, documents: selectedFiles });
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    setSelectedFiles(files);
+    form.setValue('documents', files);
+  };
+
+  const removeFile = (index: number) => {
+    const newFiles = selectedFiles.filter((_, i) => i !== index);
+    setSelectedFiles(newFiles);
+    form.setValue('documents', newFiles);
   };
 
   return (
@@ -149,10 +163,7 @@ const StepFourForm = ({ onSubmit, onBack, isLoading }: StepFourFormProps) => {
                 multiple
                 className="hidden"
                 id="company-documents"
-                onChange={(e) => {
-                  const files = Array.from(e.target.files || []);
-                  form.setValue('documents', files);
-                }}
+                onChange={handleFileChange}
               />
               <label
                 htmlFor="company-documents"
@@ -167,6 +178,29 @@ const StepFourForm = ({ onSubmit, onBack, isLoading }: StepFourFormProps) => {
                 </span>
               </label>
             </div>
+
+            {/* Display selected files */}
+            {selectedFiles.length > 0 && (
+              <div className="mt-4 space-y-2">
+                <Label>Selected Files:</Label>
+                <div className="space-y-2">
+                  {selectedFiles.map((file, index) => (
+                    <div key={index} className="flex items-center justify-between p-2 bg-muted rounded-md">
+                      <span className="text-sm truncate">{file.name}</span>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => removeFile(index)}
+                        className="h-8 w-8 p-0"
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:gap-4 pt-2">
