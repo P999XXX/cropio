@@ -12,6 +12,7 @@ const AuthRedirectHandler = () => {
         // Check if we have a hash in the URL
         if (!window.location.hash) {
           console.error("No hash parameters found in URL");
+          toast.error("Invalid or expired link. Please request a new one.");
           navigate('/signin');
           return;
         }
@@ -58,7 +59,7 @@ const AuthRedirectHandler = () => {
             const { error } = await supabase.auth.getSession();
             if (error) {
               console.error("Session error:", error);
-              toast.error("Authentication failed. Please try again.");
+              toast.error("Authentication failed. Please try signing in again.");
               navigate('/signin');
             } else {
               toast.success("Successfully authenticated!");
@@ -68,12 +69,12 @@ const AuthRedirectHandler = () => {
 
           default:
             console.error("Unknown auth type:", type);
-            toast.error("Invalid authentication link.");
+            toast.error("Invalid authentication link. Please try signing in again.");
             navigate('/signin');
         }
       } catch (error) {
         console.error("Auth redirect error:", error);
-        toast.error("An error occurred during authentication.");
+        toast.error("An error occurred. Please try signing in again.");
         navigate('/signin');
       }
     };
