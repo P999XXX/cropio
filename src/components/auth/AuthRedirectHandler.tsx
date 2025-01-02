@@ -23,6 +23,8 @@ const AuthRedirectHandler = () => {
         const refresh_token = fragment.get('refresh_token');
 
         console.log("Auth redirect type:", type);
+        console.log("Current URL:", window.location.href);
+        console.log("Base URL:", window.location.origin);
 
         switch (type) {
           case 'recovery':
@@ -33,7 +35,6 @@ const AuthRedirectHandler = () => {
               return;
             }
 
-            // Set the session with the recovery tokens
             const { error: setSessionError } = await supabase.auth.setSession({
               access_token,
               refresh_token,
@@ -46,13 +47,11 @@ const AuthRedirectHandler = () => {
               return;
             }
 
-            // If session is set successfully, redirect to reset password page
             navigate('/reset-password');
             break;
 
           case 'signup':
           case 'magiclink':
-            // Check session after setting tokens
             const { data: { session }, error: sessionError } = await supabase.auth.getSession();
             
             if (sessionError) {
@@ -64,6 +63,7 @@ const AuthRedirectHandler = () => {
 
             if (session) {
               toast.success("Successfully authenticated!", successToastStyle);
+              // Use window.location.origin to ensure we're using the correct base URL
               navigate('/dashboard');
             } else {
               console.error("No session after authentication");
