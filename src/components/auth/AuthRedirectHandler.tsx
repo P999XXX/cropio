@@ -10,16 +10,6 @@ const AuthRedirectHandler = () => {
   useEffect(() => {
     const handleRedirect = async () => {
       try {
-        // First check if we have a valid session
-        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-        
-        if (sessionError) {
-          console.error("Session error:", sessionError);
-          navigate('/signin?error=session_error');
-          return;
-        }
-
-        // Get the hash parameters from the URL
         const hash = window.location.hash;
         if (!hash) {
           console.error("No hash parameters found in URL");
@@ -62,6 +52,16 @@ const AuthRedirectHandler = () => {
 
           case 'signup':
           case 'magiclink':
+            // Check session after setting tokens
+            const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+            
+            if (sessionError) {
+              console.error("Session error:", sessionError);
+              toast.error("Authentication failed. Please try again.", errorToastStyle);
+              navigate('/signin?error=auth_failed');
+              return;
+            }
+
             if (session) {
               toast.success("Successfully authenticated!", successToastStyle);
               navigate('/dashboard');
@@ -87,7 +87,6 @@ const AuthRedirectHandler = () => {
     handleRedirect();
   }, [navigate]);
 
-  // Show nothing while handling redirect
   return null;
 };
 
