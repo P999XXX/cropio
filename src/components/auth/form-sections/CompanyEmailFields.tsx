@@ -16,10 +16,11 @@ const CompanyEmailFields = ({ form, onEmailExists, setIsCheckingEmail }: Company
   const checkEmailExists = async (email: string) => {
     try {
       setIsCheckingEmail(true);
+      
       const { data, error } = await supabase
         .from('profiles')
         .select('email')
-        .eq('email', email.toLowerCase().trim())
+        .eq('email', email)
         .maybeSingle();
 
       if (error) {
@@ -43,31 +44,23 @@ const CompanyEmailFields = ({ form, onEmailExists, setIsCheckingEmail }: Company
 
   // Watch email field changes
   const email = form.watch('email');
-  
-  // Update debounced email
-  useEffect(() => {
-    if (!email) return;
 
+  useEffect(() => {
     const timer = setTimeout(() => {
-      const trimmedEmail = email.trim().toLowerCase();
-      if (trimmedEmail && trimmedEmail !== debouncedEmail) {
-        setDebouncedEmail(trimmedEmail);
+      const emailValue = email?.trim();
+      if (emailValue && emailValue !== debouncedEmail) {
+        const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
+        if (isValidEmail) {
+          setDebouncedEmail(emailValue);
+        }
       }
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [email]);
+  }, [email, debouncedEmail]);
 
-  // Check email existence when debounced email changes
   useEffect(() => {
-    if (!debouncedEmail) return;
-
-    const isValidEmail = (email: string) => {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return emailRegex.test(email);
-    };
-
-    if (isValidEmail(debouncedEmail)) {
+    if (debouncedEmail) {
       checkEmailExists(debouncedEmail);
     }
   }, [debouncedEmail]);
