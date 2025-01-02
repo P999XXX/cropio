@@ -76,7 +76,7 @@ const CountrySelect = ({ form }: CountrySelectProps) => {
               )}
             </div>
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
-              <DialogContent className="h-[100dvh] max-w-full p-0 gap-0 border-none">
+              <DialogContent className="h-[100dvh] max-w-full p-0 gap-0">
                 <DialogHeader className="px-4 py-2 border-b sticky top-0 bg-background z-10">
                   <div className="flex items-center justify-between">
                     <DialogTitle className="text-base">Select Country</DialogTitle>
@@ -103,7 +103,7 @@ const CountrySelect = ({ form }: CountrySelectProps) => {
                   <div className="p-2">
                     {filteredCountries.map((country) => (
                       <div
-                        key={country.country}
+                        key={`${country.country}-${country.value}`}
                         className={`flex items-center px-2 py-3 cursor-pointer rounded-md text-sm text-foreground
                           ${field.value === country.country ? 'bg-secondary' : 'hover:bg-secondary/50'}`}
                         onClick={() => handleCountrySelect(country.country)}
@@ -137,7 +137,7 @@ const CountrySelect = ({ form }: CountrySelectProps) => {
             <SelectContent>
               {countries.map((country) => (
                 <SelectItem 
-                  key={country.country} 
+                  key={`${country.country}-${country.value}`}
                   value={country.country}
                   className="text-[0.875rem]"
                 >
