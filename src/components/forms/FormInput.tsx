@@ -1,11 +1,16 @@
-import { FormControl, FormField, FormItem } from "@/components/ui/form";
+import React from "react";
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { UseFormReturn } from "react-hook-form";
-import FormErrorMessage from "./FormErrorMessage";
-import FormLabel from "./FormLabel";
 
 interface FormInputProps {
-  form: UseFormReturn<any>;
+  form: any;
   name: string;
   label: string;
   placeholder?: string;
@@ -34,9 +39,17 @@ const FormInput = ({
         <FormItem className="space-y-1">
           <FormLabel>{label}</FormLabel>
           <FormControl>
-            <Input placeholder={placeholder} type={type} className={className} {...field} />
+            <Input
+              {...field}
+              type={type}
+              placeholder={placeholder}
+              className={`h-auto py-2 text-[0.775rem] ${className}`}
+            />
           </FormControl>
-          <FormErrorMessage message={form.formState.errors[name]?.message as string} />
+          {description && (
+            <FormDescription className="text-xs">{description}</FormDescription>
+          )}
+          <FormMessage />
         </FormItem>
       )}
     />
