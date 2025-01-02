@@ -12,9 +12,11 @@ import { SignInFormData } from "@/components/auth/SignInForm";
 import { handleGoogleSignIn, handleLinkedInSignIn, handlePasswordReset } from "@/utils/auth-handlers";
 import { errorToastStyle } from "@/utils/toast-styles";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { useAuthSession, withTimeout } from "@/hooks/useAuthSession";
+import { useAuthSession } from "@/hooks/useAuthSession";
 import { useLoadingStates } from "@/hooks/useLoadingStates";
 import { getErrorMessage } from "@/utils/auth-error-handler";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 
 const SignIn = () => {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
@@ -30,7 +32,6 @@ const SignIn = () => {
   useAuthSession();
 
   useEffect(() => {
-    // Check for error parameter in URL
     const error = searchParams.get('error');
     if (error) {
       let message = "An error occurred. Please try again.";
@@ -82,12 +83,10 @@ const SignIn = () => {
     setLoading('isSigningIn', true);
     
     try {
-      const { error } = await withTimeout(
-        supabase.auth.signInWithPassword({
-          email: values.email,
-          password: values.password,
-        })
-      );
+      const { error } = await supabase.auth.signInWithPassword({
+        email: values.email,
+        password: values.password,
+      });
 
       if (error) {
         if (error.message.includes('Invalid login credentials')) {
@@ -137,15 +136,19 @@ const SignIn = () => {
         <main className="w-full container flex min-h-[calc(100vh-64px)] items-start justify-center px-4 md:px-0 mt-[57px]">
           <div className="w-full md:w-[500px] py-8">
             {errorMessage && (
-              <div className="mb-6 p-4 bg-destructive/10 text-destructive rounded-lg text-sm">
-                {errorMessage}
-                <button
-                  onClick={() => setShowForgotPassword(true)}
-                  className="ml-2 underline hover:text-destructive/80"
-                >
-                  Request new reset link
-                </button>
-              </div>
+              <Alert variant="destructive" className="mb-6">
+                <AlertDescription className="flex flex-col gap-2">
+                  <p>{errorMessage}</p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowForgotPassword(true)}
+                    className="w-fit"
+                  >
+                    Request new reset link
+                  </Button>
+                </AlertDescription>
+              </Alert>
             )}
             <div className={`space-y-2 mb-8 ${isMobile ? "text-left" : "text-center"}`}>
               <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">

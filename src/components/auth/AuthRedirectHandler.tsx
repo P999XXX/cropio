@@ -2,17 +2,17 @@ import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { errorToastStyle, successToastStyle } from "@/utils/toast-styles";
+import { useNavigate } from "react-router-dom";
 
 const AuthRedirectHandler = () => {
+  const navigate = useNavigate();
+
   useEffect(() => {
     const handleRedirect = async () => {
       try {
-        // Check if we have a hash in the URL
         if (!window.location.hash) {
           console.error("No hash parameters found in URL");
-          toast.error("Invalid or expired link. Please request a new one.", errorToastStyle);
-          // Redirect to sign in page after showing error
-          window.location.href = '/signin?error=invalid_link';
+          navigate('/signin?error=invalid_link');
           return;
         }
 
@@ -23,18 +23,14 @@ const AuthRedirectHandler = () => {
 
         console.log("Auth redirect type:", type);
 
-        // Handle different auth flows
         switch (type) {
           case 'recovery':
-            // Verify we have the necessary tokens
             if (!access_token || !refresh_token) {
               console.error("Missing tokens for recovery flow");
-              toast.error("Invalid password reset link. Please request a new one.", errorToastStyle);
-              window.location.href = '/signin?error=invalid_token';
+              navigate('/signin?error=invalid_token');
               return;
             }
 
-            // For recovery flow, verify the tokens are valid without setting a session
             const { error: verifyError } = await supabase.auth.verifyOtp({
               token_hash: access_token,
               type: 'recovery',
@@ -42,12 +38,12 @@ const AuthRedirectHandler = () => {
 
             if (verifyError) {
               console.error("Token verification error:", verifyError);
-              toast.error("Your password reset link has expired. Please request a new one.", errorToastStyle);
-              window.location.href = '/signin?error=expired_token';
+              navigate('/signin?error=expired_token');
               return;
             }
 
             console.log("Recovery token verified successfully");
+            navigate('/reset-password');
             break;
 
           case 'signup':
@@ -55,27 +51,25 @@ const AuthRedirectHandler = () => {
             const { error } = await supabase.auth.getSession();
             if (error) {
               console.error("Session error:", error);
-              toast.error("Authentication failed. Please try signing in again.", errorToastStyle);
-              window.location.href = '/signin?error=auth_failed';
+              navigate('/signin?error=auth_failed');
             } else {
               toast.success("Successfully authenticated!", successToastStyle);
+              navigate('/dashboard');
             }
             break;
 
           default:
             console.error("Unknown auth type:", type);
-            toast.error("Invalid authentication link. Please try signing in again.", errorToastStyle);
-            window.location.href = '/signin?error=unknown_type';
+            navigate('/signin?error=unknown_type');
         }
       } catch (error: any) {
         console.error("Auth redirect error:", error);
-        toast.error("An error occurred. Please try signing in again.", errorToastStyle);
-        window.location.href = '/signin?error=unexpected';
+        navigate('/signin?error=unexpected');
       }
     };
 
     handleRedirect();
-  }, []);
+  }, [navigate]);
 
   return null;
 };

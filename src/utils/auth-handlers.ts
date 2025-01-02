@@ -40,18 +40,15 @@ export const handlePasswordReset = async (
     );
 
     if (resetError) {
-      // Check if it's a rate limit error
-      if (
-        resetError.message?.toLowerCase().includes('rate limit') || 
-        resetError.message?.toLowerCase().includes('too many requests') ||
-        (resetError as any)?.body?.includes('over_email_send_rate_limit')
+      if (resetError.message?.toLowerCase().includes('rate limit') || 
+          resetError.message?.toLowerCase().includes('too many requests') ||
+          (resetError as any)?.body?.includes('over_email_send_rate_limit')
       ) {
         throw new Error('Too many reset attempts. Please wait a few minutes before trying again.');
       }
       throw resetError;
     }
 
-    // If successful, show thank you dialog
     setShowForgotPassword(false);
     setShowResetThankYou(true);
     toast.success("Reset instructions sent!", successToastStyle);
