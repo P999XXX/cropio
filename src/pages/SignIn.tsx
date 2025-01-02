@@ -28,6 +28,29 @@ const SignIn = () => {
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
+    // Check current session on component mount
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        navigate('/dashboard');
+      }
+    };
+    
+    checkSession();
+
+    // Set up auth state change listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session) {
+        navigate('/dashboard');
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [navigate]);
+
+  useEffect(() => {
     const error = searchParams.get('error');
     if (error) {
       let message = "An error occurred. Please try again.";
@@ -58,7 +81,6 @@ const SignIn = () => {
   const handleSignIn = async (values: SignInFormData) => {
     setLoading('isSigningIn', true);
     try {
-      // Parse the error response if authentication fails
       const { data, error } = await supabase.auth.signInWithPassword({
         email: values.email,
         password: values.password,
@@ -67,21 +89,7 @@ const SignIn = () => {
       if (error) {
         let errorMessage = "An error occurred during sign in. Please try again.";
         
-        // Parse error body to get detailed error information
-        let errorBody;
-        try {
-          errorBody = JSON.parse(error.message);
-        } catch {
-          try {
-            errorBody = JSON.parse((error as any)?.body || '{}');
-          } catch {
-            errorBody = {};
-          }
-        }
-
-        // Handle specific error cases
-        if (error.message?.includes('Invalid login credentials') || 
-            errorBody?.code === 'invalid_credentials') {
+        if (error.message?.includes('Invalid login credentials')) {
           errorMessage = "Invalid email or password. Please try again.";
         } else if (error.message?.includes('Email not confirmed')) {
           errorMessage = "Please verify your email before signing in.";
@@ -92,6 +100,8 @@ const SignIn = () => {
       }
 
       if (data.session) {
+        // Store the session immediately after successful sign in
+        await supabase.auth.setSession(data.session);
         navigate('/dashboard');
       }
 
