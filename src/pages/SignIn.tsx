@@ -15,6 +15,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { useLoadingStates } from "@/hooks/useLoadingStates";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { AlertCircle } from "lucide-react";
 
 const SignIn = () => {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
@@ -26,7 +27,6 @@ const SignIn = () => {
   const { loadingStates, setLoading } = useLoadingStates();
   const [searchParams] = useSearchParams();
 
-  // Check for error params and set appropriate messages
   useEffect(() => {
     const error = searchParams.get('error');
     if (error) {
@@ -51,7 +51,6 @@ const SignIn = () => {
       }
       
       setErrorMessage(message);
-      // Clear the error from URL
       navigate('/signin', { replace: true });
     }
   }, [searchParams, navigate]);
@@ -112,14 +111,15 @@ const SignIn = () => {
         <main className="w-full container flex min-h-[calc(100vh-64px)] items-start justify-center px-4 md:px-0 mt-[57px]">
           <div className="w-full md:w-[500px] py-8">
             {errorMessage && (
-              <Alert variant="destructive" className="mb-6">
-                <AlertDescription className="flex flex-col gap-2">
-                  <p>{errorMessage}</p>
+              <Alert variant="destructive" className="mb-6 border-2 border-destructive/20 bg-destructive/10 dark:bg-destructive/20 shadow-sm">
+                <AlertCircle className="h-5 w-5 text-destructive" />
+                <AlertDescription className="flex flex-col gap-3 ml-2">
+                  <p className="text-destructive font-medium">{errorMessage}</p>
                   <Button
-                    variant="outline"
+                    variant="destructive"
                     size="sm"
                     onClick={() => setShowForgotPassword(true)}
-                    className="w-fit"
+                    className="w-fit text-[13px] bg-destructive hover:bg-destructive/90"
                   >
                     Request new reset link
                   </Button>
