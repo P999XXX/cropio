@@ -13,17 +13,17 @@ export const ViewModeToggle = ({ viewMode, onViewModeChange }: ViewModeTogglePro
         variant="outline"
         size="sm"
         onClick={() => onViewModeChange("grid")}
-        className={`${viewMode === "grid" ? "bg-primary/5 border-primary/30" : "bg-background border-primary/20"} hover:bg-primary/5 hover:border-primary/30 hover:text-foreground w-9 h-9`}
+        className={`${viewMode === "grid" ? "bg-primary/5 border-primary/30" : "bg-background border-primary/20"} hover:bg-primary/5 hover:border-primary/30 hover:text-foreground w-9 h-9 view-mode-toggle-grid`}
       >
-        <Grid3X3 className="h-4 w-4" />
+        <Grid3X3 className={`h-4 w-4 ${viewMode !== "grid" ? "opacity-50" : ""} transition-opacity`} />
       </Button>
       <Button
         variant="outline"
         size="sm"
         onClick={() => onViewModeChange("list")}
-        className={`${viewMode === "list" ? "bg-primary/5 border-primary/30" : "bg-background border-primary/20"} hover:bg-primary/5 hover:border-primary/30 hover:text-foreground w-9 h-9`}
+        className={`${viewMode === "list" ? "bg-primary/5 border-primary/30" : "bg-background border-primary/20"} hover:bg-primary/5 hover:border-primary/30 hover:text-foreground w-9 h-9 view-mode-toggle-list`}
       >
-        <LayoutList className="h-4 w-4" />
+        <LayoutList className={`h-4 w-4 ${viewMode !== "list" ? "opacity-50" : ""} transition-opacity`} />
       </Button>
     </div>
   );
