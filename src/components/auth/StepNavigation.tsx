@@ -12,7 +12,7 @@ const StepNavigation = ({ currentStep, steps }: StepNavigationProps) => {
         <div key={step} className="flex items-center">
           <div className="flex flex-col items-center">
             <div
-              className={`w-7 h-7 rounded-full flex items-center justify-center border-2 
+              className={`w-[1.95rem] h-[1.95rem] rounded-full flex items-center justify-center border-2 
                 ${
                   index + 1 < currentStep
                     ? "bg-primary border-primary text-primary-foreground"
