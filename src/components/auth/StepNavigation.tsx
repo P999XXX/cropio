@@ -6,6 +6,8 @@ interface StepNavigationProps {
 }
 
 const StepNavigation = ({ currentStep, steps }: StepNavigationProps) => {
+  if (currentStep === 1) return null;
+  
   return (
     <div className="flex items-center justify-center mb-8">
       {steps.map((step, index) => (
