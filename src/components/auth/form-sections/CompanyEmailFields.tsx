@@ -49,7 +49,7 @@ const CompanyEmailFields = ({ form }: CompanyEmailFieldsProps) => {
   const validateEmail = async (email: string) => {
     if (!email || !email.includes('@') || !email.includes('.')) {
       setEmailExists(false);
-      return true;
+      return "Please enter a valid email address";
     }
 
     setIsCheckingEmail(true);
@@ -59,15 +59,25 @@ const CompanyEmailFields = ({ form }: CompanyEmailFieldsProps) => {
         .select('*', { count: 'exact', head: true })
         .eq('email', email.toLowerCase());
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error checking email:', error);
+        toast.error("Error checking email availability");
+        return "Error checking email availability";
+      }
 
       const exists = count ? count > 0 : false;
       setEmailExists(exists);
 
       if (exists) {
+        form.setError('email', {
+          type: 'manual',
+          message: "This email is already registered"
+        });
         toast.error("This email is already registered");
         return "This email is already registered";
       }
+
+      form.clearErrors('email');
       return true;
     } catch (error) {
       console.error('Error checking email:', error);
