@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,6 +11,8 @@ import { ArrowLeft } from "lucide-react";
 import PhoneInput from "./PhoneInput";
 import AgreementCheckbox from "./AgreementCheckbox";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const stepTwoSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -42,10 +44,12 @@ interface StepTwoFormProps {
   onSubmit: (values: StepTwoFormData) => Promise<void>;
   isLoading: boolean;
   onBack: () => void;
+  onEmailExists: (email: string) => void;
 }
 
-const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
+const StepTwoForm = ({ onSubmit, isLoading, onBack, onEmailExists }: StepTwoFormProps) => {
   const isMobile = useIsMobile();
+  const [isCheckingEmail, setIsCheckingEmail] = useState(false);
   const form = useForm<StepTwoFormData>({
     resolver: zodResolver(stepTwoSchema),
     defaultValues: {
@@ -61,6 +65,44 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
       acceptPrivacy: false,
     },
   });
+
+  const checkEmailExists = async (email: string) => {
+    try {
+      setIsCheckingEmail(true);
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('email')
+        .eq('email', email)
+        .maybeSingle();
+
+      if (error) throw error;
+
+      if (data) {
+        onEmailExists(email);
+        form.setError('email', {
+          type: 'manual',
+          message: 'This email is already registered'
+        });
+      }
+    } catch (error) {
+      console.error('Error checking email:', error);
+    } finally {
+      setIsCheckingEmail(false);
+    }
+  };
+
+  // Watch email field changes
+  const email = form.watch('email');
+  
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (email && email.includes('@') && email.includes('.')) {
+        checkEmailExists(email);
+      }
+    }, 500); // Debounce the check by 500ms
+
+    return () => clearTimeout(timer);
+  }, [email]);
 
   const formContent = (
     <Form {...form}>
@@ -130,7 +172,7 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
         <Button 
           type="submit" 
           className="w-full bg-primary text-primary-foreground hover:bg-primary/90 mt-4" 
-          disabled={isLoading}
+          disabled={isLoading || isCheckingEmail}
         >
           {isLoading ? "Creating account..." : "Create Account"}
         </Button>
