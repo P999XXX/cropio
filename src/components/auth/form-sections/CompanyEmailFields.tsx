@@ -2,10 +2,7 @@ import { useState, useEffect } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { StepTwoFormData } from "../StepTwoForm";
 import { supabase } from "@/integrations/supabase/client";
-import { FormControl, FormField, FormItem } from "@/components/ui/form";
-import FormErrorMessage from "@/components/forms/FormErrorMessage";
-import FormLabel from "@/components/forms/FormLabel";
-import { Input } from "@/components/ui/input";
+import FormInput from "@/components/forms/FormInput";
 import { toast } from "sonner";
 import { RealtimePostgresChangesPayload } from "@supabase/supabase-js";
 
@@ -83,53 +80,25 @@ const CompanyEmailFields = ({ form }: CompanyEmailFieldsProps) => {
 
   return (
     <div className="space-y-3">
-      <FormField
-        control={form.control}
+      <FormInput
+        form={form}
         name="companyName"
-        render={({ field }) => (
-          <FormItem className="space-y-1">
-            <FormLabel>Company Name</FormLabel>
-            <FormControl>
-              <Input
-                placeholder="Enter your company name"
-                className="h-9 bg-transparent"
-                {...field}
-              />
-            </FormControl>
-            <FormErrorMessage message={form.formState.errors.companyName?.message} />
-          </FormItem>
-        )}
+        label="Company Name"
+        placeholder="Enter your company name"
       />
 
-      <FormField
-        control={form.control}
+      <FormInput
+        form={form}
         name="email"
+        label="Email"
+        type="email"
+        placeholder="Enter your email"
+        className={emailExists ? 'border-destructive' : ''}
         rules={{
           validate: {
             emailExists: validateEmail
           }
         }}
-        render={({ field }) => (
-          <FormItem className="space-y-1">
-            <FormLabel>Email</FormLabel>
-            <FormControl>
-              <Input
-                placeholder="Enter your email"
-                type="email"
-                className={`h-9 bg-transparent ${
-                  emailExists ? 'border-destructive' : ''
-                }`}
-                {...field}
-                onChange={(e) => {
-                  field.onChange(e);
-                  validateEmail(e.target.value);
-                }}
-                disabled={isCheckingEmail}
-              />
-            </FormControl>
-            <FormErrorMessage message={form.formState.errors.email?.message} />
-          </FormItem>
-        )}
       />
     </div>
   );
