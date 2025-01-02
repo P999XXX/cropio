@@ -11,9 +11,6 @@ export type Database = {
     Tables: {
       profiles: {
         Row: {
-          bank_details: Json | null
-          company_address: string | null
-          company_documents: Json | null
           company_name: string
           created_at: string
           email: string
@@ -21,14 +18,9 @@ export type Database = {
           id: string
           last_name: string | null
           role: string
-          tax_number: string | null
           updated_at: string
-          vat_number: string | null
         }
         Insert: {
-          bank_details?: Json | null
-          company_address?: string | null
-          company_documents?: Json | null
           company_name: string
           created_at?: string
           email: string
@@ -36,14 +28,9 @@ export type Database = {
           id: string
           last_name?: string | null
           role: string
-          tax_number?: string | null
           updated_at?: string
-          vat_number?: string | null
         }
         Update: {
-          bank_details?: Json | null
-          company_address?: string | null
-          company_documents?: Json | null
           company_name?: string
           created_at?: string
           email?: string
@@ -51,9 +38,7 @@ export type Database = {
           id?: string
           last_name?: string | null
           role?: string
-          tax_number?: string | null
           updated_at?: string
-          vat_number?: string | null
         }
         Relationships: []
       }

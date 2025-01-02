@@ -8,8 +8,6 @@ import SignUpHeader from "@/components/auth/SignUpHeader";
 import ThankYouDialog from "@/components/auth/ThankYouDialog";
 import StepOneForm from "@/components/auth/StepOneForm";
 import StepTwoForm from "@/components/auth/StepTwoForm";
-import StepThreeForm from "@/components/auth/StepThreeForm";
-import StepFourForm from "@/components/auth/StepFourForm";
 import { handleGoogleSignIn, handleLinkedInSignIn } from "@/utils/auth-handlers";
 import { errorToastStyle, successToastStyle } from "@/utils/toast-styles";
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -20,7 +18,6 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [step, setStep] = useState(1);
   const [selectedRole, setSelectedRole] = useState<"buyer" | "supplier">();
-  const [formData, setFormData] = useState<any>({});
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
@@ -30,32 +27,16 @@ const SignUp = () => {
   };
 
   const handleStepTwo = async (values: any) => {
-    setFormData({ ...formData, ...values });
-    setStep(3);
-  };
-
-  const handleStepThree = async (values: any) => {
-    setFormData({ ...formData, ...values });
-    setStep(4);
-  };
-
-  const handleStepFour = async (values: any) => {
     setIsLoading(true);
     try {
-      const finalData = {
-        ...formData,
-        ...values,
-        role: selectedRole,
-      };
-
       const { error: signUpError } = await supabase.auth.signUp({
-        email: finalData.email,
-        password: finalData.password,
+        email: values.email,
+        password: values.password,
         options: {
           data: {
-            first_name: finalData.firstName,
-            last_name: finalData.lastName,
-            company_name: finalData.companyName,
+            first_name: values.firstName,
+            last_name: values.lastName,
+            company_name: values.companyName,
             role: selectedRole,
           },
           emailRedirectTo: `${window.location.origin}/auth/callback`,
@@ -66,30 +47,7 @@ const SignUp = () => {
         throw signUpError;
       }
 
-      // Upload documents if provided
-      if (values.documents.vatDocument || values.documents.taxDocument) {
-        const uploadPromises = [];
-        
-        if (values.documents.vatDocument) {
-          uploadPromises.push(
-            supabase.storage
-              .from('company_documents')
-              .upload(`${finalData.email}/vat_document`, values.documents.vatDocument)
-          );
-        }
-        
-        if (values.documents.taxDocument) {
-          uploadPromises.push(
-            supabase.storage
-              .from('company_documents')
-              .upload(`${finalData.email}/tax_document`, values.documents.taxDocument)
-          );
-        }
-
-        await Promise.all(uploadPromises);
-      }
-
-      setEmail(finalData.email);
+      setEmail(values.email);
       toast.success("Successfully signed up!", successToastStyle);
       setShowThankYou(true);
     } catch (error: any) {
@@ -104,7 +62,7 @@ const SignUp = () => {
   };
 
   const handleBack = () => {
-    setStep(prev => prev - 1);
+    setStep(1);
   };
 
   return (
@@ -116,30 +74,15 @@ const SignUp = () => {
             <SignUpHeader step={step} />
             {isMobile ? (
               <div className="space-y-4">
-                {step === 1 && (
+                {step === 1 ? (
                   <StepOneForm
                     onSubmit={handleStepOne}
                     onGoogleSignUp={handleGoogleSignIn}
                     onLinkedInSignUp={handleLinkedInSignIn}
                   />
-                )}
-                {step === 2 && (
+                ) : (
                   <StepTwoForm
                     onSubmit={handleStepTwo}
-                    isLoading={isLoading}
-                    onBack={handleBack}
-                  />
-                )}
-                {step === 3 && (
-                  <StepThreeForm
-                    onSubmit={handleStepThree}
-                    isLoading={isLoading}
-                    onBack={handleBack}
-                  />
-                )}
-                {step === 4 && (
-                  <StepFourForm
-                    onSubmit={handleStepFour}
                     isLoading={isLoading}
                     onBack={handleBack}
                   />
@@ -147,30 +90,15 @@ const SignUp = () => {
               </div>
             ) : (
               <>
-                {step === 1 && (
+                {step === 1 ? (
                   <StepOneForm
                     onSubmit={handleStepOne}
                     onGoogleSignUp={handleGoogleSignIn}
                     onLinkedInSignUp={handleLinkedInSignIn}
                   />
-                )}
-                {step === 2 && (
+                ) : (
                   <StepTwoForm
                     onSubmit={handleStepTwo}
-                    isLoading={isLoading}
-                    onBack={handleBack}
-                  />
-                )}
-                {step === 3 && (
-                  <StepThreeForm
-                    onSubmit={handleStepThree}
-                    isLoading={isLoading}
-                    onBack={handleBack}
-                  />
-                )}
-                {step === 4 && (
-                  <StepFourForm
-                    onSubmit={handleStepFour}
                     isLoading={isLoading}
                     onBack={handleBack}
                   />
