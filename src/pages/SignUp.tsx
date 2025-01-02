@@ -21,17 +21,13 @@ const SignUp = () => {
   const [showThankYou, setShowThankYou] = useState(false);
   const [email, setEmail] = useState("");
   const [step, setStep] = useState(1);
-  const formData = useSignupStore(state => state.formData);
+  const { formData, updateFormData } = useSignupStore();
   const isMobile = useIsMobile();
 
   const canNavigateToStep = (targetStep: number) => {
-    // Can always go back
     if (targetStep < step) return true;
-    
-    // Can't skip steps
     if (targetStep > step) return false;
-
-    // For current step, check if previous step data exists
+    
     if (targetStep === 2) {
       return !!formData.role;
     }
@@ -52,16 +48,17 @@ const SignUp = () => {
   };
 
   const handleStepOne = (role: "buyer" | "supplier") => {
+    updateFormData({ role });
     setStep(2);
   };
 
   const handleStepTwo = async (values: any) => {
-    setFormData(prev => ({ ...prev, ...values }));
+    updateFormData(values);
     setStep(3);
   };
 
   const handleStepThree = async (values: any) => {
-    setFormData(prev => ({ ...prev, ...values }));
+    updateFormData(values);
     setStep(4);
   };
 
@@ -86,7 +83,6 @@ const SignUp = () => {
 
       if (signUpError) throw signUpError;
 
-      // Handle document upload if files are present
       if (values.documents?.length > 0) {
         for (const file of values.documents) {
           const { error: uploadError } = await supabase.storage
@@ -131,61 +127,17 @@ const SignUp = () => {
             
             {isMobile ? (
               <div className="space-y-4">
-                {step === 1 && (
-                  <StepOneForm
-                    onSubmit={handleStepOne}
-                  />
-                )}
-                {step === 2 && (
-                  <StepTwoForm
-                    onSubmit={handleStepTwo}
-                    isLoading={isLoading}
-                    onBack={handleBack}
-                  />
-                )}
-                {step === 3 && (
-                  <StepThreeForm
-                    onSubmit={handleStepThree}
-                    isLoading={isLoading}
-                    onBack={handleBack}
-                  />
-                )}
-                {step === 4 && (
-                  <StepFourForm
-                    onSubmit={handleStepFour}
-                    isLoading={isLoading}
-                    onBack={handleBack}
-                  />
-                )}
+                {step === 1 && <StepOneForm onSubmit={handleStepOne} />}
+                {step === 2 && <StepTwoForm onSubmit={handleStepTwo} isLoading={isLoading} onBack={handleBack} />}
+                {step === 3 && <StepThreeForm onSubmit={handleStepThree} isLoading={isLoading} onBack={handleBack} />}
+                {step === 4 && <StepFourForm onSubmit={handleStepFour} isLoading={isLoading} onBack={handleBack} />}
               </div>
             ) : (
               <>
-                {step === 1 && (
-                  <StepOneForm
-                    onSubmit={handleStepOne}
-                  />
-                )}
-                {step === 2 && (
-                  <StepTwoForm
-                    onSubmit={handleStepTwo}
-                    isLoading={isLoading}
-                    onBack={handleBack}
-                  />
-                )}
-                {step === 3 && (
-                  <StepThreeForm
-                    onSubmit={handleStepThree}
-                    isLoading={isLoading}
-                    onBack={handleBack}
-                  />
-                )}
-                {step === 4 && (
-                  <StepFourForm
-                    onSubmit={handleStepFour}
-                    isLoading={isLoading}
-                    onBack={handleBack}
-                  />
-                )}
+                {step === 1 && <StepOneForm onSubmit={handleStepOne} />}
+                {step === 2 && <StepTwoForm onSubmit={handleStepTwo} isLoading={isLoading} onBack={handleBack} />}
+                {step === 3 && <StepThreeForm onSubmit={handleStepThree} isLoading={isLoading} onBack={handleBack} />}
+                {step === 4 && <StepFourForm onSubmit={handleStepFour} isLoading={isLoading} onBack={handleBack} />}
               </>
             )}
           </div>

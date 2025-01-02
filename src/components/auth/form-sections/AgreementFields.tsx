@@ -1,6 +1,6 @@
 import { UseFormReturn } from "react-hook-form";
 import AgreementCheckbox from "../AgreementCheckbox";
-import { StepTwoFormData } from "../StepTwoForm";
+import { StepTwoFormData } from "../schemas/stepTwoSchema";
 
 interface AgreementFieldsProps {
   form: UseFormReturn<StepTwoFormData>;

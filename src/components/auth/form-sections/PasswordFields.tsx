@@ -1,6 +1,6 @@
 import { UseFormReturn } from "react-hook-form";
 import PasswordInput from "../PasswordInput";
-import { StepTwoFormData } from "../StepTwoForm";
+import { StepTwoFormData } from "../schemas/stepTwoSchema";
 
 interface PasswordFieldsProps {
   form: UseFormReturn<StepTwoFormData>;

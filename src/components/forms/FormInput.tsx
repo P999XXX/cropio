@@ -37,8 +37,8 @@ const FormInput = ({
       name={name}
       rules={rules}
       render={({ field, fieldState }) => (
-        <FormItem className="space-y-1">
-          <FormLabel className="text-[0.775rem] text-foreground">{label}</FormLabel>
+        <FormItem className="space-y-0">
+          <FormLabel className="text-[0.775rem] text-foreground mb-1 block">{label}</FormLabel>
           <FormControl>
             <Input
               {...field}
@@ -48,7 +48,7 @@ const FormInput = ({
             />
           </FormControl>
           {description && (
-            <FormDescription className="text-[0.775rem]">{description}</FormDescription>
+            <FormDescription className="text-[0.775rem] mt-1">{description}</FormDescription>
           )}
           <FormErrorMessage message={fieldState.error?.message} />
         </FormItem>

@@ -1,5 +1,5 @@
 import { UseFormReturn } from "react-hook-form";
-import { StepTwoFormData } from "../StepTwoForm";
+import { StepTwoFormData } from "../schemas/stepTwoSchema";
 import FormInput from "@/components/forms/FormInput";
 
 interface CompanyEmailFieldsProps {
