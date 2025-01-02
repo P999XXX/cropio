@@ -39,7 +39,7 @@ const StepNavigation = ({ currentStep, steps }: StepNavigationProps) => {
           </div>
           {index < steps.length - 1 && (
             <div
-              className={`w-6 md:w-10 h-[2px] mx-1 md:mx-2 ${
+              className={`w-6 md:w-10 h-[2px] mx-1 md:mx-2 -mt-5 ${
                 index + 1 < currentStep ? "bg-primary" : "bg-secondary"
               }`}
             />
