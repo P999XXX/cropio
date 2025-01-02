@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { TeamMembersTable } from "@/components/team/TeamMembersTable";
@@ -7,17 +7,45 @@ import { Button } from "@/components/ui/button";
 import { UserPlus } from "lucide-react";
 import { TeamMember } from "@/types/team";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 const DashboardTeam = () => {
   const [isInviteDialogOpen, setIsInviteDialogOpen] = useState(false);
+  const navigate = useNavigate();
+
+  // Check session on mount
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { session }, error } = await supabase.auth.getSession();
+      if (error || !session) {
+        console.error("Session error:", error);
+        navigate('/signin');
+        return;
+      }
+    };
+
+    checkSession();
+
+    // Listen for auth state changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_OUT' || !session) {
+        navigate('/signin');
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [navigate]);
 
   const { data: teamMembers = [], isLoading, error } = useQuery({
     queryKey: ["team-members"],
     queryFn: async () => {
       try {
-        const { data: authData, error: authError } = await supabase.auth.getUser();
-        if (authError) throw new Error("Authentication error: " + authError.message);
-        if (!authData.user) throw new Error("No authenticated user found");
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        if (sessionError || !session) {
+          throw new Error("No active session");
+        }
 
         const { data, error: fetchError } = await supabase
           .from("team_members")
@@ -43,7 +71,7 @@ const DashboardTeam = () => {
 
         if (fetchError) {
           console.error("Error fetching team members:", fetchError);
-          throw new Error(fetchError.message);
+          throw fetchError;
         }
 
         return data as TeamMember[];
@@ -52,6 +80,7 @@ const DashboardTeam = () => {
         throw error;
       }
     },
+    retry: 1,
     meta: {
       onError: (error: Error) => {
         console.error("Failed to fetch team members:", error);
