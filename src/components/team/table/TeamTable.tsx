@@ -39,7 +39,7 @@ export const TeamTable = ({ members, sortConfig, onSort }: TeamTableProps) => {
             <TableRow key={member.id} className="hover:bg-primary/5 border-primary/10">
               <TableCell className="py-2">
                 <div className="flex items-center gap-3">
-                  <Avatar className="h-8 w-8 bg-primary/10">
+                  <Avatar className="h-8 w-8 bg-secondary">
                     <AvatarFallback className="text-[0.775rem] text-foreground">
                       {member.status === "accepted" 
                         ? getInitials(member.profile?.first_name, member.profile?.last_name)
