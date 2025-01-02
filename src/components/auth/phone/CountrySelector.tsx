@@ -61,14 +61,11 @@ const CountrySelector = ({ form, onCountryChange, selectedCountry }: CountrySele
         render={({ field }) => (
           <FormItem className="w-[110px] shrink-0">
             <div
-              className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background cursor-pointer auth-input country-selector"
+              className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background cursor-pointer auth-input"
               onClick={() => setIsOpen(true)}
             >
               {selectedCountry ? (
-                <div className="flex items-center gap-1">
-                  <CountryDisplay country={selectedCountry} showLabel={false} />
-                  <span className="text-sm">{selectedCountry.value}</span>
-                </div>
+                <CountryDisplay country={selectedCountry} showLabel={false} />
               ) : (
                 <span>Select</span>
               )}
@@ -139,13 +136,10 @@ const CountrySelector = ({ form, onCountryChange, selectedCountry }: CountrySele
             <SelectTrigger className="h-10 auth-input">
               <SelectValue>
                 {selectedCountry && (
-                  <div className="flex items-center gap-1">
-                    <CountryDisplay 
-                      country={selectedCountry} 
-                      showLabel={false}
-                    />
-                    <span className="text-sm">{selectedCountry.value}</span>
-                  </div>
+                  <CountryDisplay 
+                    country={selectedCountry} 
+                    showLabel={false}
+                  />
                 )}
               </SelectValue>
             </SelectTrigger>
