@@ -6,17 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { CardDescription } from "@/components/ui/card";
 import PasswordInput from "./PasswordInput";
-import PhoneInput from "./PhoneInput";
 import { ArrowLeft } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
-import PersonalInfoFields from "./form-sections/PersonalInfoFields";
-import CompanyEmailFields from "./form-sections/CompanyEmailFields";
-import AgreementFields from "./form-sections/AgreementFields";
+import FormInput from "@/components/forms/FormInput";
 
 const stepTwoSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
-  companyName: z.string().min(1, "Company name is required"),
   email: z.string().email("Invalid email address"),
   password: z.string()
     .min(8, "Password must be at least 8 characters")
@@ -24,14 +20,6 @@ const stepTwoSchema = z.object({
     .regex(/[a-z]/, "Password must contain at least one lowercase letter")
     .regex(/[0-9]/, "Password must contain at least one number"),
   confirmPassword: z.string(),
-  phoneNumber: z.string().min(1, "Phone number is required"),
-  countryCode: z.string().min(1, "Country code is required"),
-  acceptTerms: z.boolean().refine((val) => val === true, {
-    message: "You must accept the terms and conditions",
-  }),
-  acceptPrivacy: z.boolean().refine((val) => val === true, {
-    message: "You must accept the privacy policy",
-  }),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match",
   path: ["confirmPassword"],
@@ -52,23 +40,37 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
     defaultValues: {
       firstName: "",
       lastName: "",
-      companyName: "",
       email: "",
       password: "",
       confirmPassword: "",
-      phoneNumber: "",
-      countryCode: "",
-      acceptTerms: false,
-      acceptPrivacy: false,
     },
   });
 
   const formContent = (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <PersonalInfoFields form={form} />
-        <CompanyEmailFields form={form} />
-        <PhoneInput form={form} />
+        <div className="grid gap-3 md:grid-cols-2">
+          <FormInput
+            form={form}
+            name="firstName"
+            label="First Name"
+            placeholder="Enter your first name"
+          />
+          <FormInput
+            form={form}
+            name="lastName"
+            label="Last Name"
+            placeholder="Enter your last name"
+          />
+        </div>
+
+        <FormInput
+          form={form}
+          name="email"
+          label="Email"
+          type="email"
+          placeholder="Enter your email"
+        />
 
         <div className="space-y-3">
           <PasswordInput
@@ -84,22 +86,13 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
           />
         </div>
 
-        <AgreementFields form={form} />
-
         <Button 
           type="submit" 
           className="w-full bg-primary text-primary-foreground hover:bg-primary/90 mt-4" 
           disabled={isLoading}
         >
-          {isLoading ? "Creating account..." : "Create Account"}
+          {isLoading ? "Processing..." : "Continue"}
         </Button>
-
-        <div className="text-sm text-center text-muted-foreground pt-2">
-          Already have an account?{" "}
-          <a href="/signin" className="text-primary hover:underline font-medium">
-            Sign in
-          </a>
-        </div>
       </form>
     </Form>
   );
@@ -116,7 +109,7 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
         Back
       </Button>
       <CardDescription className="text-muted-foreground mb-5">
-        Complete your registration
+        Create your account
       </CardDescription>
       {formContent}
     </div>
