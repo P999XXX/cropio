@@ -1,6 +1,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { errorToastStyle, successToastStyle } from "./toast-styles";
+import { getErrorMessage } from "./auth-error-handler";
 
 export const handleGoogleSignIn = async () => {
   const { error } = await supabase.auth.signInWithOAuth({
@@ -31,7 +32,6 @@ export const handlePasswordReset = async (
   setShowResetThankYou: (value: boolean) => void
 ) => {
   try {
-    // First try to reset the password through auth
     const { error: resetError } = await supabase.auth.resetPasswordForEmail(
       resetEmail,
       {
@@ -41,7 +41,14 @@ export const handlePasswordReset = async (
 
     if (resetError) {
       console.error("Reset password error:", resetError);
-      throw new Error(resetError.message);
+      const errorMessage = getErrorMessage(resetError);
+      toast.error(errorMessage, errorToastStyle);
+      
+      // Don't close the dialog if it's a rate limit error
+      if (!errorMessage.includes('Too many reset attempts')) {
+        setShowForgotPassword(false);
+      }
+      return;
     }
 
     // If password reset was successful
@@ -51,7 +58,13 @@ export const handlePasswordReset = async (
 
   } catch (error: any) {
     console.error("Reset password error:", error);
-    toast.error(error.message || "Failed to send reset instructions", errorToastStyle);
+    const errorMessage = getErrorMessage(error);
+    toast.error(errorMessage, errorToastStyle);
+    
+    // Don't close the dialog if it's a rate limit error
+    if (!errorMessage.includes('Too many reset attempts')) {
+      setShowForgotPassword(false);
+    }
     throw error;
   }
 };
