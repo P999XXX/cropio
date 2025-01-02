@@ -40,24 +40,44 @@ const DocumentUpload = ({ form, selectedFiles, onFileChange, onRemoveFile }: Doc
     setIsDragging(false);
 
     const files = Array.from(e.dataTransfer.files);
-    const allowedTypes = ['.pdf', '.doc', '.docx'];
-    const validFiles = files.filter(file => 
-      allowedTypes.some(type => file.name.toLowerCase().endsWith(type))
-    );
-
-    if (validFiles.length > 0) {
-      const event = {
-        target: {
-          files: validFiles
-        }
-      } as unknown as React.ChangeEvent<HTMLInputElement>;
-      onFileChange(event);
+    if (files.length > 1) {
+      alert("Please upload only one file");
+      return;
     }
+
+    const file = files[0];
+    if (file.type !== "application/pdf") {
+      alert("Please upload only PDF files");
+      return;
+    }
+
+    const event = {
+      target: {
+        files: [file]
+      }
+    } as unknown as React.ChangeEvent<HTMLInputElement>;
+    onFileChange(event);
   }, [onFileChange]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length > 1) {
+      alert("Please upload only one file");
+      return;
+    }
+
+    const file = files[0];
+    if (file && file.type !== "application/pdf") {
+      alert("Please upload only PDF files");
+      return;
+    }
+
+    onFileChange(e);
+  };
 
   return (
     <div className="space-y-2">
-      <Label>Company Documents</Label>
+      <Label className="text-[0.775rem]">Company Documents</Label>
       <div
         className={cn(
           "border-2 border-dashed border-border rounded-lg p-4 transition-colors",
@@ -71,11 +91,10 @@ const DocumentUpload = ({ form, selectedFiles, onFileChange, onRemoveFile }: Doc
       >
         <Input
           type="file"
-          accept=".pdf,.doc,.docx"
-          multiple
+          accept=".pdf"
           className="hidden"
           id="company-documents"
-          onChange={onFileChange}
+          onChange={handleInputChange}
         />
         <label
           htmlFor="company-documents"
@@ -86,27 +105,27 @@ const DocumentUpload = ({ form, selectedFiles, onFileChange, onRemoveFile }: Doc
             isDragging ? "text-primary" : "text-muted-foreground"
           )} />
           <span className={cn(
-            "text-sm",
+            "text-[0.875rem]",
             isDragging ? "text-primary" : "text-muted-foreground"
           )}>
             {isDragging 
-              ? "Drop your files here"
-              : "Upload company documents (VAT & Tax verification)"
+              ? "Drop your PDF file here"
+              : "Upload company document (VAT & Tax verification)"
             }
           </span>
-          <span className="text-xs text-muted-foreground mt-1">
-            PDF, DOC, DOCX up to 10MB each
+          <span className="text-[0.775rem] text-muted-foreground mt-1">
+            PDF only, up to 10MB
           </span>
         </label>
       </div>
 
       {selectedFiles.length > 0 && (
         <div className="mt-4 space-y-2">
-          <Label>Selected Files:</Label>
+          <Label className="text-[0.775rem]">Selected File:</Label>
           <div className="space-y-2">
             {selectedFiles.map((file, index) => (
               <div key={index} className="flex items-center justify-between p-2 bg-muted rounded-md">
-                <span className="text-sm truncate">{file.name}</span>
+                <span className="text-[0.875rem] truncate">{file.name}</span>
                 <Button
                   type="button"
                   variant="ghost"

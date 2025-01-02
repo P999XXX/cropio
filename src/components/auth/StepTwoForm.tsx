@@ -4,13 +4,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import FormInput from "@/components/forms/FormInput";
-import PasswordInput from "./PasswordInput";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import AgreementCheckbox from "./AgreementCheckbox";
 import { useSignupStore } from "@/store/signupStore";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { errorToastStyle } from "@/utils/toast-styles";
+import { useEffect, useState } from "react";
 
 const nameRegex = /^[a-zA-Z]{3,}$/;
 
@@ -68,6 +68,7 @@ interface StepTwoFormProps {
 
 const StepTwoForm = ({ onSubmit, onBack, isLoading }: StepTwoFormProps) => {
   const { formData, updateFormData } = useSignupStore();
+  const [emailExists, setEmailExists] = useState(false);
   
   const form = useForm<StepTwoFormData>({
     resolver: zodResolver(stepTwoSchema),
@@ -81,6 +82,30 @@ const StepTwoForm = ({ onSubmit, onBack, isLoading }: StepTwoFormProps) => {
       acceptPrivacy: formData.acceptPrivacy || false,
     },
   });
+
+  useEffect(() => {
+    const subscription = form.watch(async (value, { name }) => {
+      if (name === 'email' && value.email) {
+        try {
+          const { data, error } = await supabase
+            .from('profiles')
+            .select('email')
+            .eq('email', value.email)
+            .maybeSingle();
+          
+          if (error && error.code !== 'PGRST116') {
+            console.error("Email check error:", error);
+            return;
+          }
+          setEmailExists(!!data);
+        } catch (error) {
+          console.error("Email validation error:", error);
+        }
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [form]);
 
   const handleSubmit = async (values: StepTwoFormData) => {
     try {
@@ -103,22 +128,32 @@ const StepTwoForm = ({ onSubmit, onBack, isLoading }: StepTwoFormProps) => {
               name="firstName"
               label="First Name"
               placeholder="Enter your first name"
+              className="text-[0.875rem]"
             />
             <FormInput
               form={form}
               name="lastName"
               label="Last Name"
               placeholder="Enter your last name"
+              className="text-[0.875rem]"
             />
           </div>
 
-          <FormInput
-            form={form}
-            name="email"
-            label="Email"
-            type="email"
-            placeholder="Enter your email"
-          />
+          <div className="space-y-1">
+            <FormInput
+              form={form}
+              name="email"
+              label="Email"
+              type="email"
+              placeholder="Enter your email"
+              className="text-[0.875rem]"
+            />
+            {emailExists && (
+              <p className="text-destructive-foreground text-[0.775rem] mt-1">
+                This email is already registered
+              </p>
+            )}
+          </div>
 
           <div className="space-y-4">
             <PasswordInput
@@ -126,11 +161,13 @@ const StepTwoForm = ({ onSubmit, onBack, isLoading }: StepTwoFormProps) => {
               name="password"
               label="Password"
               description="Password must be at least 8 characters and contain uppercase, lowercase, and numbers"
+              className="text-[0.875rem]"
             />
             <PasswordInput
               form={form}
               name="confirmPassword"
               label="Confirm Password"
+              className="text-[0.875rem]"
             />
           </div>
 
@@ -153,7 +190,7 @@ const StepTwoForm = ({ onSubmit, onBack, isLoading }: StepTwoFormProps) => {
             <Button 
               type="submit" 
               variant="primary"
-              className="w-full sm:w-auto order-1 sm:order-2"
+              className="w-full sm:w-auto order-1 sm:order-2 text-[0.875rem]"
               disabled={isLoading}
             >
               {isLoading ? "Creating account..." : "Continue"}
@@ -163,7 +200,7 @@ const StepTwoForm = ({ onSubmit, onBack, isLoading }: StepTwoFormProps) => {
               type="button"
               variant="secondary"
               onClick={onBack}
-              className="w-full sm:w-auto order-2 sm:order-1"
+              className="w-full sm:w-auto order-2 sm:order-1 text-[0.875rem]"
             >
               <ArrowLeft className="h-4 w-4 mr-1" />
               Back

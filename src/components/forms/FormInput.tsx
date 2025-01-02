@@ -38,17 +38,17 @@ const FormInput = ({
       rules={rules}
       render={({ field, fieldState }) => (
         <FormItem className="space-y-1">
-          <FormLabel className="text-foreground">{label}</FormLabel>
+          <FormLabel className="text-[0.775rem] text-foreground">{label}</FormLabel>
           <FormControl>
             <Input
               {...field}
               type={type}
               placeholder={placeholder}
-              className={`h-auto py-2 text-[0.775rem] ${fieldState.error ? 'border-destructive' : ''} ${className}`}
+              className={`h-auto py-2 text-[0.875rem] ${fieldState.error ? 'border-destructive' : ''} ${className}`}
             />
           </FormControl>
           {description && (
-            <FormDescription className="text-xs">{description}</FormDescription>
+            <FormDescription className="text-[0.775rem]">{description}</FormDescription>
           )}
           <FormErrorMessage message={fieldState.error?.message} />
         </FormItem>

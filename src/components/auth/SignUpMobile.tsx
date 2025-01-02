@@ -3,8 +3,6 @@ import SignUpForm, { SignUpFormData } from "./SignUpForm";
 interface SignUpMobileProps {
   onSubmit: (values: SignUpFormData) => Promise<void>;
   isLoading: boolean;
-  onGoogleSignIn: () => void;
-  onLinkedInSignIn: () => void;
 }
 
 const SignUpMobile = ({

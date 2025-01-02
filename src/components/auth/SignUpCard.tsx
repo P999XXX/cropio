@@ -4,8 +4,6 @@ import SignUpForm, { SignUpFormData } from "./SignUpForm";
 interface SignUpCardProps {
   onSubmit: (values: SignUpFormData) => Promise<void>;
   isLoading: boolean;
-  onGoogleSignIn: () => void;
-  onLinkedInSignIn: () => void;
 }
 
 const SignUpCard = ({
