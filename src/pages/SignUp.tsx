@@ -9,7 +9,6 @@ import ThankYouDialog from "@/components/auth/ThankYouDialog";
 import StepOneForm from "@/components/auth/StepOneForm";
 import StepTwoForm from "@/components/auth/StepTwoForm";
 import { handleGoogleSignIn, handleLinkedInSignIn } from "@/utils/auth-handlers";
-import { errorToastStyle, successToastStyle } from "@/utils/toast-styles";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import {
   AlertDialog,
@@ -79,11 +78,19 @@ const SignUp = () => {
       if (error) throw error;
 
       setEmail(values.email);
-      toast.success("Successfully signed up!", successToastStyle);
+      toast.success("Successfully signed up!", {
+        className: "bg-primary text-white",
+        description: "Please check your email to verify your account.",
+        duration: 5000,
+      });
       setShowThankYou(true);
     } catch (error: any) {
       console.error("Sign up error:", error);
-      toast.error(error.message || "Failed to sign up", errorToastStyle);
+      toast.error("Failed to sign up", {
+        className: "bg-destructive text-destructive-foreground",
+        description: error.message,
+        duration: 5000,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -138,7 +145,7 @@ const SignUp = () => {
         </main>
 
         <ThankYouDialog
-          open={showThankYou}
+          open={showThankYou && !showErrorDialog}
           onOpenChange={setShowThankYou}
           userEmail={email}
         />
