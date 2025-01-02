@@ -51,11 +51,11 @@ const ForgotPasswordDialog = ({
       <DialogContent className="dialog-content">
         <DialogHeader>
           <DialogTitle className="dialog-title">Reset Password</DialogTitle>
-          <DialogDescription className="dialog-description">
+          <DialogDescription className="dialog-description mb-3">
             Enter your email address and we'll send you instructions to reset your password.
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4">
+        <div className="space-y-3">
           <div className="space-y-2">
             <Label htmlFor="reset-email" className="text-foreground text-sm font-medium">Email</Label>
             <Input
@@ -72,7 +72,7 @@ const ForgotPasswordDialog = ({
             {error && <p className="text-sm text-destructive-foreground">{error}</p>}
           </div>
         </div>
-        <div className="flex flex-col gap-3 mt-4 sm:flex-row sm:justify-end">
+        <div className="flex flex-col gap-3 mt-3 sm:flex-row sm:justify-end">
           <Button 
             onClick={handleSubmit}
             disabled={isResetting}

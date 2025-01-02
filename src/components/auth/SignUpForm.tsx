@@ -42,7 +42,7 @@ const SignUpForm = ({ onSubmit, isLoading }: SignUpFormProps) => {
   });
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
       <FormInput
         form={form}
         name="email"
@@ -58,24 +58,26 @@ const SignUpForm = ({ onSubmit, isLoading }: SignUpFormProps) => {
         description="Password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter, and one number"
       />
 
-      <AgreementCheckbox
-        form={form}
-        name="acceptTerms"
-        linkText="Terms and Conditions"
-        linkHref="/terms"
-      />
+      <div className="space-y-2 mt-3">
+        <AgreementCheckbox
+          form={form}
+          name="acceptTerms"
+          linkText="Terms and Conditions"
+          linkHref="/terms"
+        />
 
-      <AgreementCheckbox
-        form={form}
-        name="acceptPrivacy"
-        linkText="Privacy Policy"
-        linkHref="/privacy"
-      />
+        <AgreementCheckbox
+          form={form}
+          name="acceptPrivacy"
+          linkText="Privacy Policy"
+          linkHref="/privacy"
+        />
+      </div>
 
       <Button 
         type="submit" 
         variant="primary"
-        className="w-full text-[0.775rem] sm:text-[0.775rem] md:text-[0.775rem]" 
+        className="w-full text-[0.775rem] sm:text-[0.775rem] md:text-[0.775rem] mt-3" 
         disabled={isLoading}
       >
         {isLoading ? "Signing up..." : "Sign up"}

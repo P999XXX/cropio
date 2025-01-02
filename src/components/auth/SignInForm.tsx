@@ -30,7 +30,7 @@ const SignInForm = ({ onSubmit, isLoading, onForgotPassword }: SignInFormProps) 
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
         <FormInput
           form={form}
           name="email"
@@ -48,7 +48,7 @@ const SignInForm = ({ onSubmit, isLoading, onForgotPassword }: SignInFormProps) 
         <Button 
           type="submit" 
           variant="primary" 
-          className="w-full text-[13px]" 
+          className="w-full text-[13px] mt-3" 
           disabled={isLoading}
         >
           {isLoading ? "Signing in..." : "Sign in"}
@@ -57,7 +57,7 @@ const SignInForm = ({ onSubmit, isLoading, onForgotPassword }: SignInFormProps) 
         <button
           type="button"
           onClick={onForgotPassword}
-          className="text-sm text-primary hover:underline block w-full text-center"
+          className="text-sm text-primary hover:underline block w-full text-center mt-2"
         >
           Forgot your password?
         </button>

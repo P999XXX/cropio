@@ -101,26 +101,28 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
   return (
     <>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <PasswordInput
-            form={form}
-            name="password"
-            label="New Password"
-            description="Password must be at least 8 characters and contain uppercase, lowercase, and numbers"
-          />
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+          <div className="space-y-3">
+            <PasswordInput
+              form={form}
+              name="password"
+              label="New Password"
+              description="Password must be at least 8 characters and contain uppercase, lowercase, and numbers"
+            />
 
-          <PasswordInput
-            form={form}
-            name="confirmPassword"
-            label="Confirm Password"
-          />
+            <PasswordInput
+              form={form}
+              name="confirmPassword"
+              label="Confirm Password"
+            />
+          </div>
 
-          <Button type="submit" className="w-full" variant="primary" disabled={isLoading}>
+          <Button type="submit" className="w-full mt-3" variant="primary" disabled={isLoading}>
             {isLoading ? "Updating password..." : "Update Password"}
           </Button>
         </form>
       </Form>
-      <div className="text-sm text-center text-muted-foreground mt-4">
+      <div className="text-sm text-center text-muted-foreground mt-3">
         Already know your password?{" "}
         <a href="/signin" className="text-primary hover:underline font-medium">
           Sign in
