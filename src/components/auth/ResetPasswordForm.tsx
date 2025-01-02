@@ -5,7 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import FormInput from "@/components/forms/FormInput";
+import { Card, CardContent } from "@/components/ui/card";
+import PasswordInput from "@/components/auth/PasswordInput";
 import { toast } from "sonner";
 import { errorToastStyle, successToastStyle } from "@/utils/toast-styles";
 
@@ -41,7 +42,6 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        // Get the URL fragment
         const fragment = new URLSearchParams(window.location.hash.substring(1));
         const type = fragment.get('type');
         const access_token = fragment.get('access_token');
@@ -49,14 +49,12 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
 
         console.log("Recovery flow check:", { type, hasAccessToken: !!access_token, hasRefreshToken: !!refresh_token });
 
-        // Verify this is a recovery flow and we have the necessary tokens
         if (type !== 'recovery' || !access_token || !refresh_token) {
           console.error("Invalid recovery flow");
           toast.error("Invalid password reset link. Please request a new one.", errorToastStyle);
           return;
         }
 
-        // Set the session with the recovery tokens
         const { data: { session }, error: sessionError } = await supabase.auth.setSession({
           access_token,
           refresh_token,
@@ -76,7 +74,6 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
       }
     };
 
-    // Only run if we have a URL fragment
     if (window.location.hash) {
       checkSession();
     } else {
@@ -93,14 +90,12 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
 
     setIsLoading(true);
     try {
-      // Get the current session
       const { data: { session }, error: sessionError } = await supabase.auth.getSession();
 
       if (sessionError || !session) {
         throw new Error("Session expired. Please request a new reset link.");
       }
 
-      // Update the password
       const { error } = await supabase.auth.updateUser({
         password: values.password,
       });
@@ -109,7 +104,6 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
         throw error;
       }
 
-      // Sign out after successful password update
       await supabase.auth.signOut();
       toast.success("Password successfully updated! Please sign in with your new password.", successToastStyle);
     } catch (error: any) {
@@ -120,28 +114,40 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
     }
   };
 
-  return (
+  const formContent = (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className={`space-y-4 ${isMobile ? 'px-4' : ''}`}>
-        <FormInput
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <PasswordInput
           form={form}
           name="password"
           label="New Password"
-          type="password"
-          placeholder="Enter your new password"
+          description="Enter your new password"
         />
-        <FormInput
+        <PasswordInput
           form={form}
           name="confirmPassword"
           label="Confirm Password"
-          type="password"
-          placeholder="Confirm your new password"
+          description="Confirm your new password"
         />
-        <Button type="submit" className="w-full" disabled={isLoading}>
+        <Button 
+          type="submit" 
+          className="w-full bg-primary hover:bg-primary-hover text-primary-foreground h-10"
+          disabled={isLoading}
+        >
           {isLoading ? "Updating Password..." : "Update Password"}
         </Button>
       </form>
     </Form>
+  );
+
+  return isMobile ? (
+    <div className="px-4">{formContent}</div>
+  ) : (
+    <Card className="w-full">
+      <CardContent className="pt-6">
+        {formContent}
+      </CardContent>
+    </Card>
   );
 };
 
