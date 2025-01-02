@@ -28,7 +28,7 @@ const PasswordInput = ({ form, name, label, description, className }: PasswordIn
       name={name}
       render={({ field, fieldState }) => (
         <FormItem className="space-y-1">
-          <FormLabel className="text-[0.775rem] text-foreground font-medium">{label}</FormLabel>
+          <FormLabel className="text-[0.775rem] text-foreground">{label}</FormLabel>
           <FormControl>
             <div className="relative">
               <Input
@@ -50,7 +50,7 @@ const PasswordInput = ({ form, name, label, description, className }: PasswordIn
               </button>
             </div>
           </FormControl>
-          {name === "password" && description && (
+          {description && (
             <FormDescription className="text-[0.775rem] text-muted-foreground">
               {description}
             </FormDescription>
