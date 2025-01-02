@@ -19,13 +19,12 @@ const PhoneNumberInput = ({ form, selectedCountry }: PhoneNumberInputProps) => {
   };
 
   const maxDigits = countryToDigits[selectedCountry] || 15;
-  const placeholder = countryToExample[selectedCountry] || '';
 
   return (
     <FormItem className="flex-1">
       <FormControl>
         <Input
-          placeholder={placeholder}
+          placeholder="Enter your phone no."
           maxLength={maxDigits}
           {...form.register("phoneNumber", {
             required: "Phone number is required",
