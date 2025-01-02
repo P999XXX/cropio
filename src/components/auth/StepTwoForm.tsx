@@ -23,25 +23,7 @@ const stepTwoSchema = z.object({
     .min(3, "Last name must be at least 3 characters")
     .regex(nameRegex, "Last name must contain only letters and be at least 3 characters"),
   email: z.string()
-    .email("Invalid email address")
-    .refine(async (email) => {
-      try {
-        const { data, error } = await supabase
-          .from('profiles')
-          .select('email')
-          .eq('email', email)
-          .maybeSingle();
-        
-        if (error && error.code !== 'PGRST116') {
-          console.error("Email check error:", error);
-          return true;
-        }
-        return !data;
-      } catch (error) {
-        console.error("Email validation error:", error);
-        return true;
-      }
-    }, "This email is already registered"),
+    .email("Invalid email address"),
   password: z.string()
     .min(8, "Password must be at least 8 characters")
     .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
@@ -110,6 +92,22 @@ const StepTwoForm = ({ onSubmit, onBack, isLoading }: StepTwoFormProps) => {
 
   const handleSubmit = async (values: StepTwoFormData) => {
     try {
+      // Check if email exists before proceeding
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('email')
+        .eq('email', values.email)
+        .maybeSingle();
+      
+      if (error && error.code !== 'PGRST116') {
+        throw error;
+      }
+
+      if (data) {
+        toast.error("This email is already registered", errorToastStyle);
+        return;
+      }
+
       updateFormData(values);
       await onSubmit(values);
     } catch (error: any) {
@@ -132,7 +130,7 @@ const StepTwoForm = ({ onSubmit, onBack, isLoading }: StepTwoFormProps) => {
               type="submit" 
               variant="primary"
               className="w-full sm:w-auto order-1 sm:order-2 text-[0.875rem]"
-              disabled={isLoading}
+              disabled={isLoading || emailExists}
             >
               {isLoading ? "Creating account..." : "Continue"}
               <ArrowRight className="h-4 w-4 ml-1" />
