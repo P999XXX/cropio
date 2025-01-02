@@ -71,7 +71,7 @@ const CountrySelector = ({ form, onCountryChange, selectedCountry }: CountrySele
               )}
             </div>
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
-              <DialogContent className="h-[100dvh] max-w-full p-0 gap-0">
+              <DialogContent className="h-[100dvh] max-w-full p-0 gap-0 border-none">
                 <DialogHeader className="px-4 py-2 border-b sticky top-0 bg-background z-10">
                   <div className="flex items-center justify-between">
                     <DialogTitle className="text-base">Select Country</DialogTitle>
