@@ -51,6 +51,11 @@ const AuthRedirectHandler = () => {
             console.log("Recovery session set successfully");
             navigate('/reset-password');
             return;
+          } else {
+            console.error("Missing tokens for recovery flow");
+            toast.error("Invalid reset password link. Please request a new one.");
+            navigate('/signin');
+            return;
           }
         }
         
