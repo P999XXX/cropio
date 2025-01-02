@@ -55,7 +55,7 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
       
       toast.error(errorMessage, {
         ...errorToastStyle,
-        duration: 10000, // 10 seconds
+        duration: 5000,
       });
     }
   });
@@ -72,14 +72,24 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
 
       toast.success("Password successfully updated! Please sign in with your new password.", {
         ...successToastStyle,
-        duration: 10000,
+        duration: 5000,
+        position: "top-center",
+        style: {
+          ...successToastStyle.style,
+          zIndex: 9999,
+        },
       });
-      navigate('/signin');
+      
+      // Short delay before navigation to ensure toast is visible
+      setTimeout(() => {
+        navigate('/signin');
+      }, 1000);
+      
     } catch (error: any) {
       console.error("Password update error:", error);
       toast.error(error.message || "Failed to update password. Please try again.", {
         ...errorToastStyle,
-        duration: 10000,
+        duration: 5000,
       });
     } finally {
       setIsLoading(false);
