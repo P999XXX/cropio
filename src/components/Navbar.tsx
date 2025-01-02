@@ -2,7 +2,6 @@ import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { supabase } from "@/integrations/supabase/client";
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { useSidebar } from "@/components/ui/sidebar";
 import { Logo } from "./navbar/Logo";
 import { NavActions } from "./navbar/NavActions";
 import { MobileMenuHeader } from "./navbar/MobileMenuHeader";
@@ -19,7 +18,6 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const isDashboard = location.pathname.startsWith('/dashboard');
-  const { state } = useSidebar();
 
   useEffect(() => {
     const theme = localStorage.getItem("theme");
@@ -77,31 +75,38 @@ const Navbar = () => {
     setIsOpen(false);
   };
 
+  // Only render dashboard-specific elements if we're on a dashboard page
+  const renderDashboardElements = () => {
+    if (!isDashboard) return null;
+    
+    return (
+      <>
+        <DashboardSidebarTrigger />
+        <Sheet open={isOpen} onOpenChange={setIsOpen}>
+          <MobileNavButton />
+          <SheetContent 
+            side="left" 
+            className="w-[300px] sm:w-[400px] z-[200] p-0 overflow-y-auto custom-scrollbar fixed"
+          >
+            <MobileMenuHeader />
+            <MobileMenuContent 
+              isDashboard={isDashboard}
+              isDark={isDark}
+              onToggleTheme={toggleDarkMode}
+              onClose={handleClose}
+            />
+          </SheetContent>
+        </Sheet>
+      </>
+    );
+  };
+
   return (
     <nav className="fixed top-0 left-0 right-0 bg-background border-b border-border z-[49] shadow-[0_2px_8px_0_rgba(0,0,0,0.05)]">
       <div className={`w-full ${isDashboard ? 'px-4 md:px-8' : 'px-4 sm:px-6 lg:px-8'}`}>
         <div className="flex justify-between h-header">
           <div className="flex items-center gap-3">
-            {isDashboard && (
-              <>
-                <DashboardSidebarTrigger isExpanded={state === 'expanded'} />
-                <Sheet open={isOpen} onOpenChange={setIsOpen}>
-                  <MobileNavButton />
-                  <SheetContent 
-                    side="left" 
-                    className="w-[300px] sm:w-[400px] z-[200] p-0 overflow-y-auto custom-scrollbar fixed"
-                  >
-                    <MobileMenuHeader />
-                    <MobileMenuContent 
-                      isDashboard={isDashboard}
-                      isDark={isDark}
-                      onToggleTheme={toggleDarkMode}
-                      onClose={handleClose}
-                    />
-                  </SheetContent>
-                </Sheet>
-              </>
-            )}
+            {renderDashboardElements()}
             <Logo />
           </div>
 
