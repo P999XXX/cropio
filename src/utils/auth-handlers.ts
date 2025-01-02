@@ -32,7 +32,6 @@ export const handlePasswordReset = async (
   setShowResetThankYou: (value: boolean) => void
 ) => {
   try {
-    // First, generate the reset password link using Supabase
     const { error: resetError } = await supabase.auth.resetPasswordForEmail(
       resetEmail,
       {
@@ -41,27 +40,18 @@ export const handlePasswordReset = async (
     );
 
     if (resetError) {
-      // Check specifically for rate limit errors
-      if (resetError.message.includes('rate limit') || 
-          (resetError as any)?.body?.includes('over_email_send_rate_limit')) {
+      // Check if it's a rate limit error
+      if (
+        resetError.message?.toLowerCase().includes('rate limit') || 
+        resetError.message?.toLowerCase().includes('too many requests') ||
+        (resetError as any)?.body?.includes('over_email_send_rate_limit')
+      ) {
         throw new Error('Too many reset attempts. Please wait a few minutes before trying again.');
       }
       throw resetError;
     }
 
-    // Now send the custom email using our edge function
-    const resetLink = `${window.location.origin}/reset-password`;
-    
-    const { error: emailError } = await supabase.functions.invoke('send-reset-password', {
-      body: {
-        email: resetEmail,
-        resetLink,
-      },
-    });
-
-    if (emailError) throw emailError;
-
-    // If everything was successful
+    // If successful, show thank you dialog
     setShowForgotPassword(false);
     setShowResetThankYou(true);
     toast.success("Reset instructions sent!", successToastStyle);
