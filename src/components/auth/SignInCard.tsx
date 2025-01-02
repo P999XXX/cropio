@@ -18,7 +18,7 @@ const SignInCard = ({
   onForgotPassword,
 }: SignInCardProps) => {
   return (
-    <Card className="md:min-w-[500px]">
+    <Card className="md:min-w-[500px] md:bg-white">
       <CardHeader className="pb-2">
         <CardDescription>
           Enter your email and password to sign in
@@ -35,7 +35,7 @@ const SignInCard = ({
             <span className="w-full border-t" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-muted-foreground">
+            <span className="md:bg-white bg-background px-2 text-muted-foreground">
               Or continue with
             </span>
           </div>
