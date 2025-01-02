@@ -19,7 +19,7 @@ export const TeamTableHeaderRow = ({ sortConfig, onSort }: TeamTableHeaderRowPro
   ) => (
     <TableHead
       className={cn(
-        "cursor-pointer hover:bg-primary/5 transition-colors py-3 text-[0.775rem] font-medium bg-secondary text-primary/85 group",
+        "cursor-pointer hover:bg-primary/5 transition-colors py-3 text-[0.775rem] font-medium bg-secondary text-[#222222] dark:text-gray-200 group",
         className
       )}
       onClick={() => onSort(key)}
