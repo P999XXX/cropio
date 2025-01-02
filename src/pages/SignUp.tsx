@@ -11,10 +11,20 @@ import StepTwoForm from "@/components/auth/StepTwoForm";
 import { handleGoogleSignIn, handleLinkedInSignIn } from "@/utils/auth-handlers";
 import { errorToastStyle, successToastStyle } from "@/utils/toast-styles";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
 
 const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showThankYou, setShowThankYou] = useState(false);
+  const [showErrorDialog, setShowErrorDialog] = useState(false);
   const [email, setEmail] = useState("");
   const [step, setStep] = useState(1);
   const [selectedRole, setSelectedRole] = useState<"buyer" | "supplier">();
@@ -47,7 +57,8 @@ const SignUp = () => {
       // Check if email exists
       const emailExists = await checkEmailExists(values.email);
       if (emailExists) {
-        toast.error("An account with this email already exists", errorToastStyle);
+        setEmail(values.email);
+        setShowErrorDialog(true);
         setIsLoading(false);
         return;
       }
@@ -91,7 +102,7 @@ const SignUp = () => {
             <SignUpHeader step={step} />
 
             {isMobile ? (
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {step === 1 ? (
                   <StepOneForm
                     onSubmit={handleStepOne}
@@ -125,11 +136,43 @@ const SignUp = () => {
             )}
           </div>
         </main>
+
         <ThankYouDialog
           open={showThankYou}
           onOpenChange={setShowThankYou}
           userEmail={email}
         />
+
+        <AlertDialog open={showErrorDialog} onOpenChange={setShowErrorDialog}>
+          <AlertDialogContent className="signup-error-dialog">
+            <AlertDialogHeader>
+              <AlertDialogTitle className="text-lg font-semibold">
+                Email Already Exists
+              </AlertDialogTitle>
+              <AlertDialogDescription className="mt-2">
+                An account with the email <span className="font-medium">{email}</span> already exists. 
+                Please try signing in instead or use a different email address.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogAction 
+                onClick={() => {
+                  setShowErrorDialog(false);
+                  navigate("/signin");
+                }}
+                className="bg-primary hover:bg-primary/90"
+              >
+                Go to Sign In
+              </AlertDialogAction>
+              <AlertDialogAction 
+                onClick={() => setShowErrorDialog(false)}
+                className="bg-secondary hover:bg-secondary/90"
+              >
+                Try Different Email
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </SidebarProvider>
   );
