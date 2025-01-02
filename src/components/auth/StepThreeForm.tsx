@@ -10,13 +10,22 @@ import CountrySelect from "./form-sections/CountrySelect";
 import { useSignupStore } from "@/store/signupStore";
 
 const stepThreeSchema = z.object({
-  companyName: z.string().min(1, "Company name is required"),
-  companyStreet: z.string().min(1, "Street address is required"),
-  companyPostalCode: z.string().min(1, "Postal code is required"),
-  companyPlace: z.string().min(1, "Place is required"),
-  companyCountry: z.string().min(1, "Country is required"),
-  phoneNumber: z.string().min(1, "Phone number is required"),
-  countryCode: z.string().min(1, "Country code is required"),
+  companyName: z.string()
+    .min(3, "Company name must be at least 3 characters")
+    .regex(/^[a-zA-Z\s]{3,}$/, "Company name must contain only letters and be at least 3 characters"),
+  companyStreet: z.string()
+    .min(3, "Street address must be at least 3 characters"),
+  companyPostalCode: z.string()
+    .min(1, "Postal code is required")
+    .regex(/^\d+$/, "Postal code must contain only numbers"),
+  companyPlace: z.string()
+    .min(3, "Place must be at least 3 characters"),
+  companyCountry: z.string()
+    .min(1, "Country is required"),
+  phoneNumber: z.string()
+    .min(1, "Phone number is required"),
+  countryCode: z.string()
+    .min(1, "Country code is required"),
 });
 
 export type StepThreeFormData = z.infer<typeof stepThreeSchema>;
