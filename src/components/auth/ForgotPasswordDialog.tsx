@@ -31,6 +31,7 @@ const ForgotPasswordDialog = ({
   isResetting,
 }: ForgotPasswordDialogProps) => {
   const [error, setError] = useState("");
+  const [countdown, setCountdown] = useState(0);
 
   const handleSubmit = async () => {
     setError("");
@@ -50,12 +51,31 @@ const ForgotPasswordDialog = ({
       });
 
       if (resetError) {
+        if (resetError.message?.toLowerCase().includes('rate limit') || 
+            resetError.message?.toLowerCase().includes('too many requests') ||
+            (resetError as any)?.status === 429
+        ) {
+          const waitTime = 60;
+          setCountdown(waitTime);
+          const timer = setInterval(() => {
+            setCountdown((prev) => {
+              if (prev <= 1) {
+                clearInterval(timer);
+                return 0;
+              }
+              return prev - 1;
+            });
+          }, 1000);
+          setError(`Too many attempts. Please wait ${waitTime} seconds before trying again.`);
+          return;
+        }
         console.error("Reset error:", resetError);
         setError(resetError.message);
         return;
       }
 
       await onSubmit();
+      onOpenChange(false);
       
     } catch (error: any) {
       console.error("Reset password error:", error);
@@ -89,7 +109,14 @@ const ForgotPasswordDialog = ({
             {error && (
               <Alert variant="destructive" className="border-2 border-destructive/20 bg-destructive/10 dark:bg-destructive/20 shadow-sm">
                 <AlertCircle className="h-4 w-4 text-destructive" />
-                <AlertDescription className="ml-2 text-destructive font-medium">{error}</AlertDescription>
+                <AlertDescription className="ml-2 text-destructive font-medium">
+                  {error}
+                  {countdown > 0 && (
+                    <span className="block mt-1">
+                      Time remaining: {countdown} seconds
+                    </span>
+                  )}
+                </AlertDescription>
               </Alert>
             )}
           </div>
@@ -97,7 +124,7 @@ const ForgotPasswordDialog = ({
         <div className="flex flex-col gap-3 mt-3 sm:flex-row sm:justify-end">
           <Button 
             onClick={handleSubmit}
-            disabled={isResetting}
+            disabled={isResetting || countdown > 0}
             variant="primary"
             className="order-1 sm:order-2 w-full sm:w-auto"
           >
