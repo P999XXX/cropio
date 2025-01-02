@@ -1,6 +1,6 @@
 import { UseFormReturn } from "react-hook-form";
 import FormInput from "@/components/forms/FormInput";
-import { StepTwoFormData } from "../StepTwoForm";
+import { StepTwoFormData } from "../schemas/stepTwoSchema";
 
 interface PersonalFieldsProps {
   form: UseFormReturn<StepTwoFormData>;
