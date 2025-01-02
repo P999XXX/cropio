@@ -34,14 +34,14 @@ const AuthRedirectHandler = () => {
               return;
             }
 
-            // Set the session with the recovery tokens
-            const { data: { session }, error: sessionError } = await supabase.auth.setSession({
-              access_token,
-              refresh_token,
+            // For recovery flow, just verify the tokens are valid without setting a session
+            const { error: verifyError } = await supabase.auth.verifyOtp({
+              token_hash: access_token,
+              type: 'recovery',
             });
 
-            if (sessionError || !session) {
-              console.error("Session error:", sessionError);
+            if (verifyError) {
+              console.error("Token verification error:", verifyError);
               toast.error("Your password reset link has expired. Please request a new one.");
               navigate('/signin');
               return;
