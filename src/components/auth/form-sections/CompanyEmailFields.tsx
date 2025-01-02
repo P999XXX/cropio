@@ -5,9 +5,20 @@ import { supabase } from "@/integrations/supabase/client";
 import { FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import FormErrorMessage from "@/components/forms/FormErrorMessage";
 import { toast } from "sonner";
+import { RealtimePostgresChangesPayload } from "@supabase/supabase-js";
 
 interface CompanyEmailFieldsProps {
   form: UseFormReturn<StepTwoFormData>;
+}
+
+// Define the type for our profiles table
+interface Profile {
+  id: string;
+  email: string;
+  company_name: string;
+  first_name?: string;
+  last_name?: string;
+  role: string;
 }
 
 const CompanyEmailFields = ({ form }: CompanyEmailFieldsProps) => {
@@ -24,7 +35,7 @@ const CompanyEmailFields = ({ form }: CompanyEmailFieldsProps) => {
           schema: 'public',
           table: 'profiles'
         },
-        async (payload) => {
+        async (payload: RealtimePostgresChangesPayload<Profile>) => {
           const currentEmail = form.getValues('email');
           if (currentEmail && payload.new) {
             // Only check if the change affects email field
