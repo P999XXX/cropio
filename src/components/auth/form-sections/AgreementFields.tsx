@@ -1,6 +1,6 @@
 import { UseFormReturn } from "react-hook-form";
-import { StepTwoFormData } from "../StepTwoForm";
 import AgreementCheckbox from "../AgreementCheckbox";
+import { StepTwoFormData } from "../StepTwoForm";
 
 interface AgreementFieldsProps {
   form: UseFormReturn<StepTwoFormData>;
@@ -8,7 +8,7 @@ interface AgreementFieldsProps {
 
 const AgreementFields = ({ form }: AgreementFieldsProps) => {
   return (
-    <div className="space-y-2 mt-3">
+    <div className="space-y-2">
       <AgreementCheckbox
         form={form}
         name="acceptTerms"

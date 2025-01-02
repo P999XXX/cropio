@@ -1,16 +1,17 @@
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import FormInput from "@/components/forms/FormInput";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import AgreementCheckbox from "./AgreementCheckbox";
 import { useSignupStore } from "@/store/signupStore";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { errorToastStyle } from "@/utils/toast-styles";
 import { useEffect, useState } from "react";
+import PersonalFields from "./form-sections/PersonalFields";
+import PasswordFields from "./form-sections/PasswordFields";
+import AgreementFields from "./form-sections/AgreementFields";
 
 const nameRegex = /^[a-zA-Z]{3,}$/;
 
@@ -33,12 +34,12 @@ const stepTwoSchema = z.object({
         
         if (error && error.code !== 'PGRST116') {
           console.error("Email check error:", error);
-          return true; // Allow form submission if check fails
+          return true;
         }
-        return !data; // Return true if email doesn't exist (data is null)
+        return !data;
       } catch (error) {
         console.error("Email validation error:", error);
-        return true; // Allow form submission if check fails
+        return true;
       }
     }, "This email is already registered"),
   password: z.string()
@@ -122,69 +123,9 @@ const StepTwoForm = ({ onSubmit, onBack, isLoading }: StepTwoFormProps) => {
       <h3 className="text-lg font-semibold text-left md:text-center">Personal Information</h3>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2">
-            <FormInput
-              form={form}
-              name="firstName"
-              label="First Name"
-              placeholder="Enter your first name"
-              className="text-[0.875rem]"
-            />
-            <FormInput
-              form={form}
-              name="lastName"
-              label="Last Name"
-              placeholder="Enter your last name"
-              className="text-[0.875rem]"
-            />
-          </div>
-
-          <div className="space-y-1">
-            <FormInput
-              form={form}
-              name="email"
-              label="Email"
-              type="email"
-              placeholder="Enter your email"
-              className="text-[0.875rem]"
-            />
-            {emailExists && (
-              <p className="text-destructive-foreground text-[0.775rem] mt-1">
-                This email is already registered
-              </p>
-            )}
-          </div>
-
-          <div className="space-y-4">
-            <PasswordInput
-              form={form}
-              name="password"
-              label="Password"
-              description="Password must be at least 8 characters and contain uppercase, lowercase, and numbers"
-              className="text-[0.875rem]"
-            />
-            <PasswordInput
-              form={form}
-              name="confirmPassword"
-              label="Confirm Password"
-              className="text-[0.875rem]"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <AgreementCheckbox
-              form={form}
-              name="acceptTerms"
-              linkText="Terms and Conditions"
-              linkHref="/terms"
-            />
-            <AgreementCheckbox
-              form={form}
-              name="acceptPrivacy"
-              linkText="Privacy Policy"
-              linkHref="/privacy"
-            />
-          </div>
+          <PersonalFields form={form} emailExists={emailExists} />
+          <PasswordFields form={form} />
+          <AgreementFields form={form} />
 
           <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:gap-4 pt-2">
             <Button 
