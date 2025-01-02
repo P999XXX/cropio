@@ -4,7 +4,7 @@ import { UseFormReturn } from "react-hook-form";
 import { StepThreeFormData } from "../StepThreeForm";
 import { countries } from "../phone/countries";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import CountryDisplay from "../phone/CountryDisplay";
+import { supabase } from "@/integrations/supabase/client";
 
 interface CountrySelectProps {
   form: UseFormReturn<StepThreeFormData>;
@@ -25,6 +26,25 @@ const CountrySelect = ({ form }: CountrySelectProps) => {
   const isMobile = useIsMobile();
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    const detectCountry = async () => {
+      try {
+        const { data, error } = await supabase.functions.invoke('detect-country');
+        
+        if (error) throw error;
+        
+        if (data?.country && !form.getValues("companyCountry")) {
+          const countryCode = data.country;
+          form.setValue("companyCountry", countryCode);
+        }
+      } catch (error) {
+        console.debug('Could not detect country, using default:', error);
+      }
+    };
+
+    detectCountry();
+  }, [form]);
 
   const filteredCountries = countries.filter(country => 
     country.label.toLowerCase().includes(searchQuery.toLowerCase())
