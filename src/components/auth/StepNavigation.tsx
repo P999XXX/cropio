@@ -18,7 +18,7 @@ const StepNavigation = ({
   if (currentStep === 1) return null;
   
   return (
-    <div className="flex items-center justify-center mb-8">
+    <div className="hidden md:flex items-center justify-center mb-8">
       {steps.map((step, index) => {
         const stepNumber = index + 1;
         const isClickable = canNavigateToStep(stepNumber);
