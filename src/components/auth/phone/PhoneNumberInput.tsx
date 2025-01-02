@@ -12,27 +12,26 @@ interface PhoneNumberInputProps {
 }
 
 const PhoneNumberInput = ({ form, selectedCountry }: PhoneNumberInputProps) => {
-  const requiredDigits = countryToDigits[selectedCountry] || 10;
-
   const handlePhoneNumberChange = (value: string) => {
-    const digitsOnly = value.replace(/\D/g, '');
-    const limitedDigits = digitsOnly.slice(0, requiredDigits);
     const formatter = new AsYouType(selectedCountry);
-    const formattedNumber = formatter.input(limitedDigits);
+    const formattedNumber = formatter.input(value);
     form.setValue('phoneNumber', formattedNumber);
   };
+
+  const maxDigits = countryToDigits[selectedCountry] || 15;
+  const placeholder = countryToExample[selectedCountry] || '';
 
   return (
     <FormItem className="flex-1">
       <FormControl>
-        <Input 
-          placeholder={`Example: ${countryToExample[selectedCountry] || '1234567890'}`}
-          type="tel"
-          {...form.register('phoneNumber', {
-            validate: (value) => {
-              const digitsOnly = value.replace(/\D/g, '');
-              return digitsOnly.length === requiredDigits || 
-                `Phone number must be exactly ${requiredDigits} digits for ${selectedCountry}`;
+        <Input
+          placeholder={placeholder}
+          maxLength={maxDigits}
+          {...form.register("phoneNumber", {
+            required: "Phone number is required",
+            pattern: {
+              value: /^[0-9\s-()]+$/,
+              message: "Please enter a valid phone number"
             }
           })}
           onChange={(e) => handlePhoneNumberChange(e.target.value)}
