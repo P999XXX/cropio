@@ -20,7 +20,7 @@ const CompanyEmailFields = ({ form }: CompanyEmailFieldsProps) => {
         .from('profiles')
         .select('email')
         .eq('email', email)
-        .single();
+        .maybeSingle();
 
       if (error) {
         console.error('Error checking email:', error);
