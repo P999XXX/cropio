@@ -1,88 +1,123 @@
-import { ArrowRight, Shield, Globe, TrendingUp } from "lucide-react";
+import { ArrowRight, Shield, Globe, TrendingUp, ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import { Button } from "@/components/ui/button";
 
 const Index = () => {
   const features = [
     {
       icon: Shield,
-      title: "Verified Suppliers",
-      description: "All suppliers are thoroughly vetted and certified for quality assurance",
+      title: "Secure Trading",
+      description: "Advanced security measures and verified suppliers ensure safe transactions",
     },
     {
       icon: Globe,
       title: "Global Network",
-      description: "Connect with trusted suppliers and buyers from around the world",
+      description: "Connect with trusted agricultural partners worldwide",
     },
     {
       icon: TrendingUp,
       title: "Market Insights",
-      description: "Access real-time market trends, pricing data, and industry analysis",
+      description: "Real-time market data and analytics to make informed decisions",
     },
   ];
 
+  const scrollToFeatures = () => {
+    const featuresSection = document.getElementById('features');
+    featuresSection?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <SidebarProvider>
-      <div className="min-h-screen bg-background w-full">
+      <div className="min-h-screen bg-background">
         <Navbar />
         
         {/* Hero Section */}
-        <div className="pt-24 pb-20 sm:pt-32 sm:pb-24 w-full">
-          <div className="w-full px-4 sm:px-6 lg:px-8">
-            <div className="text-center space-y-8 animate-fade-in">
-              <h1 className="text-3xl tracking-tight font-extrabold text-foreground sm:text-4xl md:text-5xl">
-                <span className="block mb-2">The Global B2B Marketplace for</span>
-                <span className="block text-primary">Agricultural Products</span>
-              </h1>
-              <p className="mt-3 mx-auto text-lg text-muted-foreground sm:text-xl md:mt-5 md:text-2xl max-w-4xl">
-                Connect directly with verified suppliers and buyers worldwide. 
-                Streamline your agricultural trade with our secure platform.
-              </p>
-              <div className="mt-8 sm:flex sm:justify-center md:mt-10">
-                <div className="rounded-md shadow-lg">
-                  <Link
-                    to="/signup"
-                    className="w-full flex items-center justify-center px-8 py-4 border border-transparent text-lg font-semibold rounded-md text-white bg-primary hover:bg-primary/90 transition-all duration-300 hover:shadow-xl"
-                  >
-                    Get Started
-                    <ArrowRight className="ml-2 h-5 w-5 animate-bounce" />
-                  </Link>
+        <div className="relative min-h-[calc(100vh-3.8rem)] flex items-center">
+          {/* Background Pattern */}
+          <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(155,135,245,0.05)_50%,transparent_75%)] bg-[length:20px_20px]" />
+          
+          <div className="relative w-full py-16 md:py-24">
+            <div className="w-full px-4 sm:px-6 lg:px-8">
+              <div className="text-center space-y-8 animate-fade-in max-w-6xl mx-auto">
+                <div className="space-y-4">
+                  <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-foreground">
+                    <span className="block">Revolutionizing</span>
+                    <span className="block mt-2 bg-gradient-to-r from-primary to-[#9b87f5] bg-clip-text text-transparent">
+                      Agricultural Trade
+                    </span>
+                  </h1>
+                  <p className="mt-6 text-lg sm:text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto">
+                    Connect directly with verified suppliers and buyers worldwide.
+                    Transform your agricultural business with our secure platform.
+                  </p>
                 </div>
+
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10">
+                  <Button
+                    asChild
+                    size="lg"
+                    className="text-base h-12 px-8 animate-fade-in"
+                  >
+                    <Link to="/signup">
+                      Get Started
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Link>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="text-base h-12 px-8 animate-fade-in"
+                    asChild
+                  >
+                    <Link to="/signin">
+                      Sign In
+                    </Link>
+                  </Button>
+                </div>
+
+                <button
+                  onClick={scrollToFeatures}
+                  className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-muted-foreground hover:text-foreground transition-colors duration-200 animate-bounce"
+                >
+                  <span className="sr-only">Scroll to features</span>
+                  <ChevronDown className="h-8 w-8" />
+                </button>
               </div>
             </div>
           </div>
         </div>
 
         {/* Features Section */}
-        <div className="py-16 bg-secondary w-full">
+        <div id="features" className="w-full bg-secondary/50 py-24">
           <div className="w-full px-4 sm:px-6 lg:px-8">
-            <div className="lg:text-center space-y-4 animate-fade-in">
-              <h2 className="text-3xl font-extrabold text-foreground sm:text-4xl">
+            <div className="text-center space-y-4 animate-fade-in">
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground">
                 Why Choose Cropio?
               </h2>
-              <p className="mt-4 text-xl text-muted-foreground lg:mx-auto max-w-2xl">
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
                 Our platform provides everything you need to succeed in agricultural trade
               </p>
             </div>
 
-            <div className="mt-16">
-              <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto">
+            <div className="mt-16 max-w-7xl mx-auto">
+              <div className="grid grid-cols-1 gap-8 sm:gap-12 sm:grid-cols-2 lg:grid-cols-3">
                 {features.map((feature, index) => (
                   <div 
                     key={feature.title} 
-                    className="relative animate-fade-in"
+                    className="relative animate-fade-in group"
                     style={{ animationDelay: `${index * 200}ms` }}
                   >
-                    <div className="bg-card rounded-xl shadow-lg p-8 hover:shadow-xl transition-all duration-300 hover:scale-105">
+                    <div className="bg-background rounded-xl shadow-lg p-8 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                       <div className="absolute -top-6 left-6">
-                        <div className="rounded-full bg-primary p-4 shadow-lg">
+                        <div className="rounded-full bg-primary p-4 shadow-lg group-hover:bg-[#9b87f5] transition-colors duration-300">
                           <feature.icon className="h-7 w-7 text-white" />
                         </div>
                       </div>
                       <div className="mt-8">
                         <h3 className="text-xl font-bold text-foreground mb-4">{feature.title}</h3>
-                        <p className="text-lg text-muted-foreground">{feature.description}</p>
+                        <p className="text-muted-foreground">{feature.description}</p>
                       </div>
                     </div>
                   </div>
