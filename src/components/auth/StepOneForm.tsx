@@ -81,12 +81,12 @@ const StepOneForm = ({ onSubmit, onGoogleSignUp, onLinkedInSignUp }: StepOneForm
 
   return (
     <Card className="md:min-w-[500px]">
-      <CardHeader className="pb-2">
+      <CardHeader>
         <CardDescription>
           Choose your account type to get started
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4 pt-2">
+      <CardContent className="space-y-4">
         {content}
       </CardContent>
       <CardFooter>
