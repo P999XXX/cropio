@@ -36,7 +36,31 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const error = searchParams.get('error');
+  
+  // Check for error parameters in URL hash
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash) {
+      const params = new URLSearchParams(hash.substring(1));
+      const error = params.get('error');
+      const errorDescription = params.get('error_description');
+      
+      if (error) {
+        let errorMessage = "Invalid reset link. Please request a new one.";
+        
+        if (error === 'access_denied' && params.get('error_code') === 'otp_expired') {
+          errorMessage = "Your password reset link has expired. Please request a new one.";
+        } else if (errorDescription) {
+          errorMessage = decodeURIComponent(errorDescription).replace(/\+/g, ' ');
+        }
+        
+        toast.error(errorMessage, {
+          ...errorToastStyle,
+          duration: 10000, // 10 seconds
+        });
+      }
+    }
+  }, []);
 
   const form = useForm<ResetPasswordFormData>({
     resolver: zodResolver(resetPasswordSchema),
@@ -44,20 +68,6 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
       password: "",
       confirmPassword: "",
     },
-  });
-
-  // Show error toast if there's an error in URL
-  useState(() => {
-    if (error) {
-      const errorMessage = error === 'expired_token' 
-        ? "Your password reset link has expired. Please request a new one."
-        : "Invalid reset link. Please request a new password reset.";
-      
-      toast.error(errorMessage, {
-        ...errorToastStyle,
-        duration: 10000, // 10 seconds
-      });
-    }
   });
 
   const onSubmit = async (values: ResetPasswordFormData) => {
@@ -72,7 +82,7 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
 
       toast.success("Password successfully updated! Please sign in with your new password.", {
         ...successToastStyle,
-        duration: 10000,
+        duration: 10000, // 10 seconds
       });
       navigate('/signin');
     } catch (error: any) {
