@@ -28,18 +28,17 @@ const SignUp = () => {
 
   const checkEmailExists = async (email: string) => {
     try {
-      const { data, error } = await supabase
+      const { count, error } = await supabase
         .from('profiles')
-        .select('email')
-        .eq('email', email)
-        .maybeSingle();
+        .select('*', { count: 'exact', head: true })
+        .eq('email', email);
 
       if (error) {
         console.error('Error checking email:', error);
         return false;
       }
 
-      return !!data;
+      return count ? count > 0 : false;
     } catch (error) {
       console.error('Error in checkEmailExists:', error);
       return false;
@@ -66,7 +65,7 @@ const SignUp = () => {
         return;
       }
 
-      const { error: signUpError } = await supabase.auth.signUp({
+      const { data, error: signUpError } = await supabase.auth.signUp({
         email: values.email,
         password: values.password,
         options: {
@@ -84,9 +83,11 @@ const SignUp = () => {
         throw signUpError;
       }
 
-      setEmail(values.email);
-      toast.success("Successfully signed up!", successToastStyle);
-      setShowThankYou(true);
+      if (data?.user) {
+        setEmail(values.email);
+        toast.success("Successfully signed up!", successToastStyle);
+        setShowThankYou(true);
+      }
     } catch (error: any) {
       console.error("Sign up error:", error);
       toast.error(
