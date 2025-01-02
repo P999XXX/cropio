@@ -108,7 +108,7 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
     <div className={`${isMobile ? 'rounded-lg step-two-form bg-background space-y-3' : 'rounded-lg step-two-form bg-card border border-border shadow-sm p-6'} ${isMobile ? 'step-two-form-mobile' : 'step-two-form-desktop md:min-w-[500px]'}`}>
       <Button
         variant="ghost"
-        className="text-foreground hover:bg-transparent hover:text-foreground/80 p-0"
+        className="text-foreground hover:bg-transparent hover:text-foreground/80 p-0 min-h-0"
         onClick={onBack}
       >
         <ArrowLeft className="h-4 w-4 mr-1" />
