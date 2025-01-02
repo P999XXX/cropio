@@ -38,22 +38,24 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        // Get the URL parameters
-        const params = new URLSearchParams(window.location.hash.substring(1));
-        const accessToken = params.get('access_token');
-        const refreshToken = params.get('refresh_token');
+        // Get the recovery token from the URL hash
+        const fragment = new URLSearchParams(window.location.hash.substring(1));
+        const type = fragment.get('type');
+        const accessToken = fragment.get('access_token');
+        const refreshToken = fragment.get('refresh_token');
 
-        if (!accessToken || !refreshToken) {
-          console.error("Missing tokens in URL");
+        // Verify this is a recovery flow and we have the necessary tokens
+        if (type !== 'recovery' || !accessToken || !refreshToken) {
+          console.error("Invalid recovery flow");
           toast.error("Invalid password reset link. Please request a new one.");
           navigate('/signin');
           return;
         }
 
-        // Set the session with the tokens
+        // Set the session with the recovery tokens
         const { error: sessionError } = await supabase.auth.setSession({
           access_token: accessToken,
-          refresh_token: refreshToken
+          refresh_token: refreshToken,
         });
 
         if (sessionError) {
