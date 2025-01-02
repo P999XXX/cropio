@@ -5,10 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import FormInput from "@/components/forms/FormInput";
 import { ArrowLeft, ArrowRight, Upload } from "lucide-react";
-import CurrencySwitcher from "../CurrencySwitcher";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useSignupStore } from "@/store/signupStore";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 const stepFourSchema = z.object({
   bankName: z.string()
@@ -18,19 +18,21 @@ const stepFourSchema = z.object({
   bankAccountHolder: z.string().min(1, "Account holder name is required"),
   iban: z.string()
     .min(18, "IBAN must be at least 18 characters")
-    .regex(/^[A-Z0-9]+$/, "IBAN must contain only letters and numbers"),
+    .transform(val => val.toUpperCase())
+    .refine(val => /^[A-Z0-9]+$/.test(val), "IBAN must contain only letters and numbers"),
   bic: z.string()
+    .transform(val => val.toUpperCase())
     .refine(
-      (value) => {
-        const length = value.length;
-        return length === 8 || length === 11;
-      },
+      (value) => value.length === 8 || value.length === 11,
       "BIC/SWIFT must be exactly 8 or 11 characters"
     )
-    .regex(/^[A-Z]+$/, "BIC/SWIFT must contain only uppercase letters"),
+    .refine(val => /^[A-Z]+$/.test(val), "BIC/SWIFT must contain only uppercase letters"),
   vatNumber: z.string().min(1, "VAT number is required"),
   taxNumber: z.string().min(1, "Tax number is required"),
   documents: z.any(),
+  currency: z.enum(["USD", "EUR"], {
+    required_error: "Please select a currency",
+  }),
 });
 
 export type StepFourFormData = z.infer<typeof stepFourSchema>;
@@ -54,6 +56,7 @@ const StepFourForm = ({ onSubmit, onBack, isLoading }: StepFourFormProps) => {
       bic: formData.bic || "",
       vatNumber: formData.vatNumber || "",
       taxNumber: formData.taxNumber || "",
+      currency: formData.currency || "USD",
     },
   });
 
@@ -119,9 +122,22 @@ const StepFourForm = ({ onSubmit, onBack, isLoading }: StepFourFormProps) => {
             />
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-3">
             <Label>Currency</Label>
-            <CurrencySwitcher />
+            <RadioGroup
+              defaultValue={form.getValues("currency")}
+              onValueChange={(value) => form.setValue("currency", value as "USD" | "EUR")}
+              className="flex gap-4"
+            >
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="USD" id="usd" />
+                <Label htmlFor="usd" className="cursor-pointer">US Dollar (USD)</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="EUR" id="eur" />
+                <Label htmlFor="eur" className="cursor-pointer">Euro (EUR)</Label>
+              </div>
+            </RadioGroup>
           </div>
 
           <div className="space-y-2">
