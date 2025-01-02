@@ -46,7 +46,7 @@ export const handlePasswordReset = async (
     const { error: emailError } = await supabase.functions.invoke('send-reset-password', {
       body: {
         email: resetEmail,
-        resetLink: `${window.location.origin}/reset-password?token=${data?.user?.confirmation_token}`,
+        resetLink: `${window.location.origin}/reset-password`,
       },
     });
 
