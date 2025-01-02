@@ -31,31 +31,24 @@ export const handlePasswordReset = async (
   setShowResetThankYou: (value: boolean) => void
 ) => {
   try {
-    // Check if the email exists in profiles using maybeSingle() instead of single()
-    const { data: profile, error: profileError } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("email", resetEmail)
-      .maybeSingle();
+    // First try to reset the password through auth
+    const { error: resetError } = await supabase.auth.resetPasswordForEmail(
+      resetEmail,
+      {
+        redirectTo: `${window.location.origin}/reset-password`,
+      }
+    );
 
-    if (profileError) {
-      console.error("Profile check error:", profileError);
-      throw new Error("Unable to verify email address");
+    if (resetError) {
+      console.error("Reset password error:", resetError);
+      throw new Error(resetError.message);
     }
 
-    if (!profile) {
-      throw new Error("No account found with this email address");
-    }
-
-    const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
-      redirectTo: `${window.location.origin}/reset-password`,
-    });
-
-    if (error) throw error;
-
+    // If password reset was successful
     setShowForgotPassword(false);
     setShowResetThankYou(true);
     toast.success("Reset instructions sent!", successToastStyle);
+
   } catch (error: any) {
     console.error("Reset password error:", error);
     toast.error(error.message || "Failed to send reset instructions", errorToastStyle);
