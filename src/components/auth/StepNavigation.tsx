@@ -63,7 +63,7 @@ const StepNavigation = ({
               {index < steps.length - 1 && (
                 <div
                   className={cn(
-                    "w-6 md:w-10 h-[2px] mx-1 md:mx-2 -mt-5",
+                    "hidden md:block w-6 md:w-10 h-[2px] mx-1 md:mx-2 -mt-5",
                     index + 1 < currentStep ? "bg-primary" : "bg-secondary"
                   )}
                 />
