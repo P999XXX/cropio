@@ -24,22 +24,22 @@ const Index = () => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background w-full">
         <Navbar />
         
         {/* Hero Section */}
-        <div className="pt-24 pb-20 sm:pt-32 sm:pb-24">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="pt-24 pb-20 sm:pt-32 sm:pb-24 w-full">
+          <div className="w-full px-4 sm:px-6 lg:px-8">
             <div className="text-center space-y-8 animate-fade-in">
               <h1 className="text-3xl tracking-tight font-extrabold text-foreground sm:text-4xl md:text-5xl">
                 <span className="block mb-2">The Global B2B Marketplace for</span>
                 <span className="block text-primary">Agricultural Products</span>
               </h1>
-              <p className="mt-3 max-w-md mx-auto text-lg text-muted-foreground sm:text-xl md:mt-5 md:text-2xl md:max-w-3xl">
+              <p className="mt-3 mx-auto text-lg text-muted-foreground sm:text-xl md:mt-5 md:text-2xl max-w-4xl">
                 Connect directly with verified suppliers and buyers worldwide. 
                 Streamline your agricultural trade with our secure platform.
               </p>
-              <div className="mt-8 max-w-md mx-auto sm:flex sm:justify-center md:mt-10">
+              <div className="mt-8 sm:flex sm:justify-center md:mt-10">
                 <div className="rounded-md shadow-lg">
                   <Link
                     to="/signup"
@@ -55,19 +55,19 @@ const Index = () => {
         </div>
 
         {/* Features Section */}
-        <div className="py-16 bg-secondary">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="py-16 bg-secondary w-full">
+          <div className="w-full px-4 sm:px-6 lg:px-8">
             <div className="lg:text-center space-y-4 animate-fade-in">
               <h2 className="text-3xl font-extrabold text-foreground sm:text-4xl">
                 Why Choose Cropio?
               </h2>
-              <p className="mt-4 max-w-2xl text-xl text-muted-foreground lg:mx-auto">
+              <p className="mt-4 text-xl text-muted-foreground lg:mx-auto max-w-2xl">
                 Our platform provides everything you need to succeed in agricultural trade
               </p>
             </div>
 
             <div className="mt-16">
-              <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto">
                 {features.map((feature, index) => (
                   <div 
                     key={feature.title} 
