@@ -15,12 +15,37 @@ import { UseFormReturn } from "react-hook-form";
 import { countries } from "../phone/countries";
 import ReactCountryFlag from "react-country-flag";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface CountrySelectProps {
   form: UseFormReturn<any>;
 }
 
 const CountrySelect = ({ form }: CountrySelectProps) => {
+  useEffect(() => {
+    const detectCountry = async () => {
+      try {
+        const { data, error } = await supabase.functions.invoke('detect-country');
+        
+        if (error) throw error;
+        
+        if (data?.country) {
+          const countryCode = data.country;
+          const country = countries.find(c => c.country === countryCode);
+          if (country) {
+            form.setValue('companyCountry', countryCode);
+          }
+        }
+      } catch (error) {
+        console.debug('Could not detect country, using default:', error);
+        form.setValue('companyCountry', 'DE');
+      }
+    };
+
+    detectCountry();
+  }, [form]);
+
   return (
     <FormField
       control={form.control}
