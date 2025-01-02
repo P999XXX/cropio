@@ -50,9 +50,9 @@ const PasswordInput = ({ form, name, label, description, className }: PasswordIn
               </button>
             </div>
           </FormControl>
-          {description && (
-            <FormDescription className="text-xs text-muted-foreground">{description}</FormDescription>
-          )}
+          <FormDescription className="text-xs text-muted-foreground">
+            Password must be at least 8 characters and contain uppercase, lowercase, and numbers
+          </FormDescription>
           <FormErrorMessage message={fieldState.error?.message} />
         </FormItem>
       )}
