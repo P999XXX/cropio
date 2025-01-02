@@ -27,6 +27,7 @@ const CompanyEmailFields = ({ form }: CompanyEmailFieldsProps) => {
         return;
       }
 
+      // If data exists, the email is already registered
       if (data) {
         setEmailExists(true);
         form.setError('email', {
@@ -35,7 +36,10 @@ const CompanyEmailFields = ({ form }: CompanyEmailFieldsProps) => {
         });
       } else {
         setEmailExists(false);
-        form.clearErrors('email');
+        // Only clear the email error if it's the "already registered" error
+        if (form.formState.errors.email?.type === 'manual') {
+          form.clearErrors('email');
+        }
       }
     } catch (error) {
       console.error('Error checking email:', error);
@@ -45,7 +49,11 @@ const CompanyEmailFields = ({ form }: CompanyEmailFieldsProps) => {
   useEffect(() => {
     const email = form.watch('email');
     if (email && email.includes('@') && email.includes('.')) {
-      checkEmailExists(email);
+      const debounceTimer = setTimeout(() => {
+        checkEmailExists(email);
+      }, 500); // Debounce the check to avoid too many requests
+
+      return () => clearTimeout(debounceTimer);
     }
   }, [form.watch('email')]);
 
