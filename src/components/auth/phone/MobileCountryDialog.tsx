@@ -20,6 +20,7 @@ interface MobileCountryDialogProps {
   selectedValue?: string;
   onSelect: (country: string) => void;
   title?: string;
+  showPrefix?: boolean;
 }
 
 const MobileCountryDialog = ({
@@ -30,7 +31,8 @@ const MobileCountryDialog = ({
   filteredCountries,
   selectedValue,
   onSelect,
-  title = "Select Country"
+  title = "Select Country",
+  showPrefix = true
 }: MobileCountryDialogProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -66,7 +68,7 @@ const MobileCountryDialog = ({
                   ${selectedValue === country.country ? 'bg-secondary' : 'hover:bg-secondary/50'}`}
                 onClick={() => onSelect(country.country)}
               >
-                <CountryDisplay country={country} />
+                <CountryDisplay country={country} showPrefix={showPrefix} />
               </div>
             ))}
           </div>

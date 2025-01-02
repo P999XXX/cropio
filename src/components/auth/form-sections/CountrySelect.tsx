@@ -61,7 +61,7 @@ const CountrySelect = ({ form }: CountrySelectProps) => {
               onClick={() => setIsOpen(true)}
             >
               {selectedCountry ? (
-                <CountryDisplay country={selectedCountry} />
+                <CountryDisplay country={selectedCountry} showPrefix={false} />
               ) : (
                 <span>Select a country</span>
               )}
@@ -101,7 +101,7 @@ const CountrySelect = ({ form }: CountrySelectProps) => {
                   value={country.country}
                   className="text-[0.875rem]"
                 >
-                  <CountryDisplay country={country} />
+                  <CountryDisplay country={country} showPrefix={false} />
                 </SelectItem>
               ))}
             </SelectContent>
