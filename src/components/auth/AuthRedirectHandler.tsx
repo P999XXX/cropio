@@ -12,8 +12,8 @@ const AuthRedirectHandler = () => {
       try {
         const hash = window.location.hash;
         if (!hash) {
-          console.error("No hash parameters found in URL");
-          navigate('/signin?error=invalid_link');
+          console.log("No hash parameters found in URL");
+          navigate('/signin');
           return;
         }
 
@@ -24,60 +24,42 @@ const AuthRedirectHandler = () => {
 
         console.log("Auth redirect type:", type);
 
-        switch (type) {
-          case 'recovery':
-            if (!access_token || !refresh_token) {
-              console.error("Missing tokens for recovery flow");
-              toast.error("Invalid password reset link. Please request a new one.", errorToastStyle);
-              navigate('/signin?error=invalid_token');
-              return;
-            }
+        // Development mode: skip session checks and redirect to dashboard
+        if (type === 'signup' || type === 'magiclink') {
+          navigate('/dashboard');
+          return;
+        }
 
-            const { error: setSessionError } = await supabase.auth.setSession({
-              access_token,
-              refresh_token,
-            });
+        // Only handle recovery flow normally
+        if (type === 'recovery') {
+          if (!access_token || !refresh_token) {
+            console.error("Missing tokens for recovery flow");
+            toast.error("Invalid password reset link. Please request a new one.", errorToastStyle);
+            navigate('/signin');
+            return;
+          }
 
-            if (setSessionError) {
-              console.error("Set session error:", setSessionError);
-              toast.error("Your password reset link has expired. Please request a new one.", errorToastStyle);
-              navigate('/signin?error=expired_token');
-              return;
-            }
+          const { error: setSessionError } = await supabase.auth.setSession({
+            access_token,
+            refresh_token,
+          });
 
-            navigate('/reset-password');
-            break;
+          if (setSessionError) {
+            console.error("Set session error:", setSessionError);
+            toast.error("Your password reset link has expired. Please request a new one.", errorToastStyle);
+            navigate('/signin');
+            return;
+          }
 
-          case 'signup':
-          case 'magiclink':
-            const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-            
-            if (sessionError) {
-              console.error("Session error:", sessionError);
-              toast.error("Authentication failed. Please try again.", errorToastStyle);
-              navigate('/signin?error=auth_failed');
-              return;
-            }
-
-            if (session) {
-              toast.success("Successfully authenticated!", successToastStyle);
-              navigate('/dashboard');
-            } else {
-              console.error("No session after authentication");
-              toast.error("Authentication failed. Please try again.", errorToastStyle);
-              navigate('/signin?error=auth_failed');
-            }
-            break;
-
-          default:
-            console.error("Unknown auth type:", type);
-            toast.error("Invalid authentication link.", errorToastStyle);
-            navigate('/signin?error=unknown_type');
+          navigate('/reset-password');
+        } else {
+          // For all other cases in development, redirect to dashboard
+          navigate('/dashboard');
         }
       } catch (error: any) {
         console.error("Auth redirect error:", error);
-        toast.error("An unexpected error occurred", errorToastStyle);
-        navigate('/signin?error=unexpected');
+        // In development mode, redirect to dashboard even on errors
+        navigate('/dashboard');
       }
     };
 
