@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 interface ForgotPasswordDialogProps {
   open: boolean;
@@ -50,7 +51,6 @@ const ForgotPasswordDialog = ({
       const errorMessage = error.message || "An error occurred while resetting password";
       setError(errorMessage);
       
-      // Check if it's a rate limit error from the error message or body
       if (
         errorMessage.includes('Too many reset attempts') || 
         (error.body && error.body.includes('over_email_send_rate_limit'))
@@ -82,15 +82,17 @@ const ForgotPasswordDialog = ({
                 setError("");
                 setIsRateLimited(false);
               }}
-              className={`flex h-10 w-full rounded-md border bg-secondary px-3 py-2 text-[0.775rem] ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${error ? 'border-destructive' : 'border-input'}`}
+              className={`flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${error ? 'border-destructive' : 'border-input'}`}
             />
             {error && (
-              <Alert variant="destructive" className="mt-2">
+              <Alert variant="destructive" className="border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive">
+                <AlertCircle className="h-4 w-4" />
                 <AlertDescription>{error}</AlertDescription>
               </Alert>
             )}
             {isRateLimited && (
-              <Alert className="mt-2">
+              <Alert className="border-warning/50 text-warning dark:border-warning [&>svg]:text-warning">
+                <AlertCircle className="h-4 w-4" />
                 <AlertDescription>
                   Please wait a few minutes before requesting another reset email.
                 </AlertDescription>

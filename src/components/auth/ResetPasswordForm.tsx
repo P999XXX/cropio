@@ -10,6 +10,8 @@ import PasswordInput from "@/components/auth/PasswordInput";
 import { toast } from "sonner";
 import { errorToastStyle, successToastStyle } from "@/utils/toast-styles";
 import { useNavigate } from "react-router-dom";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 interface ResetPasswordFormProps {
   isMobile: boolean;
@@ -35,6 +37,7 @@ type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
 const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [sessionChecked, setSessionChecked] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const form = useForm<ResetPasswordFormData>({
@@ -52,7 +55,7 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
 
         if (sessionError || !session) {
           console.error("Session error:", sessionError);
-          toast.error("Your password reset link has expired. Please request a new one.", errorToastStyle);
+          setError("Your password reset link has expired. Please request a new one.");
           navigate('/signin?error=expired_token');
           return;
         }
@@ -61,7 +64,7 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
         setSessionChecked(true);
       } catch (error) {
         console.error("Session check error:", error);
-        toast.error("An error occurred. Please try again.", errorToastStyle);
+        setError("An error occurred. Please try again.");
         navigate('/signin?error=unexpected');
       }
     };
@@ -71,7 +74,7 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
 
   const onSubmit = async (values: ResetPasswordFormData) => {
     if (!sessionChecked) {
-      toast.error("Please wait while we verify your session.", errorToastStyle);
+      setError("Please wait while we verify your session.");
       return;
     }
 
@@ -90,6 +93,7 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
       navigate('/signin');
     } catch (error: any) {
       console.error("Password update error:", error);
+      setError(error.message || "Failed to update password. Please try again.");
       toast.error(error.message || "Failed to update password. Please try again.", errorToastStyle);
     } finally {
       setIsLoading(false);
@@ -99,6 +103,12 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
   const formContent = (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        {error && (
+          <Alert variant="destructive" className="border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
         <PasswordInput
           form={form}
           name="password"
