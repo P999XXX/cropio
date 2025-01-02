@@ -35,14 +35,33 @@ const SignUp = () => {
     setStep(2);
   };
 
-  const handleEmailExists = (email: string) => {
-    setEmail(email);
-    setShowErrorDialog(true);
+  const checkEmailExists = async (email: string) => {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('email')
+      .eq('email', email)
+      .maybeSingle();
+
+    if (error) {
+      console.error('Error checking email:', error);
+      return false;
+    }
+
+    return !!data;
   };
 
   const handleStepTwo = async (values: any) => {
     setIsLoading(true);
     try {
+      // Check if email exists
+      const emailExists = await checkEmailExists(values.email);
+      if (emailExists) {
+        setEmail(values.email);
+        setShowErrorDialog(true);
+        setIsLoading(false);
+        return;
+      }
+
       const { error } = await supabase.auth.signUp({
         email: values.email,
         password: values.password,
@@ -102,7 +121,6 @@ const SignUp = () => {
                     onSubmit={handleStepTwo}
                     isLoading={isLoading}
                     onBack={handleBack}
-                    onEmailExists={handleEmailExists}
                   />
                 )}
               </div>
@@ -119,7 +137,6 @@ const SignUp = () => {
                     onSubmit={handleStepTwo}
                     isLoading={isLoading}
                     onBack={handleBack}
-                    onEmailExists={handleEmailExists}
                   />
                 )}
               </>

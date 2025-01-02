@@ -1,28 +1,51 @@
 import React, { useState } from 'react';
+import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { CardDescription } from "@/components/ui/card";
+import FormInput from "@/components/forms/FormInput";
+import PasswordInput from "./PasswordInput";
 import { ArrowLeft } from "lucide-react";
 import PhoneInput from "./PhoneInput";
+import AgreementCheckbox from "./AgreementCheckbox";
 import { useIsMobile } from "@/hooks/use-mobile";
-import PasswordInput from "./PasswordInput";
-import PersonalInfoFields from "./form-sections/PersonalInfoFields";
-import CompanyEmailFields from "./form-sections/CompanyEmailFields";
-import AgreementSection from "./form-sections/AgreementSection";
-import { stepTwoSchema, type StepTwoFormData } from "./validation/stepTwoSchema";
+
+const stepTwoSchema = z.object({
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  companyName: z.string().min(1, "Company name is required"),
+  email: z.string().email("Invalid email address"),
+  password: z.string()
+    .min(8, "Password must be at least 8 characters")
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+    .regex(/[0-9]/, "Password must contain at least one number"),
+  confirmPassword: z.string(),
+  phoneNumber: z.string().min(1, "Phone number is required"),
+  countryCode: z.string().min(1, "Country code is required"),
+  acceptTerms: z.boolean().refine((val) => val === true, {
+    message: "You must accept the terms and conditions",
+  }),
+  acceptPrivacy: z.boolean().refine((val) => val === true, {
+    message: "You must accept the privacy policy",
+  }),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+});
+
+export type StepTwoFormData = z.infer<typeof stepTwoSchema>;
 
 interface StepTwoFormProps {
   onSubmit: (values: StepTwoFormData) => Promise<void>;
   isLoading: boolean;
   onBack: () => void;
-  onEmailExists: (email: string) => void;
 }
 
-const StepTwoForm = ({ onSubmit, isLoading, onBack, onEmailExists }: StepTwoFormProps) => {
+const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
   const isMobile = useIsMobile();
-  const [isCheckingEmail, setIsCheckingEmail] = useState(false);
   const form = useForm<StepTwoFormData>({
     resolver: zodResolver(stepTwoSchema),
     defaultValues: {
@@ -42,17 +65,39 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack, onEmailExists }: StepTwoForm
   const formContent = (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <PersonalInfoFields form={form} />
-
-        <CompanyEmailFields 
-          form={form} 
-          onEmailExists={onEmailExists}
-          setIsCheckingEmail={setIsCheckingEmail}
-        />
-
-        <PhoneInput form={form} />
+        <div className="grid gap-3 md:grid-cols-2">
+          <FormInput
+            form={form}
+            name="firstName"
+            label="First Name"
+            placeholder="Enter your first name"
+          />
+          <FormInput
+            form={form}
+            name="lastName"
+            label="Last Name"
+            placeholder="Enter your last name"
+          />
+        </div>
 
         <div className="space-y-3">
+          <FormInput
+            form={form}
+            name="companyName"
+            label="Company Name"
+            placeholder="Enter your company name"
+          />
+
+          <FormInput
+            form={form}
+            name="email"
+            label="Email"
+            type="email"
+            placeholder="Enter your email"
+          />
+
+          <PhoneInput form={form} />
+
           <PasswordInput
             form={form}
             name="password"
@@ -67,12 +112,25 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack, onEmailExists }: StepTwoForm
           />
         </div>
 
-        <AgreementSection form={form} />
+        <div className="space-y-2 mt-3">
+          <AgreementCheckbox
+            form={form}
+            name="acceptTerms"
+            linkText="Terms and Conditions"
+            linkHref="/terms"
+          />
+          <AgreementCheckbox
+            form={form}
+            name="acceptPrivacy"
+            linkText="Privacy Policy"
+            linkHref="/privacy"
+          />
+        </div>
 
         <Button 
           type="submit" 
           className="w-full bg-primary text-primary-foreground hover:bg-primary/90 mt-4" 
-          disabled={isLoading || isCheckingEmail}
+          disabled={isLoading}
         >
           {isLoading ? "Creating account..." : "Create Account"}
         </Button>
