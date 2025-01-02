@@ -1,4 +1,4 @@
-import { Card, CardContent, CardDescription, CardFooter, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import AuthProviders from "./AuthProviders";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -82,9 +82,6 @@ const StepOneForm = ({ onSubmit, onGoogleSignUp, onLinkedInSignUp }: StepOneForm
   return (
     <Card className="md:min-w-[500px]">
       <CardHeader>
-        <CardDescription>
-          Choose your account type to get started
-        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         {content}
