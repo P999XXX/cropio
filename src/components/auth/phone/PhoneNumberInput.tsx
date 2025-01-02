@@ -1,13 +1,13 @@
 import { FormControl, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
-import { StepTwoFormData } from "../StepTwoForm";
+import { StepThreeFormData } from "../StepThreeForm";
 import { AsYouType, CountryCode, parsePhoneNumber } from 'libphonenumber-js';
 import { countryToDigits } from "./countryData";
 import FormErrorMessage from "@/components/forms/FormErrorMessage";
 
 interface PhoneNumberInputProps {
-  form: UseFormReturn<StepTwoFormData>;
+  form: UseFormReturn<StepThreeFormData>;
   selectedCountry: CountryCode;
 }
 

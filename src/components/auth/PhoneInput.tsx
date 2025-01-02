@@ -1,6 +1,6 @@
 import { FormLabel } from "@/components/ui/form";
 import { UseFormReturn } from "react-hook-form";
-import { StepTwoFormData } from "./StepTwoForm";
+import { StepThreeFormData } from "./StepThreeForm";
 import { countries } from "./phone/countries";
 import { useEffect, useState } from "react";
 import { CountryCode } from 'libphonenumber-js';
@@ -9,7 +9,7 @@ import CountrySelector from "./phone/CountrySelector";
 import { supabase } from "@/integrations/supabase/client";
 
 interface PhoneInputProps {
-  form: UseFormReturn<StepTwoFormData>;
+  form: UseFormReturn<StepThreeFormData>;
 }
 
 const PhoneInput = ({ form }: PhoneInputProps) => {
@@ -48,7 +48,6 @@ const PhoneInput = ({ form }: PhoneInputProps) => {
 
   const handleCountryChange = (countryCode: CountryCode) => {
     setUserCountry(countryCode);
-    // Clear the phone number when country changes to avoid validation issues
     form.setValue('phoneNumber', '');
   };
 

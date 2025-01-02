@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { UseFormReturn } from "react-hook-form";
-import { StepTwoFormData } from "../StepTwoForm";
+import { StepThreeFormData } from "../StepThreeForm";
 import { countries } from "./countries";
 import CountryDisplay from "./CountryDisplay";
 import { CountryCode } from 'libphonenumber-js';
@@ -29,7 +29,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 interface CountrySelectorProps {
-  form: UseFormReturn<StepTwoFormData>;
+  form: UseFormReturn<StepThreeFormData>;
   onCountryChange: (countryCode: CountryCode) => void;
   selectedCountry: typeof countries[0] | undefined;
 }
