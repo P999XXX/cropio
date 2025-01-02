@@ -47,8 +47,7 @@ const SignInForm = ({ onSubmit, isLoading, onForgotPassword }: SignInFormProps) 
 
         <Button 
           type="submit" 
-          variant="primary" 
-          className="w-full text-[13px] mt-6" 
+          className="w-full text-[13px] mt-6 auth-button" 
           disabled={isLoading}
         >
           {isLoading ? "Signing in..." : "Sign in"}

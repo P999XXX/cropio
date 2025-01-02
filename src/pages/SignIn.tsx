@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -12,9 +12,7 @@ import { SignInFormData } from "@/components/auth/SignInForm";
 import { handleGoogleSignIn, handleLinkedInSignIn, handlePasswordReset } from "@/utils/auth-handlers";
 import { errorToastStyle } from "@/utils/toast-styles";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { useAuthSession } from "@/hooks/useAuthSession";
 import { useLoadingStates } from "@/hooks/useLoadingStates";
-import { getErrorMessage } from "@/utils/auth-error-handler";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 
@@ -22,16 +20,14 @@ const SignIn = () => {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [showResetThankYou, setShowResetThankYou] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
-  const [firstName, setFirstName] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const { loadingStates, setLoading } = useLoadingStates();
   const [searchParams] = useSearchParams();
 
-  useAuthSession();
-
-  useEffect(() => {
+  // Check for error params and set appropriate messages
+  useState(() => {
     const error = searchParams.get('error');
     if (error) {
       let message = "An error occurred. Please try again.";
@@ -60,30 +56,10 @@ const SignIn = () => {
     }
   }, [searchParams, navigate]);
 
-  useEffect(() => {
-    const getFirstName = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user) {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('first_name')
-          .eq('id', session.user.id)
-          .single();
-        
-        if (profile?.first_name) {
-          setFirstName(profile.first_name);
-        }
-      }
-    };
-    
-    getFirstName();
-  }, []);
-
   const handleSignIn = async (values: SignInFormData) => {
     setLoading('isSigningIn', true);
-    
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email: values.email,
         password: values.password,
       });
@@ -91,13 +67,14 @@ const SignIn = () => {
       if (error) {
         if (error.message.includes('Invalid login credentials')) {
           toast.error("Invalid email or password. Please try again.", errorToastStyle);
-          values.password = '';
         } else {
-          toast.error(getErrorMessage(error), errorToastStyle);
-          values.email = '';
-          values.password = '';
+          toast.error(error.message, errorToastStyle);
         }
         throw error;
+      }
+
+      if (data.session) {
+        navigate('/dashboard');
       }
 
     } catch (error: any) {
@@ -118,15 +95,14 @@ const SignIn = () => {
       );
     } catch (error: any) {
       console.error("Reset password error:", error);
-      toast.error(getErrorMessage(error), errorToastStyle);
+      toast.error(error.message, errorToastStyle);
     } finally {
       setLoading('isResettingPassword', false);
     }
   };
 
-  const handleForgotPassword = async () => {
+  const handleForgotPassword = () => {
     setShowForgotPassword(true);
-    return Promise.resolve();
   };
 
   return (
@@ -152,7 +128,7 @@ const SignIn = () => {
             )}
             <div className={`space-y-2 mb-8 ${isMobile ? "text-left" : "text-center"}`}>
               <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">
-                {firstName ? `Welcome back ${firstName}!` : "Welcome back!"}
+                Welcome back!
               </h1>
               <p className="text-[14px] text-muted-foreground">
                 Please sign in to continue

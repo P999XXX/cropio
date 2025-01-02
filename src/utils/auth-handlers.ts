@@ -35,7 +35,7 @@ export const handlePasswordReset = async (
     const { error: resetError } = await supabase.auth.resetPasswordForEmail(
       resetEmail,
       {
-        redirectTo: 'https://cropio.app/auth/callback#type=recovery',
+        redirectTo: `${window.location.origin}/auth/callback#type=recovery`,
       }
     );
 
