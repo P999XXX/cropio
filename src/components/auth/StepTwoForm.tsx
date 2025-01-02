@@ -8,12 +8,39 @@ import PasswordInput from "./PasswordInput";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import AgreementCheckbox from "./AgreementCheckbox";
 import { useSignupStore } from "@/store/signupStore";
-import { useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { errorToastStyle } from "@/utils/toast-styles";
+
+const nameRegex = /^[a-zA-Z]{3,}$/;
 
 const stepTwoSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  email: z.string().email("Invalid email address"),
+  firstName: z.string()
+    .min(3, "First name must be at least 3 characters")
+    .regex(nameRegex, "First name must contain only letters and be at least 3 characters"),
+  lastName: z.string()
+    .min(3, "Last name must be at least 3 characters")
+    .regex(nameRegex, "Last name must contain only letters and be at least 3 characters"),
+  email: z.string()
+    .email("Invalid email address")
+    .refine(async (email) => {
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('email')
+          .eq('email', email)
+          .single();
+        
+        if (error && error.code !== 'PGRST116') {
+          console.error("Email check error:", error);
+          return true; // Allow form submission if check fails
+        }
+        return !data; // Return true if email doesn't exist
+      } catch (error) {
+        console.error("Email validation error:", error);
+        return true; // Allow form submission if check fails
+      }
+    }, "This email is already registered"),
   password: z.string()
     .min(8, "Password must be at least 8 characters")
     .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
@@ -55,9 +82,14 @@ const StepTwoForm = ({ onSubmit, onBack, isLoading }: StepTwoFormProps) => {
     },
   });
 
-  const handleSubmit = (values: StepTwoFormData) => {
-    updateFormData(values);
-    onSubmit(values);
+  const handleSubmit = async (values: StepTwoFormData) => {
+    try {
+      updateFormData(values);
+      await onSubmit(values);
+    } catch (error: any) {
+      console.error("Form submission error:", error);
+      toast.error(error.message || "An error occurred during signup", errorToastStyle);
+    }
   };
 
   return (
