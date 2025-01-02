@@ -52,7 +52,7 @@ const PhoneNumberInput = ({ form, selectedCountry }: PhoneNumberInputProps) => {
             }
           })}
           onChange={(e) => handlePhoneNumberChange(e.target.value)}
-          className={`auth-input ${form.formState.errors.phoneNumber ? 'border-destructive' : ''}`}
+          className={`auth-input text-[0.875rem] ${form.formState.errors.phoneNumber ? 'border-destructive' : ''}`}
         />
       </FormControl>
       <FormErrorMessage message={form.formState.errors.phoneNumber?.message} />
