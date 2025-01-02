@@ -8,6 +8,7 @@ import { ArrowLeft, ArrowRight, Upload } from "lucide-react";
 import CurrencySwitcher from "../CurrencySwitcher";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useSignupStore } from "@/store/signupStore";
 
 const stepFourSchema = z.object({
   bankName: z.string().min(1, "Bank name is required"),
@@ -29,24 +30,31 @@ interface StepFourFormProps {
 }
 
 const StepFourForm = ({ onSubmit, onBack, isLoading }: StepFourFormProps) => {
+  const { formData, updateFormData } = useSignupStore();
+
   const form = useForm<StepFourFormData>({
     resolver: zodResolver(stepFourSchema),
     defaultValues: {
-      bankName: "",
-      bankAddress: "",
-      bankAccountHolder: "",
-      iban: "",
-      bic: "",
-      vatNumber: "",
-      taxNumber: "",
+      bankName: formData.bankName || "",
+      bankAddress: formData.bankAddress || "",
+      bankAccountHolder: formData.bankAccountHolder || "",
+      iban: formData.iban || "",
+      bic: formData.bic || "",
+      vatNumber: formData.vatNumber || "",
+      taxNumber: formData.taxNumber || "",
     },
   });
+
+  const handleSubmit = (values: StepFourFormData) => {
+    updateFormData(values);
+    onSubmit(values);
+  };
 
   return (
     <div className="space-y-6 md:bg-card md:p-6 md:rounded-lg md:border md:border-border md:max-w-2xl md:mx-auto">
       <h3 className="text-lg font-semibold text-left md:text-center">Bank & Tax Information</h3>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
             <FormInput
               form={form}
@@ -133,16 +141,7 @@ const StepFourForm = ({ onSubmit, onBack, isLoading }: StepFourFormProps) => {
             </div>
           </div>
 
-          <div className="flex flex-col-reverse sm:flex-row sm:justify-between gap-3 sm:gap-4 pt-2">
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={onBack}
-              className="w-full sm:w-auto order-2 sm:order-1"
-            >
-              <ArrowLeft className="h-4 w-4 mr-1" />
-              Back
-            </Button>
+          <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:gap-4 pt-2">
             <Button 
               type="submit" 
               variant="primary"
@@ -151,6 +150,15 @@ const StepFourForm = ({ onSubmit, onBack, isLoading }: StepFourFormProps) => {
             >
               {isLoading ? "Creating account..." : "Complete Registration"}
               <ArrowRight className="h-4 w-4 ml-1" />
+            </Button>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={onBack}
+              className="w-full sm:w-auto order-2 sm:order-1"
+            >
+              <ArrowLeft className="h-4 w-4 mr-1" />
+              Back
             </Button>
           </div>
         </form>

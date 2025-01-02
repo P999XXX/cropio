@@ -7,6 +7,7 @@ import FormInput from "@/components/forms/FormInput";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import PhoneInput from "./PhoneInput";
 import CountrySelect from "./form-sections/CountrySelect";
+import { useSignupStore } from "@/store/signupStore";
 
 const stepThreeSchema = z.object({
   companyName: z.string().min(1, "Company name is required"),
@@ -27,24 +28,31 @@ interface StepThreeFormProps {
 }
 
 const StepThreeForm = ({ onSubmit, onBack, isLoading }: StepThreeFormProps) => {
+  const { formData, updateFormData } = useSignupStore();
+
   const form = useForm<StepThreeFormData>({
     resolver: zodResolver(stepThreeSchema),
     defaultValues: {
-      companyName: "",
-      companyStreet: "",
-      companyPostalCode: "",
-      companyPlace: "",
-      companyCountry: "",
-      phoneNumber: "",
-      countryCode: "",
+      companyName: formData.companyName || "",
+      companyStreet: formData.companyStreet || "",
+      companyPostalCode: formData.companyPostalCode || "",
+      companyPlace: formData.companyPlace || "",
+      companyCountry: formData.companyCountry || "",
+      phoneNumber: formData.phoneNumber || "",
+      countryCode: formData.countryCode || "",
     },
   });
+
+  const handleSubmit = (values: StepThreeFormData) => {
+    updateFormData(values);
+    onSubmit(values);
+  };
 
   return (
     <div className="space-y-6 md:bg-card md:p-6 md:rounded-lg md:border md:border-border md:max-w-2xl md:mx-auto">
       <h3 className="text-lg font-semibold text-left md:text-center">Company Information</h3>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
           <FormInput
             form={form}
             name="companyName"
@@ -78,16 +86,7 @@ const StepThreeForm = ({ onSubmit, onBack, isLoading }: StepThreeFormProps) => {
 
           <PhoneInput form={form} />
 
-          <div className="flex flex-col-reverse sm:flex-row sm:justify-between gap-3 sm:gap-4 pt-2">
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={onBack}
-              className="w-full sm:w-auto order-2 sm:order-1"
-            >
-              <ArrowLeft className="h-4 w-4 mr-1" />
-              Back
-            </Button>
+          <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:gap-4 pt-2">
             <Button 
               type="submit" 
               variant="primary"
@@ -96,6 +95,15 @@ const StepThreeForm = ({ onSubmit, onBack, isLoading }: StepThreeFormProps) => {
             >
               {isLoading ? "Saving..." : "Continue"}
               <ArrowRight className="h-4 w-4 ml-1" />
+            </Button>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={onBack}
+              className="w-full sm:w-auto order-2 sm:order-1"
+            >
+              <ArrowLeft className="h-4 w-4 mr-1" />
+              Back
             </Button>
           </div>
         </form>

@@ -7,6 +7,8 @@ import FormInput from "@/components/forms/FormInput";
 import PasswordInput from "./PasswordInput";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import AgreementCheckbox from "./AgreementCheckbox";
+import { useSignupStore } from "@/store/signupStore";
+import { useEffect } from "react";
 
 const stepTwoSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -38,24 +40,31 @@ interface StepTwoFormProps {
 }
 
 const StepTwoForm = ({ onSubmit, onBack, isLoading }: StepTwoFormProps) => {
+  const { formData, updateFormData } = useSignupStore();
+  
   const form = useForm<StepTwoFormData>({
     resolver: zodResolver(stepTwoSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      acceptTerms: false,
-      acceptPrivacy: false,
+      firstName: formData.firstName || "",
+      lastName: formData.lastName || "",
+      email: formData.email || "",
+      password: formData.password || "",
+      confirmPassword: formData.confirmPassword || "",
+      acceptTerms: formData.acceptTerms || false,
+      acceptPrivacy: formData.acceptPrivacy || false,
     },
   });
+
+  const handleSubmit = (values: StepTwoFormData) => {
+    updateFormData(values);
+    onSubmit(values);
+  };
 
   return (
     <div className="space-y-6 md:bg-card md:p-6 md:rounded-lg md:border md:border-border md:max-w-2xl md:mx-auto">
       <h3 className="text-lg font-semibold text-left md:text-center">Personal Information</h3>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
             <FormInput
               form={form}
@@ -84,6 +93,7 @@ const StepTwoForm = ({ onSubmit, onBack, isLoading }: StepTwoFormProps) => {
               form={form}
               name="password"
               label="Password"
+              description="Password must be at least 8 characters and contain uppercase, lowercase, and numbers"
             />
             <PasswordInput
               form={form}
@@ -107,16 +117,7 @@ const StepTwoForm = ({ onSubmit, onBack, isLoading }: StepTwoFormProps) => {
             />
           </div>
 
-          <div className="flex flex-col-reverse sm:flex-row sm:justify-between gap-3 sm:gap-4 pt-2">
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={onBack}
-              className="w-full sm:w-auto order-2 sm:order-1"
-            >
-              <ArrowLeft className="h-4 w-4 mr-1" />
-              Back
-            </Button>
+          <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:gap-4 pt-2">
             <Button 
               type="submit" 
               variant="primary"
@@ -125,6 +126,15 @@ const StepTwoForm = ({ onSubmit, onBack, isLoading }: StepTwoFormProps) => {
             >
               {isLoading ? "Creating account..." : "Continue"}
               <ArrowRight className="h-4 w-4 ml-1" />
+            </Button>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={onBack}
+              className="w-full sm:w-auto order-2 sm:order-1"
+            >
+              <ArrowLeft className="h-4 w-4 mr-1" />
+              Back
             </Button>
           </div>
         </form>
