@@ -34,8 +34,6 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [sessionChecked, setSessionChecked] = useState(false);
-  const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [refreshToken, setRefreshToken] = useState<string | null>(null);
 
   useEffect(() => {
     const checkSession = async () => {
@@ -46,6 +44,8 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
         const access_token = fragment.get('access_token');
         const refresh_token = fragment.get('refresh_token');
 
+        console.log("Recovery flow check:", { type, hasAccessToken: !!access_token, hasRefreshToken: !!refresh_token });
+
         // Verify this is a recovery flow and we have the necessary tokens
         if (type !== 'recovery' || !access_token || !refresh_token) {
           console.error("Invalid recovery flow");
@@ -54,22 +54,20 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
           return;
         }
 
-        setAccessToken(access_token);
-        setRefreshToken(refresh_token);
-
         // Set the session with the recovery tokens
-        const { data, error: sessionError } = await supabase.auth.setSession({
+        const { data: { session }, error: sessionError } = await supabase.auth.setSession({
           access_token,
           refresh_token,
         });
 
-        if (sessionError || !data.session) {
+        if (sessionError || !session) {
           console.error("Session error:", sessionError);
           toast.error("Your password reset link has expired. Please request a new one.");
           navigate('/signin');
           return;
         }
 
+        console.log("Session established successfully");
         setSessionChecked(true);
       } catch (error) {
         console.error("Session check error:", error);
@@ -90,24 +88,21 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
   });
 
   const onSubmit = async (values: ResetPasswordFormData) => {
-    if (!sessionChecked || !accessToken || !refreshToken) {
+    if (!sessionChecked) {
       toast.error("Please wait while we verify your session.");
       return;
     }
 
     setIsLoading(true);
     try {
-      // First ensure we have a valid session
-      const { data: sessionData, error: sessionError } = await supabase.auth.setSession({
-        access_token: accessToken,
-        refresh_token: refreshToken,
-      });
+      // Get the current session
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
 
-      if (sessionError || !sessionData.session) {
+      if (sessionError || !session) {
         throw new Error("Session expired. Please request a new reset link.");
       }
 
-      // Now attempt to update the password
+      // Update the password
       const { error } = await supabase.auth.updateUser({
         password: values.password,
       });
@@ -116,6 +111,7 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
         throw error;
       }
 
+      // Sign out after successful password update
       await supabase.auth.signOut();
       toast.success("Password successfully updated! Please sign in with your new password.");
       navigate('/signin');
