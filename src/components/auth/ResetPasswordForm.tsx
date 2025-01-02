@@ -38,18 +38,37 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const { data: { session }, error } = await supabase.auth.getSession();
-        
-        if (error) {
-          console.error("Session error:", error);
+        // Get the URL parameters
+        const params = new URLSearchParams(window.location.hash.substring(1));
+        const accessToken = params.get('access_token');
+        const refreshToken = params.get('refresh_token');
+
+        if (!accessToken || !refreshToken) {
+          console.error("Missing tokens in URL");
+          toast.error("Invalid password reset link. Please request a new one.");
+          navigate('/signin');
+          return;
+        }
+
+        // Set the session with the tokens
+        const { error: sessionError } = await supabase.auth.setSession({
+          access_token: accessToken,
+          refresh_token: refreshToken
+        });
+
+        if (sessionError) {
+          console.error("Session error:", sessionError);
           toast.error("Your password reset link has expired. Please request a new one.");
           navigate('/signin');
           return;
         }
 
-        if (!session) {
-          console.log("No active session found");
-          toast.error("Your password reset link has expired. Please request a new one.");
+        // Verify the session is active
+        const { data: { session }, error: verifyError } = await supabase.auth.getSession();
+        
+        if (verifyError || !session) {
+          console.error("Session verification error:", verifyError);
+          toast.error("Unable to verify your session. Please request a new reset link.");
           navigate('/signin');
           return;
         }
@@ -86,11 +105,6 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
       });
 
       if (error) {
-        if (error.message.includes("expired")) {
-          toast.error("Your password reset link has expired. Please request a new one.");
-          navigate('/signin');
-          return;
-        }
         throw error;
       }
 
