@@ -35,12 +35,12 @@ const CompanyEmailFields = ({ form }: CompanyEmailFieldsProps) => {
           schema: 'public',
           table: 'profiles'
         },
-        async (payload: RealtimePostgresChangesPayload<Profile>) => {
+        (payload: RealtimePostgresChangesPayload<{ [key: string]: any }>) => {
           const currentEmail = form.getValues('email');
-          if (currentEmail && payload.new) {
+          if (currentEmail && payload.new && 'email' in payload.new) {
             // Only check if the change affects email field
             if (payload.new.email?.toLowerCase() === currentEmail.toLowerCase()) {
-              await validateEmail(currentEmail);
+              validateEmail(currentEmail);
             }
           }
         }
