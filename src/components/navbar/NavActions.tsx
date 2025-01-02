@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { UserMenu } from "./UserMenu";
 import { ThemeToggle } from "./ThemeToggle";
 import LanguageSwitcher from "../LanguageSwitcher";
-import CurrencySwitcher from "../CurrencySwitcher";
 import { Link, useLocation } from "react-router-dom";
 
 interface NavActionsProps {
@@ -18,7 +17,6 @@ export const NavActions = ({ isDark, onToggleTheme, userInitials }: NavActionsPr
   return (
     <div className="hidden lg:flex items-center space-x-2">
       <LanguageSwitcher />
-      <CurrencySwitcher />
       <ThemeToggle isDark={isDark} onToggleTheme={onToggleTheme} />
       {userInitials ? (
         <UserMenu userInitials={userInitials} />

@@ -25,6 +25,7 @@ interface SignupStore {
     vatNumber?: string;
     taxNumber?: string;
     documents?: File[];
+    currency?: 'USD' | 'EUR';
   };
   updateFormData: (data: Partial<SignupStore['formData']>) => void;
   clearFormData: () => void;
