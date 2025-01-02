@@ -32,26 +32,27 @@ export const handlePasswordReset = async (
   setShowResetThankYou: (value: boolean) => void
 ) => {
   try {
-    const { error: resetError } = await supabase.auth.resetPasswordForEmail(
+    // First, generate the reset password link using Supabase
+    const { data, error: resetError } = await supabase.auth.resetPasswordForEmail(
       resetEmail,
       {
         redirectTo: `${window.location.origin}/reset-password`,
       }
     );
 
-    if (resetError) {
-      console.error("Reset password error:", resetError);
-      const errorMessage = getErrorMessage(resetError);
-      toast.error(errorMessage, errorToastStyle);
-      
-      // Don't close the dialog if it's a rate limit error
-      if (!errorMessage.includes('Too many reset attempts')) {
-        setShowForgotPassword(false);
-      }
-      throw resetError;
-    }
+    if (resetError) throw resetError;
 
-    // If password reset was successful
+    // Now send the custom email using our edge function
+    const { error: emailError } = await supabase.functions.invoke('send-reset-password', {
+      body: {
+        email: resetEmail,
+        resetLink: `${window.location.origin}/reset-password?token=${data?.user?.confirmation_token}`,
+      },
+    });
+
+    if (emailError) throw emailError;
+
+    // If everything was successful
     setShowForgotPassword(false);
     setShowResetThankYou(true);
     toast.success("Reset instructions sent!", successToastStyle);
@@ -60,8 +61,6 @@ export const handlePasswordReset = async (
     console.error("Reset password error:", error);
     const errorMessage = getErrorMessage(error);
     toast.error(errorMessage, errorToastStyle);
-    
-    // Re-throw the error to be handled by the component
     throw error;
   }
 };
