@@ -26,9 +26,41 @@ const SignUp = () => {
     setStep(2);
   };
 
+  const checkEmailExists = async (email: string) => {
+    const { data: existingUser, error } = await supabase
+      .from('profiles')
+      .select('email')
+      .eq('email', email)
+      .single();
+
+    if (error && error.code !== 'PGRST116') {
+      console.error('Error checking email:', error);
+      return false;
+    }
+
+    return !!existingUser;
+  };
+
   const handleStepTwo = async (values: any) => {
     setIsLoading(true);
     try {
+      const emailExists = await checkEmailExists(values.email);
+      
+      if (emailExists) {
+        toast.error(
+          "This email is already registered. Please sign in instead.", 
+          {
+            ...errorToastStyle,
+            action: {
+              label: "Sign In",
+              onClick: () => navigate("/signin"),
+            },
+          }
+        );
+        setIsLoading(false);
+        return;
+      }
+
       const { error } = await supabase.auth.signUp({
         email: values.email,
         password: values.password,
