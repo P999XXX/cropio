@@ -9,6 +9,10 @@ import { Form } from "@/components/ui/form";
 import FormInput from "@/components/forms/FormInput";
 import { toast } from "sonner";
 
+interface ResetPasswordFormProps {
+  isMobile: boolean;
+}
+
 const resetPasswordSchema = z.object({
   password: z
     .string()
@@ -22,7 +26,7 @@ const resetPasswordSchema = z.object({
 
 type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
 
-const ResetPasswordForm = () => {
+const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [sessionChecked, setSessionChecked] = useState(false);
@@ -124,7 +128,7 @@ const ResetPasswordForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className={`space-y-4 ${isMobile ? 'px-4' : ''}`}>
         <FormInput
           form={form}
           name="password"
