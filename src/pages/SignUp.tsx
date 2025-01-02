@@ -12,6 +12,7 @@ import StepFourForm from "@/components/auth/StepFourForm";
 import StepNavigation from "@/components/auth/StepNavigation";
 import { errorToastStyle, successToastStyle } from "@/utils/toast-styles";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import { useSignupStore } from "@/store/signupStore";
 
 const steps = ["Account Type", "Personal Info", "Company Info", "Banking Info"];
 
@@ -20,11 +21,37 @@ const SignUp = () => {
   const [showThankYou, setShowThankYou] = useState(false);
   const [email, setEmail] = useState("");
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState<any>({});
+  const formData = useSignupStore(state => state.formData);
   const isMobile = useIsMobile();
 
+  const canNavigateToStep = (targetStep: number) => {
+    // Can always go back
+    if (targetStep < step) return true;
+    
+    // Can't skip steps
+    if (targetStep > step) return false;
+
+    // For current step, check if previous step data exists
+    if (targetStep === 2) {
+      return !!formData.role;
+    }
+    if (targetStep === 3) {
+      return !!(formData.role && formData.email && formData.password);
+    }
+    if (targetStep === 4) {
+      return !!(formData.role && formData.email && formData.password && formData.companyName);
+    }
+
+    return false;
+  };
+
+  const handleStepClick = (newStep: number) => {
+    if (canNavigateToStep(newStep)) {
+      setStep(newStep);
+    }
+  };
+
   const handleStepOne = (role: "buyer" | "supplier") => {
-    setFormData(prev => ({ ...prev, role }));
     setStep(2);
   };
 
@@ -95,7 +122,12 @@ const SignUp = () => {
         <main className="w-full container flex min-h-[calc(100vh-64px)] items-start justify-center px-4 md:px-0 mt-[57px]">
           <div className="w-full md:w-[500px] py-8">
             <SignUpHeader step={step} />
-            <StepNavigation currentStep={step} steps={steps} />
+            <StepNavigation 
+              currentStep={step} 
+              steps={steps} 
+              onStepClick={handleStepClick}
+              canNavigateToStep={canNavigateToStep}
+            />
             
             {isMobile ? (
               <div className="space-y-4">
