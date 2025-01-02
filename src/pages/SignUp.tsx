@@ -10,7 +10,6 @@ import StepTwoForm from "@/components/auth/StepTwoForm";
 import StepThreeForm from "@/components/auth/StepThreeForm";
 import StepFourForm from "@/components/auth/StepFourForm";
 import StepNavigation from "@/components/auth/StepNavigation";
-import { handleGoogleSignIn, handleLinkedInSignIn } from "@/utils/auth-handlers";
 import { errorToastStyle, successToastStyle } from "@/utils/toast-styles";
 import { SidebarProvider } from "@/components/ui/sidebar";
 
@@ -103,8 +102,6 @@ const SignUp = () => {
                 {step === 1 && (
                   <StepOneForm
                     onSubmit={handleStepOne}
-                    onGoogleSignUp={handleGoogleSignIn}
-                    onLinkedInSignUp={handleLinkedInSignIn}
                   />
                 )}
                 {step === 2 && (
@@ -134,8 +131,6 @@ const SignUp = () => {
                 {step === 1 && (
                   <StepOneForm
                     onSubmit={handleStepOne}
-                    onGoogleSignUp={handleGoogleSignIn}
-                    onLinkedInSignUp={handleLinkedInSignIn}
                   />
                 )}
                 {step === 2 && (
