@@ -30,9 +30,6 @@ const PasswordInput = ({ form, name, label, description, className }: PasswordIn
       render={({ field }) => (
         <FormItem className="space-y-1">
           <FormLabel className="!text-foreground">{label}</FormLabel>
-          {description && (
-            <FormDescription className="text-xs">{description}</FormDescription>
-          )}
           <FormControl>
             <div className="relative">
               <Input
@@ -54,6 +51,9 @@ const PasswordInput = ({ form, name, label, description, className }: PasswordIn
               </button>
             </div>
           </FormControl>
+          {description && (
+            <FormDescription className="text-xs">{description}</FormDescription>
+          )}
           <FormErrorMessage message={form.formState.errors[name]?.message} />
         </FormItem>
       )}
