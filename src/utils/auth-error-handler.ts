@@ -1,9 +1,17 @@
 export const getErrorMessage = (error: any): string => {
+  // First try to parse the error body if it exists
+  let body;
+  try {
+    body = error?.body ? JSON.parse(error.body) : {};
+  } catch {
+    body = {};
+  }
+  
   const message = error?.message?.toLowerCase() || '';
-  const body = error?.body ? JSON.parse(error.body) : {};
   const code = body?.code || '';
   
-  if (code === 'over_email_send_rate_limit') {
+  // Handle rate limit errors
+  if (code === 'over_email_send_rate_limit' || message.includes('rate limit')) {
     return 'Too many reset attempts. Please wait a few minutes before trying again.';
   }
   
@@ -15,8 +23,6 @@ export const getErrorMessage = (error: any): string => {
     return 'The operation timed out. Please check your internet connection and try again.';
   } else if (message.includes('network')) {
     return 'Unable to connect. Please check your internet connection.';
-  } else if (message.includes('too many requests') || message.includes('rate limit')) {
-    return 'Too many attempts. Please try again later.';
   }
   
   return error.message || 'An unexpected error occurred. Please try again.';

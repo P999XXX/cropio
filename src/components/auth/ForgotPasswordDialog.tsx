@@ -33,7 +33,6 @@ const ForgotPasswordDialog = ({
 
   const handleSubmit = async () => {
     setError("");
-    setIsRateLimited(false);
     
     if (!email) {
       setError("Please enter your email address");
@@ -43,14 +42,19 @@ const ForgotPasswordDialog = ({
       setError("Please enter a valid email address");
       return;
     }
+    
     try {
       await onSubmit();
+      setIsRateLimited(false);
     } catch (error: any) {
       const errorMessage = error.message || "An error occurred while resetting password";
       setError(errorMessage);
       
-      // Check if it's a rate limit error
-      if (errorMessage.includes('Too many reset attempts')) {
+      // Check if it's a rate limit error from the error message or body
+      if (
+        errorMessage.includes('Too many reset attempts') || 
+        (error.body && error.body.includes('over_email_send_rate_limit'))
+      ) {
         setIsRateLimited(true);
       }
     }

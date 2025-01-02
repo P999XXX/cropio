@@ -61,10 +61,7 @@ export const handlePasswordReset = async (
     const errorMessage = getErrorMessage(error);
     toast.error(errorMessage, errorToastStyle);
     
-    // Don't close the dialog if it's a rate limit error
-    if (!errorMessage.includes('Too many reset attempts')) {
-      setShowForgotPassword(false);
-    }
+    // Re-throw the error to be handled by the component
     throw error;
   }
 };
