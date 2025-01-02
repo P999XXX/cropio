@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
@@ -23,19 +22,7 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<any>({});
-  const navigate = useNavigate();
   const isMobile = useIsMobile();
-
-  useEffect(() => {
-    const checkSession = async () => {
-      const { data: { session }, error } = await supabase.auth.getSession();
-      if (session) {
-        navigate('/dashboard');
-      }
-    };
-
-    checkSession();
-  }, [navigate]);
 
   const handleStepOne = (role: "buyer" | "supplier") => {
     setFormData(prev => ({ ...prev, role }));

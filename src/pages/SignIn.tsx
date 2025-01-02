@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
@@ -22,61 +22,9 @@ const SignIn = () => {
   const [showResetThankYou, setShowResetThankYou] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const navigate = useNavigate();
   const isMobile = useIsMobile();
   const { loadingStates, setLoading } = useLoadingStates();
   const [searchParams] = useSearchParams();
-
-  useEffect(() => {
-    // Check current session on component mount
-    const checkSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        navigate('/dashboard');
-      }
-    };
-    
-    checkSession();
-
-    // Set up auth state change listener
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === 'SIGNED_IN' && session) {
-        navigate('/dashboard');
-      }
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [navigate]);
-
-  useEffect(() => {
-    const error = searchParams.get('error');
-    if (error) {
-      let message = "An error occurred. Please try again.";
-      
-      switch (error) {
-        case 'invalid_link':
-          message = "The password reset link is invalid. Please request a new one.";
-          break;
-        case 'invalid_token':
-          message = "Invalid password reset link. Please request a new one.";
-          break;
-        case 'expired_token':
-          message = "Your password reset link has expired. Please request a new one.";
-          break;
-        case 'auth_failed':
-          message = "Authentication failed. Please try again.";
-          break;
-        case 'unknown_type':
-          message = "Invalid authentication link. Please try again.";
-          break;
-      }
-      
-      setErrorMessage(message);
-      navigate('/signin', { replace: true });
-    }
-  }, [searchParams, navigate]);
 
   const handleSignIn = async (values: SignInFormData) => {
     setLoading('isSigningIn', true);
@@ -100,9 +48,9 @@ const SignIn = () => {
       }
 
       if (data.session) {
-        // Store the session immediately after successful sign in
+        // Store the session but don't redirect
         await supabase.auth.setSession(data.session);
-        navigate('/dashboard');
+        toast.success("Signed in successfully!");
       }
 
     } catch (error: any) {
