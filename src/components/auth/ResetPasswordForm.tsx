@@ -34,6 +34,8 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [sessionChecked, setSessionChecked] = useState(false);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [refreshToken, setRefreshToken] = useState<string | null>(null);
 
   useEffect(() => {
     const checkSession = async () => {
@@ -41,36 +43,29 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
         // Get the recovery token from the URL hash
         const fragment = new URLSearchParams(window.location.hash.substring(1));
         const type = fragment.get('type');
-        const accessToken = fragment.get('access_token');
-        const refreshToken = fragment.get('refresh_token');
+        const access_token = fragment.get('access_token');
+        const refresh_token = fragment.get('refresh_token');
 
         // Verify this is a recovery flow and we have the necessary tokens
-        if (type !== 'recovery' || !accessToken || !refreshToken) {
+        if (type !== 'recovery' || !access_token || !refresh_token) {
           console.error("Invalid recovery flow");
           toast.error("Invalid password reset link. Please request a new one.");
           navigate('/signin');
           return;
         }
 
+        setAccessToken(access_token);
+        setRefreshToken(refresh_token);
+
         // Set the session with the recovery tokens
-        const { error: sessionError } = await supabase.auth.setSession({
-          access_token: accessToken,
-          refresh_token: refreshToken,
+        const { data, error: sessionError } = await supabase.auth.setSession({
+          access_token,
+          refresh_token,
         });
 
-        if (sessionError) {
+        if (sessionError || !data.session) {
           console.error("Session error:", sessionError);
           toast.error("Your password reset link has expired. Please request a new one.");
-          navigate('/signin');
-          return;
-        }
-
-        // Verify the session is active
-        const { data: { session }, error: verifyError } = await supabase.auth.getSession();
-        
-        if (verifyError || !session) {
-          console.error("Session verification error:", verifyError);
-          toast.error("Unable to verify your session. Please request a new reset link.");
           navigate('/signin');
           return;
         }
@@ -95,13 +90,24 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
   });
 
   const onSubmit = async (values: ResetPasswordFormData) => {
-    if (!sessionChecked) {
+    if (!sessionChecked || !accessToken || !refreshToken) {
       toast.error("Please wait while we verify your session.");
       return;
     }
 
     setIsLoading(true);
     try {
+      // First ensure we have a valid session
+      const { data: sessionData, error: sessionError } = await supabase.auth.setSession({
+        access_token: accessToken,
+        refresh_token: refreshToken,
+      });
+
+      if (sessionError || !sessionData.session) {
+        throw new Error("Session expired. Please request a new reset link.");
+      }
+
+      // Now attempt to update the password
       const { error } = await supabase.auth.updateUser({
         password: values.password,
       });
