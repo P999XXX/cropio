@@ -8,17 +8,17 @@ const Index = () => {
     {
       icon: Shield,
       title: "Verified Suppliers",
-      description: "All suppliers are thoroughly vetted and certified",
+      description: "All suppliers are thoroughly vetted and certified for quality assurance",
     },
     {
       icon: Globe,
       title: "Global Network",
-      description: "Connect with suppliers and buyers worldwide",
+      description: "Connect with trusted suppliers and buyers from around the world",
     },
     {
       icon: TrendingUp,
       title: "Market Insights",
-      description: "Real-time price trends and market analysis",
+      description: "Access real-time market trends, pricing data, and industry analysis",
     },
   ];
 
@@ -28,25 +28,25 @@ const Index = () => {
         <Navbar />
         
         {/* Hero Section */}
-        <div className="pt-20 pb-16 sm:pt-24 sm:pb-20">
+        <div className="pt-24 pb-20 sm:pt-32 sm:pb-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center animate-fade-in">
-              <h1 className="text-2xl tracking-tight font-extrabold text-foreground sm:text-3xl md:text-3xl">
-                <span className="block">The Global B2B Marketplace for</span>
+            <div className="text-center space-y-8 animate-fade-in">
+              <h1 className="text-3xl tracking-tight font-extrabold text-foreground sm:text-4xl md:text-5xl">
+                <span className="block mb-2">The Global B2B Marketplace for</span>
                 <span className="block text-primary">Agricultural Products</span>
               </h1>
-              <p className="mt-3 max-w-md mx-auto text-base text-muted-foreground sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
+              <p className="mt-3 max-w-md mx-auto text-lg text-muted-foreground sm:text-xl md:mt-5 md:text-2xl md:max-w-3xl">
                 Connect directly with verified suppliers and buyers worldwide. 
                 Streamline your agricultural trade with our secure platform.
               </p>
-              <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
-                <div className="rounded-md shadow">
+              <div className="mt-8 max-w-md mx-auto sm:flex sm:justify-center md:mt-10">
+                <div className="rounded-md shadow-lg">
                   <Link
                     to="/signup"
-                    className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90 md:py-4 md:text-lg md:px-10"
+                    className="w-full flex items-center justify-center px-8 py-4 border border-transparent text-lg font-semibold rounded-md text-white bg-primary hover:bg-primary/90 transition-all duration-300 hover:shadow-xl"
                   >
                     Get Started
-                    <ArrowRight className="ml-2 h-5 w-5" />
+                    <ArrowRight className="ml-2 h-5 w-5 animate-bounce" />
                   </Link>
                 </div>
               </div>
@@ -55,10 +55,10 @@ const Index = () => {
         </div>
 
         {/* Features Section */}
-        <div className="py-12 bg-secondary">
+        <div className="py-16 bg-secondary">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="lg:text-center animate-fade-in">
-              <h2 className="text-2xl font-extrabold text-foreground sm:text-3xl">
+            <div className="lg:text-center space-y-4 animate-fade-in">
+              <h2 className="text-3xl font-extrabold text-foreground sm:text-4xl">
                 Why Choose Cropio?
               </h2>
               <p className="mt-4 max-w-2xl text-xl text-muted-foreground lg:mx-auto">
@@ -66,19 +66,23 @@ const Index = () => {
               </p>
             </div>
 
-            <div className="mt-10">
-              <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
-                {features.map((feature) => (
-                  <div key={feature.title} className="relative animate-fade-in">
-                    <div className="bg-card rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
-                      <div className="absolute -top-4 left-4">
-                        <div className="rounded-full bg-primary p-3">
-                          <feature.icon className="h-6 w-6 text-white" />
+            <div className="mt-16">
+              <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-3">
+                {features.map((feature, index) => (
+                  <div 
+                    key={feature.title} 
+                    className="relative animate-fade-in"
+                    style={{ animationDelay: `${index * 200}ms` }}
+                  >
+                    <div className="bg-card rounded-xl shadow-lg p-8 hover:shadow-xl transition-all duration-300 hover:scale-105">
+                      <div className="absolute -top-6 left-6">
+                        <div className="rounded-full bg-primary p-4 shadow-lg">
+                          <feature.icon className="h-7 w-7 text-white" />
                         </div>
                       </div>
                       <div className="mt-8">
-                        <h3 className="text-lg font-medium text-foreground">{feature.title}</h3>
-                        <p className="mt-2 text-base text-muted-foreground">{feature.description}</p>
+                        <h3 className="text-xl font-bold text-foreground mb-4">{feature.title}</h3>
+                        <p className="text-lg text-muted-foreground">{feature.description}</p>
                       </div>
                     </div>
                   </div>
