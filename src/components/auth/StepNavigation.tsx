@@ -51,7 +51,7 @@ const StepNavigation = ({
                 </Button>
                 <span
                   className={cn(
-                    "text-[0.65rem] mt-1 whitespace-nowrap md:text-xs hidden md:block",
+                    "text-[0.65rem] mt-1 whitespace-nowrap md:text-xs",
                     stepNumber === currentStep 
                       ? "text-primary" 
                       : "text-muted-foreground"
