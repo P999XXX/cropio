@@ -1,10 +1,10 @@
-import { FormControl, FormItem, FormMessage } from "@/components/ui/form";
+import { FormControl, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
 import { StepTwoFormData } from "../StepTwoForm";
 import { AsYouType, CountryCode } from 'libphonenumber-js';
 import { countryToDigits, countryToExample } from "./countryData";
-import { AlertTriangle } from "lucide-react";
+import FormErrorMessage from "@/components/forms/FormErrorMessage";
 
 interface PhoneNumberInputProps {
   form: UseFormReturn<StepTwoFormData>;
@@ -36,16 +36,10 @@ const PhoneNumberInput = ({ form, selectedCountry }: PhoneNumberInputProps) => {
             }
           })}
           onChange={(e) => handlePhoneNumberChange(e.target.value)}
+          className={form.formState.errors.phoneNumber ? 'border-destructive' : ''}
         />
       </FormControl>
-      <FormMessage className="text-[11px] text-destructive flex items-center gap-1">
-        {form.formState.errors.phoneNumber?.message && (
-          <>
-            <AlertTriangle className="h-3 w-3" />
-            <span>{form.formState.errors.phoneNumber?.message}</span>
-          </>
-        )}
-      </FormMessage>
+      <FormErrorMessage message={form.formState.errors.phoneNumber?.message} />
     </FormItem>
   );
 };
