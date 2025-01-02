@@ -12,6 +12,7 @@ import DashboardFAQ from "./pages/dashboard/DashboardFAQ";
 import DashboardSupport from "./pages/dashboard/DashboardSupport";
 import DashboardSubscriptions from "./pages/dashboard/DashboardSubscriptions";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import AuthRedirectHandler from "./components/auth/AuthRedirectHandler";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
   {
     path: "/reset-password",
     element: <ResetPassword />,
+  },
+  {
+    path: "/auth/callback",
+    element: <AuthRedirectHandler />,
   },
   {
     path: "/components",
