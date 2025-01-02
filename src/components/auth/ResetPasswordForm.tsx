@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -28,7 +27,6 @@ const resetPasswordSchema = z.object({
 type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
 
 const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
-  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [sessionChecked, setSessionChecked] = useState(false);
 
@@ -55,7 +53,6 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
         if (type !== 'recovery' || !access_token || !refresh_token) {
           console.error("Invalid recovery flow");
           toast.error("Invalid password reset link. Please request a new one.", errorToastStyle);
-          navigate('/signin');
           return;
         }
 
@@ -68,7 +65,6 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
         if (sessionError || !session) {
           console.error("Session error:", sessionError);
           toast.error("Your password reset link has expired. Please request a new one.", errorToastStyle);
-          navigate('/signin');
           return;
         }
 
@@ -77,7 +73,6 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
       } catch (error) {
         console.error("Session check error:", error);
         toast.error("An error occurred. Please try again.", errorToastStyle);
-        navigate('/signin');
       }
     };
 
@@ -87,9 +82,8 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
     } else {
       console.error("No URL fragment found");
       toast.error("Invalid password reset link. Please request a new one.", errorToastStyle);
-      navigate('/signin');
     }
-  }, [navigate]);
+  }, []);
 
   const onSubmit = async (values: ResetPasswordFormData) => {
     if (!sessionChecked) {
@@ -118,7 +112,6 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
       // Sign out after successful password update
       await supabase.auth.signOut();
       toast.success("Password successfully updated! Please sign in with your new password.", successToastStyle);
-      navigate('/signin');
     } catch (error: any) {
       console.error("Password update error:", error);
       toast.error(error.message || "Failed to update password. Please try again.", errorToastStyle);

@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { errorToastStyle, successToastStyle } from "@/utils/toast-styles";
@@ -8,9 +7,6 @@ import { errorToastStyle, successToastStyle } from "@/utils/toast-styles";
 const OPERATION_TIMEOUT = 15000;
 
 export const useAuthSession = () => {
-  const navigate = useNavigate();
-  const isDevelopment = import.meta.env.MODE === 'development';
-
   useEffect(() => {
     const {
       data: { subscription },
@@ -19,7 +15,6 @@ export const useAuthSession = () => {
       
       if (event === 'SIGNED_IN') {
         toast.success("Successfully signed in!", successToastStyle);
-        if (!isDevelopment) navigate("/dashboard");
       } else if (event === 'SIGNED_OUT') {
         toast.error("Your session has ended. Please sign in again.", errorToastStyle);
       } else if (event === 'TOKEN_REFRESHED') {
@@ -31,10 +26,7 @@ export const useAuthSession = () => {
 
     // Initial session check
     const checkSession = async () => {
-      const { data: { session }, error } = await supabase.auth.getSession();
-      if (session && !isDevelopment) {
-        navigate("/dashboard");
-      }
+      const { error } = await supabase.auth.getSession();
       if (error) {
         console.error("Session check error:", error);
         toast.error("Unable to verify your session", errorToastStyle);
@@ -46,7 +38,7 @@ export const useAuthSession = () => {
     return () => {
       subscription.unsubscribe();
     };
-  }, [navigate, isDevelopment]);
+  }, []);
 };
 
 // Utility function to handle operation timeouts

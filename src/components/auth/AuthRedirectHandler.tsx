@@ -1,13 +1,9 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { errorToastStyle, successToastStyle } from "@/utils/toast-styles";
 
 const AuthRedirectHandler = () => {
-  const navigate = useNavigate();
-  const isDevelopment = import.meta.env.MODE === 'development';
-
   useEffect(() => {
     const handleRedirect = async () => {
       try {
@@ -15,7 +11,6 @@ const AuthRedirectHandler = () => {
         if (!window.location.hash) {
           console.error("No hash parameters found in URL");
           toast.error("Invalid or expired link. Please request a new one.", errorToastStyle);
-          if (!isDevelopment) navigate('/signin');
           return;
         }
 
@@ -33,7 +28,6 @@ const AuthRedirectHandler = () => {
             if (!access_token || !refresh_token) {
               console.error("Missing tokens for recovery flow");
               toast.error("Invalid password reset link. Please request a new one.", errorToastStyle);
-              if (!isDevelopment) navigate('/signin');
               return;
             }
 
@@ -46,13 +40,10 @@ const AuthRedirectHandler = () => {
             if (verifyError) {
               console.error("Token verification error:", verifyError);
               toast.error("Your password reset link has expired. Please request a new one.", errorToastStyle);
-              if (!isDevelopment) navigate('/signin');
               return;
             }
 
-            // If verification successful, redirect to reset password page with the hash intact
-            console.log("Redirecting to reset password page");
-            if (!isDevelopment) navigate(`/reset-password${window.location.hash}`);
+            console.log("Recovery token verified successfully");
             break;
 
           case 'signup':
@@ -61,27 +52,23 @@ const AuthRedirectHandler = () => {
             if (error) {
               console.error("Session error:", error);
               toast.error("Authentication failed. Please try signing in again.", errorToastStyle);
-              if (!isDevelopment) navigate('/signin');
             } else {
               toast.success("Successfully authenticated!", successToastStyle);
-              if (!isDevelopment) navigate('/dashboard');
             }
             break;
 
           default:
             console.error("Unknown auth type:", type);
             toast.error("Invalid authentication link. Please try signing in again.", errorToastStyle);
-            if (!isDevelopment) navigate('/signin');
         }
       } catch (error: any) {
         console.error("Auth redirect error:", error);
         toast.error("An error occurred. Please try signing in again.", errorToastStyle);
-        if (!isDevelopment) navigate('/signin');
       }
     };
 
     handleRedirect();
-  }, [navigate, isDevelopment]);
+  }, []);
 
   return null;
 };
