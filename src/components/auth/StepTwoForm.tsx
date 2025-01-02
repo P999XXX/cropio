@@ -11,6 +11,7 @@ import { ArrowLeft } from "lucide-react";
 import PhoneInput from "./PhoneInput";
 import AgreementCheckbox from "./AgreementCheckbox";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { supabase } from "@/integrations/supabase/client";
 
 const stepTwoSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -46,6 +47,7 @@ interface StepTwoFormProps {
 
 const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
   const isMobile = useIsMobile();
+  const [emailExists, setEmailExists] = useState(false);
   const form = useForm<StepTwoFormData>({
     resolver: zodResolver(stepTwoSchema),
     defaultValues: {
@@ -61,6 +63,43 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
       acceptPrivacy: false,
     },
   });
+
+  const checkEmailExists = async (email: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('email')
+        .eq('email', email)
+        .single();
+
+      if (error) {
+        console.error('Error checking email:', error);
+        return;
+      }
+
+      if (data) {
+        setEmailExists(true);
+        form.setError('email', {
+          type: 'manual',
+          message: 'This email is already registered'
+        });
+      } else {
+        setEmailExists(false);
+        form.clearErrors('email');
+      }
+    } catch (error) {
+      console.error('Error checking email:', error);
+    }
+  };
+
+  const handleEmailChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const email = e.target.value;
+    form.setValue('email', email);
+    
+    if (email && email.includes('@') && email.includes('.')) {
+      await checkEmailExists(email);
+    }
+  };
 
   const formContent = (
     <Form {...form}>
@@ -88,12 +127,24 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
             placeholder="Enter your company name"
           />
 
-          <FormInput
-            form={form}
+          <FormField
+            control={form.control}
             name="email"
-            label="Email"
-            type="email"
-            placeholder="Enter your email"
+            render={({ field }) => (
+              <FormItem className="space-y-1">
+                <FormLabel className="!text-foreground">Email</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Enter your email"
+                    type="email"
+                    {...field}
+                    onChange={handleEmailChange}
+                    className={emailExists ? 'border-red-500' : ''}
+                  />
+                </FormControl>
+                <FormErrorMessage message={form.formState.errors.email?.message} />
+              </FormItem>
+            )}
           />
 
           <PhoneInput form={form} />
@@ -130,7 +181,7 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
         <Button 
           type="submit" 
           className="w-full bg-primary text-primary-foreground hover:bg-primary/90 mt-4" 
-          disabled={isLoading}
+          disabled={isLoading || emailExists}
         >
           {isLoading ? "Creating account..." : "Create Account"}
         </Button>
