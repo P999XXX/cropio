@@ -29,6 +29,24 @@ const SignUp = () => {
   const handleStepTwo = async (values: any) => {
     setIsLoading(true);
     try {
+      // First check if the email already exists
+      const { data: existingUser, error: checkError } = await supabase
+        .from('profiles')
+        .select('email')
+        .eq('email', values.email)
+        .single();
+
+      if (checkError && checkError.code !== 'PGRST116') {
+        throw checkError;
+      }
+
+      if (existingUser) {
+        toast.error("An account with this email already exists.", errorToastStyle);
+        setIsLoading(false);
+        return;
+      }
+
+      // If email doesn't exist, proceed with signup
       const { error: signUpError } = await supabase.auth.signUp({
         email: values.email,
         password: values.password,
@@ -44,6 +62,10 @@ const SignUp = () => {
       });
 
       if (signUpError) {
+        if (signUpError.message.includes("User already registered")) {
+          toast.error("An account with this email already exists.", errorToastStyle);
+          return;
+        }
         throw signUpError;
       }
 
