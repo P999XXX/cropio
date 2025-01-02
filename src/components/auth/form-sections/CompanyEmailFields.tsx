@@ -3,9 +3,7 @@ import { UseFormReturn } from "react-hook-form";
 import { StepTwoFormData } from "../StepTwoForm";
 import { supabase } from "@/integrations/supabase/client";
 import { FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import FormErrorMessage from "@/components/forms/FormErrorMessage";
-import FormInput from "@/components/forms/FormInput";
 import { toast } from "sonner";
 
 interface CompanyEmailFieldsProps {
@@ -25,7 +23,8 @@ const CompanyEmailFields = ({ form }: CompanyEmailFieldsProps) => {
       const { count } = await supabase
         .from('profiles')
         .select('*', { count: 'exact', head: true })
-        .eq('email', email);
+        .eq('email', email)
+        .throwOnError();
 
       if (count && count > 0) {
         toast.error("This email is already registered");
@@ -34,6 +33,7 @@ const CompanyEmailFields = ({ form }: CompanyEmailFieldsProps) => {
       return true;
     } catch (error) {
       console.error('Error checking email:', error);
+      toast.error("Error checking email availability");
       return "Error checking email availability";
     } finally {
       setIsCheckingEmail(false);
@@ -42,11 +42,22 @@ const CompanyEmailFields = ({ form }: CompanyEmailFieldsProps) => {
 
   return (
     <div className="space-y-3">
-      <FormInput
-        form={form}
+      <FormField
+        control={form.control}
         name="companyName"
-        label="Company Name"
-        placeholder="Enter your company name"
+        render={({ field }) => (
+          <FormItem className="space-y-1">
+            <FormLabel className="!text-foreground">Company Name</FormLabel>
+            <FormControl>
+              <input
+                placeholder="Enter your company name"
+                className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                {...field}
+              />
+            </FormControl>
+            <FormErrorMessage message={form.formState.errors.companyName?.message} />
+          </FormItem>
+        )}
       />
 
       <FormField
@@ -61,11 +72,11 @@ const CompanyEmailFields = ({ form }: CompanyEmailFieldsProps) => {
           <FormItem className="space-y-1">
             <FormLabel className="!text-foreground">Email</FormLabel>
             <FormControl>
-              <Input
+              <input
                 placeholder="Enter your email"
                 type="email"
+                className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                 {...field}
-                className={isCheckingEmail ? 'bg-muted' : ''}
                 disabled={isCheckingEmail}
               />
             </FormControl>
