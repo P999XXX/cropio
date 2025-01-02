@@ -1,11 +1,17 @@
+import { useState } from 'react';
+import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
+import { Form } from "@/components/ui/form";
 import { CardDescription } from "@/components/ui/card";
+import PasswordInput from "./PasswordInput";
+import PhoneInput from "./PhoneInput";
 import { ArrowLeft } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
-import StepTwoFormContent from "./form-sections/StepTwoFormContent";
+import PersonalInfoFields from "./form-sections/PersonalInfoFields";
+import CompanyEmailFields from "./form-sections/CompanyEmailFields";
+import AgreementFields from "./form-sections/AgreementFields";
 
 const stepTwoSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -57,8 +63,49 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
     },
   });
 
+  const formContent = (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <PersonalInfoFields form={form} />
+        <CompanyEmailFields form={form} />
+        <PhoneInput form={form} />
+
+        <div className="space-y-3">
+          <PasswordInput
+            form={form}
+            name="password"
+            label="Password"
+            description="Password must be at least 8 characters and contain uppercase, lowercase, and numbers"
+          />
+          <PasswordInput
+            form={form}
+            name="confirmPassword"
+            label="Confirm Password"
+          />
+        </div>
+
+        <AgreementFields form={form} />
+
+        <Button 
+          type="submit" 
+          className="w-full bg-primary text-primary-foreground hover:bg-primary/90 mt-4" 
+          disabled={isLoading}
+        >
+          {isLoading ? "Creating account..." : "Create Account"}
+        </Button>
+
+        <div className="text-sm text-center text-muted-foreground pt-2">
+          Already have an account?{" "}
+          <a href="/signin" className="text-primary hover:underline font-medium">
+            Sign in
+          </a>
+        </div>
+      </form>
+    </Form>
+  );
+
   return (
-    <div className={`${isMobile ? 'rounded-lg step-two-form bg-background space-y-3 py-2' : 'rounded-lg step-two-form bg-card border border-border shadow-sm p-6'} ${isMobile ? 'step-two-form-mobile' : 'step-two-form-desktop md:min-w-[500px]'}`}>
+    <div className={`${isMobile ? 'rounded-lg step-two-form bg-background space-y-3' : 'rounded-lg step-two-form bg-card border border-border shadow-sm p-6'} ${isMobile ? 'step-two-form-mobile' : 'step-two-form-desktop md:min-w-[500px]'}`}>
       <Button
         variant="ghost"
         className="text-foreground hover:bg-transparent hover:text-foreground/80 p-0"
@@ -70,11 +117,7 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
       <CardDescription className="text-muted-foreground mb-5">
         Complete your registration
       </CardDescription>
-      <StepTwoFormContent 
-        form={form}
-        onSubmit={onSubmit}
-        isLoading={isLoading}
-      />
+      {formContent}
     </div>
   );
 };

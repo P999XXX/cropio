@@ -26,10 +26,47 @@ const SignUp = () => {
     setStep(2);
   };
 
+  const checkEmailExists = async (email: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('email')
+        .eq('email', email)
+        .maybeSingle();
+
+      if (error) {
+        console.error('Error checking email:', error);
+        return false;
+      }
+
+      return !!data;
+    } catch (error) {
+      console.error('Error in checkEmailExists:', error);
+      return false;
+    }
+  };
+
   const handleStepTwo = async (values: any) => {
     setIsLoading(true);
     try {
-      const { error } = await supabase.auth.signUp({
+      const emailExists = await checkEmailExists(values.email);
+      
+      if (emailExists) {
+        toast.error(
+          "This email is already registered. Please sign in instead.", 
+          {
+            ...errorToastStyle,
+            action: {
+              label: "Sign In",
+              onClick: () => navigate("/signin"),
+            },
+          }
+        );
+        setIsLoading(false);
+        return;
+      }
+
+      const { error: signUpError } = await supabase.auth.signUp({
         email: values.email,
         password: values.password,
         options: {
@@ -39,17 +76,23 @@ const SignUp = () => {
             company_name: values.companyName,
             role: selectedRole,
           },
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
         },
       });
 
-      if (error) throw error;
+      if (signUpError) {
+        throw signUpError;
+      }
 
       setEmail(values.email);
       toast.success("Successfully signed up!", successToastStyle);
       setShowThankYou(true);
     } catch (error: any) {
       console.error("Sign up error:", error);
-      toast.error(error.message || "Failed to sign up", errorToastStyle);
+      toast.error(
+        error.message || "Failed to sign up. Please try again.", 
+        errorToastStyle
+      );
     } finally {
       setIsLoading(false);
     }
@@ -64,7 +107,7 @@ const SignUp = () => {
       <div className="min-h-screen bg-background w-full">
         <Navbar />
         <main className="w-full container flex min-h-[calc(100vh-64px)] items-start justify-center px-4 md:px-0 mt-[57px]">
-          <div className="w-full md:w-[500px] py-2">
+          <div className="w-full md:w-[500px] py-8">
             <SignUpHeader step={step} />
 
             {isMobile ? (
