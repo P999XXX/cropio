@@ -1,4 +1,8 @@
 import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { errorToastStyle } from "@/utils/toast-styles";
 import Index from "./pages/Index";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
@@ -13,31 +17,46 @@ import DashboardSupport from "./pages/dashboard/DashboardSupport";
 import DashboardSubscriptions from "./pages/dashboard/DashboardSubscriptions";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import AuthRedirectHandler from "./components/auth/AuthRedirectHandler";
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
 
 // Protected Route wrapper component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setIsAuthenticated(!!session);
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        if (error) {
+          console.error("Auth error:", error);
+          toast.error("Authentication error. Please sign in again.", errorToastStyle);
+          setIsAuthenticated(false);
+        } else {
+          setIsAuthenticated(!!session);
+        }
+      } catch (error) {
+        console.error("Session check error:", error);
+        setIsAuthenticated(false);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     checkAuth();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log("Auth state changed:", event);
       setIsAuthenticated(!!session);
+      setIsLoading(false);
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
-  // Show nothing while checking authentication
-  if (isAuthenticated === null) {
-    return null;
+  if (isLoading) {
+    return null; // Or a loading spinner
   }
 
   return isAuthenticated ? children : <Navigate to="/signin" replace />;
