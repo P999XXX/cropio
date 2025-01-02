@@ -52,30 +52,29 @@ const StepThreeForm = ({ onSubmit, onBack, isLoading }: StepThreeFormProps) => {
             placeholder="Enter company name"
           />
 
+          <FormInput
+            form={form}
+            name="companyStreet"
+            label="Street and Number"
+            placeholder="Enter street address"
+          />
+
           <div className="grid gap-4 md:grid-cols-2">
-            <FormInput
-              form={form}
-              name="companyStreet"
-              label="Street and Number"
-              placeholder="Enter street address"
-            />
             <FormInput
               form={form}
               name="companyPostalCode"
               label="Postal Code"
               placeholder="Enter postal code"
             />
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-2">
             <FormInput
               form={form}
               name="companyPlace"
               label="Place"
               placeholder="Enter city/place"
             />
-            <CountrySelect form={form} />
           </div>
+
+          <CountrySelect form={form} />
 
           <PhoneInput form={form} />
 
