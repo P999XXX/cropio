@@ -48,6 +48,7 @@ const PhoneInput = ({ form }: PhoneInputProps) => {
 
   const handleCountryChange = (countryCode: CountryCode) => {
     setUserCountry(countryCode);
+    // Clear the phone number when country changes to avoid validation issues
     form.setValue('phoneNumber', '');
   };
 
