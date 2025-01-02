@@ -27,7 +27,7 @@ export const NavActions = ({ isDark, onToggleTheme, userInitials }: NavActionsPr
           asChild 
           variant={isSignInPage ? "outline" : "primary"} 
           size="sm"
-          className={`${isSignInPage ? 'bg-white text-primary border-primary hover:bg-white hover:text-primary/90' : ''}`}
+          className={isSignInPage ? 'text-primary border-primary hover:text-primary/90' : ''}
         >
           <Link to={isSignInPage ? "/signup" : "/signin"}>
             {isSignInPage ? "Sign Up" : "Sign In"}
