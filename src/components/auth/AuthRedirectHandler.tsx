@@ -11,6 +11,8 @@ const AuthRedirectHandler = () => {
         if (!window.location.hash) {
           console.error("No hash parameters found in URL");
           toast.error("Invalid or expired link. Please request a new one.", errorToastStyle);
+          // Redirect to sign in page after showing error
+          window.location.href = '/signin?error=invalid_link';
           return;
         }
 
@@ -28,6 +30,7 @@ const AuthRedirectHandler = () => {
             if (!access_token || !refresh_token) {
               console.error("Missing tokens for recovery flow");
               toast.error("Invalid password reset link. Please request a new one.", errorToastStyle);
+              window.location.href = '/signin?error=invalid_token';
               return;
             }
 
@@ -40,6 +43,7 @@ const AuthRedirectHandler = () => {
             if (verifyError) {
               console.error("Token verification error:", verifyError);
               toast.error("Your password reset link has expired. Please request a new one.", errorToastStyle);
+              window.location.href = '/signin?error=expired_token';
               return;
             }
 
@@ -52,6 +56,7 @@ const AuthRedirectHandler = () => {
             if (error) {
               console.error("Session error:", error);
               toast.error("Authentication failed. Please try signing in again.", errorToastStyle);
+              window.location.href = '/signin?error=auth_failed';
             } else {
               toast.success("Successfully authenticated!", successToastStyle);
             }
@@ -60,10 +65,12 @@ const AuthRedirectHandler = () => {
           default:
             console.error("Unknown auth type:", type);
             toast.error("Invalid authentication link. Please try signing in again.", errorToastStyle);
+            window.location.href = '/signin?error=unknown_type';
         }
       } catch (error: any) {
         console.error("Auth redirect error:", error);
         toast.error("An error occurred. Please try signing in again.", errorToastStyle);
+        window.location.href = '/signin?error=unexpected';
       }
     };
 

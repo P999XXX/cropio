@@ -21,6 +21,7 @@ const SignIn = () => {
   const [showResetThankYou, setShowResetThankYou] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
   const [firstName, setFirstName] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const { loadingStates, setLoading } = useLoadingStates();
@@ -32,8 +33,27 @@ const SignIn = () => {
     // Check for error parameter in URL
     const error = searchParams.get('error');
     if (error) {
-      // Show error toast if there's an error parameter
-      toast.error("Password reset link is invalid or has expired. Please request a new one.", errorToastStyle);
+      let message = "An error occurred. Please try again.";
+      
+      switch (error) {
+        case 'invalid_link':
+          message = "The password reset link is invalid. Please request a new one.";
+          break;
+        case 'invalid_token':
+          message = "Invalid password reset link. Please request a new one.";
+          break;
+        case 'expired_token':
+          message = "Your password reset link has expired. Please request a new one.";
+          break;
+        case 'auth_failed':
+          message = "Authentication failed. Please try again.";
+          break;
+        case 'unknown_type':
+          message = "Invalid authentication link. Please try again.";
+          break;
+      }
+      
+      setErrorMessage(message);
       // Clear the error from URL
       navigate('/signin', { replace: true });
     }
@@ -116,6 +136,17 @@ const SignIn = () => {
         <Navbar />
         <main className="w-full container flex min-h-[calc(100vh-64px)] items-start justify-center px-4 md:px-0 mt-[57px]">
           <div className="w-full md:w-[500px] py-8">
+            {errorMessage && (
+              <div className="mb-6 p-4 bg-destructive/10 text-destructive rounded-lg text-sm">
+                {errorMessage}
+                <button
+                  onClick={() => setShowForgotPassword(true)}
+                  className="ml-2 underline hover:text-destructive/80"
+                >
+                  Request new reset link
+                </button>
+              </div>
+            )}
             <div className={`space-y-2 mb-8 ${isMobile ? "text-left" : "text-center"}`}>
               <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">
                 {firstName ? `Welcome back ${firstName}!` : "Welcome back!"}
