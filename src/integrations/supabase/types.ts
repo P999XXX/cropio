@@ -11,13 +11,23 @@ export type Database = {
     Tables: {
       profiles: {
         Row: {
+          bank_account_holder: string | null
+          bank_address: string | null
           bank_details: Json | null
+          bank_name: string | null
+          bic: string | null
           company_address: string | null
+          company_country: string | null
           company_documents: Json | null
           company_name: string
+          company_phone: string | null
+          company_place: string | null
+          company_postal_code: string | null
+          company_street: string | null
           created_at: string
           email: string
           first_name: string | null
+          iban: string | null
           id: string
           last_name: string | null
           role: string
@@ -26,13 +36,23 @@ export type Database = {
           vat_number: string | null
         }
         Insert: {
+          bank_account_holder?: string | null
+          bank_address?: string | null
           bank_details?: Json | null
+          bank_name?: string | null
+          bic?: string | null
           company_address?: string | null
+          company_country?: string | null
           company_documents?: Json | null
           company_name: string
+          company_phone?: string | null
+          company_place?: string | null
+          company_postal_code?: string | null
+          company_street?: string | null
           created_at?: string
           email: string
           first_name?: string | null
+          iban?: string | null
           id: string
           last_name?: string | null
           role: string
@@ -41,13 +61,23 @@ export type Database = {
           vat_number?: string | null
         }
         Update: {
+          bank_account_holder?: string | null
+          bank_address?: string | null
           bank_details?: Json | null
+          bank_name?: string | null
+          bic?: string | null
           company_address?: string | null
+          company_country?: string | null
           company_documents?: Json | null
           company_name?: string
+          company_phone?: string | null
+          company_place?: string | null
+          company_postal_code?: string | null
+          company_street?: string | null
           created_at?: string
           email?: string
           first_name?: string | null
+          iban?: string | null
           id?: string
           last_name?: string | null
           role?: string
