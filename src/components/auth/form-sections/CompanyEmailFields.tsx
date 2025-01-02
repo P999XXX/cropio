@@ -16,7 +16,7 @@ const CompanyEmailFields = ({ form }: CompanyEmailFieldsProps) => {
 
   useEffect(() => {
     const channel = supabase
-      .channel('public:profiles')
+      .channel('schema-db-changes')
       .on(
         'postgres_changes',
         {
@@ -24,11 +24,13 @@ const CompanyEmailFields = ({ form }: CompanyEmailFieldsProps) => {
           schema: 'public',
           table: 'profiles'
         },
-        () => {
-          // Revalidate email when profiles table changes
+        async (payload) => {
           const currentEmail = form.getValues('email');
-          if (currentEmail) {
-            validateEmail(currentEmail);
+          if (currentEmail && payload.new) {
+            // Only check if the change affects email field
+            if (payload.new.email?.toLowerCase() === currentEmail.toLowerCase()) {
+              await validateEmail(currentEmail);
+            }
           }
         }
       )
