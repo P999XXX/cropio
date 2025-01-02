@@ -22,9 +22,9 @@ const StepNavigation = ({ currentStep, steps }: StepNavigationProps) => {
                 }`}
             >
               {index + 1 < currentStep ? (
-                <Check className="h-3.5 w-3.5" />
+                <Check className="h-4 w-4" />
               ) : (
-                <span className="text-xs">{index + 1}</span>
+                <span className="text-sm">{index + 1}</span>
               )}
             </div>
             <span
