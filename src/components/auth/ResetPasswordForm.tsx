@@ -9,6 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import PasswordInput from "@/components/auth/PasswordInput";
 import { toast } from "sonner";
 import { errorToastStyle, successToastStyle } from "@/utils/toast-styles";
+import { useNavigate } from "react-router-dom";
 
 interface ResetPasswordFormProps {
   isMobile: boolean;
@@ -18,7 +19,11 @@ const resetPasswordSchema = z.object({
   password: z
     .string()
     .min(8, "Password must be at least 8 characters")
-    .max(64, "Password must be less than 64 characters"),
+    .max(64, "Password must be less than 64 characters")
+    .regex(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+      "Password must contain uppercase, lowercase, and numbers"
+    ),
   confirmPassword: z.string(),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords do not match",
@@ -30,6 +35,7 @@ type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
 const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [sessionChecked, setSessionChecked] = useState(false);
+  const navigate = useNavigate();
 
   const form = useForm<ResetPasswordFormData>({
     resolver: zodResolver(resetPasswordSchema),
@@ -42,27 +48,12 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const fragment = new URLSearchParams(window.location.hash.substring(1));
-        const type = fragment.get('type');
-        const access_token = fragment.get('access_token');
-        const refresh_token = fragment.get('refresh_token');
-
-        console.log("Recovery flow check:", { type, hasAccessToken: !!access_token, hasRefreshToken: !!refresh_token });
-
-        if (type !== 'recovery' || !access_token || !refresh_token) {
-          console.error("Invalid recovery flow");
-          toast.error("Invalid password reset link. Please request a new one.", errorToastStyle);
-          return;
-        }
-
-        const { data: { session }, error: sessionError } = await supabase.auth.setSession({
-          access_token,
-          refresh_token,
-        });
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
 
         if (sessionError || !session) {
           console.error("Session error:", sessionError);
           toast.error("Your password reset link has expired. Please request a new one.", errorToastStyle);
+          navigate('/signin?error=expired_token');
           return;
         }
 
@@ -71,16 +62,12 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
       } catch (error) {
         console.error("Session check error:", error);
         toast.error("An error occurred. Please try again.", errorToastStyle);
+        navigate('/signin?error=unexpected');
       }
     };
 
-    if (window.location.hash) {
-      checkSession();
-    } else {
-      console.error("No URL fragment found");
-      toast.error("Invalid password reset link. Please request a new one.", errorToastStyle);
-    }
-  }, []);
+    checkSession();
+  }, [navigate]);
 
   const onSubmit = async (values: ResetPasswordFormData) => {
     if (!sessionChecked) {
@@ -90,22 +77,17 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
 
     setIsLoading(true);
     try {
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-
-      if (sessionError || !session) {
-        throw new Error("Session expired. Please request a new reset link.");
-      }
-
-      const { error } = await supabase.auth.updateUser({
+      const { error: updateError } = await supabase.auth.updateUser({
         password: values.password,
       });
 
-      if (error) {
-        throw error;
+      if (updateError) {
+        throw updateError;
       }
 
       await supabase.auth.signOut();
       toast.success("Password successfully updated! Please sign in with your new password.", successToastStyle);
+      navigate('/signin');
     } catch (error: any) {
       console.error("Password update error:", error);
       toast.error(error.message || "Failed to update password. Please try again.", errorToastStyle);
@@ -121,17 +103,15 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
           form={form}
           name="password"
           label="New Password"
-          description="Enter your new password"
         />
         <PasswordInput
           form={form}
           name="confirmPassword"
           label="Confirm Password"
-          description="Confirm your new password"
         />
         <Button 
           type="submit" 
-          className="w-full bg-primary hover:bg-primary-hover text-primary-foreground h-10"
+          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
           disabled={isLoading}
         >
           {isLoading ? "Updating Password..." : "Update Password"}

@@ -10,6 +10,15 @@ const AuthRedirectHandler = () => {
   useEffect(() => {
     const handleRedirect = async () => {
       try {
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        
+        if (sessionError) {
+          console.error("Session error:", sessionError);
+          navigate('/signin?error=session_error');
+          return;
+        }
+
+        // Check for hash parameters in URL
         if (!window.location.hash) {
           console.error("No hash parameters found in URL");
           navigate('/signin?error=invalid_link');
@@ -31,30 +40,29 @@ const AuthRedirectHandler = () => {
               return;
             }
 
-            const { error: verifyError } = await supabase.auth.verifyOtp({
-              token_hash: access_token,
-              type: 'recovery',
+            // Set the session with the recovery tokens
+            const { error: setSessionError } = await supabase.auth.setSession({
+              access_token,
+              refresh_token,
             });
 
-            if (verifyError) {
-              console.error("Token verification error:", verifyError);
+            if (setSessionError) {
+              console.error("Set session error:", setSessionError);
               navigate('/signin?error=expired_token');
               return;
             }
 
-            console.log("Recovery token verified successfully");
             navigate('/reset-password');
             break;
 
           case 'signup':
           case 'magiclink':
-            const { error } = await supabase.auth.getSession();
-            if (error) {
-              console.error("Session error:", error);
-              navigate('/signin?error=auth_failed');
-            } else {
+            if (session) {
               toast.success("Successfully authenticated!", successToastStyle);
               navigate('/dashboard');
+            } else {
+              console.error("No session after authentication");
+              navigate('/signin?error=auth_failed');
             }
             break;
 
@@ -64,6 +72,7 @@ const AuthRedirectHandler = () => {
         }
       } catch (error: any) {
         console.error("Auth redirect error:", error);
+        toast.error("An unexpected error occurred", errorToastStyle);
         navigate('/signin?error=unexpected');
       }
     };
