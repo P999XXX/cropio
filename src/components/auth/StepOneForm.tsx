@@ -14,7 +14,6 @@ const StepOneForm = ({ onSubmit, onGoogleSignUp, onLinkedInSignUp }: StepOneForm
 
   const content = (
     <>
-      <h3 className="text-lg font-semibold mb-4">Choose Your Account Type</h3>
       <div className="grid gap-4">
         <Button
           variant="outline"
@@ -68,6 +67,7 @@ const StepOneForm = ({ onSubmit, onGoogleSignUp, onLinkedInSignUp }: StepOneForm
   if (isMobile) {
     return (
       <div className="space-y-4">
+        <h3 className="text-lg font-semibold mb-4">Choose Your Account Type</h3>
         {content}
         <div className="text-sm text-center text-muted-foreground">
           Already have an account?{" "}
@@ -82,6 +82,7 @@ const StepOneForm = ({ onSubmit, onGoogleSignUp, onLinkedInSignUp }: StepOneForm
   return (
     <Card className="md:min-w-[500px]">
       <CardHeader>
+        <h3 className="text-lg font-semibold mb-4">Choose Your Account Type</h3>
       </CardHeader>
       <CardContent className="space-y-4">
         {content}
