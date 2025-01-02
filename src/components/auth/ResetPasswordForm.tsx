@@ -33,19 +33,32 @@ interface ResetPasswordFormProps {
 const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [isTokenValid, setIsTokenValid] = useState(true);
+  const [sessionChecked, setSessionChecked] = useState(false);
 
   useEffect(() => {
     const checkSession = async () => {
-      const { data: { session }, error } = await supabase.auth.getSession();
-      
-      if (error || !session) {
-        console.error("Session error:", error);
-        setIsTokenValid(false);
-        toast.error("Your password reset link has expired. Please request a new one.");
-        setTimeout(() => {
-          navigate("/signin");
-        }, 3000);
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (error) {
+          console.error("Session error:", error);
+          toast.error("Your password reset link has expired. Please request a new one.");
+          navigate('/signin');
+          return;
+        }
+
+        if (!session) {
+          console.log("No active session found");
+          toast.error("Your password reset link has expired. Please request a new one.");
+          navigate('/signin');
+          return;
+        }
+
+        setSessionChecked(true);
+      } catch (error) {
+        console.error("Session check error:", error);
+        toast.error("Unable to verify your session. Please try again.");
+        navigate('/signin');
       }
     };
 
@@ -61,9 +74,8 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
   });
 
   const onSubmit = async (values: ResetPasswordFormData) => {
-    if (!isTokenValid) {
-      toast.error("Your password reset link has expired. Please request a new one.");
-      navigate("/signin");
+    if (!sessionChecked) {
+      toast.error("Please wait while we verify your session.");
       return;
     }
 
@@ -76,16 +88,15 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
       if (error) {
         if (error.message.includes("expired")) {
           toast.error("Your password reset link has expired. Please request a new one.");
-          navigate("/signin");
+          navigate('/signin');
           return;
         }
         throw error;
       }
 
       await supabase.auth.signOut();
-      
       toast.success("Password successfully updated! Please sign in with your new password.");
-      navigate("/signin");
+      navigate('/signin');
     } catch (error: any) {
       console.error("Reset password error:", error);
       toast.error(error.message || "Failed to reset password");
@@ -94,7 +105,7 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
     }
   };
 
-  if (!isTokenValid) {
+  if (!sessionChecked) {
     return null;
   }
 

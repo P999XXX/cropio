@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const AuthRedirectHandler = () => {
   const navigate = useNavigate();
@@ -10,7 +11,6 @@ const AuthRedirectHandler = () => {
       console.log("=== Starting auth redirect handling ===");
       
       try {
-        // Get current URL parameters
         const currentUrl = new URL(window.location.href);
         console.log("Current URL:", currentUrl.toString());
         
@@ -22,7 +22,6 @@ const AuthRedirectHandler = () => {
         const searchParams = new URLSearchParams(currentUrl.search);
         console.log("Search params:", Object.fromEntries(searchParams.entries()));
         
-        // Check for tokens in both hash and search params
         const accessToken = hashParams.get('access_token') || searchParams.get('access_token');
         const refreshToken = hashParams.get('refresh_token') || searchParams.get('refresh_token');
         const type = hashParams.get('type') || searchParams.get('type');
@@ -34,8 +33,8 @@ const AuthRedirectHandler = () => {
         });
 
         // Handle recovery flow
-        if (type === 'recovery' && accessToken) {
-          console.log("Valid recovery token detected - redirecting to reset-password");
+        if (type === 'recovery') {
+          console.log("Recovery flow detected");
           if (accessToken && refreshToken) {
             const { error } = await supabase.auth.setSession({
               access_token: accessToken,
@@ -43,25 +42,29 @@ const AuthRedirectHandler = () => {
             });
             
             if (error) {
-              console.error("Error setting session:", error);
-              throw error;
+              console.error("Error setting recovery session:", error);
+              toast.error("Unable to process password reset. Please try again.");
+              navigate('/signin');
+              return;
             }
+            
+            console.log("Recovery session set successfully");
+            navigate('/reset-password');
+            return;
           }
-          navigate('/reset-password');
-          return;
         }
         
-        // Handle email confirmation
+        // Handle email confirmation and other auth flows
         if (currentUrl.pathname.includes('/auth/callback')) {
           console.log("Auth callback detected");
           
-          // Get the current session
           const { data: { session }, error: sessionError } = await supabase.auth.getSession();
           console.log("Session check:", { hasSession: !!session, error: sessionError });
           
           if (sessionError) {
             console.error("Session error:", sessionError);
-            throw sessionError;
+            navigate('/signin');
+            return;
           }
 
           if (session) {
@@ -71,7 +74,6 @@ const AuthRedirectHandler = () => {
               navigate('/dashboard');
             }
           } else {
-            // If no session, try to exchange the tokens
             if (accessToken && refreshToken) {
               const { error: setSessionError } = await supabase.auth.setSession({
                 access_token: accessToken,
@@ -80,7 +82,8 @@ const AuthRedirectHandler = () => {
               
               if (setSessionError) {
                 console.error("Error setting session:", setSessionError);
-                throw setSessionError;
+                navigate('/signin');
+                return;
               }
               
               navigate('/dashboard');
@@ -92,10 +95,9 @@ const AuthRedirectHandler = () => {
         }
       } catch (error) {
         console.error("Auth redirect error:", error);
+        toast.error("An error occurred during authentication");
         navigate('/signin');
       }
-      
-      console.log("=== Auth redirect handling complete ===");
     };
 
     handleAuthRedirects();
