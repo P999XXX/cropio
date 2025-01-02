@@ -7,11 +7,6 @@ interface SignUpHeaderProps {
 
 const SignUpHeader = ({ step }: SignUpHeaderProps) => {
   const isMobile = useIsMobile();
-
-  if (isMobile && step === 2) {
-    return null;
-  }
-
   const alignmentClass = isMobile ? "text-left" : "text-center";
 
   return (
