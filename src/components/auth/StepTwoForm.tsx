@@ -29,13 +29,13 @@ const stepTwoSchema = z.object({
           .from('profiles')
           .select('email')
           .eq('email', email)
-          .single();
+          .maybeSingle();
         
         if (error && error.code !== 'PGRST116') {
           console.error("Email check error:", error);
           return true; // Allow form submission if check fails
         }
-        return !data; // Return true if email doesn't exist
+        return !data; // Return true if email doesn't exist (data is null)
       } catch (error) {
         console.error("Email validation error:", error);
         return true; // Allow form submission if check fails
