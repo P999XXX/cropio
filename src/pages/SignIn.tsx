@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -27,7 +27,7 @@ const SignIn = () => {
   const [searchParams] = useSearchParams();
 
   // Check for error params and set appropriate messages
-  useState(() => {
+  useEffect(() => {
     const error = searchParams.get('error');
     if (error) {
       let message = "An error occurred. Please try again.";
