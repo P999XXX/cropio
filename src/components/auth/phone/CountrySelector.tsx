@@ -13,20 +13,11 @@ import {
 import { UseFormReturn } from "react-hook-form";
 import { StepThreeFormData } from "../StepThreeForm";
 import { countries } from "./countries";
-import CountryDisplay from "./CountryDisplay";
 import { CountryCode } from 'libphonenumber-js';
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useIsMobile } from "@/hooks/use-mobile";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { useState } from "react";
-import { Search, X } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import CountryDisplay from "./CountryDisplay";
+import MobileCountryDialog from "./MobileCountryDialog";
 
 interface CountrySelectorProps {
   form: UseFormReturn<StepThreeFormData>;
@@ -70,46 +61,16 @@ const CountrySelector = ({ form, onCountryChange, selectedCountry }: CountrySele
                 <span>Select</span>
               )}
             </div>
-            <Dialog open={isOpen} onOpenChange={setIsOpen}>
-              <DialogContent className="h-[100dvh] max-w-full p-0 gap-0 border-none">
-                <DialogHeader className="px-4 py-2 border-b sticky top-0 bg-background z-10">
-                  <div className="flex items-center justify-between">
-                    <DialogTitle className="text-base">Select Country</DialogTitle>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => setIsOpen(false)}
-                      className="h-8 w-8"
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
-                  </div>
-                  <div className="relative">
-                    <Input
-                      placeholder="Search countries..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-8 auth-input"
-                    />
-                    <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  </div>
-                </DialogHeader>
-                <ScrollArea className="flex-1 h-[calc(100dvh-120px)]">
-                  <div className="p-2">
-                    {filteredCountries.map((country) => (
-                      <div
-                        key={country.value}
-                        className={`flex items-center px-2 py-3 cursor-pointer rounded-md text-sm text-foreground
-                          ${field.value === country.value ? 'bg-secondary' : 'hover:bg-secondary/50'}`}
-                        onClick={() => handleCountrySelect(country.value)}
-                      >
-                        <CountryDisplay country={country} />
-                      </div>
-                    ))}
-                  </div>
-                </ScrollArea>
-              </DialogContent>
-            </Dialog>
+            <MobileCountryDialog
+              isOpen={isOpen}
+              onOpenChange={setIsOpen}
+              searchQuery={searchQuery}
+              onSearchChange={setSearchQuery}
+              filteredCountries={filteredCountries}
+              selectedValue={field.value}
+              onSelect={handleCountrySelect}
+              title="Select Country Code"
+            />
             <FormMessage />
           </FormItem>
         )}
@@ -144,18 +105,15 @@ const CountrySelector = ({ form, onCountryChange, selectedCountry }: CountrySele
               </SelectValue>
             </SelectTrigger>
             <SelectContent className="bg-background min-w-[280px]">
-              <ScrollArea className="h-[300px]">
-                {countries.map((country) => (
-                  <SelectItem 
-                    key={country.value} 
-                    value={country.value}
-                    className={`cursor-pointer text-sm text-foreground data-[highlighted]:text-foreground data-[highlighted]:bg-secondary
-                      ${field.value === country.value ? 'bg-secondary' : ''}`}
-                  >
-                    <CountryDisplay country={country} />
-                  </SelectItem>
-                ))}
-              </ScrollArea>
+              {countries.map((country) => (
+                <SelectItem 
+                  key={`${country.country}-${country.value}`}
+                  value={country.value}
+                  className="cursor-pointer text-sm text-foreground data-[highlighted]:text-foreground data-[highlighted]:bg-secondary"
+                >
+                  <CountryDisplay country={country} />
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
           <FormMessage />
