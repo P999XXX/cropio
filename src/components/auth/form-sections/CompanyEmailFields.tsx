@@ -3,6 +3,7 @@ import FormInput from "@/components/forms/FormInput";
 import { StepTwoFormData } from "../validation/stepTwoSchema";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface CompanyEmailFieldsProps {
   form: UseFormReturn<StepTwoFormData>;
@@ -20,7 +21,7 @@ const CompanyEmailFields = ({ form, onEmailExists, setIsCheckingEmail }: Company
       const { data, error } = await supabase
         .from('profiles')
         .select('email')
-        .eq('email', email)
+        .eq('email', email.toLowerCase())
         .maybeSingle();
 
       if (error) {
@@ -33,6 +34,9 @@ const CompanyEmailFields = ({ form, onEmailExists, setIsCheckingEmail }: Company
         form.setError('email', {
           type: 'manual',
           message: 'This email is already registered'
+        });
+        toast.error("Email already exists", {
+          description: "Please use a different email address or sign in.",
         });
       }
     } catch (error) {
@@ -47,23 +51,19 @@ const CompanyEmailFields = ({ form, onEmailExists, setIsCheckingEmail }: Company
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      const emailValue = email?.trim();
-      if (emailValue && emailValue !== debouncedEmail) {
+      if (email) {
+        const emailValue = email.trim().toLowerCase();
         const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
-        if (isValidEmail) {
+        
+        if (isValidEmail && emailValue !== debouncedEmail) {
           setDebouncedEmail(emailValue);
+          checkEmailExists(emailValue);
         }
       }
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [email, debouncedEmail]);
-
-  useEffect(() => {
-    if (debouncedEmail) {
-      checkEmailExists(debouncedEmail);
-    }
-  }, [debouncedEmail]);
+  }, [email]);
 
   return (
     <div className="space-y-3">
