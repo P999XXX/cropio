@@ -8,9 +8,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Timer } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 interface ForgotPasswordDialogProps {
@@ -32,6 +32,20 @@ const ForgotPasswordDialog = ({
 }: ForgotPasswordDialogProps) => {
   const [error, setError] = useState("");
   const [isRateLimited, setIsRateLimited] = useState(false);
+  const [countdown, setCountdown] = useState(0);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (countdown > 0) {
+      timer = setInterval(() => {
+        setCountdown((prev) => prev - 1);
+        if (countdown === 1) {
+          setIsRateLimited(false);
+        }
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [countdown]);
 
   const handleSubmit = async () => {
     setError("");
@@ -50,7 +64,23 @@ const ForgotPasswordDialog = ({
         redirectTo: `${window.location.origin}/reset-password`,
       });
 
-      if (resetError) throw resetError;
+      if (resetError) {
+        if (
+          resetError.message.includes('rate limit') || 
+          resetError.message.toLowerCase().includes('after') ||
+          (resetError as any)?.body?.includes('over_email_send_rate_limit')
+        ) {
+          // Extract the wait time from the error message if available
+          const waitTimeMatch = resetError.message.match(/after (\d+) seconds/);
+          const waitTime = waitTimeMatch ? parseInt(waitTimeMatch[1]) : 60;
+          
+          setCountdown(waitTime);
+          setIsRateLimited(true);
+          setError("Please wait before requesting another reset email.");
+          return;
+        }
+        throw resetError;
+      }
       
       await onSubmit();
       setIsRateLimited(false);
@@ -59,10 +89,12 @@ const ForgotPasswordDialog = ({
       setError(errorMessage);
       
       if (
-        errorMessage.includes('Too many reset attempts') || 
+        errorMessage.includes('rate limit') || 
+        errorMessage.toLowerCase().includes('after') ||
         (error.body && error.body.includes('over_email_send_rate_limit'))
       ) {
         setIsRateLimited(true);
+        setCountdown(60); // Default to 60 seconds if no specific time is provided
       }
     }
   };
@@ -87,7 +119,6 @@ const ForgotPasswordDialog = ({
               onChange={(e) => {
                 onEmailChange(e.target.value);
                 setError("");
-                setIsRateLimited(false);
               }}
               className={`h-10 ${error ? 'border-destructive focus-visible:ring-destructive' : ''}`}
             />
@@ -97,11 +128,11 @@ const ForgotPasswordDialog = ({
                 <AlertDescription className="ml-2 text-destructive font-medium">{error}</AlertDescription>
               </Alert>
             )}
-            {isRateLimited && (
+            {isRateLimited && countdown > 0 && (
               <Alert className="border-2 border-warning/20 bg-warning/10 dark:bg-warning/20 shadow-sm">
-                <AlertCircle className="h-4 w-4 text-warning" />
+                <Timer className="h-4 w-4 text-warning" />
                 <AlertDescription className="ml-2 text-warning font-medium">
-                  Please wait a few minutes before requesting another reset email.
+                  Please wait {countdown} seconds before requesting another reset email.
                 </AlertDescription>
               </Alert>
             )}
