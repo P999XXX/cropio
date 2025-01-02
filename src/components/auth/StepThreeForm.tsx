@@ -79,7 +79,7 @@ const StepThreeForm = ({ onSubmit, onBack, isLoading }: StepThreeFormProps) => {
 
           <PhoneInput form={form} />
 
-          <div className="flex flex-col-reverse sm:flex-row gap-3 sm:gap-4 pt-2">
+          <div className="flex flex-col-reverse sm:flex-row sm:justify-between gap-3 sm:gap-4 pt-2">
             <Button
               type="button"
               variant="ghost"
