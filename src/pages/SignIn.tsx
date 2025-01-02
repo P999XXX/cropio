@@ -13,24 +13,81 @@ import { handleGoogleSignIn, handleLinkedInSignIn, handlePasswordReset } from "@
 import { errorToastStyle, successToastStyle } from "@/utils/toast-styles";
 import { SidebarProvider } from "@/components/ui/sidebar";
 
+// Timeout duration for operations (15 seconds)
+const OPERATION_TIMEOUT = 15000;
+
+interface LoadingStates {
+  isSigningIn: boolean;
+  isGoogleSigningIn: boolean;
+  isLinkedInSigningIn: boolean;
+  isResettingPassword: boolean;
+}
+
 const SignIn = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [loadingStates, setLoadingStates] = useState<LoadingStates>({
+    isSigningIn: false,
+    isGoogleSigningIn: false,
+    isLinkedInSigningIn: false,
+    isResettingPassword: false,
+  });
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [showResetThankYou, setShowResetThankYou] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
-  const [isResetting, setIsResetting] = useState(false);
   const [firstName, setFirstName] = useState("");
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
-  useEffect(() => {
-    const hashParams = new URLSearchParams(window.location.hash.replace('#', ''));
-    const errorDescription = hashParams.get('error_description');
-    
-    if (errorDescription === 'Email link is invalid or has expired') {
-      toast.error("Your password reset link has expired. Please request a new one.", errorToastStyle);
-    }
+  // Function to handle operation timeouts
+  const withTimeout = async (operation: Promise<any>, timeoutDuration: number = OPERATION_TIMEOUT) => {
+    return Promise.race([
+      operation,
+      new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Operation timed out')), timeoutDuration)
+      )
+    ]);
+  };
 
+  // Enhanced session management
+  useEffect(() => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log("Auth state changed:", event);
+      
+      if (event === 'SIGNED_IN') {
+        toast.success("Successfully signed in!", successToastStyle);
+        navigate("/dashboard");
+      } else if (event === 'SIGNED_OUT') {
+        toast.error("Your session has ended. Please sign in again.", errorToastStyle);
+      } else if (event === 'TOKEN_REFRESHED') {
+        console.log("Session token refreshed");
+      } else if (event === 'USER_UPDATED') {
+        console.log("User data updated");
+      }
+    });
+
+    // Initial session check
+    const checkSession = async () => {
+      const { data: { session }, error } = await supabase.auth.getSession();
+      if (session) {
+        navigate("/dashboard");
+      }
+      if (error) {
+        console.error("Session check error:", error);
+        toast.error("Unable to verify your session", errorToastStyle);
+      }
+    };
+
+    checkSession();
+
+    // Cleanup subscription
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [navigate]);
+
+  // Get user's first name if available
+  useEffect(() => {
     const getFirstName = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.user) {
@@ -49,28 +106,72 @@ const SignIn = () => {
     getFirstName();
   }, []);
 
+  // Enhanced error handling with specific messages
+  const getErrorMessage = (error: any): string => {
+    const message = error?.message?.toLowerCase() || '';
+    
+    if (message.includes('invalid login credentials')) {
+      return 'Incorrect email or password. Please try again.';
+    } else if (message.includes('email not confirmed')) {
+      return 'Please verify your email before signing in.';
+    } else if (message.includes('timeout')) {
+      return 'The operation timed out. Please check your internet connection and try again.';
+    } else if (message.includes('network')) {
+      return 'Unable to connect. Please check your internet connection.';
+    } else if (message.includes('too many requests')) {
+      return 'Too many attempts. Please try again later.';
+    }
+    
+    return error.message || 'An unexpected error occurred. Please try again.';
+  };
+
   const handleSignIn = async (values: SignInFormData) => {
-    setIsLoading(true);
+    setLoadingStates(prev => ({ ...prev, isSigningIn: true }));
+    
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email: values.email,
-        password: values.password,
-      });
+      const { error } = await withTimeout(
+        supabase.auth.signInWithPassword({
+          email: values.email,
+          password: values.password,
+        })
+      );
 
       if (error) throw error;
 
-      toast.success("Successfully signed in!", successToastStyle);
-      navigate("/dashboard");
     } catch (error: any) {
       console.error("Sign in error:", error);
-      toast.error(error.message || "Failed to sign in", errorToastStyle);
+      toast.error(getErrorMessage(error), errorToastStyle);
+      // Reset form on error
+      if (error.message?.toLowerCase().includes('invalid login credentials')) {
+        // Clear only password on invalid credentials
+        values.password = '';
+      } else {
+        // Clear both fields on other errors
+        values.email = '';
+        values.password = '';
+      }
     } finally {
-      setIsLoading(false);
+      setLoadingStates(prev => ({ ...prev, isSigningIn: true }));
     }
   };
 
   const handleResetPasswordRequest = async () => {
-    return handlePasswordReset(resetEmail, setIsResetting, setShowForgotPassword, setShowResetThankYou);
+    setLoadingStates(prev => ({ ...prev, isResettingPassword: true }));
+    try {
+      await withTimeout(
+        handlePasswordReset(
+          resetEmail,
+          () => setLoadingStates(prev => ({ ...prev, isResettingPassword: false })),
+          setShowForgotPassword,
+          setShowResetThankYou
+        )
+      );
+    } catch (error: any) {
+      console.error("Reset password error:", error);
+      toast.error(getErrorMessage(error), errorToastStyle);
+    } finally {
+      setLoadingStates(prev => ({ ...prev, isResettingPassword: false }));
+    }
   };
 
   const handleForgotPassword = async () => {
@@ -96,7 +197,7 @@ const SignIn = () => {
             {isMobile ? (
               <SignInMobile
                 onSubmit={handleSignIn}
-                isLoading={isLoading}
+                isLoading={loadingStates.isSigningIn}
                 onGoogleSignIn={handleGoogleSignIn}
                 onLinkedInSignIn={handleLinkedInSignIn}
                 onForgotPassword={handleForgotPassword}
@@ -104,7 +205,7 @@ const SignIn = () => {
             ) : (
               <SignInCard
                 onSubmit={handleSignIn}
-                isLoading={isLoading}
+                isLoading={loadingStates.isSigningIn}
                 onGoogleSignIn={handleGoogleSignIn}
                 onLinkedInSignIn={handleLinkedInSignIn}
                 onForgotPassword={handleForgotPassword}
@@ -118,7 +219,7 @@ const SignIn = () => {
           onSubmit={handleResetPasswordRequest}
           email={resetEmail}
           onEmailChange={setResetEmail}
-          isResetting={isResetting}
+          isResetting={loadingStates.isResettingPassword}
         />
         <ResetPasswordThankYouDialog
           open={showResetThankYou}
