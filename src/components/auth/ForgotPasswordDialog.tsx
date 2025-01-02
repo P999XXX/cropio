@@ -67,7 +67,7 @@ const ForgotPasswordDialog = ({
                 onEmailChange(e.target.value);
                 setError("");
               }}
-              className={`auth-input h-auto py-2 text-[0.775rem] ${error ? 'border-destructive' : ''}`}
+              className={`flex h-10 w-full rounded-md border bg-secondary px-3 py-2 text-[0.775rem] ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${error ? 'border-destructive' : 'border-input'}`}
             />
             {error && <p className="text-sm text-destructive-foreground">{error}</p>}
           </div>
