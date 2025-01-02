@@ -9,7 +9,7 @@ import SignInMobile from "@/components/auth/SignInMobile";
 import ForgotPasswordDialog from "@/components/auth/ForgotPasswordDialog";
 import ResetPasswordThankYouDialog from "@/components/auth/ResetPasswordThankYouDialog";
 import { SignInFormData } from "@/components/auth/SignInForm";
-import { handleGoogleSignIn, handleLinkedInSignIn, handlePasswordReset } from "@/utils/auth-handlers";
+import { handleGoogleSignIn, handleLinkedInSignIn } from "@/utils/auth-handlers";
 import { errorToastStyle } from "@/utils/toast-styles";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { useLoadingStates } from "@/hooks/useLoadingStates";
@@ -86,12 +86,15 @@ const SignIn = () => {
   const handleResetPasswordRequest = async () => {
     setLoading('isResettingPassword', true);
     try {
-      await handlePasswordReset(
-        resetEmail,
-        (value) => setLoading('isResettingPassword', value),
-        setShowForgotPassword,
-        setShowResetThankYou
-      );
+      const { error: resetError } = await supabase.auth.resetPasswordForEmail(resetEmail, {
+        redirectTo: `${window.location.origin}/auth/callback#type=recovery`,
+      });
+
+      if (resetError) throw resetError;
+
+      setShowForgotPassword(false);
+      setShowResetThankYou(true);
+      
     } catch (error: any) {
       console.error("Reset password error:", error);
       toast.error(error.message, errorToastStyle);

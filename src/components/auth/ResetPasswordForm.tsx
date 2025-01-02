@@ -46,12 +46,11 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
     },
   });
 
-  // Show error toast if there's an error in URL
   useState(() => {
     if (error) {
       const errorMessage = error === 'expired_token' 
         ? "Your password reset link has expired. Please request a new one."
-        : "Invalid reset link. Please request a new password reset.";
+        : "Invalid reset link. Please request a new one.";
       
       toast.error(errorMessage, {
         ...errorToastStyle,
@@ -73,24 +72,15 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
       toast.success("Password successfully updated! Please sign in with your new password.", {
         ...successToastStyle,
         duration: 5000,
-        position: "top-center",
-        style: {
-          ...successToastStyle.style,
-          zIndex: 9999,
-        },
       });
       
-      // Short delay before navigation to ensure toast is visible
       setTimeout(() => {
         navigate('/signin');
       }, 1000);
       
     } catch (error: any) {
       console.error("Password update error:", error);
-      toast.error(error.message || "Failed to update password. Please try again.", {
-        ...errorToastStyle,
-        duration: 5000,
-      });
+      toast.error(error.message || "Failed to update password. Please try again.", errorToastStyle);
     } finally {
       setIsLoading(false);
     }

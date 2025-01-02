@@ -23,8 +23,6 @@ const AuthRedirectHandler = () => {
         const refresh_token = fragment.get('refresh_token');
 
         console.log("Auth redirect type:", type);
-        console.log("Current URL:", window.location.href);
-        console.log("Base URL:", window.location.origin);
 
         switch (type) {
           case 'recovery':
