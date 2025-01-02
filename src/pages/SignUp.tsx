@@ -26,46 +26,10 @@ const SignUp = () => {
     setStep(2);
   };
 
-  const checkEmailExists = async (email: string) => {
-    try {
-      const { count, error } = await supabase
-        .from('profiles')
-        .select('*', { count: 'exact', head: true })
-        .eq('email', email);
-
-      if (error) {
-        console.error('Error checking email:', error);
-        return false;
-      }
-
-      return count ? count > 0 : false;
-    } catch (error) {
-      console.error('Error in checkEmailExists:', error);
-      return false;
-    }
-  };
-
   const handleStepTwo = async (values: any) => {
     setIsLoading(true);
     try {
-      const emailExists = await checkEmailExists(values.email);
-      
-      if (emailExists) {
-        toast.error(
-          "This email is already registered. Please sign in instead.", 
-          {
-            ...errorToastStyle,
-            action: {
-              label: "Sign In",
-              onClick: () => navigate("/signin"),
-            },
-          }
-        );
-        setIsLoading(false);
-        return;
-      }
-
-      const { data, error: signUpError } = await supabase.auth.signUp({
+      const { error } = await supabase.auth.signUp({
         email: values.email,
         password: values.password,
         options: {
@@ -75,25 +39,17 @@ const SignUp = () => {
             company_name: values.companyName,
             role: selectedRole,
           },
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
         },
       });
 
-      if (signUpError) {
-        throw signUpError;
-      }
+      if (error) throw error;
 
-      if (data?.user) {
-        setEmail(values.email);
-        toast.success("Successfully signed up!", successToastStyle);
-        setShowThankYou(true);
-      }
+      setEmail(values.email);
+      toast.success("Successfully signed up!", successToastStyle);
+      setShowThankYou(true);
     } catch (error: any) {
       console.error("Sign up error:", error);
-      toast.error(
-        error.message || "Failed to sign up. Please try again.", 
-        errorToastStyle
-      );
+      toast.error(error.message || "Failed to sign up", errorToastStyle);
     } finally {
       setIsLoading(false);
     }
