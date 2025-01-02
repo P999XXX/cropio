@@ -67,7 +67,7 @@ const ForgotPasswordDialog = ({
                 onEmailChange(e.target.value);
                 setError("");
               }}
-              className="h-auto py-2 text-[0.775rem]"
+              className={`auth-input h-auto py-2 text-[0.775rem] ${error ? 'border-destructive' : ''}`}
             />
             {error && <p className="text-sm text-destructive-foreground">{error}</p>}
           </div>
