@@ -72,7 +72,6 @@ const SignUp = () => {
         <main className="w-full container flex min-h-[calc(100vh-64px)] items-start justify-center px-4 md:px-0 mt-[57px]">
           <div className="w-full md:w-[500px] py-8">
             <SignUpHeader step={step} />
-
             {isMobile ? (
               <div className="space-y-4">
                 {step === 1 ? (

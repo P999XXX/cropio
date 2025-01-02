@@ -2,7 +2,6 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader } from "@/co
 import { Button } from "@/components/ui/button";
 import AuthProviders from "./AuthProviders";
 import { useIsMobile } from "@/hooks/use-mobile";
-import SignUpHeader from "./SignUpHeader";
 
 interface StepOneFormProps {
   onSubmit: (role: "buyer" | "supplier") => void;
