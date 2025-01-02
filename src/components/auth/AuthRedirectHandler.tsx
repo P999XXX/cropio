@@ -63,7 +63,6 @@ const AuthRedirectHandler = () => {
 
             if (session) {
               toast.success("Successfully authenticated!", successToastStyle);
-              // Use window.location.origin to ensure we're using the correct base URL
               navigate('/dashboard');
             } else {
               console.error("No session after authentication");

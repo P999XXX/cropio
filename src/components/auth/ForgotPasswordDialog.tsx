@@ -61,7 +61,7 @@ const ForgotPasswordDialog = ({
     
     try {
       const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password`,
+        redirectTo: `${window.location.origin}/auth/callback#type=recovery`,
       });
 
       if (resetError) {
