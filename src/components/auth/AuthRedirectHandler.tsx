@@ -2,10 +2,11 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { errorToastStyle } from "@/utils/toast-styles";
+import { errorToastStyle, successToastStyle } from "@/utils/toast-styles";
 
 const AuthRedirectHandler = () => {
   const navigate = useNavigate();
+  const isDevelopment = import.meta.env.MODE === 'development';
 
   useEffect(() => {
     const handleRedirect = async () => {
@@ -14,7 +15,7 @@ const AuthRedirectHandler = () => {
         if (!window.location.hash) {
           console.error("No hash parameters found in URL");
           toast.error("Invalid or expired link. Please request a new one.", errorToastStyle);
-          navigate('/signin');
+          if (!isDevelopment) navigate('/signin');
           return;
         }
 
@@ -32,7 +33,7 @@ const AuthRedirectHandler = () => {
             if (!access_token || !refresh_token) {
               console.error("Missing tokens for recovery flow");
               toast.error("Invalid password reset link. Please request a new one.", errorToastStyle);
-              navigate('/signin');
+              if (!isDevelopment) navigate('/signin');
               return;
             }
 
@@ -45,13 +46,13 @@ const AuthRedirectHandler = () => {
             if (verifyError) {
               console.error("Token verification error:", verifyError);
               toast.error("Your password reset link has expired. Please request a new one.", errorToastStyle);
-              navigate('/signin');
+              if (!isDevelopment) navigate('/signin');
               return;
             }
 
             // If verification successful, redirect to reset password page with the hash intact
             console.log("Redirecting to reset password page");
-            navigate(`/reset-password${window.location.hash}`);
+            if (!isDevelopment) navigate(`/reset-password${window.location.hash}`);
             break;
 
           case 'signup':
@@ -60,27 +61,27 @@ const AuthRedirectHandler = () => {
             if (error) {
               console.error("Session error:", error);
               toast.error("Authentication failed. Please try signing in again.", errorToastStyle);
-              navigate('/signin');
+              if (!isDevelopment) navigate('/signin');
             } else {
-              toast.success("Successfully authenticated!");
-              navigate('/dashboard');
+              toast.success("Successfully authenticated!", successToastStyle);
+              if (!isDevelopment) navigate('/dashboard');
             }
             break;
 
           default:
             console.error("Unknown auth type:", type);
             toast.error("Invalid authentication link. Please try signing in again.", errorToastStyle);
-            navigate('/signin');
+            if (!isDevelopment) navigate('/signin');
         }
       } catch (error: any) {
         console.error("Auth redirect error:", error);
         toast.error("An error occurred. Please try signing in again.", errorToastStyle);
-        navigate('/signin');
+        if (!isDevelopment) navigate('/signin');
       }
     };
 
     handleRedirect();
-  }, [navigate]);
+  }, [navigate, isDevelopment]);
 
   return null;
 };
