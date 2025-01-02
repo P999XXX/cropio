@@ -86,16 +86,21 @@ const SignIn = () => {
   const handleResetPasswordRequest = async () => {
     setLoading('isResettingPassword', true);
     try {
-      await supabase.auth.resetPasswordForEmail(resetEmail, {
+      const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
         redirectTo: `${window.location.origin}/auth/callback#type=recovery`,
       });
-      
+
+      if (error) {
+        console.error("Reset password error:", error);
+        throw error;
+      }
+
       setShowForgotPassword(false);
       setShowResetThankYou(true);
       
     } catch (error: any) {
       console.error("Reset password error:", error);
-      toast.error(error.message, errorToastStyle);
+      toast.error(error.message || "Failed to send reset instructions", errorToastStyle);
     } finally {
       setLoading('isResettingPassword', false);
     }

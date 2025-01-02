@@ -56,7 +56,18 @@ const ForgotPasswordDialog = ({
       });
 
       if (resetError) {
-        const errorBody = JSON.parse((resetError as any)?.body || '{}');
+        // Parse error body to check for rate limit
+        let errorBody;
+        try {
+          errorBody = JSON.parse(resetError.message);
+        } catch {
+          try {
+            errorBody = JSON.parse((resetError as any)?.body || '{}');
+          } catch {
+            errorBody = {};
+          }
+        }
+
         const isRateLimit = 
           resetError.message?.toLowerCase().includes('rate limit') || 
           errorBody.code === 'over_email_send_rate_limit' ||
