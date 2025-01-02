@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -63,8 +64,8 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
 
   const formContent = (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-        <div className="grid gap-4 md:grid-cols-2">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <div className="grid gap-3 md:grid-cols-2">
           <FormInput
             form={form}
             name="firstName"
@@ -79,37 +80,39 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
           />
         </div>
 
-        <FormInput
-          form={form}
-          name="companyName"
-          label="Company Name"
-          placeholder="Enter your company name"
-        />
+        <div className="space-y-3">
+          <FormInput
+            form={form}
+            name="companyName"
+            label="Company Name"
+            placeholder="Enter your company name"
+          />
 
-        <FormInput
-          form={form}
-          name="email"
-          label="Email"
-          type="email"
-          placeholder="Enter your email"
-        />
+          <FormInput
+            form={form}
+            name="email"
+            label="Email"
+            type="email"
+            placeholder="Enter your email"
+          />
 
-        <PhoneInput form={form} />
+          <PhoneInput form={form} />
 
-        <PasswordInput
-          form={form}
-          name="password"
-          label="Password"
-          description="Password must be at least 8 characters and contain uppercase, lowercase, and numbers"
-        />
+          <PasswordInput
+            form={form}
+            name="password"
+            label="Password"
+            description="Password must be at least 8 characters and contain uppercase, lowercase, and numbers"
+          />
 
-        <PasswordInput
-          form={form}
-          name="confirmPassword"
-          label="Confirm Password"
-        />
+          <PasswordInput
+            form={form}
+            name="confirmPassword"
+            label="Confirm Password"
+          />
+        </div>
 
-        <div className="space-y-2">
+        <div className="space-y-2 mt-3">
           <AgreementCheckbox
             form={form}
             name="acceptTerms"
@@ -126,7 +129,7 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
 
         <Button 
           type="submit" 
-          className="w-full bg-primary text-primary-foreground hover:bg-primary/90" 
+          className="w-full bg-primary text-primary-foreground hover:bg-primary/90 mt-4" 
           disabled={isLoading}
         >
           {isLoading ? "Creating account..." : "Create Account"}
@@ -156,7 +159,7 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
   const baseContent = (
     <>
       {backButton}
-      <CardDescription className="text-muted-foreground mb-6">
+      <CardDescription className="text-muted-foreground mb-5">
         Complete your registration
       </CardDescription>
       {formContent}
@@ -164,7 +167,7 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
   );
 
   const commonStyles = isMobile 
-    ? "rounded-lg step-two-form bg-background space-y-4" 
+    ? "rounded-lg step-two-form bg-background space-y-3" 
     : "rounded-lg step-two-form bg-card border border-border shadow-sm p-6";
 
   if (isMobile) {
