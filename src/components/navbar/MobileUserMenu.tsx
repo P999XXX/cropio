@@ -22,7 +22,7 @@ export const MobileUserMenu = ({ userInitials }: MobileUserMenuProps) => {
           asChild 
           variant={isSignInPage ? "outline" : "primary"} 
           size="sm" 
-          className={`h-8 ${isSignInPage ? 'bg-white text-primary border-primary hover:bg-white hover:text-primary/90' : ''}`}
+          className={`h-8 text-[0.775rem] ${isSignInPage ? 'text-primary border-primary hover:text-white hover:bg-primary' : ''}`}
         >
           <Link to={isSignInPage ? "/signup" : "/signin"}>
             {isSignInPage ? "Sign Up" : "Sign In"}
