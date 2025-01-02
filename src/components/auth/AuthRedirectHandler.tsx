@@ -48,7 +48,8 @@ const AuthRedirectHandler = () => {
             }
 
             // Redirect to reset password page with the hash intact
-            navigate(`/reset-password${window.location.hash}`);
+            console.log("Redirecting to reset password page");
+            window.location.href = `/reset-password${window.location.hash}`;
             break;
 
           case 'signup':
