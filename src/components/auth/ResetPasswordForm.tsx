@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -37,35 +37,32 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   
-  // Check for error parameters in URL hash
-  useEffect(() => {
-    const hash = window.location.hash;
-    if (hash) {
-      const params = new URLSearchParams(hash.substring(1));
-      const error = params.get('error');
-      const errorDescription = params.get('error_description');
+  // Check for error parameters in URL hash immediately when component mounts
+  if (window.location.hash) {
+    const params = new URLSearchParams(window.location.hash.substring(1));
+    const error = params.get('error');
+    const errorDescription = params.get('error_description');
+    
+    if (error) {
+      let errorMessage = "Invalid reset link. Please request a new one.";
       
-      if (error) {
-        let errorMessage = "Invalid reset link. Please request a new one.";
-        
-        if (error === 'access_denied' && params.get('error_code') === 'otp_expired') {
-          errorMessage = "Your password reset link has expired. Please request a new one.";
-        } else if (errorDescription) {
-          errorMessage = decodeURIComponent(errorDescription).replace(/\+/g, ' ');
-        }
-        
-        toast.error(errorMessage, {
-          ...errorToastStyle,
-          duration: 10000, // 10 seconds
-        });
-        
-        // Redirect to signin page after showing the error
-        setTimeout(() => {
-          navigate('/signin');
-        }, 10000);
+      if (error === 'access_denied' && params.get('error_code') === 'otp_expired') {
+        errorMessage = "Your password reset link has expired. Please request a new one.";
+      } else if (errorDescription) {
+        errorMessage = decodeURIComponent(errorDescription).replace(/\+/g, ' ');
       }
+      
+      toast.error(errorMessage, {
+        ...errorToastStyle,
+        duration: 10000, // 10 seconds
+      });
+      
+      // Redirect to signin page after showing the error
+      setTimeout(() => {
+        navigate('/signin');
+      }, 10000);
     }
-  }, [navigate]);
+  }
 
   const form = useForm<ResetPasswordFormData>({
     resolver: zodResolver(resetPasswordSchema),
