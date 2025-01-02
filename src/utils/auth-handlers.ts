@@ -31,12 +31,12 @@ export const handlePasswordReset = async (
   setShowResetThankYou: (value: boolean) => void
 ) => {
   try {
-    // Check if the email exists in profiles
+    // Check if the email exists in profiles using maybeSingle() instead of single()
     const { data: profile, error: profileError } = await supabase
       .from("profiles")
       .select("*")
       .eq("email", resetEmail)
-      .single();
+      .maybeSingle();
 
     if (profileError) {
       console.error("Profile check error:", profileError);
