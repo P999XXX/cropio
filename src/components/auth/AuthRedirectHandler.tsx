@@ -68,12 +68,14 @@ const AuthRedirectHandler = () => {
           
           if (sessionError) {
             console.error("Session error:", sessionError);
+            toast.error("Authentication failed. Please try again.");
             navigate('/signin');
             return;
           }
 
           if (session) {
             if (type === 'email_confirmation') {
+              toast.success("Email confirmed successfully!");
               navigate('/signin');
             } else {
               navigate('/dashboard');
@@ -87,6 +89,7 @@ const AuthRedirectHandler = () => {
               
               if (setSessionError) {
                 console.error("Error setting session:", setSessionError);
+                toast.error("Authentication failed. Please try again.");
                 navigate('/signin');
                 return;
               }
