@@ -25,10 +25,8 @@ const SignIn = () => {
   const isMobile = useIsMobile();
   const { loadingStates, setLoading } = useLoadingStates();
 
-  // Use the auth session hook
   useAuthSession();
 
-  // Get user's first name if available
   useEffect(() => {
     const getFirstName = async () => {
       const { data: { session } } = await supabase.auth.getSession();
@@ -59,20 +57,22 @@ const SignIn = () => {
         })
       );
 
-      if (error) throw error;
+      if (error) {
+        if (error.message.includes('Invalid login credentials')) {
+          toast.error("Invalid email or password. Please try again.", errorToastStyle);
+          // Only clear password on invalid credentials
+          values.password = '';
+        } else {
+          toast.error(getErrorMessage(error), errorToastStyle);
+          // Clear both fields on other errors
+          values.email = '';
+          values.password = '';
+        }
+        throw error;
+      }
 
     } catch (error: any) {
       console.error("Sign in error:", error);
-      toast.error(getErrorMessage(error), errorToastStyle);
-      // Reset form on error
-      if (error.message?.toLowerCase().includes('invalid login credentials')) {
-        // Clear only password on invalid credentials
-        values.password = '';
-      } else {
-        // Clear both fields on other errors
-        values.email = '';
-        values.password = '';
-      }
     } finally {
       setLoading('isSigningIn', false);
     }
