@@ -64,8 +64,16 @@ const PhoneInput = ({ form }: PhoneInputProps) => {
   const handleCountryChange = (countryCode: CountryCode) => {
     setUserCountry(countryCode);
     form.setValue('phoneNumber', '');
-    // Also update the company country when phone prefix is changed
+    // Update both country code and company country when country is selected
+    form.setValue('countryCode', countries.find(c => c.country === countryCode)?.value || '');
     form.setValue('companyCountry', countryCode);
+  };
+
+  const handlePrefixChange = (countryCode: CountryCode) => {
+    setUserCountry(countryCode);
+    form.setValue('phoneNumber', '');
+    // Only update the country code when prefix is changed, not the company country
+    form.setValue('countryCode', countries.find(c => c.country === countryCode)?.value || '');
   };
 
   return (
@@ -74,7 +82,7 @@ const PhoneInput = ({ form }: PhoneInputProps) => {
       <div className="flex gap-2">
         <CountrySelector
           form={form}
-          onCountryChange={handleCountryChange}
+          onCountryChange={handlePrefixChange}
           selectedCountry={selectedCountry}
         />
         <PhoneNumberInput 
