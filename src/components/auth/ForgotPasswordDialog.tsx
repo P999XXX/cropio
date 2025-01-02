@@ -38,10 +38,13 @@ const ForgotPasswordDialog = ({
     let timer: NodeJS.Timeout;
     if (countdown > 0) {
       timer = setInterval(() => {
-        setCountdown((prev) => prev - 1);
-        if (countdown === 1) {
-          setIsRateLimited(false);
-        }
+        setCountdown((prev) => {
+          const newCount = prev - 1;
+          if (newCount === 0) {
+            setIsRateLimited(false);
+          }
+          return newCount;
+        });
       }, 1000);
     }
     return () => clearInterval(timer);
@@ -58,6 +61,11 @@ const ForgotPasswordDialog = ({
       setError("Please enter a valid email address");
       return;
     }
+
+    if (isRateLimited) {
+      setError(`Please wait ${countdown} seconds before requesting another reset email.`);
+      return;
+    }
     
     try {
       const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
@@ -65,37 +73,49 @@ const ForgotPasswordDialog = ({
       });
 
       if (resetError) {
-        if (
+        console.error("Reset error:", resetError);
+        
+        // Check for rate limit errors in different formats
+        const isRateLimit = 
           resetError.message.includes('rate limit') || 
           resetError.message.toLowerCase().includes('after') ||
-          (resetError as any)?.body?.includes('over_email_send_rate_limit')
-        ) {
-          // Extract the wait time from the error message if available
+          (resetError as any)?.status === 429 ||
+          (resetError as any)?.body?.includes('over_email_send_rate_limit');
+
+        if (isRateLimit) {
+          // Extract wait time from error message if available
           const waitTimeMatch = resetError.message.match(/after (\d+) seconds/);
           const waitTime = waitTimeMatch ? parseInt(waitTimeMatch[1]) : 60;
           
           setCountdown(waitTime);
           setIsRateLimited(true);
-          setError("Please wait before requesting another reset email.");
+          setError(`Please wait ${waitTime} seconds before requesting another reset email.`);
           return;
         }
-        throw resetError;
+        
+        setError(resetError.message);
+        return;
       }
       
       await onSubmit();
       setIsRateLimited(false);
-    } catch (error: any) {
-      const errorMessage = error.message || "An error occurred while resetting password";
-      setError(errorMessage);
       
+    } catch (error: any) {
+      console.error("Reset password error:", error);
+      
+      // Additional rate limit check for caught errors
       if (
-        errorMessage.includes('rate limit') || 
-        errorMessage.toLowerCase().includes('after') ||
-        (error.body && error.body.includes('over_email_send_rate_limit'))
+        error.message?.includes('rate limit') || 
+        error.status === 429 ||
+        error.body?.includes('over_email_send_rate_limit')
       ) {
         setIsRateLimited(true);
         setCountdown(60); // Default to 60 seconds if no specific time is provided
+        setError("Please wait before requesting another reset email.");
+        return;
       }
+      
+      setError(error.message || "An unexpected error occurred");
     }
   };
 
