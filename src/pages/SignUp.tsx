@@ -27,18 +27,23 @@ const SignUp = () => {
   };
 
   const checkEmailExists = async (email: string) => {
-    const { data: existingUser, error } = await supabase
-      .from('profiles')
-      .select('email')
-      .eq('email', email)
-      .maybeSingle();
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('email')
+        .eq('email', email)
+        .maybeSingle();
 
-    if (error) {
-      console.error('Error checking email:', error);
+      if (error) {
+        console.error('Error checking email:', error);
+        return false;
+      }
+
+      return !!data;
+    } catch (error) {
+      console.error('Error in checkEmailExists:', error);
       return false;
     }
-
-    return !!existingUser;
   };
 
   const handleStepTwo = async (values: any) => {
@@ -61,7 +66,7 @@ const SignUp = () => {
         return;
       }
 
-      const { error } = await supabase.auth.signUp({
+      const { error: signUpError } = await supabase.auth.signUp({
         email: values.email,
         password: values.password,
         options: {
@@ -71,17 +76,23 @@ const SignUp = () => {
             company_name: values.companyName,
             role: selectedRole,
           },
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
         },
       });
 
-      if (error) throw error;
+      if (signUpError) {
+        throw signUpError;
+      }
 
       setEmail(values.email);
       toast.success("Successfully signed up!", successToastStyle);
       setShowThankYou(true);
     } catch (error: any) {
       console.error("Sign up error:", error);
-      toast.error(error.message || "Failed to sign up", errorToastStyle);
+      toast.error(
+        error.message || "Failed to sign up. Please try again.", 
+        errorToastStyle
+      );
     } finally {
       setIsLoading(false);
     }
