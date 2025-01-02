@@ -2,10 +2,10 @@ import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface DashboardSidebarTriggerProps {
-  isExpanded: boolean;
+  isExpanded?: boolean;
 }
 
-export const DashboardSidebarTrigger = ({ isExpanded }: DashboardSidebarTriggerProps) => {
+export const DashboardSidebarTrigger = ({ isExpanded = false }: DashboardSidebarTriggerProps) => {
   return (
     <Button 
       variant="ghost" 
