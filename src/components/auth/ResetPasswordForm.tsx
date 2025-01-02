@@ -58,9 +58,14 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
           ...errorToastStyle,
           duration: 10000, // 10 seconds
         });
+        
+        // Redirect to signin page after showing the error
+        setTimeout(() => {
+          navigate('/signin');
+        }, 10000);
       }
     }
-  }, []);
+  }, [navigate]);
 
   const form = useForm<ResetPasswordFormData>({
     resolver: zodResolver(resetPasswordSchema),
@@ -84,7 +89,12 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
         ...successToastStyle,
         duration: 10000, // 10 seconds
       });
-      navigate('/signin');
+      
+      // Redirect to signin page after showing success message
+      setTimeout(() => {
+        navigate('/signin');
+      }, 10000);
+      
     } catch (error: any) {
       console.error("Password update error:", error);
       toast.error(error.message || "Failed to update password. Please try again.", {
