@@ -144,8 +144,8 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
 
   const backButton = (
     <Button
-      variant="ghost"
-      className="w-fit h-8 px-2 mb-2"
+      variant="secondary"
+      className="w-fit h-8 px-2 mb-2 text-secondary-foreground"
       onClick={onBack}
     >
       <ArrowLeft className="h-4 w-4 mr-1" />
