@@ -78,7 +78,7 @@ const PhoneInput = ({ form }: PhoneInputProps) => {
 
   return (
     <div className="space-y-1">
-      <FormLabel className="!text-foreground">Phone Number</FormLabel>
+      <FormLabel className="text-[0.775rem] text-foreground">Phone Number</FormLabel>
       <div className="flex gap-2">
         <CountrySelector
           form={form}
