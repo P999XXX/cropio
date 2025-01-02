@@ -11,6 +11,8 @@ interface CompanyEmailFieldsProps {
 }
 
 const CompanyEmailFields = ({ form, onEmailExists, setIsCheckingEmail }: CompanyEmailFieldsProps) => {
+  const [debouncedEmail, setDebouncedEmail] = useState("");
+  
   const checkEmailExists = async (email: string) => {
     try {
       setIsCheckingEmail(true);
@@ -39,15 +41,27 @@ const CompanyEmailFields = ({ form, onEmailExists, setIsCheckingEmail }: Company
   // Watch email field changes
   const email = form.watch('email');
   
+  // Update debounced email
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (email && email.includes('@') && email.includes('.')) {
-        checkEmailExists(email);
+      if (email && email !== debouncedEmail) {
+        setDebouncedEmail(email);
       }
-    }, 500); // Debounce the check by 500ms
+    }, 500);
 
     return () => clearTimeout(timer);
   }, [email]);
+
+  // Check email existence when debounced email changes
+  useEffect(() => {
+    const isValidEmail = (email: string) => {
+      return email.includes('@') && email.includes('.') && email.length > 5;
+    };
+
+    if (debouncedEmail && isValidEmail(debouncedEmail)) {
+      checkEmailExists(debouncedEmail);
+    }
+  }, [debouncedEmail]);
 
   return (
     <div className="space-y-3">
