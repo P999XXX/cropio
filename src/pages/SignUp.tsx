@@ -70,8 +70,8 @@ const SignUp = () => {
       }
 
       setEmail(values.email);
-      toast.success("Successfully signed up!", successToastStyle);
       setShowThankYou(true);
+      toast.success("Successfully signed up!", successToastStyle);
     } catch (error: any) {
       console.error("Sign up error:", error);
       toast.error(
