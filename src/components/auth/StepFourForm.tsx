@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import FormInput from "@/components/forms/FormInput";
-import { ArrowLeft, Upload } from "lucide-react";
+import { ArrowLeft, ArrowRight, Upload } from "lucide-react";
 import CurrencySwitcher from "../CurrencySwitcher";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -150,6 +150,7 @@ const StepFourForm = ({ onSubmit, onBack, isLoading }: StepFourFormProps) => {
               disabled={isLoading}
             >
               {isLoading ? "Creating account..." : "Complete Registration"}
+              <ArrowRight className="h-4 w-4 ml-1" />
             </Button>
           </div>
         </form>

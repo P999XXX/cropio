@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import FormInput from "@/components/forms/FormInput";
 import PasswordInput from "./PasswordInput";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import AgreementCheckbox from "./AgreementCheckbox";
 
 const stepTwoSchema = z.object({
@@ -112,7 +112,7 @@ const StepTwoForm = ({ onSubmit, onBack, isLoading }: StepTwoFormProps) => {
               type="button"
               variant="secondary"
               onClick={onBack}
-              className="w-full sm:w-auto order-1 sm:order-1"
+              className="w-full sm:w-auto order-2 sm:order-1"
             >
               <ArrowLeft className="h-4 w-4 mr-1" />
               Back
@@ -120,10 +120,11 @@ const StepTwoForm = ({ onSubmit, onBack, isLoading }: StepTwoFormProps) => {
             <Button 
               type="submit" 
               variant="primary"
-              className="w-full sm:w-auto order-2 sm:order-2"
+              className="w-full sm:w-auto order-1 sm:order-2"
               disabled={isLoading}
             >
               {isLoading ? "Creating account..." : "Continue"}
+              <ArrowRight className="h-4 w-4 ml-1" />
             </Button>
           </div>
         </form>

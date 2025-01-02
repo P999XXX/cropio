@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import FormInput from "@/components/forms/FormInput";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import PhoneInput from "./PhoneInput";
 import CountrySelect from "./form-sections/CountrySelect";
 
@@ -96,6 +96,7 @@ const StepThreeForm = ({ onSubmit, onBack, isLoading }: StepThreeFormProps) => {
               disabled={isLoading}
             >
               {isLoading ? "Saving..." : "Continue"}
+              <ArrowRight className="h-4 w-4 ml-1" />
             </Button>
           </div>
         </form>
