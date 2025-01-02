@@ -58,17 +58,36 @@ const SignIn = () => {
   const handleSignIn = async (values: SignInFormData) => {
     setLoading('isSigningIn', true);
     try {
+      // Parse the error response if authentication fails
       const { data, error } = await supabase.auth.signInWithPassword({
         email: values.email,
         password: values.password,
       });
 
       if (error) {
-        if (error.message.includes('Invalid login credentials')) {
-          toast.error("Invalid email or password. Please try again.", errorToastStyle);
-        } else {
-          toast.error(error.message, errorToastStyle);
+        let errorMessage = "An error occurred during sign in. Please try again.";
+        
+        // Parse error body to get detailed error information
+        let errorBody;
+        try {
+          errorBody = JSON.parse(error.message);
+        } catch {
+          try {
+            errorBody = JSON.parse((error as any)?.body || '{}');
+          } catch {
+            errorBody = {};
+          }
         }
+
+        // Handle specific error cases
+        if (error.message?.includes('Invalid login credentials') || 
+            errorBody?.code === 'invalid_credentials') {
+          errorMessage = "Invalid email or password. Please try again.";
+        } else if (error.message?.includes('Email not confirmed')) {
+          errorMessage = "Please verify your email before signing in.";
+        }
+
+        toast.error(errorMessage, errorToastStyle);
         throw error;
       }
 
