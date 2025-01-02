@@ -8,7 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -33,6 +33,11 @@ const ForgotPasswordDialog = ({
   const [error, setError] = useState("");
   const [countdown, setCountdown] = useState(0);
 
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => setCountdown(0);
+  }, []);
+
   const handleSubmit = async () => {
     setError("");
     
@@ -51,10 +56,13 @@ const ForgotPasswordDialog = ({
       });
 
       if (resetError) {
-        if (resetError.message?.toLowerCase().includes('rate limit') || 
-            resetError.message?.toLowerCase().includes('too many requests') ||
-            (resetError as any)?.status === 429
-        ) {
+        const errorBody = JSON.parse((resetError as any)?.body || '{}');
+        const isRateLimit = 
+          resetError.message?.toLowerCase().includes('rate limit') || 
+          errorBody.code === 'over_email_send_rate_limit' ||
+          resetError.status === 429;
+
+        if (isRateLimit) {
           const waitTime = 60;
           setCountdown(waitTime);
           const timer = setInterval(() => {
@@ -69,14 +77,13 @@ const ForgotPasswordDialog = ({
           setError(`Too many attempts. Please wait ${waitTime} seconds before trying again.`);
           return;
         }
-        console.error("Reset error:", resetError);
+
         setError(resetError.message);
         return;
       }
 
       await onSubmit();
       onOpenChange(false);
-      
     } catch (error: any) {
       console.error("Reset password error:", error);
       setError(error.message || "An unexpected error occurred");

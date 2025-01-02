@@ -86,12 +86,10 @@ const SignIn = () => {
   const handleResetPasswordRequest = async () => {
     setLoading('isResettingPassword', true);
     try {
-      const { error: resetError } = await supabase.auth.resetPasswordForEmail(resetEmail, {
+      await supabase.auth.resetPasswordForEmail(resetEmail, {
         redirectTo: `${window.location.origin}/auth/callback#type=recovery`,
       });
-
-      if (resetError) throw resetError;
-
+      
       setShowForgotPassword(false);
       setShowResetThankYou(true);
       
