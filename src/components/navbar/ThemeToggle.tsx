@@ -9,10 +9,10 @@ interface ThemeToggleProps {
 export const ThemeToggle = ({ isDark, onToggleTheme }: ThemeToggleProps) => {
   return (
     <Button
-      variant="secondary"
+      variant="ghost"
       size="icon"
       onClick={onToggleTheme}
-      className="h-8 w-8 md:h-9 md:w-9 text-foreground hover:text-foreground"
+      className="h-8 w-8 md:h-9 md:w-9 text-foreground hover:text-foreground hover:bg-secondary/80"
     >
       {isDark ? (
         <Moon className="h-4 w-4" />

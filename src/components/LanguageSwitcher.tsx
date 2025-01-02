@@ -60,9 +60,9 @@ export const LanguageSwitcher = () => {
       <HoverCard openDelay={200} closeDelay={200}>
         <HoverCardTrigger asChild>
           <Button 
-            variant="secondary" 
+            variant="ghost" 
             size="icon" 
-            className="h-9 w-9 hover:bg-secondary-hover hover:text-foreground transition-colors"
+            className="h-9 w-9 hover:bg-secondary/80 hover:text-foreground transition-colors"
           >
             <ReactCountryFlag
               countryCode={selectedCountry}
