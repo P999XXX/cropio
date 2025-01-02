@@ -16,21 +16,6 @@ const PhoneInput = ({ form }: PhoneInputProps) => {
   const [userCountry, setUserCountry] = useState<CountryCode>("DE");
 
   useEffect(() => {
-    // Watch for changes in companyCountry and update phone country code accordingly
-    const subscription = form.watch((value, { name }) => {
-      if (name === 'companyCountry') {
-        const country = countries.find(c => c.country === value.companyCountry);
-        if (country) {
-          form.setValue('countryCode', country.value);
-          setUserCountry(country.country as CountryCode);
-        }
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [form]);
-
-  useEffect(() => {
     const detectCountry = async () => {
       try {
         const { data, error } = await supabase.functions.invoke('detect-country');
@@ -64,8 +49,6 @@ const PhoneInput = ({ form }: PhoneInputProps) => {
   const handleCountryChange = (countryCode: CountryCode) => {
     setUserCountry(countryCode);
     form.setValue('phoneNumber', '');
-    // Also update the company country when phone prefix is changed
-    form.setValue('companyCountry', countryCode);
   };
 
   return (
