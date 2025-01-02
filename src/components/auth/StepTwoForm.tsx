@@ -5,13 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useSignupStore } from "@/store/signupStore";
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { errorToastStyle } from "@/utils/toast-styles";
 import { useEffect, useState } from "react";
 import PersonalFields from "./form-sections/PersonalFields";
 import PasswordFields from "./form-sections/PasswordFields";
 import AgreementFields from "./form-sections/AgreementFields";
+import { checkEmailExists } from "@/utils/validation";
 
 const nameRegex = /^[a-zA-Z]{3,}$/;
 
@@ -69,21 +69,8 @@ const StepTwoForm = ({ onSubmit, onBack, isLoading }: StepTwoFormProps) => {
   useEffect(() => {
     const subscription = form.watch(async (value, { name }) => {
       if (name === 'email' && value.email) {
-        try {
-          const { data, error } = await supabase
-            .from('profiles')
-            .select('email')
-            .eq('email', value.email)
-            .maybeSingle();
-          
-          if (error && error.code !== 'PGRST116') {
-            console.error("Email check error:", error);
-            return;
-          }
-          setEmailExists(!!data);
-        } catch (error) {
-          console.error("Email validation error:", error);
-        }
+        const exists = await checkEmailExists(value.email);
+        setEmailExists(exists);
       }
     });
 
@@ -92,18 +79,9 @@ const StepTwoForm = ({ onSubmit, onBack, isLoading }: StepTwoFormProps) => {
 
   const handleSubmit = async (values: StepTwoFormData) => {
     try {
-      // Check if email exists before proceeding
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('email')
-        .eq('email', values.email)
-        .maybeSingle();
+      const exists = await checkEmailExists(values.email);
       
-      if (error && error.code !== 'PGRST116') {
-        throw error;
-      }
-
-      if (data) {
+      if (exists) {
         toast.error("This email is already registered", errorToastStyle);
         return;
       }
