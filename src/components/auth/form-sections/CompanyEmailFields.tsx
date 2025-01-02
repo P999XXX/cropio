@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { StepTwoFormData } from "../StepTwoForm";
 import { supabase } from "@/integrations/supabase/client";
@@ -6,56 +6,39 @@ import { FormControl, FormField, FormItem, FormLabel } from "@/components/ui/for
 import { Input } from "@/components/ui/input";
 import FormErrorMessage from "@/components/forms/FormErrorMessage";
 import FormInput from "@/components/forms/FormInput";
+import { toast } from "sonner";
 
 interface CompanyEmailFieldsProps {
   form: UseFormReturn<StepTwoFormData>;
 }
 
 const CompanyEmailFields = ({ form }: CompanyEmailFieldsProps) => {
-  const [emailExists, setEmailExists] = useState(false);
+  const [isCheckingEmail, setIsCheckingEmail] = useState(false);
 
-  const checkEmailExists = async (email: string) => {
+  const validateEmail = async (email: string) => {
+    if (!email || !email.includes('@') || !email.includes('.')) {
+      return true;
+    }
+
+    setIsCheckingEmail(true);
     try {
-      const { data, error } = await supabase
+      const { count } = await supabase
         .from('profiles')
-        .select('email')
-        .eq('email', email)
-        .maybeSingle();
+        .select('*', { count: 'exact', head: true })
+        .eq('email', email);
 
-      if (error) {
-        console.error('Error checking email:', error);
-        return;
+      if (count && count > 0) {
+        toast.error("This email is already registered");
+        return "This email is already registered";
       }
-
-      // If data exists, the email is already registered
-      if (data) {
-        setEmailExists(true);
-        form.setError('email', {
-          type: 'manual',
-          message: 'This email is already registered'
-        });
-      } else {
-        setEmailExists(false);
-        // Only clear the email error if it's the "already registered" error
-        if (form.formState.errors.email?.type === 'manual') {
-          form.clearErrors('email');
-        }
-      }
+      return true;
     } catch (error) {
       console.error('Error checking email:', error);
+      return "Error checking email availability";
+    } finally {
+      setIsCheckingEmail(false);
     }
   };
-
-  useEffect(() => {
-    const email = form.watch('email');
-    if (email && email.includes('@') && email.includes('.')) {
-      const debounceTimer = setTimeout(() => {
-        checkEmailExists(email);
-      }, 500); // Debounce the check to avoid too many requests
-
-      return () => clearTimeout(debounceTimer);
-    }
-  }, [form.watch('email')]);
 
   return (
     <div className="space-y-3">
@@ -69,6 +52,11 @@ const CompanyEmailFields = ({ form }: CompanyEmailFieldsProps) => {
       <FormField
         control={form.control}
         name="email"
+        rules={{
+          validate: {
+            emailExists: validateEmail
+          }
+        }}
         render={({ field }) => (
           <FormItem className="space-y-1">
             <FormLabel className="!text-foreground">Email</FormLabel>
@@ -77,7 +65,8 @@ const CompanyEmailFields = ({ form }: CompanyEmailFieldsProps) => {
                 placeholder="Enter your email"
                 type="email"
                 {...field}
-                className={emailExists ? 'border-destructive' : ''}
+                className={isCheckingEmail ? 'bg-muted' : ''}
+                disabled={isCheckingEmail}
               />
             </FormControl>
             <FormErrorMessage message={form.formState.errors.email?.message} />
