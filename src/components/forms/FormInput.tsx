@@ -8,6 +8,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import FormErrorMessage from "./FormErrorMessage";
 
 interface FormInputProps {
   form: any;
@@ -35,21 +36,21 @@ const FormInput = ({
       control={form.control}
       name={name}
       rules={rules}
-      render={({ field }) => (
+      render={({ field, fieldState }) => (
         <FormItem className="space-y-1">
-          <FormLabel>{label}</FormLabel>
+          <FormLabel className="text-foreground">{label}</FormLabel>
           <FormControl>
             <Input
               {...field}
               type={type}
               placeholder={placeholder}
-              className={`h-auto py-2 text-[0.775rem] ${className}`}
+              className={`h-auto py-2 text-[0.775rem] ${fieldState.error ? 'border-destructive' : ''} ${className}`}
             />
           </FormControl>
           {description && (
             <FormDescription className="text-xs">{description}</FormDescription>
           )}
-          <FormMessage />
+          <FormErrorMessage message={fieldState.error?.message} />
         </FormItem>
       )}
     />

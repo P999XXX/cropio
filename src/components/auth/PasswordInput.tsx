@@ -27,7 +27,7 @@ const PasswordInput = ({ form, name, label, description, className }: PasswordIn
     <FormField
       control={form.control}
       name={name}
-      render={({ field }) => (
+      render={({ field, fieldState }) => (
         <FormItem className="space-y-1">
           <FormLabel className="!text-foreground">{label}</FormLabel>
           <FormControl>
@@ -35,7 +35,7 @@ const PasswordInput = ({ form, name, label, description, className }: PasswordIn
               <Input
                 placeholder={`${name === "password" ? "Enter" : "Confirm"} your password`}
                 type={showPassword ? "text" : "password"}
-                className={className}
+                className={`${fieldState.error ? 'border-destructive' : ''} ${className}`}
                 {...field}
               />
               <button
@@ -54,7 +54,7 @@ const PasswordInput = ({ form, name, label, description, className }: PasswordIn
           {description && (
             <FormDescription className="text-xs">{description}</FormDescription>
           )}
-          <FormErrorMessage message={form.formState.errors[name]?.message} />
+          <FormErrorMessage message={fieldState.error?.message} />
         </FormItem>
       )}
     />
