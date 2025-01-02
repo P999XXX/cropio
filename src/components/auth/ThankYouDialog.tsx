@@ -35,7 +35,8 @@ const ThankYouDialog = ({ open, onOpenChange, userEmail }: ThankYouDialogProps) 
         <div className="flex justify-end mt-4">
           <Button
             onClick={() => navigate("/")}
-            className="dialog-button-primary w-fit"
+            variant="primary"
+            className="w-fit"
           >
             Back to Homepage
           </Button>
