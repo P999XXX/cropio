@@ -112,7 +112,7 @@ const StepTwoForm = ({ onSubmit, onBack, isLoading }: StepTwoFormProps) => {
               type="button"
               variant="ghost"
               onClick={onBack}
-              className="w-full sm:w-auto order-2 sm:order-1"
+              className="w-full sm:w-auto order-1 sm:order-1"
             >
               <ArrowLeft className="h-4 w-4 mr-1" />
               Back
@@ -120,7 +120,7 @@ const StepTwoForm = ({ onSubmit, onBack, isLoading }: StepTwoFormProps) => {
             <Button 
               type="submit" 
               variant="primary"
-              className="w-full sm:w-auto order-1 sm:order-2"
+              className="w-full sm:w-auto order-2 sm:order-2"
               disabled={isLoading}
             >
               {isLoading ? "Creating account..." : "Continue"}
