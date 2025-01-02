@@ -63,7 +63,7 @@ const SignUp = () => {
     <SidebarProvider>
       <div className="min-h-screen bg-background w-full">
         <Navbar />
-        <main className={`w-full container flex min-h-[calc(100vh-64px)] items-start justify-center px-4 md:px-0 ${step === 1 ? 'mt-[2rem]' : 'mt-[0.5rem]'}`}>
+        <main className="w-full container flex min-h-[calc(100vh-64px)] items-start justify-center px-4 md:px-0 mt-[57px]">
           <div className="w-full md:w-[500px] py-2">
             <SignUpHeader step={step} />
 
