@@ -9,6 +9,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import PasswordInput from "@/components/auth/PasswordInput";
 import { toast } from "sonner";
 import { errorToastStyle, successToastStyle } from "@/utils/toast-styles";
+import { AlertCircle } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 interface ResetPasswordFormProps {
   isMobile: boolean;
@@ -30,6 +32,7 @@ type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
 const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [sessionChecked, setSessionChecked] = useState(false);
+  const [urlError, setUrlError] = useState<string | null>(null);
 
   const form = useForm<ResetPasswordFormData>({
     resolver: zodResolver(resetPasswordSchema),
@@ -49,9 +52,13 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
 
         console.log("Recovery flow check:", { type, hasAccessToken: !!access_token, hasRefreshToken: !!refresh_token });
 
+        if (!window.location.hash) {
+          setUrlError("Invalid password reset link. Please request a new one.");
+          return;
+        }
+
         if (type !== 'recovery' || !access_token || !refresh_token) {
-          console.error("Invalid recovery flow");
-          toast.error("Invalid password reset link. Please request a new one.", errorToastStyle);
+          setUrlError("Invalid password reset link. Please request a new one.");
           return;
         }
 
@@ -62,7 +69,7 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
 
         if (sessionError || !session) {
           console.error("Session error:", sessionError);
-          toast.error("Your password reset link has expired. Please request a new one.", errorToastStyle);
+          setUrlError("Your password reset link has expired. Please request a new one.");
           return;
         }
 
@@ -70,16 +77,11 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
         setSessionChecked(true);
       } catch (error) {
         console.error("Session check error:", error);
-        toast.error("An error occurred. Please try again.", errorToastStyle);
+        setUrlError("An error occurred. Please try again.");
       }
     };
 
-    if (window.location.hash) {
-      checkSession();
-    } else {
-      console.error("No URL fragment found");
-      toast.error("Invalid password reset link. Please request a new one.", errorToastStyle);
-    }
+    checkSession();
   }, []);
 
   const onSubmit = async (values: ResetPasswordFormData) => {
@@ -113,6 +115,24 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
       setIsLoading(false);
     }
   };
+
+  if (urlError) {
+    return (
+      <div className="px-4 md:px-0">
+        <Alert variant="destructive" className="mb-4">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{urlError}</AlertDescription>
+        </Alert>
+        <Button 
+          className="w-full bg-primary hover:bg-primary-hover text-primary-foreground h-10"
+          onClick={() => window.location.href = '/sign-in'}
+        >
+          Back to Sign In
+        </Button>
+      </div>
+    );
+  }
 
   const formContent = (
     <Form {...form}>
