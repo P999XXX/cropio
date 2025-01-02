@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import FormInput from "@/components/forms/FormInput";
 import { toast } from "sonner";
+import { errorToastStyle, successToastStyle } from "@/utils/toast-styles";
 
 interface ResetPasswordFormProps {
   isMobile: boolean;
@@ -53,7 +54,7 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
         // Verify this is a recovery flow and we have the necessary tokens
         if (type !== 'recovery' || !access_token || !refresh_token) {
           console.error("Invalid recovery flow");
-          toast.error("Invalid password reset link. Please request a new one.");
+          toast.error("Invalid password reset link. Please request a new one.", errorToastStyle);
           navigate('/signin');
           return;
         }
@@ -66,7 +67,7 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
 
         if (sessionError || !session) {
           console.error("Session error:", sessionError);
-          toast.error("Your password reset link has expired. Please request a new one.");
+          toast.error("Your password reset link has expired. Please request a new one.", errorToastStyle);
           navigate('/signin');
           return;
         }
@@ -75,7 +76,7 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
         setSessionChecked(true);
       } catch (error) {
         console.error("Session check error:", error);
-        toast.error("An error occurred. Please try again.");
+        toast.error("An error occurred. Please try again.", errorToastStyle);
         navigate('/signin');
       }
     };
@@ -85,14 +86,14 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
       checkSession();
     } else {
       console.error("No URL fragment found");
-      toast.error("Invalid password reset link. Please request a new one.");
+      toast.error("Invalid password reset link. Please request a new one.", errorToastStyle);
       navigate('/signin');
     }
   }, [navigate]);
 
   const onSubmit = async (values: ResetPasswordFormData) => {
     if (!sessionChecked) {
-      toast.error("Please wait while we verify your session.");
+      toast.error("Please wait while we verify your session.", errorToastStyle);
       return;
     }
 
@@ -116,11 +117,11 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
 
       // Sign out after successful password update
       await supabase.auth.signOut();
-      toast.success("Password successfully updated! Please sign in with your new password.");
+      toast.success("Password successfully updated! Please sign in with your new password.", successToastStyle);
       navigate('/signin');
     } catch (error: any) {
       console.error("Password update error:", error);
-      toast.error(error.message || "Failed to update password. Please try again.");
+      toast.error(error.message || "Failed to update password. Please try again.", errorToastStyle);
     } finally {
       setIsLoading(false);
     }
