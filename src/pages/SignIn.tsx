@@ -81,13 +81,11 @@ const SignIn = () => {
   const handleResetPasswordRequest = async () => {
     setLoading('isResettingPassword', true);
     try {
-      await withTimeout(
-        handlePasswordReset(
-          resetEmail,
-          () => setLoading('isResettingPassword', false),
-          setShowForgotPassword,
-          setShowResetThankYou
-        )
+      await handlePasswordReset(
+        resetEmail,
+        (value) => setLoading('isResettingPassword', value),
+        setShowForgotPassword,
+        setShowResetThankYou
       );
     } catch (error: any) {
       console.error("Reset password error:", error);

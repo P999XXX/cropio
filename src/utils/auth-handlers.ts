@@ -1,7 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { errorToastStyle, successToastStyle } from "./toast-styles";
-import { useQueryClient } from "@tanstack/react-query";
 
 export const handleGoogleSignIn = async () => {
   const { error } = await supabase.auth.signInWithOAuth({
@@ -31,13 +30,7 @@ export const handlePasswordReset = async (
   setShowForgotPassword: (value: boolean) => void,
   setShowResetThankYou: (value: boolean) => void
 ) => {
-  setIsResetting(true);
-
   try {
-    // Clear any existing cached data
-    const queryClient = useQueryClient();
-    queryClient.clear();
-
     // Check if the email exists in profiles
     const { data: profile, error: profileError } = await supabase
       .from("profiles")
@@ -45,7 +38,10 @@ export const handlePasswordReset = async (
       .eq("email", resetEmail)
       .single();
 
-    if (profileError) throw profileError;
+    if (profileError) {
+      console.error("Profile check error:", profileError);
+      throw new Error("Unable to verify email address");
+    }
 
     if (!profile) {
       throw new Error("No account found with this email address");
@@ -62,8 +58,7 @@ export const handlePasswordReset = async (
     toast.success("Reset instructions sent!", successToastStyle);
   } catch (error: any) {
     console.error("Reset password error:", error);
+    toast.error(error.message || "Failed to send reset instructions", errorToastStyle);
     throw error;
-  } finally {
-    setIsResetting(false);
   }
 };
