@@ -104,42 +104,20 @@ const StepTwoForm = ({ onSubmit, isLoading, onBack }: StepTwoFormProps) => {
     </Form>
   );
 
-  const backButton = (
-    <Button
-      variant="secondary"
-      className="w-fit h-8 px-2 mb-2 text-secondary-foreground"
-      onClick={onBack}
-    >
-      <ArrowLeft className="h-4 w-4 mr-1" />
-      Back
-    </Button>
-  );
-
-  const baseContent = (
-    <>
-      {backButton}
+  return (
+    <div className={`${isMobile ? 'rounded-lg step-two-form bg-background space-y-3' : 'rounded-lg step-two-form bg-card border border-border shadow-sm p-6'} ${isMobile ? 'step-two-form-mobile' : 'step-two-form-desktop md:min-w-[500px]'}`}>
+      <Button
+        variant="primary"
+        className="w-fit h-8 px-2 mb-2"
+        onClick={onBack}
+      >
+        <ArrowLeft className="h-4 w-4 mr-1" />
+        Back
+      </Button>
       <CardDescription className="text-muted-foreground mb-5">
         Complete your registration
       </CardDescription>
       {formContent}
-    </>
-  );
-
-  const commonStyles = isMobile 
-    ? "rounded-lg step-two-form bg-background space-y-3" 
-    : "rounded-lg step-two-form bg-card border border-border shadow-sm p-6";
-
-  if (isMobile) {
-    return (
-      <div className={`${commonStyles} step-two-form-mobile`}>
-        {baseContent}
-      </div>
-    );
-  }
-
-  return (
-    <div className={`${commonStyles} step-two-form-desktop md:min-w-[500px]`}>
-      {baseContent}
     </div>
   );
 };

@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { StepTwoFormData } from "../StepTwoForm";
 import { supabase } from "@/integrations/supabase/client";
-import { FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { FormControl, FormField, FormItem } from "@/components/ui/form";
 import FormErrorMessage from "@/components/forms/FormErrorMessage";
+import FormLabel from "@/components/forms/FormLabel";
+import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { RealtimePostgresChangesPayload } from "@supabase/supabase-js";
 
@@ -11,14 +13,10 @@ interface CompanyEmailFieldsProps {
   form: UseFormReturn<StepTwoFormData>;
 }
 
-// Define the type for our profiles table
 interface Profile {
   id: string;
   email: string;
   company_name: string;
-  first_name?: string;
-  last_name?: string;
-  role: string;
 }
 
 const CompanyEmailFields = ({ form }: CompanyEmailFieldsProps) => {
@@ -35,10 +33,9 @@ const CompanyEmailFields = ({ form }: CompanyEmailFieldsProps) => {
           schema: 'public',
           table: 'profiles'
         },
-        (payload: RealtimePostgresChangesPayload<{ [key: string]: any }>) => {
+        (payload: RealtimePostgresChangesPayload<Profile>) => {
           const currentEmail = form.getValues('email');
           if (currentEmail && payload.new && 'email' in payload.new) {
-            // Only check if the change affects email field
             if (payload.new.email?.toLowerCase() === currentEmail.toLowerCase()) {
               validateEmail(currentEmail);
             }
@@ -63,8 +60,7 @@ const CompanyEmailFields = ({ form }: CompanyEmailFieldsProps) => {
       const { count, error } = await supabase
         .from('profiles')
         .select('*', { count: 'exact', head: true })
-        .eq('email', email.toLowerCase())
-        .throwOnError();
+        .eq('email', email.toLowerCase());
 
       if (error) throw error;
 
@@ -92,11 +88,11 @@ const CompanyEmailFields = ({ form }: CompanyEmailFieldsProps) => {
         name="companyName"
         render={({ field }) => (
           <FormItem className="space-y-1">
-            <FormLabel className="!text-foreground">Company Name</FormLabel>
+            <FormLabel>Company Name</FormLabel>
             <FormControl>
-              <input
+              <Input
                 placeholder="Enter your company name"
-                className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                className="h-9 bg-transparent"
                 {...field}
               />
             </FormControl>
@@ -115,14 +111,14 @@ const CompanyEmailFields = ({ form }: CompanyEmailFieldsProps) => {
         }}
         render={({ field }) => (
           <FormItem className="space-y-1">
-            <FormLabel className="!text-foreground">Email</FormLabel>
+            <FormLabel>Email</FormLabel>
             <FormControl>
-              <input
+              <Input
                 placeholder="Enter your email"
                 type="email"
-                className={`flex h-9 w-full rounded-md border ${
-                  emailExists ? 'border-destructive' : 'border-input'
-                } bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50`}
+                className={`h-9 bg-transparent ${
+                  emailExists ? 'border-destructive' : ''
+                }`}
                 {...field}
                 onChange={(e) => {
                   field.onChange(e);
