@@ -42,6 +42,7 @@ const StepThreeForm = ({ onSubmit, onBack, isLoading }: StepThreeFormProps) => {
 
   return (
     <div className="space-y-6 bg-card p-6 rounded-lg border border-border">
+      <h3 className="text-lg font-semibold">Company Information</h3>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormInput
