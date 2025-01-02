@@ -18,13 +18,7 @@ import DashboardSubscriptions from "./pages/dashboard/DashboardSubscriptions";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import AuthRedirectHandler from "./components/auth/AuthRedirectHandler";
 
-// Temporarily disabled auth checks for development
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  // Development mode: directly render children without auth checks
-  return children;
-  
-  // Original auth logic commented out for later use
-  /*
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -51,7 +45,13 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       console.log("Auth state changed:", event);
-      setIsAuthenticated(!!session);
+      if (event === 'SIGNED_IN') {
+        setIsAuthenticated(true);
+      } else if (event === 'SIGNED_OUT') {
+        setIsAuthenticated(false);
+      } else if (event === 'TOKEN_REFRESHED') {
+        setIsAuthenticated(true);
+      }
       setIsLoading(false);
     });
 
@@ -65,7 +65,6 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   }
 
   return isAuthenticated ? children : <Navigate to="/signin" replace />;
-  */
 };
 
 const router = createBrowserRouter([

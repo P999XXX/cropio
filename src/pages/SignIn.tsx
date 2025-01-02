@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
@@ -24,7 +24,7 @@ const SignIn = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const isMobile = useIsMobile();
   const { loadingStates, setLoading } = useLoadingStates();
-  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   const handleSignIn = async (values: SignInFormData) => {
     setLoading('isSigningIn', true);
@@ -48,13 +48,14 @@ const SignIn = () => {
       }
 
       if (data.session) {
-        // Store the session but don't redirect
         await supabase.auth.setSession(data.session);
         toast.success("Signed in successfully!");
+        navigate('/dashboard');
       }
 
     } catch (error: any) {
       console.error("Sign in error:", error);
+      setErrorMessage(error.message);
     } finally {
       setLoading('isSigningIn', false);
     }
@@ -64,13 +65,10 @@ const SignIn = () => {
     setLoading('isResettingPassword', true);
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
-        redirectTo: `${window.location.origin}/auth/callback#type=recovery`,
+        redirectTo: `${window.location.origin}/auth/callback?type=recovery`,
       });
 
-      if (error) {
-        console.error("Reset password error:", error);
-        throw error;
-      }
+      if (error) throw error;
 
       setShowForgotPassword(false);
       setShowResetThankYou(true);
