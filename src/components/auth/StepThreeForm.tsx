@@ -41,7 +41,7 @@ const StepThreeForm = ({ onSubmit, onBack, isLoading }: StepThreeFormProps) => {
   });
 
   return (
-    <div className="space-y-6 bg-card p-6 rounded-lg border border-border md:max-w-2xl md:mx-auto">
+    <div className="space-y-6 md:bg-card md:p-6 md:rounded-lg md:border md:border-border md:max-w-2xl md:mx-auto">
       <h3 className="text-lg font-semibold text-left md:text-center">Company Information</h3>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -82,7 +82,7 @@ const StepThreeForm = ({ onSubmit, onBack, isLoading }: StepThreeFormProps) => {
           <div className="flex flex-col-reverse sm:flex-row sm:justify-between gap-3 sm:gap-4 pt-2">
             <Button
               type="button"
-              variant="ghost"
+              variant="secondary"
               onClick={onBack}
               className="w-full sm:w-auto order-2 sm:order-1"
             >
