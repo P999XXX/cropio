@@ -10,81 +10,23 @@ import ForgotPasswordDialog from "@/components/auth/ForgotPasswordDialog";
 import ResetPasswordThankYouDialog from "@/components/auth/ResetPasswordThankYouDialog";
 import { SignInFormData } from "@/components/auth/SignInForm";
 import { handleGoogleSignIn, handleLinkedInSignIn, handlePasswordReset } from "@/utils/auth-handlers";
-import { errorToastStyle, successToastStyle } from "@/utils/toast-styles";
+import { errorToastStyle } from "@/utils/toast-styles";
 import { SidebarProvider } from "@/components/ui/sidebar";
-
-// Timeout duration for operations (15 seconds)
-const OPERATION_TIMEOUT = 15000;
-
-interface LoadingStates {
-  isSigningIn: boolean;
-  isGoogleSigningIn: boolean;
-  isLinkedInSigningIn: boolean;
-  isResettingPassword: boolean;
-}
+import { useAuthSession, withTimeout } from "@/hooks/useAuthSession";
+import { useLoadingStates } from "@/hooks/useLoadingStates";
+import { getErrorMessage } from "@/utils/auth-error-handler";
 
 const SignIn = () => {
-  const [loadingStates, setLoadingStates] = useState<LoadingStates>({
-    isSigningIn: false,
-    isGoogleSigningIn: false,
-    isLinkedInSigningIn: false,
-    isResettingPassword: false,
-  });
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [showResetThankYou, setShowResetThankYou] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const navigate = useNavigate();
   const isMobile = useIsMobile();
+  const { loadingStates, setLoading } = useLoadingStates();
 
-  // Function to handle operation timeouts
-  const withTimeout = async (operation: Promise<any>, timeoutDuration: number = OPERATION_TIMEOUT) => {
-    return Promise.race([
-      operation,
-      new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Operation timed out')), timeoutDuration)
-      )
-    ]);
-  };
-
-  // Enhanced session management
-  useEffect(() => {
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log("Auth state changed:", event);
-      
-      if (event === 'SIGNED_IN') {
-        toast.success("Successfully signed in!", successToastStyle);
-        navigate("/dashboard");
-      } else if (event === 'SIGNED_OUT') {
-        toast.error("Your session has ended. Please sign in again.", errorToastStyle);
-      } else if (event === 'TOKEN_REFRESHED') {
-        console.log("Session token refreshed");
-      } else if (event === 'USER_UPDATED') {
-        console.log("User data updated");
-      }
-    });
-
-    // Initial session check
-    const checkSession = async () => {
-      const { data: { session }, error } = await supabase.auth.getSession();
-      if (session) {
-        navigate("/dashboard");
-      }
-      if (error) {
-        console.error("Session check error:", error);
-        toast.error("Unable to verify your session", errorToastStyle);
-      }
-    };
-
-    checkSession();
-
-    // Cleanup subscription
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [navigate]);
+  // Use the auth session hook
+  useAuthSession();
 
   // Get user's first name if available
   useEffect(() => {
@@ -106,27 +48,8 @@ const SignIn = () => {
     getFirstName();
   }, []);
 
-  // Enhanced error handling with specific messages
-  const getErrorMessage = (error: any): string => {
-    const message = error?.message?.toLowerCase() || '';
-    
-    if (message.includes('invalid login credentials')) {
-      return 'Incorrect email or password. Please try again.';
-    } else if (message.includes('email not confirmed')) {
-      return 'Please verify your email before signing in.';
-    } else if (message.includes('timeout')) {
-      return 'The operation timed out. Please check your internet connection and try again.';
-    } else if (message.includes('network')) {
-      return 'Unable to connect. Please check your internet connection.';
-    } else if (message.includes('too many requests')) {
-      return 'Too many attempts. Please try again later.';
-    }
-    
-    return error.message || 'An unexpected error occurred. Please try again.';
-  };
-
   const handleSignIn = async (values: SignInFormData) => {
-    setLoadingStates(prev => ({ ...prev, isSigningIn: true }));
+    setLoading('isSigningIn', true);
     
     try {
       const { error } = await withTimeout(
@@ -151,17 +74,17 @@ const SignIn = () => {
         values.password = '';
       }
     } finally {
-      setLoadingStates(prev => ({ ...prev, isSigningIn: true }));
+      setLoading('isSigningIn', false);
     }
   };
 
   const handleResetPasswordRequest = async () => {
-    setLoadingStates(prev => ({ ...prev, isResettingPassword: true }));
+    setLoading('isResettingPassword', true);
     try {
       await withTimeout(
         handlePasswordReset(
           resetEmail,
-          () => setLoadingStates(prev => ({ ...prev, isResettingPassword: false })),
+          () => setLoading('isResettingPassword', false),
           setShowForgotPassword,
           setShowResetThankYou
         )
@@ -170,7 +93,7 @@ const SignIn = () => {
       console.error("Reset password error:", error);
       toast.error(getErrorMessage(error), errorToastStyle);
     } finally {
-      setLoadingStates(prev => ({ ...prev, isResettingPassword: false }));
+      setLoading('isResettingPassword', false);
     }
   };
 
