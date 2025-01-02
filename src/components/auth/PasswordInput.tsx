@@ -34,7 +34,7 @@ const PasswordInput = ({ form, name, label, description, className }: PasswordIn
               <Input
                 placeholder={`${name === "password" ? "Enter" : "Confirm"} your password`}
                 type={showPassword ? "text" : "password"}
-                className={`h-10 px-3 py-2 text-sm ${fieldState.error ? 'border-destructive' : ''} ${className}`}
+                className={`h-10 px-3 py-2 text-[0.775rem] ${fieldState.error ? 'border-destructive' : ''} ${className}`}
                 {...field}
               />
               <button
@@ -50,9 +50,9 @@ const PasswordInput = ({ form, name, label, description, className }: PasswordIn
               </button>
             </div>
           </FormControl>
-          {name === "password" && (
+          {name === "password" && description && (
             <FormDescription className="text-xs text-muted-foreground">
-              Password must be at least 8 characters and contain uppercase, lowercase, and numbers
+              {description}
             </FormDescription>
           )}
           <FormErrorMessage message={fieldState.error?.message} />
