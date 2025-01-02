@@ -1,44 +1,44 @@
-import { Button } from "@/components/ui/button";
-import { Form } from "@/components/ui/form";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import PasswordInput from "./PasswordInput";
-import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { useState, useEffect } from "react";
-
-const passwordSchema = z
-  .string()
-  .min(8, "Password must be at least 8 characters")
-  .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-  .regex(/[a-z]/, "Password must contain at least one lowercase letter")
-  .regex(/[0-9]/, "Password must contain at least one number");
+import { Button } from "@/components/ui/button";
+import { Form } from "@/components/ui/form";
+import FormInput from "@/components/forms/FormInput";
+import { toast } from "sonner";
 
 const resetPasswordSchema = z.object({
-  password: passwordSchema,
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters")
+    .max(64, "Password must be less than 64 characters"),
   confirmPassword: z.string(),
 }).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
+  message: "Passwords do not match",
   path: ["confirmPassword"],
 });
 
 type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
 
-interface ResetPasswordFormProps {
-  isMobile: boolean;
-}
-
-const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
+const ResetPasswordForm = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [sessionChecked, setSessionChecked] = useState(false);
 
+  const form = useForm<ResetPasswordFormData>({
+    resolver: zodResolver(resetPasswordSchema),
+    defaultValues: {
+      password: "",
+      confirmPassword: "",
+    },
+  });
+
   useEffect(() => {
     const checkSession = async () => {
       try {
-        // Get the recovery token from the URL hash
+        // Get the URL fragment
         const fragment = new URLSearchParams(window.location.hash.substring(1));
         const type = fragment.get('type');
         const access_token = fragment.get('access_token');
@@ -71,21 +71,20 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
         setSessionChecked(true);
       } catch (error) {
         console.error("Session check error:", error);
-        toast.error("Unable to verify your session. Please try again.");
+        toast.error("An error occurred. Please try again.");
         navigate('/signin');
       }
     };
 
-    checkSession();
+    // Only run if we have a URL fragment
+    if (window.location.hash) {
+      checkSession();
+    } else {
+      console.error("No URL fragment found");
+      toast.error("Invalid password reset link. Please request a new one.");
+      navigate('/signin');
+    }
   }, [navigate]);
-
-  const form = useForm<ResetPasswordFormData>({
-    resolver: zodResolver(resetPasswordSchema),
-    defaultValues: {
-      password: "",
-      confirmPassword: "",
-    },
-  });
 
   const onSubmit = async (values: ResetPasswordFormData) => {
     if (!sessionChecked) {
@@ -116,48 +115,35 @@ const ResetPasswordForm = ({ isMobile }: ResetPasswordFormProps) => {
       toast.success("Password successfully updated! Please sign in with your new password.");
       navigate('/signin');
     } catch (error: any) {
-      console.error("Reset password error:", error);
-      toast.error(error.message || "Failed to reset password");
+      console.error("Password update error:", error);
+      toast.error(error.message || "Failed to update password. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  if (!sessionChecked) {
-    return null;
-  }
-
   return (
-    <>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
-          <div className="space-y-3">
-            <PasswordInput
-              form={form}
-              name="password"
-              label="New Password"
-              description="Password must be at least 8 characters and contain uppercase, lowercase, and numbers"
-            />
-
-            <PasswordInput
-              form={form}
-              name="confirmPassword"
-              label="Confirm Password"
-            />
-          </div>
-
-          <Button type="submit" className="w-full mt-3" variant="primary" disabled={isLoading}>
-            {isLoading ? "Updating password..." : "Update Password"}
-          </Button>
-        </form>
-      </Form>
-      <div className="text-sm text-center text-muted-foreground mt-3">
-        Already know your password?{" "}
-        <a href="/signin" className="text-primary hover:underline font-medium">
-          Sign in
-        </a>
-      </div>
-    </>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <FormInput
+          form={form}
+          name="password"
+          label="New Password"
+          type="password"
+          placeholder="Enter your new password"
+        />
+        <FormInput
+          form={form}
+          name="confirmPassword"
+          label="Confirm Password"
+          type="password"
+          placeholder="Confirm your new password"
+        />
+        <Button type="submit" className="w-full" disabled={isLoading}>
+          {isLoading ? "Updating Password..." : "Update Password"}
+        </Button>
+      </form>
+    </Form>
   );
 };
 
