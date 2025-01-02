@@ -12,7 +12,7 @@ const StepNavigation = ({ currentStep, steps }: StepNavigationProps) => {
         <div key={step} className="flex items-center">
           <div className="flex flex-col items-center">
             <div
-              className={`w-8 h-8 rounded-full flex items-center justify-center border-2 
+              className={`w-7 h-7 rounded-full flex items-center justify-center border-2 
                 ${
                   index + 1 < currentStep
                     ? "bg-primary border-primary text-primary-foreground"
@@ -22,13 +22,13 @@ const StepNavigation = ({ currentStep, steps }: StepNavigationProps) => {
                 }`}
             >
               {index + 1 < currentStep ? (
-                <Check className="h-4 w-4" />
+                <Check className="h-3.5 w-3.5" />
               ) : (
-                <span className="text-sm">{index + 1}</span>
+                <span className="text-xs">{index + 1}</span>
               )}
             </div>
             <span
-              className={`text-xs mt-1 whitespace-nowrap md:text-sm ${
+              className={`text-[0.65rem] mt-1 whitespace-nowrap md:text-xs ${
                 index + 1 === currentStep ? "text-primary" : "text-muted-foreground"
               }`}
             >
@@ -37,7 +37,7 @@ const StepNavigation = ({ currentStep, steps }: StepNavigationProps) => {
           </div>
           {index < steps.length - 1 && (
             <div
-              className={`w-8 md:w-12 h-[2px] mx-1 md:mx-2 ${
+              className={`w-6 md:w-10 h-[2px] mx-1 md:mx-2 ${
                 index + 1 < currentStep ? "bg-primary" : "bg-secondary"
               }`}
             />
