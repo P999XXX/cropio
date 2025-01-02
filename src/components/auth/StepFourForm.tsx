@@ -11,11 +11,23 @@ import { Label } from "@/components/ui/label";
 import { useSignupStore } from "@/store/signupStore";
 
 const stepFourSchema = z.object({
-  bankName: z.string().min(1, "Bank name is required"),
+  bankName: z.string()
+    .min(3, "Bank name must be at least 3 characters")
+    .regex(/^[a-zA-Z\s]{3,}$/, "Bank name must contain only letters and be at least 3 characters"),
   bankAddress: z.string().min(1, "Bank address is required"),
   bankAccountHolder: z.string().min(1, "Account holder name is required"),
-  iban: z.string().min(1, "IBAN is required"),
-  bic: z.string().min(1, "BIC/SWIFT is required"),
+  iban: z.string()
+    .min(18, "IBAN must be at least 18 characters")
+    .regex(/^[A-Z0-9]+$/, "IBAN must contain only letters and numbers"),
+  bic: z.string()
+    .refine(
+      (value) => {
+        const length = value.length;
+        return length === 8 || length === 11;
+      },
+      "BIC/SWIFT must be exactly 8 or 11 characters"
+    )
+    .regex(/^[A-Z]+$/, "BIC/SWIFT must contain only uppercase letters"),
   vatNumber: z.string().min(1, "VAT number is required"),
   taxNumber: z.string().min(1, "Tax number is required"),
   documents: z.any(),
