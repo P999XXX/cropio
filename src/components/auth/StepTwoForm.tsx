@@ -107,7 +107,7 @@ const StepTwoForm = ({ onSubmit, onBack, isLoading }: StepTwoFormProps) => {
             />
           </div>
 
-          <div className="flex flex-col-reverse sm:flex-row gap-3 sm:gap-4 pt-2">
+          <div className="flex flex-col-reverse sm:flex-row sm:justify-between gap-3 sm:gap-4 pt-2">
             <Button
               type="button"
               variant="secondary"
