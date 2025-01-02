@@ -1,11 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Upload, X } from "lucide-react";
+import { Upload, X, FileIcon } from "lucide-react";
 import { UseFormReturn } from "react-hook-form";
 import { StepFourFormData } from "../StepFourForm";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { cn } from "@/lib/utils";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 
 interface DocumentUploadProps {
   form: UseFormReturn<StepFourFormData>;
@@ -16,6 +17,18 @@ interface DocumentUploadProps {
 
 const DocumentUpload = ({ form, selectedFiles, onFileChange, onRemoveFile }: DocumentUploadProps) => {
   const [isDragging, setIsDragging] = useState(false);
+  const [pdfPreviews, setPdfPreviews] = useState<string[]>([]);
+
+  useEffect(() => {
+    // Create object URLs for PDF previews
+    const previews = selectedFiles.map(file => URL.createObjectURL(file));
+    setPdfPreviews(previews);
+
+    // Cleanup
+    return () => {
+      previews.forEach(preview => URL.revokeObjectURL(preview));
+    };
+  }, [selectedFiles]);
 
   const handleDragEnter = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -76,7 +89,7 @@ const DocumentUpload = ({ form, selectedFiles, onFileChange, onRemoveFile }: Doc
   };
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 document-upload">
       <Label className="text-[0.775rem]">Company Documents</Label>
       <div
         className={cn(
@@ -124,18 +137,36 @@ const DocumentUpload = ({ form, selectedFiles, onFileChange, onRemoveFile }: Doc
           <Label className="text-[0.775rem]">Selected File:</Label>
           <div className="space-y-2">
             {selectedFiles.map((file, index) => (
-              <div key={index} className="flex items-center justify-between p-2 bg-muted rounded-md">
-                <span className="text-[0.875rem] truncate">{file.name}</span>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => onRemoveFile(index)}
-                  className="h-8 w-8 p-0"
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              </div>
+              <HoverCard key={index}>
+                <HoverCardTrigger asChild>
+                  <div className="flex items-center justify-between p-2 bg-muted rounded-md cursor-pointer">
+                    <div className="flex items-center gap-2">
+                      <FileIcon className="h-4 w-4 text-primary" />
+                      <span className="text-[0.875rem] truncate">{file.name}</span>
+                    </div>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => onRemoveFile(index)}
+                      className="h-8 w-8 p-0"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </HoverCardTrigger>
+                <HoverCardContent className="w-80 p-0">
+                  <object
+                    data={pdfPreviews[index]}
+                    type="application/pdf"
+                    width="100%"
+                    height="200px"
+                    className="rounded-md"
+                  >
+                    <p>PDF preview not available</p>
+                  </object>
+                </HoverCardContent>
+              </HoverCard>
             ))}
           </div>
         </div>
