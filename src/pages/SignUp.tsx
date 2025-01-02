@@ -34,9 +34,9 @@ const SignUp = () => {
         .from('profiles')
         .select('email')
         .eq('email', values.email)
-        .single();
+        .maybeSingle();
 
-      if (checkError && checkError.code !== 'PGRST116') {
+      if (checkError) {
         throw checkError;
       }
 
