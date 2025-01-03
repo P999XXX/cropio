@@ -64,7 +64,7 @@ const StepFiveForm = ({ onSubmit, onBack, isLoading }: StepFiveFormProps) => {
       }
 
       // Create user account
-      await createUserAccount({
+      const { user } = await createUserAccount({
         email: formData.email,
         password: formData.password,
         firstName: formData.firstName || '',
@@ -73,10 +73,14 @@ const StepFiveForm = ({ onSubmit, onBack, isLoading }: StepFiveFormProps) => {
         role: formData.role || 'buyer',
       });
 
+      if (!user?.id) {
+        throw new Error('Failed to create user account');
+      }
+
       // Upload documents if any
       let uploadedFiles: File[] = [];
       if (selectedFiles.length > 0) {
-        uploadedFiles = await uploadDocuments(formData.email, selectedFiles);
+        uploadedFiles = await uploadDocuments(user.id, selectedFiles);
         
         if (uploadedFiles.length === 0) {
           toast.error("Failed to upload documents", {

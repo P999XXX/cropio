@@ -19,17 +19,20 @@ export const checkEmailExists = async (email: string): Promise<boolean> => {
   }
 };
 
-export const uploadDocuments = async (email: string, files: File[]): Promise<File[]> => {
+export const uploadDocuments = async (userId: string, files: File[]): Promise<File[]> => {
   const uploadedFiles: File[] = [];
 
   for (const file of files) {
     try {
       const fileExt = file.name.split('.').pop();
-      const fileName = `${email}/${crypto.randomUUID()}.${fileExt}`;
+      const fileName = `${userId}/${crypto.randomUUID()}.${fileExt}`;
       
       const { error: uploadError } = await supabase.storage
         .from('company_documents')
-        .upload(fileName, file);
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
       
       if (uploadError) {
         console.error("Upload error:", uploadError);
@@ -53,7 +56,7 @@ export const createUserAccount = async (userData: {
   companyName: string;
   role: string;
 }) => {
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email: userData.email,
     password: userData.password,
     options: {
@@ -68,5 +71,5 @@ export const createUserAccount = async (userData: {
   });
 
   if (error) throw error;
-  return true;
+  return data;
 };
