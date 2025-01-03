@@ -63,7 +63,7 @@ const SignIn = () => {
         }
 
         toast.error(errorMessage, errorToastStyle);
-        throw error;
+        throw new Error(errorMessage);
       }
 
       if (data.session) {

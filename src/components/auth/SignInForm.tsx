@@ -32,11 +32,11 @@ const SignInForm = ({ onSubmit, isLoading, onForgotPassword }: SignInFormProps) 
   const handleSubmit = async (values: SignInFormData) => {
     try {
       await onSubmit(values);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Sign in error:", error);
       form.setError("root", {
         type: "manual",
-        message: "Invalid email or password. Please try again.",
+        message: error.message || "Invalid email or password. Please try again.",
       });
     }
   };
@@ -59,7 +59,7 @@ const SignInForm = ({ onSubmit, isLoading, onForgotPassword }: SignInFormProps) 
         />
 
         {form.formState.errors.root && (
-          <p className="text-[#D32F2F] text-sm mt-2">
+          <p className="text-destructive text-sm mt-2">
             {form.formState.errors.root.message}
           </p>
         )}
