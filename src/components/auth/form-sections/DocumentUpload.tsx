@@ -3,13 +3,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Upload, X, FileIcon } from "lucide-react";
 import { UseFormReturn } from "react-hook-form";
-import { StepFourFormData } from "../StepFourForm";
+import { StepFiveFormData } from "../StepFiveForm";
 import { useState, useCallback, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 
 interface DocumentUploadProps {
-  form: UseFormReturn<StepFourFormData>;
+  form: UseFormReturn<StepFiveFormData>;
   selectedFiles: File[];
   onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onRemoveFile: (index: number) => void;
