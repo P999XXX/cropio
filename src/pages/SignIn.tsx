@@ -84,6 +84,37 @@ const SignIn = () => {
     }
   };
 
+  const handleResetPasswordRequest = async () => {
+    setLoading('isResettingPassword', true);
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
+        redirectTo: `${window.location.origin}/auth/callback?type=recovery`,
+      });
+
+      if (error) {
+        console.error("Reset password error:", error);
+        toast.error(error.message || "Failed to send reset instructions", {
+          ...errorToastStyle,
+          icon: <AlertCircle className="h-5 w-5" />,
+        });
+        throw error;
+      }
+
+      setShowForgotPassword(false);
+      setShowResetThankYou(true);
+      toast.success("Reset instructions sent successfully!", {
+        ...successToastStyle,
+        icon: '📧',
+      });
+      
+    } catch (error: any) {
+      console.error("Reset password error:", error);
+      throw error;
+    } finally {
+      setLoading('isResettingPassword', false);
+    }
+  };
+
   return (
     <SidebarProvider>
       <div className="min-h-screen bg-background w-full">
