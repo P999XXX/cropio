@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 import { errorToastStyle } from "@/utils/toast-styles";
 import { useSignupStore } from "@/store/signupStore";
 import { checkEmailExists } from "@/utils/validation";
@@ -10,6 +11,7 @@ import { stepTwoSchema, type StepTwoFormData } from "../schemas/stepTwoSchema";
 export const useStepTwoForm = (onSubmit: (values: StepTwoFormData) => void) => {
   const [emailExists, setEmailExists] = useState(false);
   const { formData, updateFormData } = useSignupStore();
+  const navigate = useNavigate();
 
   const form = useForm<StepTwoFormData>({
     resolver: zodResolver(stepTwoSchema),
@@ -40,7 +42,8 @@ export const useStepTwoForm = (onSubmit: (values: StepTwoFormData) => void) => {
       const exists = await checkEmailExists(values.email);
       
       if (exists) {
-        toast.error("This email is already registered", errorToastStyle);
+        toast.error("This email is already registered. Please sign in instead.", errorToastStyle);
+        navigate('/signin');
         return;
       }
 
