@@ -9,9 +9,8 @@ import FormInput from "@/components/forms/FormInput";
 import { useSignupStore } from "@/store/signupStore";
 import DocumentUpload from "./form-sections/DocumentUpload";
 import { toast } from "sonner";
-import { checkEmailExists } from "@/utils/validation";
-import { errorToastStyle } from "@/utils/toast-styles";
 import { supabase } from "@/integrations/supabase/client";
+import { errorToastStyle } from "@/utils/toast-styles";
 
 const stepFiveSchema = z.object({
   vatNumber: z.string().min(1, "VAT number is required"),
@@ -45,18 +44,46 @@ const StepFiveForm = ({ onSubmit, onBack, isLoading }: StepFiveFormProps) => {
     try {
       setIsUploading(true);
       
-      // Check if email exists before proceeding
-      const emailExists = await checkEmailExists(formData.email || '');
-      
-      if (emailExists) {
+      // Check if email exists using Supabase Auth
+      const { data: emailCheck } = await supabase.auth.signInWithOtp({
+        email: formData.email || '',
+        options: {
+          shouldCreateUser: false,
+        }
+      });
+
+      if (emailCheck) {
         toast.error("This email is already registered", {
           ...errorToastStyle,
           position: "top-center",
         });
+        setIsUploading(false);
         return;
       }
 
-      // Upload files if present
+      // Prepare data without files first
+      const dataWithoutFiles = { ...values, documents: [] };
+      
+      // First create the user account
+      const { error: signUpError } = await supabase.auth.signUp({
+        email: formData.email || '',
+        password: formData.password || '',
+        options: {
+          data: {
+            first_name: formData.firstName,
+            last_name: formData.lastName,
+            company_name: formData.companyName,
+            role: formData.role,
+          },
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+
+      if (signUpError) {
+        throw signUpError;
+      }
+
+      // Now handle file uploads if present
       const uploadedFiles = [];
       if (selectedFiles.length > 0) {
         for (const file of selectedFiles) {
@@ -73,18 +100,21 @@ const StepFiveForm = ({ onSubmit, onBack, isLoading }: StepFiveFormProps) => {
               ...errorToastStyle,
               position: "top-center",
             });
-            return;
+            continue; // Continue with other files if one fails
           }
           
           uploadedFiles.push(fileName);
         }
       }
 
-      updateFormData({ ...values, documents: uploadedFiles });
-      onSubmit({ ...values, documents: uploadedFiles });
-    } catch (error) {
+      // Update the form data with uploaded files
+      const finalData = { ...dataWithoutFiles, documents: uploadedFiles };
+      updateFormData(finalData);
+      onSubmit(finalData);
+      
+    } catch (error: any) {
       console.error("Form submission error:", error);
-      toast.error("An error occurred during registration", {
+      toast.error(error.message || "An error occurred during registration", {
         ...errorToastStyle,
         position: "top-center",
       });
