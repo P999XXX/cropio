@@ -12,7 +12,11 @@ const ProgressSteps = ({ currentStep, totalSteps = 4 }: ProgressStepsProps) => {
         <Progress 
           key={index}
           value={currentStep > index ? 100 : 0}
-          className="h-1 flex-1 bg-secondary dark:bg-secondary/20"
+          className={`h-1 flex-1 ${
+            currentStep > index 
+              ? "bg-success dark:bg-success/80" 
+              : "bg-secondary dark:bg-secondary/20"
+          }`}
         />
       ))}
     </div>
