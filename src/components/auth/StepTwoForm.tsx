@@ -25,24 +25,24 @@ const StepTwoForm = ({ onSubmit, onBack, isLoading }: StepTwoFormProps) => {
           <PasswordFields form={form} />
           <AgreementFields form={form} />
 
-          <div className="flex flex-col gap-3 pt-8">
-            <Button 
-              type="submit" 
-              variant="primary"
-              className="w-full text-[0.875rem]"
-              disabled={isLoading || emailExists}
-            >
-              {isLoading ? "Creating account..." : "Continue"}
-              <ArrowRight className="h-4 w-4 ml-1" />
-            </Button>
+          <div className="flex flex-col md:flex-row md:justify-between gap-3 pt-8">
             <Button
               type="button"
               variant="secondary"
               onClick={onBack}
-              className="w-full text-[0.875rem]"
+              className="w-full md:w-[48%] text-[0.875rem]"
             >
               <ArrowLeft className="h-4 w-4 mr-1" />
               Back
+            </Button>
+            <Button 
+              type="submit" 
+              variant="primary"
+              className="w-full md:w-[48%] text-[0.875rem]"
+              disabled={isLoading || emailExists}
+            >
+              {isLoading ? "Creating account..." : "Continue"}
+              <ArrowRight className="h-4 w-4 ml-1" />
             </Button>
           </div>
         </form>
