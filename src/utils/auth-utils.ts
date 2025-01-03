@@ -6,9 +6,9 @@ export const checkEmailExists = async (email: string): Promise<boolean> => {
       .from('profiles')
       .select('email')
       .eq('email', email)
-      .single();
-
-    if (error) {
+      .maybeSingle();
+    
+    if (error && error.code !== 'PGRST116') {
       console.error("Email check error:", error);
       return false;
     }
@@ -35,7 +35,7 @@ export const uploadDocuments = async (userId: string, files: File[]): Promise<Fi
         });
       
       if (uploadError) {
-        console.error("Upload error:", uploadError);
+        console.error("File upload error:", uploadError);
         continue;
       }
       
