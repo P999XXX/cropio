@@ -90,7 +90,12 @@ const DocumentUpload = ({ form, selectedFiles, onFileChange, onRemoveFile }: Doc
 
   return (
     <div className="space-y-2 document-upload">
-      <Label className="text-[0.775rem]">Company Documents</Label>
+      <div className="space-y-1">
+        <Label className="text-[0.775rem]">Company Documents</Label>
+        <p className="text-[0.675rem] text-muted-foreground">
+          Please upload up to 2 documents showing your VAT and TAX numbers. These can be official extracts, customer invoices, purchase invoices, or similar documents that clearly display these numbers.
+        </p>
+      </div>
       <div
         className={cn(
           "border-2 border-dashed border-border rounded-lg p-4 transition-colors",
