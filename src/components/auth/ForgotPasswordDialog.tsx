@@ -52,7 +52,7 @@ const ForgotPasswordDialog = ({
 
     try {
       const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth/callback#type=recovery`,
+        redirectTo: `${window.location.origin}/auth/callback?type=recovery`,
       });
 
       if (resetError) {
@@ -68,14 +68,15 @@ const ForgotPasswordDialog = ({
           }
         }
 
-        const isRateLimit = 
-          resetError.message?.toLowerCase().includes('rate limit') || 
-          errorBody.code === 'over_email_send_rate_limit' ||
-          resetError.status === 429;
-
-        if (isRateLimit) {
-          const waitTime = 60;
+        // Check if it's a rate limit error
+        if (errorBody.code === 'over_email_send_rate_limit' || resetError.status === 429) {
+          // Extract wait time from error message if available
+          const waitTimeMatch = errorBody.message?.match(/(\d+)\s*seconds/);
+          const waitTime = waitTimeMatch ? parseInt(waitTimeMatch[1]) : 60;
+          
           setCountdown(waitTime);
+          
+          // Start countdown timer
           const timer = setInterval(() => {
             setCountdown((prev) => {
               if (prev <= 1) {
@@ -85,6 +86,7 @@ const ForgotPasswordDialog = ({
               return prev - 1;
             });
           }, 1000);
+
           setError(`Too many attempts. Please wait ${waitTime} seconds before trying again.`);
           return;
         }
