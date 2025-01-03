@@ -12,7 +12,7 @@ import { SignInFormData } from "@/components/auth/SignInForm";
 import { errorToastStyle, successToastStyle } from "@/utils/toast-styles";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { useLoadingStates } from "@/hooks/useLoadingStates";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, CheckCircle2, Mail } from "lucide-react";
 
 const SignIn = () => {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
@@ -72,7 +72,7 @@ const SignIn = () => {
         await supabase.auth.setSession(data.session);
         toast.success("Welcome back! You've successfully signed in.", {
           ...successToastStyle,
-          icon: '👋',
+          icon: <CheckCircle2 className="h-5 w-5" />,
         });
         navigate('/dashboard');
       }
@@ -104,7 +104,7 @@ const SignIn = () => {
       setShowResetThankYou(true);
       toast.success("Reset instructions sent successfully!", {
         ...successToastStyle,
-        icon: '📧',
+        icon: <Mail className="h-5 w-5" />,
       });
       
     } catch (error: any) {
