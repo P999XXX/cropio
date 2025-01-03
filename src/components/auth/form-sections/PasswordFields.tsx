@@ -13,7 +13,7 @@ const PasswordFields = ({ form }: PasswordFieldsProps) => {
         form={form}
         name="password"
         label="Password"
-        description="Password must be at least 8 characters and contain uppercase, lowercase, and numbers"
+        description={<span className="text-[0.675rem]">Password must be at least 8 characters and contain uppercase, lowercase, and numbers</span>}
         className="text-[0.875rem]"
       />
       <PasswordInput
