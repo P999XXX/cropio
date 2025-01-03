@@ -28,24 +28,35 @@ const AuthRedirectHandler = () => {
       });
     }
 
-    // Safe postMessage handling
+    // Safe postMessage handling with multiple allowed origins
     const sendAuthComplete = () => {
-      // Only send to allowed origins
-      const allowedOrigins = [window.location.origin];
-      const targetOrigin = allowedOrigins.includes(window.opener?.origin) 
-        ? window.opener.origin 
-        : window.location.origin;
+      if (!window.opener) return;
 
-      if (window.opener) {
+      // List of allowed origins
+      const allowedOrigins = [
+        window.location.origin,
+        'https://cropio.app',
+        'https://gptengineer.app',
+        'https://lovable.dev',
+        'http://localhost:3000'
+      ];
+
+      // Try to send message to each allowed origin
+      allowedOrigins.forEach(origin => {
         try {
           window.opener.postMessage(
             { type: "AUTH_COMPLETE", success: true },
-            targetOrigin
+            origin
           );
         } catch (error) {
-          console.error("Failed to send auth completion message:", error);
+          console.debug(`PostMessage to ${origin} failed:`, error);
         }
-      }
+      });
+
+      // Close the window after sending messages
+      setTimeout(() => {
+        window.close();
+      }, 1000);
     };
 
     sendAuthComplete();
