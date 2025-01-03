@@ -30,7 +30,7 @@ const SignInForm = ({ onSubmit, isLoading, onForgotPassword }: SignInFormProps) 
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
         <FormInput
           form={form}
           name="email"

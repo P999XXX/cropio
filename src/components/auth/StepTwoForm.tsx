@@ -20,7 +20,7 @@ const StepTwoForm = ({ onSubmit, onBack, isLoading }: StepTwoFormProps) => {
     <div className="space-y-6 pt-8 md:bg-card md:p-6 md:rounded-lg md:border md:border-border md:max-w-2xl md:mx-auto md:mt-8">
       <h3 className="text-[1.25rem] font-semibold text-left md:text-center">Account Information</h3>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-2">
           <PersonalFields form={form} emailExists={emailExists} />
           <PasswordFields form={form} />
           <AgreementFields form={form} />
