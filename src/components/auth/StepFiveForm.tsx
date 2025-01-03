@@ -42,10 +42,7 @@ const StepFiveForm = ({ onSubmit, onBack, isLoading }: StepFiveFormProps) => {
 
   const handleSubmit = async (values: StepFiveFormData) => {
     if (!formData.email || !formData.password) {
-      toast.error("Missing email or password", {
-        ...errorToastStyle,
-        position: "top-center",
-      });
+      toast.error("Missing email or password", errorToastStyle);
       return;
     }
 
@@ -54,12 +51,8 @@ const StepFiveForm = ({ onSubmit, onBack, isLoading }: StepFiveFormProps) => {
     try {
       // Check if email exists
       const emailExists = await checkEmailExists(formData.email);
-      
       if (emailExists) {
-        toast.error("This email is already registered", {
-          ...errorToastStyle,
-          position: "top-center",
-        });
+        toast.error("This email is already registered", errorToastStyle);
         return;
       }
 
@@ -83,15 +76,9 @@ const StepFiveForm = ({ onSubmit, onBack, isLoading }: StepFiveFormProps) => {
         uploadedFiles = await uploadDocuments(user.id, selectedFiles);
         
         if (uploadedFiles.length === 0) {
-          toast.error("Failed to upload documents", {
-            ...errorToastStyle,
-            position: "top-center",
-          });
+          toast.error("Failed to upload documents", errorToastStyle);
         } else if (uploadedFiles.length < selectedFiles.length) {
-          toast.error("Some documents failed to upload", {
-            ...errorToastStyle,
-            position: "top-center",
-          });
+          toast.error("Some documents failed to upload", errorToastStyle);
         }
       }
 
@@ -104,17 +91,10 @@ const StepFiveForm = ({ onSubmit, onBack, isLoading }: StepFiveFormProps) => {
       updateFormData(finalData);
       onSubmit(finalData);
 
-      toast.success("Account created successfully!", {
-        ...successToastStyle,
-        position: "top-center",
-      });
-
+      toast.success("Account created successfully!", successToastStyle);
     } catch (error: any) {
       console.error("Form submission error:", error);
-      toast.error(error.message || "An error occurred during registration", {
-        ...errorToastStyle,
-        position: "top-center",
-      });
+      toast.error(error.message || "An error occurred during registration", errorToastStyle);
     } finally {
       setIsUploading(false);
     }

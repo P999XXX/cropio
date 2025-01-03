@@ -6,9 +6,9 @@ export const checkEmailExists = async (email: string): Promise<boolean> => {
       .from('profiles')
       .select('email')
       .eq('email', email)
-      .maybeSingle();
-    
-    if (error && error.code !== 'PGRST116') {
+      .single();
+
+    if (error) {
       console.error("Email check error:", error);
       return false;
     }
