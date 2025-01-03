@@ -29,7 +29,7 @@ const AgreementCheckbox = ({ form, name, linkText, linkHref }: AgreementCheckbox
             />
           </FormControl>
           <div className="space-y-1 leading-none">
-            <div className="text-sm text-foreground">
+            <div className="text-[0.775rem] text-foreground">
               I accept the <a href={linkHref} className="text-primary hover:text-primary/90">{linkText}</a>
             </div>
             <FormErrorMessage message={form.formState.errors[name]?.message} />
