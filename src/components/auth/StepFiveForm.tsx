@@ -66,12 +66,12 @@ const StepFiveForm = ({ onSubmit, onBack, isLoading }: StepFiveFormProps) => {
             onRemoveFile={removeFile}
           />
 
-          <div className="flex flex-col md:flex-row md:justify-between gap-3 pt-8">
+          <div className="flex flex-col-reverse md:flex-row md:justify-between gap-3 pt-8">
             <Button
               type="button"
               variant="secondary"
               onClick={onBack}
-              className="w-full md:w-[48%]"
+              className="w-full"
             >
               <ArrowLeft className="h-4 w-4 mr-1" />
               Back
@@ -79,7 +79,7 @@ const StepFiveForm = ({ onSubmit, onBack, isLoading }: StepFiveFormProps) => {
             <Button 
               type="submit" 
               variant="primary"
-              className="w-full md:w-[48%]"
+              className="w-full"
               disabled={isLoading}
             >
               {isLoading ? "Creating account..." : "Complete Registration"}

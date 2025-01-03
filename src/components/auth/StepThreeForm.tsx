@@ -105,12 +105,12 @@ const StepThreeForm = ({ onSubmit, onBack, isLoading }: StepThreeFormProps) => {
 
           <PhoneInput form={form} />
 
-          <div className="flex flex-col md:flex-row md:justify-between gap-3 pt-8">
+          <div className="flex flex-col-reverse md:flex-row md:justify-between gap-3 pt-8">
             <Button
               type="button"
               variant="secondary"
               onClick={onBack}
-              className="w-full md:w-[48%]"
+              className="w-full"
             >
               <ArrowLeft className="h-4 w-4 mr-1" />
               Back
@@ -118,7 +118,7 @@ const StepThreeForm = ({ onSubmit, onBack, isLoading }: StepThreeFormProps) => {
             <Button 
               type="submit" 
               variant="primary"
-              className="w-full md:w-[48%]"
+              className="w-full"
               disabled={isLoading}
             >
               {isLoading ? "Saving..." : "Continue"}
