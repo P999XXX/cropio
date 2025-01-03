@@ -1,13 +1,13 @@
-import { z } from "zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import FormInput from "@/components/forms/FormInput";
 import { useSignupStore } from "@/store/signupStore";
-import TaxFields from "./form-sections/TaxFields";
 import DocumentUpload from "./form-sections/DocumentUpload";
-import { useState } from "react";
 import { toast } from "sonner";
 import { checkEmailExists } from "@/utils/validation";
 import { errorToastStyle } from "@/utils/toast-styles";
@@ -16,15 +16,14 @@ import { supabase } from "@/integrations/supabase/client";
 const stepFiveSchema = z.object({
   vatNumber: z.string().min(1, "VAT number is required"),
   taxNumber: z.string().min(1, "Tax number is required"),
-  documents: z.any(),
 });
 
-export type StepFiveFormData = z.infer<typeof stepFiveSchema>;
+type StepFiveFormData = z.infer<typeof stepFiveSchema>;
 
 interface StepFiveFormProps {
   onSubmit: (values: StepFiveFormData) => void;
   onBack: () => void;
-  isLoading?: boolean;
+  isLoading: boolean;
 }
 
 const StepFiveForm = ({ onSubmit, onBack, isLoading }: StepFiveFormProps) => {
@@ -92,55 +91,53 @@ const StepFiveForm = ({ onSubmit, onBack, isLoading }: StepFiveFormProps) => {
     }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    setSelectedFiles(files);
-    form.setValue('documents', files);
-  };
-
-  const removeFile = (index: number) => {
-    const newFiles = selectedFiles.filter((_, i) => i !== index);
-    setSelectedFiles(newFiles);
-    form.setValue('documents', newFiles);
-  };
-
   return (
-    <div className="space-y-6 pt-8 md:bg-card md:p-6 md:rounded-lg md:border md:border-border md:max-w-2xl md:mx-auto md:mt-8">
-      <h3 className="text-lg font-semibold text-left md:text-center">Tax & Company Verification</h3>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
-          <TaxFields form={form} />
-          
-          <DocumentUpload
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+        <div className="space-y-4">
+          <FormInput
             form={form}
-            selectedFiles={selectedFiles}
-            onFileChange={handleFileChange}
-            onRemoveFile={removeFile}
+            name="vatNumber"
+            label="VAT Number"
+            placeholder="Enter VAT number"
           />
 
-          <div className="flex flex-col-reverse md:flex-row md:justify-between gap-3 pt-8">
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={onBack}
-              className="w-full text-[0.775rem]"
-            >
-              <ArrowLeft className="h-4 w-4 mr-1" />
-              Back
-            </Button>
-            <Button 
-              type="submit" 
-              variant="primary"
-              className="w-full text-[0.775rem]"
-              disabled={isLoading || isUploading}
-            >
-              {isLoading || isUploading ? "Creating account..." : "Complete Registration"}
-              <ArrowRight className="h-4 w-4 ml-1" />
-            </Button>
-          </div>
-        </form>
-      </Form>
-    </div>
+          <FormInput
+            form={form}
+            name="taxNumber"
+            label="Tax Number"
+            placeholder="Enter tax number"
+          />
+
+          <DocumentUpload
+            selectedFiles={selectedFiles}
+            setSelectedFiles={setSelectedFiles}
+          />
+        </div>
+
+        <div className="flex flex-col gap-3 sm:flex-row-reverse sm:gap-3 mt-6">
+          <Button 
+            type="submit" 
+            variant="primary"
+            className="w-full text-[0.775rem]"
+            disabled={isLoading || isUploading}
+          >
+            {isLoading || isUploading ? "Creating account..." : "Complete Registration"}
+            <ArrowRight className="h-4 w-4 ml-1" />
+          </Button>
+
+          <Button
+            type="button"
+            variant="secondary"
+            className="w-full text-[0.775rem]"
+            onClick={onBack}
+            disabled={isLoading}
+          >
+            Back
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
 };
 
