@@ -21,7 +21,7 @@ const AgreementCheckbox = ({ form, name, linkText, linkHref }: AgreementCheckbox
       control={form.control}
       name={name}
       render={({ field }) => (
-        <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+        <FormItem className="flex flex-row items-center justify-start space-x-3 space-y-0 w-full">
           <FormControl>
             <Checkbox
               checked={field.value}
