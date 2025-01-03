@@ -84,11 +84,11 @@ const StepFourForm = ({ onSubmit, onBack, isLoading }: StepFourFormProps) => {
             </RadioGroup>
           </div>
 
-          <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:gap-4 pt-8">
+          <div className="flex flex-col gap-3 pt-8">
             <Button 
               type="submit" 
               variant="primary"
-              className="w-full sm:w-auto order-1 sm:order-2"
+              className="w-full"
               disabled={isLoading}
             >
               Continue
@@ -98,7 +98,7 @@ const StepFourForm = ({ onSubmit, onBack, isLoading }: StepFourFormProps) => {
               type="button"
               variant="secondary"
               onClick={onBack}
-              className="w-full sm:w-auto order-2 sm:order-1"
+              className="w-full"
             >
               <ArrowLeft className="h-4 w-4 mr-1" />
               Back
