@@ -72,22 +72,6 @@ const DocumentUpload = ({ form, selectedFiles, onFileChange, onRemoveFile }: Doc
     onFileChange(event);
   }, [onFileChange]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    if (files.length > 1) {
-      alert("Please upload only one file");
-      return;
-    }
-
-    const file = files[0];
-    if (file && file.type !== "application/pdf") {
-      alert("Please upload only PDF files");
-      return;
-    }
-
-    onFileChange(e);
-  };
-
   return (
     <div className="space-y-2 document-upload">
       <div className="space-y-1">
@@ -112,7 +96,7 @@ const DocumentUpload = ({ form, selectedFiles, onFileChange, onRemoveFile }: Doc
           accept=".pdf"
           className="hidden"
           id="company-documents"
-          onChange={handleInputChange}
+          onChange={onFileChange}
         />
         <label
           htmlFor="company-documents"

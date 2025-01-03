@@ -16,9 +16,10 @@ import { supabase } from "@/integrations/supabase/client";
 const stepFiveSchema = z.object({
   vatNumber: z.string().min(1, "VAT number is required"),
   taxNumber: z.string().min(1, "Tax number is required"),
+  documents: z.array(z.any()).optional(),
 });
 
-type StepFiveFormData = z.infer<typeof stepFiveSchema>;
+export type StepFiveFormData = z.infer<typeof stepFiveSchema>;
 
 interface StepFiveFormProps {
   onSubmit: (values: StepFiveFormData) => void;
@@ -36,6 +37,7 @@ const StepFiveForm = ({ onSubmit, onBack, isLoading }: StepFiveFormProps) => {
     defaultValues: {
       vatNumber: formData.vatNumber || "",
       taxNumber: formData.taxNumber || "",
+      documents: [],
     },
   });
 
@@ -110,8 +112,18 @@ const StepFiveForm = ({ onSubmit, onBack, isLoading }: StepFiveFormProps) => {
           />
 
           <DocumentUpload
+            form={form}
             selectedFiles={selectedFiles}
-            setSelectedFiles={setSelectedFiles}
+            onFileChange={(e) => {
+              const files = Array.from(e.target.files || []);
+              setSelectedFiles(files);
+              form.setValue('documents', files);
+            }}
+            onRemoveFile={(index) => {
+              const newFiles = selectedFiles.filter((_, i) => i !== index);
+              setSelectedFiles(newFiles);
+              form.setValue('documents', newFiles);
+            }}
           />
         </div>
 
