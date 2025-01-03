@@ -78,7 +78,7 @@ const StepFiveForm = ({ onSubmit, onBack, isLoading }: StepFiveFormProps) => {
         uploadedDocuments = await uploadDocuments(user.id, selectedFiles);
         
         if (uploadedDocuments.length === 0) {
-          throw new Error('Failed to upload any documents');
+          throw new Error('Failed to upload documents');
         }
 
         // Update profile with document references
