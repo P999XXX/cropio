@@ -103,7 +103,7 @@ const CountrySelect = ({ form }: CountrySelectProps) => {
                 <SelectItem 
                   key={`${country.country}-${country.value}`}
                   value={country.country}
-                  className="text-[0.875rem]"
+                  className="text-[0.875rem] cursor-pointer text-foreground data-[highlighted]:text-foreground data-[highlighted]:bg-secondary"
                 >
                   <CountryDisplay country={country} showPrefix={false} />
                 </SelectItem>
