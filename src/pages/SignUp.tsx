@@ -9,6 +9,7 @@ import StepOneForm from "@/components/auth/StepOneForm";
 import StepTwoForm from "@/components/auth/StepTwoForm";
 import StepThreeForm from "@/components/auth/StepThreeForm";
 import StepFourForm from "@/components/auth/StepFourForm";
+import StepFiveForm from "@/components/auth/StepFiveForm";
 import ProgressSteps from "@/components/auth/ProgressSteps";
 import { errorToastStyle, successToastStyle } from "@/utils/toast-styles";
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -38,6 +39,11 @@ const SignUp = () => {
   };
 
   const handleStepFour = async (values: any) => {
+    updateFormData(values);
+    setStep(5);
+  };
+
+  const handleStepFive = async (values: any) => {
     setIsLoading(true);
     try {
       const finalData = { ...formData, ...values };
@@ -101,6 +107,7 @@ const SignUp = () => {
                 {step === 2 && <StepTwoForm onSubmit={handleStepTwo} isLoading={isLoading} onBack={handleBack} />}
                 {step === 3 && <StepThreeForm onSubmit={handleStepThree} isLoading={isLoading} onBack={handleBack} />}
                 {step === 4 && <StepFourForm onSubmit={handleStepFour} isLoading={isLoading} onBack={handleBack} />}
+                {step === 5 && <StepFiveForm onSubmit={handleStepFive} isLoading={isLoading} onBack={handleBack} />}
               </div>
             ) : (
               <>
@@ -108,6 +115,7 @@ const SignUp = () => {
                 {step === 2 && <StepTwoForm onSubmit={handleStepTwo} isLoading={isLoading} onBack={handleBack} />}
                 {step === 3 && <StepThreeForm onSubmit={handleStepThree} isLoading={isLoading} onBack={handleBack} />}
                 {step === 4 && <StepFourForm onSubmit={handleStepFour} isLoading={isLoading} onBack={handleBack} />}
+                {step === 5 && <StepFiveForm onSubmit={handleStepFive} isLoading={isLoading} onBack={handleBack} />}
               </>
             )}
           </div>

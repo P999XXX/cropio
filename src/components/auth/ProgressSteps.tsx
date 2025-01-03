@@ -5,7 +5,7 @@ interface ProgressStepsProps {
   totalSteps?: number;
 }
 
-const ProgressSteps = ({ currentStep, totalSteps = 4 }: ProgressStepsProps) => {
+const ProgressSteps = ({ currentStep, totalSteps = 5 }: ProgressStepsProps) => {
   return (
     <div className="w-full md:mb-8 flex gap-2 md:px-5">
       {[...Array(totalSteps)].map((_, index) => (

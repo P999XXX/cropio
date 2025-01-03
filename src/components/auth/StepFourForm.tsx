@@ -7,10 +7,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { useSignupStore } from "@/store/signupStore";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { useState } from "react";
 import BankingFields from "./form-sections/BankingFields";
-import TaxFields from "./form-sections/TaxFields";
-import DocumentUpload from "./form-sections/DocumentUpload";
 
 const stepFourSchema = z.object({
   bankName: z.string()
@@ -29,9 +26,6 @@ const stepFourSchema = z.object({
       "BIC/SWIFT must be exactly 8 or 11 characters"
     )
     .refine(val => /^[A-Z]+$/.test(val), "BIC/SWIFT must contain only uppercase letters"),
-  vatNumber: z.string().min(1, "VAT number is required"),
-  taxNumber: z.string().min(1, "Tax number is required"),
-  documents: z.any(),
   currency: z.enum(["USD", "EUR"], {
     required_error: "Please select a currency",
   }),
@@ -47,7 +41,6 @@ interface StepFourFormProps {
 
 const StepFourForm = ({ onSubmit, onBack, isLoading }: StepFourFormProps) => {
   const { formData, updateFormData } = useSignupStore();
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
   const form = useForm<StepFourFormData>({
     resolver: zodResolver(stepFourSchema),
@@ -57,36 +50,21 @@ const StepFourForm = ({ onSubmit, onBack, isLoading }: StepFourFormProps) => {
       bankAccountHolder: formData.bankAccountHolder || "",
       iban: formData.iban || "",
       bic: formData.bic || "",
-      vatNumber: formData.vatNumber || "",
-      taxNumber: formData.taxNumber || "",
       currency: formData.currency || "USD",
     },
   });
 
   const handleSubmit = (values: StepFourFormData) => {
-    updateFormData({ ...values, documents: selectedFiles });
-    onSubmit({ ...values, documents: selectedFiles });
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    setSelectedFiles(files);
-    form.setValue('documents', files);
-  };
-
-  const removeFile = (index: number) => {
-    const newFiles = selectedFiles.filter((_, i) => i !== index);
-    setSelectedFiles(newFiles);
-    form.setValue('documents', newFiles);
+    updateFormData(values);
+    onSubmit(values);
   };
 
   return (
     <div className="space-y-6 pt-8 md:bg-card md:p-6 md:rounded-lg md:border md:border-border md:max-w-2xl md:mx-auto md:mt-8">
-      <h3 className="text-lg font-semibold text-left md:text-center">Bank & Tax Information</h3>
+      <h3 className="text-lg font-semibold text-left md:text-center">Bank Information</h3>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
           <BankingFields form={form} />
-          <TaxFields form={form} />
 
           <div className="space-y-3">
             <Label className="text-[0.775rem] text-foreground">Currency</Label>
@@ -106,13 +84,6 @@ const StepFourForm = ({ onSubmit, onBack, isLoading }: StepFourFormProps) => {
             </RadioGroup>
           </div>
 
-          <DocumentUpload
-            form={form}
-            selectedFiles={selectedFiles}
-            onFileChange={handleFileChange}
-            onRemoveFile={removeFile}
-          />
-
           <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:gap-4 pt-8">
             <Button 
               type="submit" 
@@ -120,7 +91,7 @@ const StepFourForm = ({ onSubmit, onBack, isLoading }: StepFourFormProps) => {
               className="w-full sm:w-auto order-1 sm:order-2"
               disabled={isLoading}
             >
-              {isLoading ? "Creating account..." : "Complete Registration"}
+              Continue
               <ArrowRight className="h-4 w-4 ml-1" />
             </Button>
             <Button
