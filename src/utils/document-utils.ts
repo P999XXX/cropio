@@ -1,8 +1,10 @@
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { errorToastStyle } from "@/utils/toast-styles";
+import { Json } from "@/integrations/supabase/types";
 
 export interface UploadedDocument {
+  [key: string]: string | number; // Make it compatible with Json type
   name: string;
   path: string;
   type: string;
@@ -56,7 +58,7 @@ export const updateProfileWithDocuments = async (
     .update({
       vat_number: vatNumber,
       tax_number: taxNumber,
-      company_documents: documents
+      company_documents: documents as Json
     })
     .eq('id', userId);
 
