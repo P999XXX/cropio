@@ -45,14 +45,15 @@ const StepFiveForm = ({ onSubmit, onBack, isLoading }: StepFiveFormProps) => {
       setIsUploading(true);
       
       // Check if email exists using Supabase Auth
-      const { data: emailCheck } = await supabase.auth.signInWithOtp({
+      const { error: emailCheckError } = await supabase.auth.signInWithOtp({
         email: formData.email || '',
         options: {
           shouldCreateUser: false,
         }
       });
 
-      if (emailCheck) {
+      // If there's no error, it means the email exists
+      if (!emailCheckError) {
         toast.error("This email is already registered", {
           ...errorToastStyle,
           position: "top-center",
@@ -64,7 +65,7 @@ const StepFiveForm = ({ onSubmit, onBack, isLoading }: StepFiveFormProps) => {
       // Prepare data without files first
       const dataWithoutFiles = { ...values, documents: [] };
       
-      // First create the user account
+      // Create the user account
       const { error: signUpError } = await supabase.auth.signUp({
         email: formData.email || '',
         password: formData.password || '',
@@ -83,7 +84,7 @@ const StepFiveForm = ({ onSubmit, onBack, isLoading }: StepFiveFormProps) => {
         throw signUpError;
       }
 
-      // Now handle file uploads if present
+      // Handle file uploads if present
       const uploadedFiles = [];
       if (selectedFiles.length > 0) {
         for (const file of selectedFiles) {
