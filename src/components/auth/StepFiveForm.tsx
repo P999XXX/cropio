@@ -9,8 +9,8 @@ import FormInput from "@/components/forms/FormInput";
 import { useSignupStore } from "@/store/signupStore";
 import DocumentUpload from "./form-sections/DocumentUpload";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
 import { errorToastStyle, successToastStyle } from "@/utils/toast-styles";
+import { checkEmailExists, uploadDocuments, createUserAccount } from "@/utils/auth-utils";
 
 const stepFiveSchema = z.object({
   vatNumber: z.string().min(1, "VAT number is required"),
@@ -40,85 +40,19 @@ const StepFiveForm = ({ onSubmit, onBack, isLoading }: StepFiveFormProps) => {
     },
   });
 
-  const checkEmailExists = async (email: string): Promise<boolean> => {
-    try {
-      const { data, error } = await supabase.auth.signInWithOtp({
-        email,
-        options: {
-          shouldCreateUser: false,
-        }
-      });
-      
-      // If there's no error and data exists, the email is already registered
-      return !error && data;
-    } catch (error) {
-      console.error("Error checking email:", error);
-      return false;
-    }
-  };
-
-  const uploadDocuments = async (email: string, files: File[]): Promise<string[]> => {
-    const uploadedFiles: string[] = [];
-
-    for (const file of files) {
-      try {
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${email}/${crypto.randomUUID()}.${fileExt}`;
-        
-        const { error: uploadError } = await supabase.storage
-          .from('company_documents')
-          .upload(fileName, file);
-        
-        if (uploadError) {
-          console.error("Upload error:", uploadError);
-          toast.error(`Failed to upload ${file.name}`, {
-            ...errorToastStyle,
-            position: "top-center",
-          });
-          continue;
-        }
-        
-        uploadedFiles.push(fileName);
-      } catch (error) {
-        console.error("File upload error:", error);
-        toast.error(`Error uploading ${file.name}`, {
-          ...errorToastStyle,
-          position: "top-center",
-        });
-      }
-    }
-
-    return uploadedFiles;
-  };
-
-  const createUserAccount = async (userData: any) => {
-    const { error } = await supabase.auth.signUp({
-      email: userData.email,
-      password: userData.password,
-      options: {
-        data: {
-          first_name: userData.firstName,
-          last_name: userData.lastName,
-          company_name: userData.companyName,
-          role: userData.role,
-        },
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
-
-    if (error) throw error;
-  };
-
   const handleSubmit = async (values: StepFiveFormData) => {
     if (!formData.email || !formData.password) {
-      toast.error("Missing email or password", errorToastStyle);
+      toast.error("Missing email or password", {
+        ...errorToastStyle,
+        position: "top-center",
+      });
       return;
     }
 
     setIsUploading(true);
 
     try {
-      // First, check if email exists
+      // Check if email exists
       const emailExists = await checkEmailExists(formData.email);
       
       if (emailExists) {
@@ -130,24 +64,46 @@ const StepFiveForm = ({ onSubmit, onBack, isLoading }: StepFiveFormProps) => {
       }
 
       // Create user account
-      await createUserAccount(formData);
+      await createUserAccount({
+        email: formData.email,
+        password: formData.password,
+        firstName: formData.firstName || '',
+        lastName: formData.lastName || '',
+        companyName: formData.companyName || '',
+        role: formData.role || 'buyer',
+      });
 
       // Upload documents if any
-      const uploadedFiles = selectedFiles.length > 0 
-        ? await uploadDocuments(formData.email, selectedFiles)
-        : [];
+      let uploadedFiles: File[] = [];
+      if (selectedFiles.length > 0) {
+        uploadedFiles = await uploadDocuments(formData.email, selectedFiles);
+        
+        if (uploadedFiles.length === 0) {
+          toast.error("Failed to upload documents", {
+            ...errorToastStyle,
+            position: "top-center",
+          });
+        } else if (uploadedFiles.length < selectedFiles.length) {
+          toast.error("Some documents failed to upload", {
+            ...errorToastStyle,
+            position: "top-center",
+          });
+        }
+      }
 
-      // Prepare final data
+      // Update form data and submit
       const finalData = {
         ...values,
         documents: uploadedFiles,
       };
 
-      // Update form data and submit
       updateFormData(finalData);
       onSubmit(finalData);
 
-      toast.success("Account created successfully!", successToastStyle);
+      toast.success("Account created successfully!", {
+        ...successToastStyle,
+        position: "top-center",
+      });
 
     } catch (error: any) {
       console.error("Form submission error:", error);
