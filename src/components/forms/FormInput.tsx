@@ -36,7 +36,7 @@ const FormInput = ({
       name={name}
       rules={rules}
       render={({ field, fieldState }) => (
-        <FormItem className="space-y-1">
+        <FormItem className="space-y-1 mt-0">
           <FormLabel className="text-[0.775rem] text-foreground">{label}</FormLabel>
           <FormControl>
             <Input

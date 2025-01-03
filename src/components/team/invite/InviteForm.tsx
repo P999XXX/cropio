@@ -55,7 +55,7 @@ export const InviteForm = ({ onSubmit, isLoading, onCancel }: InviteFormProps) =
             control={form.control}
             name="firstName"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="mt-0">
                 <FormLabel className="text-[0.775rem]">First Name</FormLabel>
                 <FormControl>
                   <Input 
@@ -72,7 +72,7 @@ export const InviteForm = ({ onSubmit, isLoading, onCancel }: InviteFormProps) =
             control={form.control}
             name="lastName"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="mt-0">
                 <FormLabel className="text-[0.775rem]">Last Name</FormLabel>
                 <FormControl>
                   <Input 
@@ -91,7 +91,7 @@ export const InviteForm = ({ onSubmit, isLoading, onCancel }: InviteFormProps) =
           control={form.control}
           name="email"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="mt-0">
               <FormLabel className="text-[0.775rem]">Email Address</FormLabel>
               <FormControl>
                 <Input 
@@ -110,7 +110,7 @@ export const InviteForm = ({ onSubmit, isLoading, onCancel }: InviteFormProps) =
           control={form.control}
           name="role"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="mt-0">
               <FormLabel className="text-[0.775rem]">Role</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>

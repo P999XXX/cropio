@@ -15,7 +15,7 @@ interface PasswordInputProps {
   form: UseFormReturn<any>;
   name: string;
   label: string;
-  description?: string;
+  description?: string | React.ReactNode;
   className?: string;
 }
 
@@ -27,7 +27,7 @@ const PasswordInput = ({ form, name, label, description, className }: PasswordIn
       control={form.control}
       name={name}
       render={({ field, fieldState }) => (
-        <FormItem className="space-y-1">
+        <FormItem className="space-y-1 mt-0">
           <FormLabel className="text-[0.775rem] text-foreground">{label}</FormLabel>
           <FormControl>
             <div className="relative">
@@ -51,7 +51,7 @@ const PasswordInput = ({ form, name, label, description, className }: PasswordIn
             </div>
           </FormControl>
           {description && (
-            <FormDescription className="text-[0.775rem] text-muted-foreground">
+            <FormDescription className="text-[0.775rem]">
               {description}
             </FormDescription>
           )}
