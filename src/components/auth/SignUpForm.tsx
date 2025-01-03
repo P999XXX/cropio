@@ -49,10 +49,9 @@ const SignUpForm = ({ onSubmit, isLoading }: SignUpFormProps) => {
       acceptTerms: formData.acceptTerms || false,
       acceptPrivacy: formData.acceptPrivacy || false,
     },
-    mode: "onChange", // Enable real-time validation
+    mode: "onChange",
   });
 
-  // Update store when form values change
   useEffect(() => {
     const subscription = form.watch((value) => {
       updateFormData(value);
@@ -65,6 +64,10 @@ const SignUpForm = ({ onSubmit, isLoading }: SignUpFormProps) => {
       await onSubmit(values);
     } catch (error) {
       console.error("Form submission error:", error);
+      form.setError("root", {
+        type: "manual",
+        message: "Failed to submit form. Please try again.",
+      });
     }
   };
 
@@ -105,10 +108,16 @@ const SignUpForm = ({ onSubmit, isLoading }: SignUpFormProps) => {
         type="submit" 
         variant="primary"
         className="w-full text-[0.775rem] sm:text-[0.775rem] md:text-[0.775rem] mt-3" 
-        disabled={isLoading}
+        disabled={isLoading || !form.formState.isValid}
       >
         {isLoading ? "Signing up..." : "Sign up"}
       </Button>
+
+      {form.formState.errors.root && (
+        <p className="text-destructive text-sm mt-2">
+          {form.formState.errors.root.message}
+        </p>
+      )}
     </form>
   );
 };

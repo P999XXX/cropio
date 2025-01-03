@@ -7,49 +7,50 @@ const AuthRedirectHandler = () => {
 
   useEffect(() => {
     const handleAuthChange = async (event: string, session: any) => {
+      console.log("Auth event received:", event);
       if (event === "SIGNED_IN") {
-        // Use a timeout to ensure the session is properly set
         setTimeout(() => {
           navigate("/dashboard");
         }, 100);
       }
     };
 
-    // Subscribe to auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(handleAuthChange);
 
-    // Parse the hash if present
     const hashParams = new URLSearchParams(window.location.hash.substring(1));
     const accessToken = hashParams.get("access_token");
     const refreshToken = hashParams.get("refresh_token");
 
     if (accessToken && refreshToken) {
+      console.log("Setting session with tokens");
       supabase.auth.setSession({
         access_token: accessToken,
         refresh_token: refreshToken,
       });
     }
 
-    // Safe postMessage handling with dynamic origin
     const sendAuthComplete = () => {
-      if (!window.opener) return;
+      if (!window.opener) {
+        console.log("No opener window found");
+        return;
+      }
 
-      // Get the origin from the referrer or default to current origin
       const origin = document.referrer 
         ? new URL(document.referrer).origin 
         : window.location.origin;
 
+      console.log("Sending auth complete message to origin:", origin);
+      
       try {
         window.opener.postMessage(
           { type: "AUTH_COMPLETE", success: true },
           origin
         );
-        console.log("Auth complete message sent to:", origin);
+        console.log("Auth complete message sent successfully");
       } catch (error) {
         console.error("PostMessage error:", error);
       }
 
-      // Close the window after sending message
       setTimeout(() => {
         window.close();
       }, 1000);
@@ -57,7 +58,6 @@ const AuthRedirectHandler = () => {
 
     sendAuthComplete();
 
-    // Cleanup subscription
     return () => {
       subscription.unsubscribe();
     };

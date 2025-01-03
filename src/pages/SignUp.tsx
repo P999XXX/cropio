@@ -29,8 +29,24 @@ const SignUp = () => {
   };
 
   const handleStepTwo = async (values: any) => {
-    updateFormData(values);
-    setStep(3);
+    try {
+      const { data: existingUser } = await supabase
+        .from('profiles')
+        .select('email')
+        .eq('email', values.email)
+        .single();
+
+      if (existingUser) {
+        toast.error("This email is already registered", errorToastStyle);
+        return;
+      }
+
+      updateFormData(values);
+      setStep(3);
+    } catch (error) {
+      console.error("Step two error:", error);
+      toast.error("An error occurred. Please try again.", errorToastStyle);
+    }
   };
 
   const handleStepThree = async (values: any) => {
@@ -48,7 +64,7 @@ const SignUp = () => {
     try {
       const finalData = { ...formData, ...values };
       
-      const { error: signUpError } = await supabase.auth.signUp({
+      const { data, error: signUpError } = await supabase.auth.signUp({
         email: finalData.email,
         password: finalData.password,
         options: {
@@ -68,7 +84,7 @@ const SignUp = () => {
         for (const file of values.documents) {
           const { error: uploadError } = await supabase.storage
             .from('company_documents')
-            .upload(`${finalData.email}/${file.name}`, file);
+            .upload(`${data.user?.id}/${file.name}`, file);
           
           if (uploadError) throw uploadError;
         }
