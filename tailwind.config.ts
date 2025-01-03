@@ -18,6 +18,9 @@ export default {
       },
     },
     extend: {
+      spacing: {
+        '[3px]': '3px',
+      },
       maxWidth: {
         'md': '500px',
       },
