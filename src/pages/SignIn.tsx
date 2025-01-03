@@ -47,7 +47,7 @@ const SignIn = () => {
   const handleSignIn = async (values: SignInFormData) => {
     setLoading('isSigningIn', true);
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email: values.email,
         password: values.password,
       });
@@ -63,11 +63,13 @@ const SignIn = () => {
         throw new Error(errorMessage);
       }
 
-      toast.success("Welcome back! You've successfully signed in.", {
-        ...successToastStyle,
-        icon: <CheckCircle2 className="h-5 w-5" />,
-      });
-      navigate('/dashboard');
+      if (data.session) {
+        toast.success("Welcome back! You've successfully signed in.", {
+          ...successToastStyle,
+          icon: <CheckCircle2 className="h-5 w-5" />,
+        });
+        navigate('/dashboard');
+      }
     } catch (error: any) {
       console.error("Sign in error:", error);
       throw error;

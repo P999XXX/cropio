@@ -33,9 +33,12 @@ const SignInForm = ({ onSubmit, isLoading, onForgotPassword }: SignInFormProps) 
   const handleSubmit = async (values: SignInFormData) => {
     try {
       await onSubmit(values);
-    } catch (error) {
-      // Error is already handled in the parent component
+    } catch (error: any) {
       console.error("Form submission error:", error);
+      form.setError("root", {
+        type: "manual",
+        message: error.message || "An error occurred during sign in. Please try again.",
+      });
     }
   };
 
