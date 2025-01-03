@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import FormInput from "@/components/forms/FormInput";
 import PasswordInput from "./PasswordInput";
 import AgreementCheckbox from "./AgreementCheckbox";
+import { useSignupStore } from "@/store/signupStore";
+import { useEffect } from "react";
 
 const schema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -31,15 +33,25 @@ interface SignUpFormProps {
 }
 
 const SignUpForm = ({ onSubmit, isLoading }: SignUpFormProps) => {
+  const { formData, updateFormData } = useSignupStore();
+
   const form = useForm<SignUpFormData>({
     resolver: zodResolver(schema),
     defaultValues: {
-      email: "",
-      password: "",
-      acceptTerms: false,
-      acceptPrivacy: false,
+      email: formData.email || "",
+      password: formData.password || "",
+      acceptTerms: formData.acceptTerms || false,
+      acceptPrivacy: formData.acceptPrivacy || false,
     },
   });
+
+  // Update store when form values change
+  useEffect(() => {
+    const subscription = form.watch((value) => {
+      updateFormData(value);
+    });
+    return () => subscription.unsubscribe();
+  }, [form, updateFormData]);
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
