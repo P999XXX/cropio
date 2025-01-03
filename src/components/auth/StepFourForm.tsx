@@ -89,7 +89,7 @@ const StepFourForm = ({ onSubmit, onBack, isLoading }: StepFourFormProps) => {
           <TaxFields form={form} />
 
           <div className="space-y-3">
-            <Label>Currency</Label>
+            <Label className="text-[0.775rem] text-foreground">Currency</Label>
             <RadioGroup
               defaultValue={form.getValues("currency")}
               onValueChange={(value) => form.setValue("currency", value as "USD" | "EUR")}
