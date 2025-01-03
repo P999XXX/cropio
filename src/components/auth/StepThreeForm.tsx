@@ -86,7 +86,7 @@ const StepThreeForm = ({ onSubmit, onBack, isLoading }: StepThreeFormProps) => {
             <FormInput
               form={form}
               name="companyPlace"
-              label="Place"
+              label="City/Place"
               placeholder="Enter city/place"
             />
           </div>
