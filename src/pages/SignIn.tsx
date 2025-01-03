@@ -12,6 +12,7 @@ import { SignInFormData } from "@/components/auth/SignInForm";
 import { errorToastStyle, successToastStyle } from "@/utils/toast-styles";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { useLoadingStates } from "@/hooks/useLoadingStates";
+import { AlertCircle } from "lucide-react";
 
 const SignIn = () => {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
@@ -60,13 +61,19 @@ const SignIn = () => {
           errorMessage = "Please verify your email before signing in.";
         }
 
-        toast.error(errorMessage, errorToastStyle);
+        toast.error(errorMessage, {
+          ...errorToastStyle,
+          icon: <AlertCircle className="h-5 w-5" />,
+        });
         throw new Error(errorMessage);
       }
 
       if (data.session) {
         await supabase.auth.setSession(data.session);
-        toast.success("Signed in successfully!", successToastStyle);
+        toast.success("Welcome back! You've successfully signed in.", {
+          ...successToastStyle,
+          icon: '👋',
+        });
         navigate('/dashboard');
       }
     } catch (error: any) {
@@ -74,26 +81,6 @@ const SignIn = () => {
       throw error;
     } finally {
       setLoading('isSigningIn', false);
-    }
-  };
-
-  const handleResetPasswordRequest = async () => {
-    setLoading('isResettingPassword', true);
-    try {
-      const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
-        redirectTo: `${window.location.origin}/auth/callback?type=recovery`,
-      });
-
-      if (error) throw error;
-
-      setShowForgotPassword(false);
-      setShowResetThankYou(true);
-      
-    } catch (error: any) {
-      console.error("Reset password error:", error);
-      toast.error(error.message || "Failed to send reset instructions", errorToastStyle);
-    } finally {
-      setLoading('isResettingPassword', false);
     }
   };
 

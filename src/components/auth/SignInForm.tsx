@@ -5,6 +5,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import FormInput from "@/components/forms/FormInput";
 import PasswordInput from "./PasswordInput";
+import { AlertCircle } from "lucide-react";
 
 const signInSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -59,9 +60,10 @@ const SignInForm = ({ onSubmit, isLoading, onForgotPassword }: SignInFormProps) 
         />
 
         {form.formState.errors.root && (
-          <p className="text-destructive text-sm mt-2 bg-destructive/10 p-2 rounded">
-            {form.formState.errors.root.message}
-          </p>
+          <div className="flex items-start space-x-2 p-3 rounded-lg bg-destructive/10 text-destructive text-[0.775rem] mt-4 animate-in fade-in-50">
+            <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
+            <p>{form.formState.errors.root.message}</p>
+          </div>
         )}
 
         <Button 
