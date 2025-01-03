@@ -2,17 +2,19 @@ import { supabase } from "@/integrations/supabase/client";
 
 export const checkEmailExists = async (email: string): Promise<boolean> => {
   try {
-    const { data, error } = await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        shouldCreateUser: false,
-      }
-    });
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('email')
+      .eq('email', email)
+      .maybeSingle();
     
-    // If there's no error and data exists, the email is already registered
-    return error ? false : true;
+    if (error && error.code !== 'PGRST116') {
+      console.error("Email check error:", error);
+      return false;
+    }
+    return !!data;
   } catch (error) {
-    console.error("Error checking email:", error);
+    console.error("Email validation error:", error);
     return false;
   }
 };
