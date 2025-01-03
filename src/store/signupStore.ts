@@ -12,6 +12,7 @@ interface SignupStore {
     acceptPrivacy?: boolean;
     companyName?: string;
     companyStreet?: string;
+    companyStreetTwo?: string;
     companyPostalCode?: string;
     companyPlace?: string;
     companyCountry?: string;
