@@ -8,7 +8,7 @@ interface AgreementFieldsProps {
 
 const AgreementFields = ({ form }: AgreementFieldsProps) => {
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 mt-6">
       <AgreementCheckbox
         form={form}
         name="acceptTerms"
