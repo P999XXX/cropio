@@ -93,7 +93,14 @@ const SignIn = () => {
 
       if (error) {
         console.error("Reset password error:", error);
-        toast.error(error.message || "Failed to send reset instructions", {
+        let errorMessage = error.message;
+        
+        if (error.message?.toLowerCase().includes('rate limit') || 
+            error.message?.toLowerCase().includes('too many requests')) {
+          errorMessage = 'Too many reset attempts. Please wait a few minutes before trying again.';
+        }
+        
+        toast.error(errorMessage, {
           ...errorToastStyle,
           icon: <AlertCircle className="h-5 w-5" />,
         });
