@@ -7,8 +7,8 @@ import FormInput from "@/components/forms/FormInput";
 import PasswordInput from "./PasswordInput";
 
 const signInSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(1, "Password is required"),
+  email: z.string().email("Please enter a valid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
 export type SignInFormData = z.infer<typeof signInSchema>;
@@ -26,11 +26,24 @@ const SignInForm = ({ onSubmit, isLoading, onForgotPassword }: SignInFormProps) 
       email: "",
       password: "",
     },
+    mode: "onChange",
   });
+
+  const handleSubmit = async (values: SignInFormData) => {
+    try {
+      await onSubmit(values);
+    } catch (error) {
+      console.error("Sign in error:", error);
+      form.setError("root", {
+        type: "manual",
+        message: "Invalid email or password. Please try again.",
+      });
+    }
+  };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-2">
         <FormInput
           form={form}
           name="email"
@@ -45,10 +58,16 @@ const SignInForm = ({ onSubmit, isLoading, onForgotPassword }: SignInFormProps) 
           label="Password"
         />
 
+        {form.formState.errors.root && (
+          <p className="text-destructive text-sm mt-2">
+            {form.formState.errors.root.message}
+          </p>
+        )}
+
         <Button 
           type="submit" 
           className="w-full text-[0.775rem] mt-6 bg-primary hover:bg-primary/90 text-primary-foreground" 
-          disabled={isLoading}
+          disabled={isLoading || !form.formState.isValid}
         >
           {isLoading ? "Signing in..." : "Sign in"}
         </Button>

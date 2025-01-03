@@ -13,18 +13,36 @@ import { handleGoogleSignIn, handleLinkedInSignIn } from "@/utils/auth-handlers"
 import { errorToastStyle } from "@/utils/toast-styles";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { useLoadingStates } from "@/hooks/useLoadingStates";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { AlertCircle } from "lucide-react";
+import { useEffect } from "react";
 
 const SignIn = () => {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [showResetThankYou, setShowResetThankYou] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
   const isMobile = useIsMobile();
   const { loadingStates, setLoading } = useLoadingStates();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        navigate('/dashboard');
+      }
+    };
+    
+    checkSession();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session) {
+        navigate('/dashboard');
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [navigate]);
 
   const handleSignIn = async (values: SignInFormData) => {
     setLoading('isSigningIn', true);
@@ -35,6 +53,7 @@ const SignIn = () => {
       });
 
       if (error) {
+        console.error("Sign in error:", error);
         let errorMessage = "An error occurred during sign in. Please try again.";
         
         if (error.message?.includes('Invalid login credentials')) {
@@ -52,10 +71,9 @@ const SignIn = () => {
         toast.success("Signed in successfully!");
         navigate('/dashboard');
       }
-
     } catch (error: any) {
       console.error("Sign in error:", error);
-      setErrorMessage(error.message);
+      throw error;
     } finally {
       setLoading('isSigningIn', false);
     }
@@ -81,32 +99,12 @@ const SignIn = () => {
     }
   };
 
-  const handleForgotPassword = () => {
-    setShowForgotPassword(true);
-  };
-
   return (
     <SidebarProvider>
       <div className="min-h-screen bg-background w-full">
         <Navbar />
         <main className="w-full container flex min-h-[calc(100vh-64px)] items-start justify-center px-4 md:px-0 mt-[57px]">
           <div className="w-full md:w-[500px] py-8">
-            {errorMessage && (
-              <Alert variant="destructive" className="mb-6 border-2 border-destructive/20 bg-destructive/10 dark:bg-destructive/20 shadow-sm">
-                <AlertCircle className="h-5 w-5 text-destructive" />
-                <AlertDescription className="flex flex-col gap-3 ml-2">
-                  <p className="text-destructive font-medium">{errorMessage}</p>
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    onClick={() => setShowForgotPassword(true)}
-                    className="w-fit text-[13px] bg-destructive hover:bg-destructive/90"
-                  >
-                    Request new reset link
-                  </Button>
-                </AlertDescription>
-              </Alert>
-            )}
             <div className={`space-y-2 mb-8 ${isMobile ? "text-left" : "text-center"}`}>
               <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">
                 Welcome back!
@@ -122,7 +120,7 @@ const SignIn = () => {
                 isLoading={loadingStates.isSigningIn}
                 onGoogleSignIn={handleGoogleSignIn}
                 onLinkedInSignIn={handleLinkedInSignIn}
-                onForgotPassword={handleForgotPassword}
+                onForgotPassword={() => setShowForgotPassword(true)}
               />
             ) : (
               <SignInCard
@@ -130,7 +128,7 @@ const SignIn = () => {
                 isLoading={loadingStates.isSigningIn}
                 onGoogleSignIn={handleGoogleSignIn}
                 onLinkedInSignIn={handleLinkedInSignIn}
-                onForgotPassword={handleForgotPassword}
+                onForgotPassword={() => setShowForgotPassword(true)}
               />
             )}
           </div>
