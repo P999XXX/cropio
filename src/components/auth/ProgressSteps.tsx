@@ -6,14 +6,15 @@ interface ProgressStepsProps {
 }
 
 const ProgressSteps = ({ currentStep, totalSteps = 4 }: ProgressStepsProps) => {
-  const progress = (currentStep / totalSteps) * 100;
-
   return (
-    <div className="w-full mb-8">
-      <Progress 
-        value={progress} 
-        className="h-1 bg-secondary dark:bg-secondary/20"
-      />
+    <div className="w-full mb-8 flex gap-2">
+      {[...Array(totalSteps)].map((_, index) => (
+        <Progress 
+          key={index}
+          value={currentStep > index ? 100 : 0}
+          className="h-1 flex-1 bg-secondary dark:bg-secondary/20"
+        />
+      ))}
     </div>
   );
 };
