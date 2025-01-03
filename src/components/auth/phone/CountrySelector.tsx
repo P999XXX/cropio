@@ -1,7 +1,6 @@
 import {
   FormField,
   FormItem,
-  FormMessage,
 } from "@/components/ui/form";
 import {
   Select,
@@ -18,6 +17,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { useState } from "react";
 import CountryDisplay from "./CountryDisplay";
 import MobileCountryDialog from "./MobileCountryDialog";
+import FormErrorMessage from "@/components/forms/FormErrorMessage";
 
 interface CountrySelectorProps {
   form: UseFormReturn<StepThreeFormData>;
@@ -52,7 +52,9 @@ const CountrySelector = ({ form, onCountryChange, selectedCountry }: CountrySele
         render={({ field }) => (
           <FormItem className="w-[110px] shrink-0">
             <div
-              className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background cursor-pointer auth-input"
+              className={`flex h-10 w-full items-center justify-between rounded-md border bg-background px-3 py-2 text-sm ring-offset-background cursor-pointer auth-input ${
+                form.formState.errors.countryCode ? 'border-destructive' : 'border-input'
+              }`}
               onClick={() => setIsOpen(true)}
             >
               {selectedCountry ? (
@@ -61,6 +63,7 @@ const CountrySelector = ({ form, onCountryChange, selectedCountry }: CountrySele
                 <span>Select</span>
               )}
             </div>
+            <FormErrorMessage message={form.formState.errors.countryCode?.message} />
             <MobileCountryDialog
               isOpen={isOpen}
               onOpenChange={setIsOpen}
@@ -71,7 +74,6 @@ const CountrySelector = ({ form, onCountryChange, selectedCountry }: CountrySele
               onSelect={handleCountrySelect}
               title="Select Country Code"
             />
-            <FormMessage />
           </FormItem>
         )}
       />
@@ -94,7 +96,7 @@ const CountrySelector = ({ form, onCountryChange, selectedCountry }: CountrySele
             }} 
             value={field.value}
           >
-            <SelectTrigger className="h-10 auth-input">
+            <SelectTrigger className={`h-10 auth-input ${form.formState.errors.countryCode ? 'border-destructive' : ''}`}>
               <SelectValue>
                 {selectedCountry && (
                   <CountryDisplay 
@@ -116,7 +118,7 @@ const CountrySelector = ({ form, onCountryChange, selectedCountry }: CountrySele
               ))}
             </SelectContent>
           </Select>
-          <FormMessage />
+          <FormErrorMessage message={form.formState.errors.countryCode?.message} />
         </FormItem>
       )}
     />

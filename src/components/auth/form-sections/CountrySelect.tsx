@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import CountryDisplay from "../phone/CountryDisplay";
 import { supabase } from "@/integrations/supabase/client";
 import MobileCountryDialog from "../phone/MobileCountryDialog";
+import FormErrorMessage from "@/components/forms/FormErrorMessage";
 
 interface CountrySelectProps {
   form: UseFormReturn<StepThreeFormData>;
@@ -57,7 +58,9 @@ const CountrySelect = ({ form }: CountrySelectProps) => {
           <FormItem>
             <FormLabel className="text-[0.775rem]">Country</FormLabel>
             <div
-              className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background cursor-pointer auth-input"
+              className={`flex h-10 w-full items-center justify-between rounded-md border bg-background px-3 py-2 text-sm ring-offset-background cursor-pointer auth-input ${
+                form.formState.errors.companyCountry ? 'border-destructive' : 'border-input'
+              }`}
               onClick={() => setIsOpen(true)}
             >
               {selectedCountry ? (
@@ -66,6 +69,7 @@ const CountrySelect = ({ form }: CountrySelectProps) => {
                 <span>Select a country</span>
               )}
             </div>
+            <FormErrorMessage message={form.formState.errors.companyCountry?.message} />
             <MobileCountryDialog
               isOpen={isOpen}
               onOpenChange={setIsOpen}
@@ -90,7 +94,7 @@ const CountrySelect = ({ form }: CountrySelectProps) => {
           <FormLabel className="text-[0.775rem]">Country</FormLabel>
           <Select onValueChange={field.onChange} value={field.value}>
             <FormControl>
-              <SelectTrigger className="text-[0.875rem]">
+              <SelectTrigger className={`text-[0.875rem] ${form.formState.errors.companyCountry ? 'border-destructive' : ''}`}>
                 <SelectValue placeholder="Select a country" />
               </SelectTrigger>
             </FormControl>
@@ -106,6 +110,7 @@ const CountrySelect = ({ form }: CountrySelectProps) => {
               ))}
             </SelectContent>
           </Select>
+          <FormErrorMessage message={form.formState.errors.companyCountry?.message} />
         </FormItem>
       )}
     />
