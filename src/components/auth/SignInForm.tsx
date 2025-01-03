@@ -33,12 +33,9 @@ const SignInForm = ({ onSubmit, isLoading, onForgotPassword }: SignInFormProps) 
   const handleSubmit = async (values: SignInFormData) => {
     try {
       await onSubmit(values);
-    } catch (error: any) {
-      console.error("Sign in error:", error);
-      form.setError("root", {
-        type: "manual",
-        message: error.message || "Invalid email or password. Please try again.",
-      });
+    } catch (error) {
+      // Error is already handled in the parent component
+      console.error("Form submission error:", error);
     }
   };
 
