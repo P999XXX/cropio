@@ -11,6 +11,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { checkEmailExists } from "@/utils/validation";
 import { errorToastStyle } from "@/utils/toast-styles";
+import { supabase } from "@/integrations/supabase/client";
 
 const stepFiveSchema = z.object({
   vatNumber: z.string().min(1, "VAT number is required"),
@@ -29,6 +30,7 @@ interface StepFiveFormProps {
 const StepFiveForm = ({ onSubmit, onBack, isLoading }: StepFiveFormProps) => {
   const { formData, updateFormData } = useSignupStore();
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
 
   const form = useForm<StepFiveFormData>({
     resolver: zodResolver(stepFiveSchema),
@@ -40,19 +42,53 @@ const StepFiveForm = ({ onSubmit, onBack, isLoading }: StepFiveFormProps) => {
 
   const handleSubmit = async (values: StepFiveFormData) => {
     try {
+      setIsUploading(true);
+      
       // Check if email exists before proceeding
       const emailExists = await checkEmailExists(formData.email || '');
       
       if (emailExists) {
-        toast.error("This email is already registered", errorToastStyle);
+        toast.error("This email is already registered", {
+          ...errorToastStyle,
+          position: "top-center",
+        });
         return;
       }
 
-      updateFormData({ ...values, documents: selectedFiles });
-      onSubmit({ ...values, documents: selectedFiles });
+      // Upload files if present
+      const uploadedFiles = [];
+      if (selectedFiles.length > 0) {
+        for (const file of selectedFiles) {
+          const fileExt = file.name.split('.').pop();
+          const fileName = `${formData.email}/${crypto.randomUUID()}.${fileExt}`;
+          
+          const { error: uploadError } = await supabase.storage
+            .from('company_documents')
+            .upload(fileName, file);
+          
+          if (uploadError) {
+            console.error("Upload error:", uploadError);
+            toast.error("Failed to upload document", {
+              ...errorToastStyle,
+              position: "top-center",
+            });
+            return;
+          }
+          
+          uploadedFiles.push(fileName);
+        }
+      }
+
+      updateFormData({ ...values, documents: uploadedFiles });
+      onSubmit({ ...values, documents: uploadedFiles });
     } catch (error) {
       console.error("Form submission error:", error);
-      toast.error("An error occurred during registration", errorToastStyle);
+      toast.error("An error occurred during registration", {
+        ...errorToastStyle,
+        position: "top-center",
+      });
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -96,9 +132,9 @@ const StepFiveForm = ({ onSubmit, onBack, isLoading }: StepFiveFormProps) => {
               type="submit" 
               variant="primary"
               className="w-full text-[0.775rem]"
-              disabled={isLoading}
+              disabled={isLoading || isUploading}
             >
-              {isLoading ? "Creating account..." : "Complete Registration"}
+              {isLoading || isUploading ? "Creating account..." : "Complete Registration"}
               <ArrowRight className="h-4 w-4 ml-1" />
             </Button>
           </div>
