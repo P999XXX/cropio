@@ -44,7 +44,7 @@ const StepOneForm = ({ onSubmit }: StepOneFormProps) => {
 
   if (isMobile) {
     return (
-      <div className="space-y-4">
+      <div className="space-y-4 pt-8">
         <h3 className="text-lg font-semibold mb-4">Choose Your Account Type</h3>
         {content}
         <div className="text-sm text-center text-muted-foreground">
@@ -58,7 +58,7 @@ const StepOneForm = ({ onSubmit }: StepOneFormProps) => {
   }
 
   return (
-    <Card className="md:min-w-[500px]">
+    <Card className="md:min-w-[500px] mt-8">
       <CardHeader>
         <h3 className="text-lg font-semibold mb-4 text-left md:text-center">Choose Your Account Type</h3>
       </CardHeader>

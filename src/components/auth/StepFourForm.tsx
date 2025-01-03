@@ -81,7 +81,7 @@ const StepFourForm = ({ onSubmit, onBack, isLoading }: StepFourFormProps) => {
   };
 
   return (
-    <div className="space-y-6 md:bg-card md:p-6 md:rounded-lg md:border md:border-border md:max-w-2xl md:mx-auto">
+    <div className="space-y-6 pt-8 md:bg-card md:p-6 md:rounded-lg md:border md:border-border md:max-w-2xl md:mx-auto md:mt-8">
       <h3 className="text-lg font-semibold text-left md:text-center">Bank & Tax Information</h3>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
