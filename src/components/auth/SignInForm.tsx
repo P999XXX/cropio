@@ -59,7 +59,7 @@ const SignInForm = ({ onSubmit, isLoading, onForgotPassword }: SignInFormProps) 
         />
 
         {form.formState.errors.root && (
-          <p className="text-destructive text-sm mt-2">
+          <p className="text-[#D32F2F] text-sm mt-2">
             {form.formState.errors.root.message}
           </p>
         )}
