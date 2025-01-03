@@ -91,9 +91,9 @@ const DocumentUpload = ({ form, selectedFiles, onFileChange, onRemoveFile }: Doc
   return (
     <div className="space-y-2 document-upload">
       <div className="space-y-1">
-        <Label className="text-[0.775rem]">Company Documents</Label>
+        <Label className="text-[0.775rem]">Company Verification</Label>
         <p className="text-[0.675rem] text-muted-foreground">
-          Please upload up to 2 documents showing your VAT and TAX numbers. These can be official extracts, customer invoices, purchase invoices, or similar documents that clearly display these numbers.
+          Please upload max. 2 documents showing your VAT and TAX numbers. These can be official extracts, customer invoices, purchase invoices, or similar documents that clearly display these numbers for validte you company.
         </p>
       </div>
       <div
