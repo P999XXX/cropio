@@ -28,13 +28,13 @@ const PasswordInput = ({ form, name, label, description, className }: PasswordIn
       name={name}
       render={({ field, fieldState }) => (
         <FormItem className="space-y-1">
-          <FormLabel className="text-[0.775rem] text-foreground">{label}</FormLabel>
+          <FormLabel className="text-[0.675rem] text-foreground">{label}</FormLabel>
           <FormControl>
             <div className="relative">
               <Input
                 placeholder={`${name === "password" ? "Enter" : "Confirm"} your password`}
                 type={showPassword ? "text" : "password"}
-                className={`h-10 px-3 py-2 text-[0.775rem] ${fieldState.error ? 'border-destructive' : ''} ${className}`}
+                className={`h-10 px-3 py-2 text-[0.675rem] ${fieldState.error ? 'border-destructive' : ''} ${className}`}
                 {...field}
               />
               <button
@@ -51,7 +51,7 @@ const PasswordInput = ({ form, name, label, description, className }: PasswordIn
             </div>
           </FormControl>
           {description && (
-            <FormDescription className="text-[0.775rem] text-muted-foreground">
+            <FormDescription className="text-[0.675rem] text-muted-foreground">
               {description}
             </FormDescription>
           )}
