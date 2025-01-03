@@ -13,6 +13,7 @@ import { errorToastStyle, successToastStyle } from "@/utils/toast-styles";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { useLoadingStates } from "@/hooks/useLoadingStates";
 import { AlertCircle, CheckCircle2, Mail } from "lucide-react";
+import { getErrorMessage } from "@/utils/auth-error-handler";
 
 const SignIn = () => {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
@@ -53,14 +54,8 @@ const SignIn = () => {
 
       if (error) {
         console.error("Sign in error:", error);
-        let errorMessage = "An error occurred during sign in. Please try again.";
+        const errorMessage = getErrorMessage(error);
         
-        if (error.message?.includes('Invalid login credentials')) {
-          errorMessage = "The email or password you entered is incorrect. Please try again.";
-        } else if (error.message?.includes('Email not confirmed')) {
-          errorMessage = "Please verify your email before signing in.";
-        }
-
         toast.error(errorMessage, {
           ...errorToastStyle,
           icon: <AlertCircle className="h-5 w-5" />,
@@ -93,12 +88,7 @@ const SignIn = () => {
 
       if (error) {
         console.error("Reset password error:", error);
-        let errorMessage = error.message;
-        
-        if (error.message?.toLowerCase().includes('rate limit') || 
-            error.message?.toLowerCase().includes('too many requests')) {
-          errorMessage = 'Too many reset attempts. Please wait a few minutes before trying again.';
-        }
+        const errorMessage = getErrorMessage(error);
         
         toast.error(errorMessage, {
           ...errorToastStyle,
@@ -109,7 +99,7 @@ const SignIn = () => {
 
       setShowForgotPassword(false);
       setShowResetThankYou(true);
-      toast.success("Reset instructions sent successfully!", {
+      toast.success("Reset instructions sent!", {
         ...successToastStyle,
         icon: <Mail className="h-5 w-5" />,
       });
