@@ -1,59 +1,64 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { errorToastStyle } from "@/utils/toast-styles";
 
 const AuthRedirectHandler = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const handleAuthRedirect = async () => {
-      try {
-        const hash = window.location.hash;
-        if (!hash) {
-          console.log("No hash parameters found in URL");
-          return;
+    // Handle the auth callback
+    supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN") {
+        // Use a timeout to ensure the session is properly set
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 100);
+      }
+    });
+
+    // Parse the hash if present
+    const hashParams = new URLSearchParams(window.location.hash.substring(1));
+    const accessToken = hashParams.get("access_token");
+    const refreshToken = hashParams.get("refresh_token");
+
+    if (accessToken && refreshToken) {
+      supabase.auth.setSession({
+        access_token: accessToken,
+        refresh_token: refreshToken,
+      });
+    }
+
+    // Safe postMessage handling
+    const sendAuthComplete = () => {
+      // Only send to allowed origins
+      const allowedOrigins = [window.location.origin];
+      const targetOrigin = allowedOrigins.includes(window.opener?.origin) 
+        ? window.opener.origin 
+        : window.location.origin;
+
+      if (window.opener) {
+        try {
+          window.opener.postMessage(
+            { type: "AUTH_COMPLETE", success: true },
+            targetOrigin
+          );
+        } catch (error) {
+          console.error("Failed to send auth completion message:", error);
         }
-
-        const hashParams = new URLSearchParams(hash.substring(1));
-        const type = hashParams.get('type');
-        const access_token = hashParams.get('access_token');
-        const refresh_token = hashParams.get('refresh_token');
-        
-        console.log("Auth redirect type:", type);
-
-        // Only handle recovery flow
-        if (type === 'recovery') {
-          if (!access_token || !refresh_token) {
-            console.error("Missing tokens for recovery flow");
-            toast.error("Invalid password reset link. Please request a new one.", errorToastStyle);
-            return;
-          }
-
-          const { error: setSessionError } = await supabase.auth.setSession({
-            access_token,
-            refresh_token,
-          });
-
-          if (setSessionError) {
-            console.error("Set session error:", setSessionError);
-            toast.error("Your password reset link has expired. Please request a new one.", errorToastStyle);
-            return;
-          }
-
-          navigate('/reset-password');
-        }
-        // All other auth types are ignored in development mode
-      } catch (error: any) {
-        console.error("Auth redirect error:", error);
       }
     };
 
-    handleAuthRedirect();
+    sendAuthComplete();
   }, [navigate]);
 
-  return null;
+  return (
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="text-center">
+        <h2 className="text-xl font-semibold mb-2">Authenticating...</h2>
+        <p className="text-muted-foreground">Please wait while we complete the authentication process.</p>
+      </div>
+    </div>
+  );
 };
 
 export default AuthRedirectHandler;
