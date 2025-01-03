@@ -5,6 +5,8 @@ import { StepThreeFormData } from "../StepThreeForm";
 import { AsYouType, CountryCode, parsePhoneNumber } from 'libphonenumber-js';
 import { countryToDigits } from "./countryData";
 import FormErrorMessage from "@/components/forms/FormErrorMessage";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 interface PhoneNumberInputProps {
   form: UseFormReturn<StepThreeFormData>;
@@ -16,29 +18,27 @@ const PhoneNumberInput = ({ form, selectedCountry }: PhoneNumberInputProps) => {
     // Create a formatter for the selected country
     const formatter = new AsYouType(selectedCountry);
     const formattedNumber = formatter.input(value);
-    
-    // Only update if the number is valid for the country or empty
-    if (value === '' || isValidForCountry(value, selectedCountry)) {
-      form.setValue('phoneNumber', formattedNumber);
-    }
+    form.setValue('phoneNumber', formattedNumber);
   };
 
   const isValidForCountry = (value: string, country: CountryCode): boolean => {
     try {
-      // Try to parse the phone number
+      if (!value) return true;
       const phoneNumber = parsePhoneNumber(value, country);
       return phoneNumber.isValid();
     } catch {
-      // If parsing fails, check if it's just digits and spaces
-      return /^[0-9\s]*$/.test(value);
+      return false;
     }
   };
 
   // Get the maximum digits allowed for the selected country
   const maxDigits = countryToDigits[selectedCountry] || 15;
 
+  const currentValue = form.watch("phoneNumber");
+  const showWarning = currentValue && !isValidForCountry(currentValue, selectedCountry);
+
   return (
-    <FormItem className="flex-1">
+    <FormItem className="flex-1 phone-input-container">
       <FormControl>
         <Input
           placeholder={`Enter your phone no.`}
@@ -56,6 +56,14 @@ const PhoneNumberInput = ({ form, selectedCountry }: PhoneNumberInputProps) => {
         />
       </FormControl>
       <FormErrorMessage message={form.formState.errors.phoneNumber?.message} />
+      {showWarning && (
+        <Alert variant="destructive" className="mt-2 py-2 px-3">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription className="text-xs ml-2">
+            This phone number format doesn't match the selected country format
+          </AlertDescription>
+        </Alert>
+      )}
     </FormItem>
   );
 };
