@@ -8,8 +8,14 @@ import AgreementCheckbox from "./AgreementCheckbox";
 import { useSignupStore } from "@/store/signupStore";
 import { useEffect } from "react";
 
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
 const schema = z.object({
-  email: z.string().email("Please enter a valid email address"),
+  email: z
+    .string()
+    .min(1, "Email is required")
+    .email("Please enter a valid email address")
+    .regex(emailRegex, "Please enter a valid email address"),
   password: z
     .string()
     .min(8, "Password must be at least 8 characters")
@@ -43,6 +49,7 @@ const SignUpForm = ({ onSubmit, isLoading }: SignUpFormProps) => {
       acceptTerms: formData.acceptTerms || false,
       acceptPrivacy: formData.acceptPrivacy || false,
     },
+    mode: "onChange", // Enable real-time validation
   });
 
   // Update store when form values change
@@ -53,8 +60,16 @@ const SignUpForm = ({ onSubmit, isLoading }: SignUpFormProps) => {
     return () => subscription.unsubscribe();
   }, [form, updateFormData]);
 
+  const handleSubmit = async (values: SignUpFormData) => {
+    try {
+      await onSubmit(values);
+    } catch (error) {
+      console.error("Form submission error:", error);
+    }
+  };
+
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+    <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-2">
       <FormInput
         form={form}
         name="email"

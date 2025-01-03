@@ -6,15 +6,17 @@ const AuthRedirectHandler = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Handle the auth callback
-    supabase.auth.onAuthStateChange((event, session) => {
+    const handleAuthChange = async (event: string, session: any) => {
       if (event === "SIGNED_IN") {
         // Use a timeout to ensure the session is properly set
         setTimeout(() => {
           navigate("/dashboard");
         }, 100);
       }
-    });
+    };
+
+    // Subscribe to auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(handleAuthChange);
 
     // Parse the hash if present
     const hashParams = new URLSearchParams(window.location.hash.substring(1));
@@ -28,38 +30,37 @@ const AuthRedirectHandler = () => {
       });
     }
 
-    // Safe postMessage handling with multiple allowed origins
+    // Safe postMessage handling with dynamic origin
     const sendAuthComplete = () => {
       if (!window.opener) return;
 
-      // List of allowed origins
-      const allowedOrigins = [
-        window.location.origin,
-        'https://cropio.app',
-        'https://gptengineer.app',
-        'https://lovable.dev',
-        'http://localhost:3000'
-      ];
+      // Get the origin from the referrer or default to current origin
+      const origin = document.referrer 
+        ? new URL(document.referrer).origin 
+        : window.location.origin;
 
-      // Try to send message to each allowed origin
-      allowedOrigins.forEach(origin => {
-        try {
-          window.opener.postMessage(
-            { type: "AUTH_COMPLETE", success: true },
-            origin
-          );
-        } catch (error) {
-          console.debug(`PostMessage to ${origin} failed:`, error);
-        }
-      });
+      try {
+        window.opener.postMessage(
+          { type: "AUTH_COMPLETE", success: true },
+          origin
+        );
+        console.log("Auth complete message sent to:", origin);
+      } catch (error) {
+        console.error("PostMessage error:", error);
+      }
 
-      // Close the window after sending messages
+      // Close the window after sending message
       setTimeout(() => {
         window.close();
       }, 1000);
     };
 
     sendAuthComplete();
+
+    // Cleanup subscription
+    return () => {
+      subscription.unsubscribe();
+    };
   }, [navigate]);
 
   return (
