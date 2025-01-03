@@ -56,7 +56,7 @@ export const InviteForm = ({ onSubmit, isLoading, onCancel }: InviteFormProps) =
             name="firstName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-[0.925rem]">First Name</FormLabel>
+                <FormLabel className="text-[0.775rem]">First Name</FormLabel>
                 <FormControl>
                   <Input 
                     {...field} 
@@ -73,7 +73,7 @@ export const InviteForm = ({ onSubmit, isLoading, onCancel }: InviteFormProps) =
             name="lastName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-[0.925rem]">Last Name</FormLabel>
+                <FormLabel className="text-[0.775rem]">Last Name</FormLabel>
                 <FormControl>
                   <Input 
                     {...field} 
@@ -92,7 +92,7 @@ export const InviteForm = ({ onSubmit, isLoading, onCancel }: InviteFormProps) =
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-[0.925rem]">Email Address</FormLabel>
+              <FormLabel className="text-[0.775rem]">Email Address</FormLabel>
               <FormControl>
                 <Input 
                   {...field} 
@@ -111,7 +111,7 @@ export const InviteForm = ({ onSubmit, isLoading, onCancel }: InviteFormProps) =
           name="role"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-[0.925rem]">Role</FormLabel>
+              <FormLabel className="text-[0.775rem]">Role</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger className="h-10 text-[0.925rem] bg-background border-input">
