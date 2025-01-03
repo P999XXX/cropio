@@ -25,7 +25,7 @@ const StepTwoForm = ({ onSubmit, onBack, isLoading }: StepTwoFormProps) => {
           <PasswordFields form={form} />
           <AgreementFields form={form} />
 
-          <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:gap-4 pt-2">
+          <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:gap-4 pt-8">
             <Button 
               type="submit" 
               variant="primary"

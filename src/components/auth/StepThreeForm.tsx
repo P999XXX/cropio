@@ -95,7 +95,7 @@ const StepThreeForm = ({ onSubmit, onBack, isLoading }: StepThreeFormProps) => {
 
           <PhoneInput form={form} />
 
-          <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:gap-4 pt-2">
+          <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:gap-4 pt-8">
             <Button 
               type="submit" 
               variant="primary"
