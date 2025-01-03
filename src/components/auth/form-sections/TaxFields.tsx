@@ -1,9 +1,9 @@
 import FormInput from "@/components/forms/FormInput";
 import { UseFormReturn } from "react-hook-form";
-import { StepFourFormData } from "../StepFourForm";
+import { StepFiveFormData } from "../StepFiveForm";
 
 interface TaxFieldsProps {
-  form: UseFormReturn<StepFourFormData>;
+  form: UseFormReturn<StepFiveFormData>;
 }
 
 const TaxFields = ({ form }: TaxFieldsProps) => {
