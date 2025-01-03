@@ -8,6 +8,9 @@ import { useSignupStore } from "@/store/signupStore";
 import TaxFields from "./form-sections/TaxFields";
 import DocumentUpload from "./form-sections/DocumentUpload";
 import { useState } from "react";
+import { toast } from "sonner";
+import { checkEmailExists } from "@/utils/validation";
+import { errorToastStyle } from "@/utils/toast-styles";
 
 const stepFiveSchema = z.object({
   vatNumber: z.string().min(1, "VAT number is required"),
@@ -35,9 +38,22 @@ const StepFiveForm = ({ onSubmit, onBack, isLoading }: StepFiveFormProps) => {
     },
   });
 
-  const handleSubmit = (values: StepFiveFormData) => {
-    updateFormData({ ...values, documents: selectedFiles });
-    onSubmit({ ...values, documents: selectedFiles });
+  const handleSubmit = async (values: StepFiveFormData) => {
+    try {
+      // Check if email exists before proceeding
+      const emailExists = await checkEmailExists(formData.email || '');
+      
+      if (emailExists) {
+        toast.error("This email is already registered", errorToastStyle);
+        return;
+      }
+
+      updateFormData({ ...values, documents: selectedFiles });
+      onSubmit({ ...values, documents: selectedFiles });
+    } catch (error) {
+      console.error("Form submission error:", error);
+      toast.error("An error occurred during registration", errorToastStyle);
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
