@@ -5,7 +5,7 @@ import { StepThreeFormData } from "../StepThreeForm";
 import { AsYouType, CountryCode, parsePhoneNumber } from 'libphonenumber-js';
 import { countryToDigits } from "./countryData";
 import FormErrorMessage from "@/components/forms/FormErrorMessage";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Check } from "lucide-react";
 
 interface PhoneNumberInputProps {
   form: UseFormReturn<StepThreeFormData>;
@@ -58,7 +58,8 @@ const PhoneNumberInput = ({ form, selectedCountry }: PhoneNumberInputProps) => {
       {showWarning && (
         <div className="w-full text-warning-foreground bg-warning/20 text-[11px] mt-1 flex items-center gap-1 px-2 py-1 rounded">
           <AlertCircle className="h-3.5 w-3.5 text-warning-foreground" />
-          This phone number format doesn't match the selected country format
+          This phone number format doesn't match the selected country format. Is that correct
+          <Check className="h-3 w-3 text-warning-foreground ml-0.5" />
         </div>
       )}
     </FormItem>
