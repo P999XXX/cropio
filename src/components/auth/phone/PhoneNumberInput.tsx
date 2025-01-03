@@ -5,7 +5,8 @@ import { StepThreeFormData } from "../StepThreeForm";
 import { AsYouType, CountryCode, parsePhoneNumber } from 'libphonenumber-js';
 import { countryToDigits } from "./countryData";
 import FormErrorMessage from "@/components/forms/FormErrorMessage";
-import { AlertCircle, Check } from "lucide-react";
+import { AlertCircle, X } from "lucide-react";
+import { useState } from "react";
 
 interface PhoneNumberInputProps {
   form: UseFormReturn<StepThreeFormData>;
@@ -13,11 +14,13 @@ interface PhoneNumberInputProps {
 }
 
 const PhoneNumberInput = ({ form, selectedCountry }: PhoneNumberInputProps) => {
+  const [showWarningMessage, setShowWarningMessage] = useState(true);
+
   const handlePhoneNumberChange = (value: string) => {
-    // Create a formatter for the selected country
     const formatter = new AsYouType(selectedCountry);
     const formattedNumber = formatter.input(value);
     form.setValue('phoneNumber', formattedNumber);
+    setShowWarningMessage(true);
   };
 
   const isValidForCountry = (value: string, country: CountryCode): boolean => {
@@ -30,11 +33,9 @@ const PhoneNumberInput = ({ form, selectedCountry }: PhoneNumberInputProps) => {
     }
   };
 
-  // Get the maximum digits allowed for the selected country
   const maxDigits = countryToDigits[selectedCountry] || 15;
-
   const currentValue = form.watch("phoneNumber");
-  const showWarning = currentValue && !isValidForCountry(currentValue, selectedCountry);
+  const showWarning = currentValue && !isValidForCountry(currentValue, selectedCountry) && showWarningMessage;
 
   return (
     <FormItem className="flex-1 phone-input-container">
@@ -56,10 +57,18 @@ const PhoneNumberInput = ({ form, selectedCountry }: PhoneNumberInputProps) => {
       </FormControl>
       <FormErrorMessage message={form.formState.errors.phoneNumber?.message} />
       {showWarning && (
-        <div className="w-full text-warning-foreground bg-warning/20 text-[11px] mt-1 flex items-center gap-1 px-2 py-1 rounded">
-          <AlertCircle className="h-3.5 w-3.5 text-warning-foreground" />
-          This phone number format doesn't match the selected country format. Is that correct
-          <Check className="h-3 w-3 text-warning-foreground ml-0.5" />
+        <div className="w-full text-warning-foreground bg-warning/20 text-[11px] mt-1 flex items-center justify-between gap-1 px-2 py-1 rounded">
+          <div className="flex items-center gap-1">
+            <AlertCircle className="h-3.5 w-3.5 text-warning-foreground" />
+            This phone number format doesn't match the selected country format. Is that correct
+          </div>
+          <button
+            type="button"
+            onClick={() => setShowWarningMessage(false)}
+            className="text-warning-foreground hover:text-warning-foreground/80 transition-colors"
+          >
+            <X className="h-3.5 w-3.5" />
+          </button>
         </div>
       )}
     </FormItem>

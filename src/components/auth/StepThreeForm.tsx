@@ -14,7 +14,9 @@ const stepThreeSchema = z.object({
     .min(3, "Company name must be at least 3 characters")
     .regex(/^[a-zA-Z\s]{3,}$/, "Company name must contain only letters and be at least 3 characters"),
   companyStreet: z.string()
-    .min(3, "Street address must be at least 3 characters"),
+    .min(3, "Address must be at least 3 characters"),
+  companyStreetTwo: z.string()
+    .optional(),
   companyPostalCode: z.string()
     .min(1, "Postal code is required")
     .regex(/^\d+$/, "Postal code must contain only numbers"),
@@ -44,6 +46,7 @@ const StepThreeForm = ({ onSubmit, onBack, isLoading }: StepThreeFormProps) => {
     defaultValues: {
       companyName: formData.companyName || "",
       companyStreet: formData.companyStreet || "",
+      companyStreetTwo: formData.companyStreetTwo || "",
       companyPostalCode: formData.companyPostalCode || "",
       companyPlace: formData.companyPlace || "",
       companyCountry: formData.companyCountry || "",
@@ -72,8 +75,15 @@ const StepThreeForm = ({ onSubmit, onBack, isLoading }: StepThreeFormProps) => {
           <FormInput
             form={form}
             name="companyStreet"
-            label="Street and Number"
-            placeholder="Enter street address"
+            label="Address Line 1"
+            placeholder="Enter address line 1"
+          />
+
+          <FormInput
+            form={form}
+            name="companyStreetTwo"
+            label="Address Line 2"
+            placeholder="Enter address line 2 (optional)"
           />
 
           <div className="grid gap-4 md:grid-cols-2">
