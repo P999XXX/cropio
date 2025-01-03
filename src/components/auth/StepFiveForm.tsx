@@ -11,7 +11,7 @@ import DocumentUpload from "./form-sections/DocumentUpload";
 import { toast } from "sonner";
 import { errorToastStyle, successToastStyle } from "@/utils/toast-styles";
 import { checkEmailExists, createUserAccount } from "@/utils/auth-utils";
-import { supabase } from "@/integrations/supabase/client";
+import { uploadDocuments, updateProfileWithDocuments } from "@/utils/document-utils";
 
 const stepFiveSchema = z.object({
   vatNumber: z.string().min(1, "VAT number is required"),
@@ -40,42 +40,6 @@ const StepFiveForm = ({ onSubmit, onBack, isLoading }: StepFiveFormProps) => {
       documents: [],
     },
   });
-
-  const uploadDocuments = async (userId: string, files: File[]) => {
-    const uploadedFiles = [];
-    
-    for (const file of files) {
-      try {
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${userId}/${crypto.randomUUID()}.${fileExt}`;
-
-        const { error: uploadError } = await supabase.storage
-          .from('company_documents')
-          .upload(fileName, file, {
-            cacheControl: '3600',
-            upsert: false
-          });
-
-        if (uploadError) {
-          console.error("File upload error:", uploadError);
-          toast.error(`Failed to upload ${file.name}`, errorToastStyle);
-          continue;
-        }
-
-        uploadedFiles.push({
-          name: file.name,
-          path: fileName,
-          type: file.type,
-          size: file.size
-        });
-      } catch (error) {
-        console.error("File upload error:", error);
-        toast.error(`Error uploading ${file.name}`, errorToastStyle);
-      }
-    }
-
-    return uploadedFiles;
-  };
 
   const handleSubmit = async (values: StepFiveFormData) => {
     if (!formData.email || !formData.password) {
@@ -113,20 +77,17 @@ const StepFiveForm = ({ onSubmit, onBack, isLoading }: StepFiveFormProps) => {
       if (selectedFiles.length > 0) {
         uploadedDocuments = await uploadDocuments(user.id, selectedFiles);
         
-        // Update profile with document references
-        const { error: updateError } = await supabase
-          .from('profiles')
-          .update({
-            vat_number: values.vatNumber,
-            tax_number: values.taxNumber,
-            company_documents: uploadedDocuments
-          })
-          .eq('id', user.id);
-
-        if (updateError) {
-          console.error("Profile update error:", updateError);
-          toast.error("Failed to update profile with documents", errorToastStyle);
+        if (uploadedDocuments.length === 0) {
+          throw new Error('Failed to upload any documents');
         }
+
+        // Update profile with document references
+        await updateProfileWithDocuments(
+          user.id,
+          values.vatNumber,
+          values.taxNumber,
+          uploadedDocuments
+        );
       }
 
       // Update form data and submit
@@ -137,7 +98,6 @@ const StepFiveForm = ({ onSubmit, onBack, isLoading }: StepFiveFormProps) => {
 
       updateFormData(finalData);
       onSubmit(finalData);
-
       toast.success("Account created successfully!", successToastStyle);
     } catch (error: any) {
       console.error("Form submission error:", error);
