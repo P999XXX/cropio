@@ -1,6 +1,7 @@
 import { UseFormReturn } from "react-hook-form";
 import FormInput from "@/components/forms/FormInput";
 import { StepTwoFormData } from "../schemas/stepTwoSchema";
+import { AlertCircle } from "lucide-react";
 
 interface PersonalFieldsProps {
   form: UseFormReturn<StepTwoFormData>;
@@ -37,9 +38,10 @@ const PersonalFields = ({ form, emailExists }: PersonalFieldsProps) => {
           className="text-[0.875rem]"
         />
         {emailExists && (
-          <p className="text-destructive-foreground text-[0.775rem] mt-1">
+          <div className="text-destructive-foreground bg-destructive/20 text-[11px] mt-1 flex items-center gap-1 px-2 py-1 rounded">
+            <AlertCircle className="h-3.5 w-3.5 text-destructive-foreground" />
             This email is already registered
-          </p>
+          </div>
         )}
       </div>
     </>
