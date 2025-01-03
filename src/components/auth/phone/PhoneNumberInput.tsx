@@ -56,7 +56,7 @@ const PhoneNumberInput = ({ form, selectedCountry }: PhoneNumberInputProps) => {
       </FormControl>
       <FormErrorMessage message={form.formState.errors.phoneNumber?.message} />
       {showWarning && (
-        <div className="text-warning-foreground bg-warning/20 text-[11px] mt-1 flex items-center gap-1 px-2 py-1 rounded">
+        <div className="w-full text-warning-foreground bg-warning/20 text-[11px] mt-1 flex items-center gap-1 px-2 py-1 rounded">
           <AlertCircle className="h-3.5 w-3.5 text-warning-foreground" />
           This phone number format doesn't match the selected country format
         </div>
