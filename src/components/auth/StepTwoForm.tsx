@@ -30,7 +30,7 @@ const StepTwoForm = ({ onSubmit, onBack, isLoading }: StepTwoFormProps) => {
               type="button"
               variant="secondary"
               onClick={onBack}
-              className="w-full text-[0.875rem]"
+              className="w-full text-[0.775rem]"
             >
               <ArrowLeft className="h-4 w-4 mr-1" />
               Back
@@ -38,7 +38,7 @@ const StepTwoForm = ({ onSubmit, onBack, isLoading }: StepTwoFormProps) => {
             <Button 
               type="submit" 
               variant="primary"
-              className="w-full text-[0.875rem]"
+              className="w-full text-[0.775rem]"
               disabled={isLoading || emailExists}
             >
               {isLoading ? "Creating account..." : "Continue"}
