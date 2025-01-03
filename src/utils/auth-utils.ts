@@ -25,11 +25,11 @@ export const uploadDocuments = async (userId: string, files: File[]): Promise<Fi
   for (const file of files) {
     try {
       const fileExt = file.name.split('.').pop();
-      const fileName = `${userId}/${crypto.randomUUID()}.${fileExt}`;
+      const sanitizedFileName = `${userId}/${crypto.randomUUID()}.${fileExt}`;
       
       const { error: uploadError } = await supabase.storage
         .from('company_documents')
-        .upload(fileName, file, {
+        .upload(sanitizedFileName, file, {
           cacheControl: '3600',
           upsert: false
         });
