@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -9,11 +9,9 @@ import SignInMobile from "@/components/auth/SignInMobile";
 import ForgotPasswordDialog from "@/components/auth/ForgotPasswordDialog";
 import ResetPasswordThankYouDialog from "@/components/auth/ResetPasswordThankYouDialog";
 import { SignInFormData } from "@/components/auth/SignInForm";
-import { handleGoogleSignIn, handleLinkedInSignIn } from "@/utils/auth-handlers";
-import { errorToastStyle } from "@/utils/toast-styles";
+import { errorToastStyle, successToastStyle } from "@/utils/toast-styles";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { useLoadingStates } from "@/hooks/useLoadingStates";
-import { useEffect } from "react";
 
 const SignIn = () => {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
@@ -57,7 +55,7 @@ const SignIn = () => {
         let errorMessage = "An error occurred during sign in. Please try again.";
         
         if (error.message?.includes('Invalid login credentials')) {
-          errorMessage = "Invalid email or password. Please try again.";
+          errorMessage = "The email or password you entered is incorrect. Please try again.";
         } else if (error.message?.includes('Email not confirmed')) {
           errorMessage = "Please verify your email before signing in.";
         }
@@ -68,7 +66,7 @@ const SignIn = () => {
 
       if (data.session) {
         await supabase.auth.setSession(data.session);
-        toast.success("Signed in successfully!");
+        toast.success("Signed in successfully!", successToastStyle);
         navigate('/dashboard');
       }
     } catch (error: any) {
@@ -118,16 +116,16 @@ const SignIn = () => {
               <SignInMobile
                 onSubmit={handleSignIn}
                 isLoading={loadingStates.isSigningIn}
-                onGoogleSignIn={handleGoogleSignIn}
-                onLinkedInSignIn={handleLinkedInSignIn}
+                onGoogleSignIn={() => {}}
+                onLinkedInSignIn={() => {}}
                 onForgotPassword={() => setShowForgotPassword(true)}
               />
             ) : (
               <SignInCard
                 onSubmit={handleSignIn}
                 isLoading={loadingStates.isSigningIn}
-                onGoogleSignIn={handleGoogleSignIn}
-                onLinkedInSignIn={handleLinkedInSignIn}
+                onGoogleSignIn={() => {}}
+                onLinkedInSignIn={() => {}}
                 onForgotPassword={() => setShowForgotPassword(true)}
               />
             )}
