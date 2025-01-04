@@ -72,7 +72,7 @@ const SignInForm = ({ onSubmit, isLoading, onForgotPassword }: SignInFormProps) 
 
         <Button 
           type="submit" 
-          className="w-full text-[0.775rem] mt-6" 
+          className="w-full text-[0.775rem] mt-8" 
           disabled={isLoading || !form.formState.isValid}
           variant="primary"
         >
@@ -82,7 +82,7 @@ const SignInForm = ({ onSubmit, isLoading, onForgotPassword }: SignInFormProps) 
         <button
           type="button"
           onClick={onForgotPassword}
-          className="text-[0.775rem] text-primary hover:underline block w-full text-center mt-2"
+          className="text-[0.875rem] text-primary hover:underline block w-full text-center mt-2"
         >
           Forgot your password?
         </button>
