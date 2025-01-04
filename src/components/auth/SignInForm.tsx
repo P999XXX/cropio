@@ -35,9 +35,13 @@ const SignInForm = ({ onSubmit, isLoading, onForgotPassword }: SignInFormProps) 
       await onSubmit(values);
     } catch (error: any) {
       console.error("Form submission error:", error);
+      const errorMessage = error.message?.includes("Invalid login credentials")
+        ? "The email or password you entered is incorrect. Please try again."
+        : error.message || "An error occurred during sign in. Please try again.";
+      
       form.setError("root", {
         type: "manual",
-        message: error.message || "An error occurred during sign in. Please try again.",
+        message: errorMessage,
       });
     }
   };
