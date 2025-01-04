@@ -12,6 +12,13 @@ import { RoleBadge } from "../badges/RoleBadge";
 import { TeamTableHeaderRow } from "./TeamTableHeaderRow";
 import { TeamMemberActions } from "./TeamMemberActions";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { MoreVertical } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface TeamTableProps {
   members: TeamMember[];
@@ -80,7 +87,23 @@ export const TeamTable = ({ members, sortConfig, onSort }: TeamTableProps) => {
                   {member.inviter?.first_name} {member.inviter?.last_name}
                 </TableCell>
                 <TableCell className="py-2">
-                  <TeamMemberActions />
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground"
+                      >
+                        <span className="sr-only">Open menu</span>
+                        <MoreVertical className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <TeamMemberActions 
+                        member={member} 
+                        onInvite={() => {}} // Pass empty function since it's required
+                      />
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </TableCell>
               </TableRow>
             );
