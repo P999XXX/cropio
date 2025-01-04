@@ -63,16 +63,16 @@ export const InviteForm = ({ onOpenChange }: InviteFormProps) => {
               control={form.control}
               name="firstName"
               render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel className="text-[0.775rem]">First Name</FormLabel>
+                <FormItem className="space-y-1">
+                  <FormLabel className="text-[0.775rem] text-foreground">First Name</FormLabel>
                   <FormControl>
                     <Input 
                       {...field} 
-                      className="h-10 text-[0.775rem] bg-background border-input w-full" 
-                      placeholder="John"
+                      className="h-auto py-2 text-[0.875rem]" 
+                      placeholder="Enter first name"
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-[11px]" />
                 </FormItem>
               )}
             />
@@ -80,16 +80,16 @@ export const InviteForm = ({ onOpenChange }: InviteFormProps) => {
               control={form.control}
               name="lastName"
               render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel className="text-[0.775rem]">Last Name</FormLabel>
+                <FormItem className="space-y-1">
+                  <FormLabel className="text-[0.775rem] text-foreground">Last Name</FormLabel>
                   <FormControl>
                     <Input 
                       {...field} 
-                      className="h-10 text-[0.775rem] bg-background border-input w-full" 
-                      placeholder="Doe"
+                      className="h-auto py-2 text-[0.875rem]" 
+                      placeholder="Enter last name"
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-[11px]" />
                 </FormItem>
               )}
             />
@@ -99,17 +99,17 @@ export const InviteForm = ({ onOpenChange }: InviteFormProps) => {
             control={form.control}
             name="email"
             render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel className="text-[0.775rem]">Email Address</FormLabel>
+              <FormItem className="space-y-1">
+                <FormLabel className="text-[0.775rem] text-foreground">Email Address</FormLabel>
                 <FormControl>
                   <Input 
                     {...field} 
                     type="email"
-                    className="h-10 text-[0.775rem] bg-background border-input w-full" 
-                    placeholder="john.doe@example.com"
+                    className="h-auto py-2 text-[0.875rem]" 
+                    placeholder="Enter email address"
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-[11px]" />
               </FormItem>
             )}
           />
@@ -118,21 +118,21 @@ export const InviteForm = ({ onOpenChange }: InviteFormProps) => {
             control={form.control}
             name="role"
             render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel className="text-[0.775rem]">Permission</FormLabel>
+              <FormItem className="space-y-1">
+                <FormLabel className="text-[0.775rem] text-foreground">Permission</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
-                    <SelectTrigger className="h-10 text-[0.775rem] bg-background border-input w-full">
+                    <SelectTrigger className="h-auto py-2 text-[0.875rem]">
                       <SelectValue placeholder="Select a role" />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent className="z-[151] bg-background border border-border">
-                    <SelectItem value="administrator" className="text-[0.775rem]">Administrator</SelectItem>
-                    <SelectItem value="editor" className="text-[0.775rem]">Editor</SelectItem>
-                    <SelectItem value="readonly" className="text-[0.775rem]">Read Only</SelectItem>
+                  <SelectContent className="z-[151]">
+                    <SelectItem value="administrator" className="text-[0.875rem]">Administrator</SelectItem>
+                    <SelectItem value="editor" className="text-[0.875rem]">Editor</SelectItem>
+                    <SelectItem value="readonly" className="text-[0.875rem]">Read Only</SelectItem>
                   </SelectContent>
                 </Select>
-                <FormMessage />
+                <FormMessage className="text-[11px]" />
               </FormItem>
             )}
           />
@@ -143,7 +143,7 @@ export const InviteForm = ({ onOpenChange }: InviteFormProps) => {
             type="submit"
             disabled={isPending}
             variant="primary"
-            className="w-full h-10 text-[0.775rem]"
+            className="w-full h-auto py-2 text-[0.775rem]"
           >
             {isPending ? "Sending Invitation..." : "Send Invitation"}
           </Button>
