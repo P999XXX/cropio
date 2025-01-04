@@ -1,48 +1,39 @@
-import { formatDistanceToNow } from "date-fns";
-import { MoreVertical, UserCog, UserX } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Card } from "@/components/ui/card";
+import { RoleBadge } from "../badges/RoleBadge";
+import { StatusBadge } from "../badges/StatusBadge";
+import { MoreVertical } from "lucide-react";
+import { TeamMemberActions } from "../table/TeamMemberActions";
+import { TeamMember } from "@/types/team";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Card } from "@/components/ui/card";
-import { TeamMember } from "@/types/team";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { StatusBadge } from "../badges/StatusBadge";
-import { RoleBadge } from "../badges/RoleBadge";
+import { Button } from "@/components/ui/button";
 
 interface TeamCardProps {
   member: TeamMember;
-  viewMode: "grid" | "list";
-  onSort: (key: keyof TeamMember) => void;
-  sortConfig: {
-    key: keyof TeamMember;
-    direction: "asc" | "desc";
-  };
+  onInvite: () => void;
 }
 
-export const TeamCard = ({ member, viewMode }: TeamCardProps) => {
-  const getInitials = (firstName?: string | null, lastName?: string | null) => {
-    if (!firstName && !lastName) return '??';
-    return `${(firstName?.[0] || '').toUpperCase()}${(lastName?.[0] || '').toUpperCase()}`;
-  };
+const getInitials = (firstName?: string, lastName?: string) => {
+  if (!firstName && !lastName) return "?";
+  return `${(firstName?.[0] || "").toUpperCase()}${(lastName?.[0] || "").toUpperCase()}`;
+};
 
-  // Get the appropriate name based on status
-  const firstName = member.status === "accepted" ? member.profile?.first_name : member.first_name;
-  const lastName = member.status === "accepted" ? member.profile?.last_name : member.last_name;
-  const email = member.status === "accepted" ? member.profile?.email : member.email;
-  
+export const TeamCard = ({ member, onInvite }: TeamCardProps) => {
   const displayName = member.first_name && member.last_name 
     ? `${member.first_name} ${member.last_name}`
     : member.profile?.first_name && member.profile?.last_name 
     ? `${member.profile.first_name} ${member.profile.last_name}`
     : "Unnamed User";
 
+  const email = member.status === "accepted" ? member.profile?.email : member.email;
+
   return (
-    <Card className="team-member-card p-4 hover:bg-accent/5 transition-colors">
-      <div className="flex items-center justify-between gap-4">
+    <Card className="team-card p-4 bg-background border border-border">
+      <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-3 min-w-0">
           <Avatar className="h-8 w-8 bg-primary/10">
             <AvatarFallback className="text-[0.775rem]">
@@ -50,40 +41,30 @@ export const TeamCard = ({ member, viewMode }: TeamCardProps) => {
             </AvatarFallback>
           </Avatar>
           <div className="min-w-0">
-            <div className="flex items-center gap-2">
-              <h3 className="font-medium truncate text-[0.775rem]">
-                {displayName}
-              </h3>
-              <div className="flex gap-1.5">
-                <RoleBadge role={member.role} />
-                <StatusBadge status={member.status} />
-              </div>
-            </div>
+            <h3 className="text-[0.875rem] font-medium truncate">
+              {displayName}
+            </h3>
             <p className="text-[0.775rem] text-muted-foreground truncate">
               {email}
             </p>
           </div>
         </div>
-        
-        <div className="flex items-center gap-3 text-[0.775rem] text-muted-foreground shrink-0">
-          <span className="hidden sm:block">
-            {formatDistanceToNow(new Date(member.created_at), { addSuffix: true })}
-          </span>
+
+        <div className="flex items-center gap-2">
+          <StatusBadge status={member.status} />
+          <RoleBadge role={member.role} />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8">
+              <Button
+                variant="ghost"
+                className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground"
+              >
+                <span className="sr-only">Open menu</span>
                 <MoreVertical className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem className="flex items-center gap-2 text-[0.775rem]">
-                <UserCog className="h-4 w-4" />
-                Change Role
-              </DropdownMenuItem>
-              <DropdownMenuItem className="flex items-center gap-2 text-destructive text-[0.775rem]">
-                <UserX className="h-4 w-4" />
-                Remove Member
-              </DropdownMenuItem>
+              <TeamMemberActions member={member} onInvite={onInvite} />
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
