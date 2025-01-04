@@ -36,6 +36,6 @@
   .invite-member-dialog {
     width: 100% !important;
     right: 0 !important;
-    left: 0 !important;
+    left: unset !important;
   }
 }
