@@ -1,30 +1,23 @@
-import { Button } from "@/components/ui/button";
+import { TeamMember } from "@/types/team";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MoreVertical, UserCog, UserX } from "lucide-react";
+import { Mail } from "lucide-react";
 
-export const TeamMemberActions = () => {
+interface TeamMemberActionsProps {
+  member: TeamMember;
+  onInvite: () => void;
+}
+
+export const TeamMemberActions = ({ member, onInvite }: TeamMemberActionsProps) => {
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="h-8 w-8 p-0">
-          <MoreVertical className="h-4 w-4" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem className="flex items-center gap-2">
-          <UserCog className="h-4 w-4" />
-          Change Role
+    <>
+      {member.status === "pending" && (
+        <DropdownMenuItem onClick={onInvite} className="gap-2">
+          <Mail className="h-4 w-4" />
+          <span>Resend Invite</span>
         </DropdownMenuItem>
-        <DropdownMenuItem className="flex items-center gap-2 text-destructive">
-          <UserX className="h-4 w-4" />
-          Remove Member
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+      )}
+    </>
   );
 };
