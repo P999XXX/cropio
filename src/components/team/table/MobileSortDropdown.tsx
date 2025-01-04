@@ -47,7 +47,7 @@ export const MobileSortDropdown = ({ sortConfig, onSort }: MobileSortDropdownPro
 
     // If not the current sort column
     if (!isCurrentSort) {
-      return <ArrowDownUp className={cn(baseClass, "text-black/60 group-hover:text-black/60")} />;
+      return <ArrowDownUp className={cn(baseClass, "text-black/60 group-hover:text-black/30")} />;
     }
 
     // Text-based columns
