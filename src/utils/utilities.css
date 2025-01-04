@@ -1,4 +1,5 @@
 @layer components {
+  /* Form Styles */
   .form-label {
     @apply text-foreground text-sm font-medium !important;
   }
@@ -7,10 +8,12 @@
     @apply text-destructive-foreground bg-destructive/10 text-[11px] mt-1 flex items-center gap-1 px-2 py-1 rounded;
   }
 
+  /* Link Styles */
   .agreement-link {
-    @apply text-primary hover:text-primary/90 transition-none font-medium;
+    @apply text-primary hover:text-primary/90 font-medium;
   }
 
+  /* Auth Component Styles */
   .auth-input {
     @apply text-sm w-full bg-white dark:bg-[#1F2937] border-[#8E9196] dark:border-gray-600 text-[#222222] dark:text-gray-100 focus:border-primary/50 dark:focus:border-primary/50 focus:ring-1 focus:ring-primary/50 dark:focus:ring-primary/50;
   }

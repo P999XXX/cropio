@@ -37,7 +37,7 @@
   }
 
   * {
-    @apply border-border transition-colors duration-100;
+    @apply border-border;
   }
 
   body {
