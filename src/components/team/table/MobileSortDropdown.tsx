@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ChevronUp, ChevronDown } from "lucide-react";
+import { ArrowUp, ArrowDown } from "lucide-react";
 import { TeamMember } from "@/types/team";
 import {
   Popover,
@@ -42,8 +42,8 @@ export const MobileSortDropdown = ({ sortConfig, onSort }: MobileSortDropdownPro
         >
           <span>Sort by: {getSortLabel(sortConfig.key)}</span>
           <div className="flex flex-col ml-[5px]">
-            <ChevronUp className="h-3 w-3 -mb-1 text-primary/20" />
-            <ChevronDown className="h-3 w-3 text-primary/20" />
+            <ArrowUp className="h-3 w-3 -mb-1 text-primary/20" />
+            <ArrowDown className="h-3 w-3 text-primary/20" />
           </div>
         </Button>
       </PopoverTrigger>
@@ -63,7 +63,7 @@ export const MobileSortDropdown = ({ sortConfig, onSort }: MobileSortDropdownPro
             >
               <span>{label}</span>
               <div className="flex flex-col">
-                <ChevronUp 
+                <ArrowUp 
                   className={cn(
                     "h-3 w-3 -mb-1",
                     sortConfig.key === key && sortConfig.direction === "asc" 
@@ -71,7 +71,7 @@ export const MobileSortDropdown = ({ sortConfig, onSort }: MobileSortDropdownPro
                       : "text-primary/20 group-hover:text-primary/40"
                   )} 
                 />
-                <ChevronDown 
+                <ArrowDown 
                   className={cn(
                     "h-3 w-3",
                     sortConfig.key === key && sortConfig.direction === "desc" 

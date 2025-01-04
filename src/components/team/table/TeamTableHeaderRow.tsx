@@ -1,7 +1,7 @@
 import { TableHead, TableRow } from "@/components/ui/table";
 import { TeamMember } from "@/types/team";
 import { cn } from "@/lib/utils";
-import { ChevronUp, ChevronDown } from "lucide-react";
+import { ArrowUp, ArrowDown } from "lucide-react";
 
 interface TeamTableHeaderRowProps {
   sortConfig: {
@@ -27,7 +27,7 @@ export const TeamTableHeaderRow = ({ sortConfig, onSort }: TeamTableHeaderRowPro
       <div className="flex items-center gap-[5px] justify-between">
         <span>{label}</span>
         <div className="flex flex-col">
-          <ChevronUp 
+          <ArrowUp 
             className={cn(
               "h-4 w-4 -mb-2",
               sortConfig.key === key && sortConfig.direction === "asc" 
@@ -35,7 +35,7 @@ export const TeamTableHeaderRow = ({ sortConfig, onSort }: TeamTableHeaderRowPro
                 : "text-primary/40 group-hover:text-primary/60"
             )} 
           />
-          <ChevronDown 
+          <ArrowDown 
             className={cn(
               "h-4 w-4",
               sortConfig.key === key && sortConfig.direction === "desc" 
