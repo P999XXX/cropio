@@ -26,7 +26,7 @@ export const TeamTableHeaderRow = ({ sortConfig, onSort }: TeamTableHeaderRowPro
 
     // If not the current sort column
     if (!isCurrentSort) {
-      return <ArrowDownUp className="h-4 w-4 text-black/60 group-hover:text-black/80" />;
+      return <ArrowDownUp className="h-4 w-4 text-black/60 group-hover:text-black/60" />;
     }
 
     // Text-based columns
