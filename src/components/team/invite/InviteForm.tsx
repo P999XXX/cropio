@@ -18,6 +18,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   firstName: z.string().min(2, "First name must be at least 2 characters"),
@@ -30,13 +33,9 @@ const formSchema = z.object({
 
 export type InviteFormData = z.infer<typeof formSchema>;
 
-interface InviteFormProps {
-  onSubmit: (values: InviteFormData) => void;
-  isLoading: boolean;
-  onCancel: () => void;
-}
+export const InviteForm = () => {
+  const [isLoading, setIsLoading] = useState(false);
 
-export const InviteForm = ({ onSubmit, isLoading, onCancel }: InviteFormProps) => {
   const form = useForm<InviteFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -47,9 +46,42 @@ export const InviteForm = ({ onSubmit, isLoading, onCancel }: InviteFormProps) =
     },
   });
 
+  const handleSubmit = async (values: InviteFormData) => {
+    setIsLoading(true);
+    try {
+      const { data: authData, error: authError } = await supabase.auth.getUser();
+      if (authError) throw new Error("Authentication error: " + authError.message);
+      if (!authData.user) throw new Error("No authenticated user found");
+
+      const { error: insertError } = await supabase.from("team_members").insert({
+        email: values.email,
+        role: values.role,
+        invited_by: authData.user.id,
+        profile_id: authData.user.id,
+        status: "pending",
+        first_name: values.firstName,
+        last_name: values.lastName,
+      });
+
+      if (insertError) {
+        if (insertError.code === "42501") {
+          throw new Error("You don't have permission to invite team members.");
+        }
+        throw new Error("Failed to create team member: " + insertError.message);
+      }
+
+      toast.success("Team member invited successfully");
+    } catch (error: any) {
+      console.error("Error inviting team member:", error);
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-2">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           <FormField
             control={form.control}
@@ -129,21 +161,13 @@ export const InviteForm = ({ onSubmit, isLoading, onCancel }: InviteFormProps) =
           )}
         />
 
-        <div className="flex flex-col gap-3 mt-4 sm:flex-row sm:justify-end">
+        <div className="flex justify-end mt-4">
           <Button
             type="submit"
             disabled={isLoading}
             className="h-10 px-4 text-[0.925rem]"
           >
             {isLoading ? "Inviting..." : "Send Invitation"}
-          </Button>
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={onCancel}
-            className="h-10 px-4 text-[0.925rem]"
-          >
-            Cancel
           </Button>
         </div>
       </form>
