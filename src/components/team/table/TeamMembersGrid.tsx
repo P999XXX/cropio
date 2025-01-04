@@ -12,9 +12,7 @@ interface TeamMembersGridProps {
 }
 
 export const TeamMembersGrid = ({ 
-  members, 
-  viewMode, 
-  sortConfig, 
+  members,
   onSort 
 }: TeamMembersGridProps) => {
   return (
@@ -22,10 +20,8 @@ export const TeamMembersGrid = ({
       {members.map((member) => (
         <TeamCard 
           key={member.id} 
-          member={member} 
-          viewMode={viewMode}
-          onSort={onSort}
-          sortConfig={sortConfig}
+          member={member}
+          onInvite={() => {}} // Pass empty function since it's required by TeamCard
         />
       ))}
     </div>

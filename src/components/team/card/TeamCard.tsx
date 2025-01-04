@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 
-interface TeamCardProps {
+export interface TeamCardProps {
   member: TeamMember;
   onInvite: () => void;
 }
