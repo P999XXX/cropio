@@ -29,7 +29,7 @@ export const TeamTableHeaderRow = ({ sortConfig, onSort }: TeamTableHeaderRowPro
         <div className="flex flex-col">
           <ChevronUp 
             className={cn(
-              "h-5 w-5 -mb-2",
+              "h-4 w-4 -mb-2",
               sortConfig.key === key && sortConfig.direction === "asc" 
                 ? "text-primary" 
                 : "text-primary/40 group-hover:text-primary/60"
@@ -37,7 +37,7 @@ export const TeamTableHeaderRow = ({ sortConfig, onSort }: TeamTableHeaderRowPro
           />
           <ChevronDown 
             className={cn(
-              "h-5 w-5",
+              "h-4 w-4",
               sortConfig.key === key && sortConfig.direction === "desc" 
                 ? "text-primary" 
                 : "text-primary/40 group-hover:text-primary/60"
