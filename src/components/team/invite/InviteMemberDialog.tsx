@@ -14,7 +14,7 @@ export const InviteMemberDialog = ({ open, onOpenChange }: InviteMemberDialogPro
           <DialogTitle className="text-xl font-semibold">
             Invite Team Member
           </DialogTitle>
-          <DialogDescription className="text-[0.775rem] text-muted-foreground">
+          <DialogDescription className="text-[0.875rem] text-muted-foreground">
             Send an invitation to join your team. They'll receive an email with instructions.
           </DialogDescription>
         </DialogHeader>
