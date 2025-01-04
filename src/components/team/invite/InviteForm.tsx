@@ -143,7 +143,7 @@ export const InviteForm = ({ onOpenChange }: InviteFormProps) => {
             type="submit"
             disabled={isPending}
             variant="primary"
-            className="w-full h-10 text-[0.875rem]"
+            className="w-full h-10 text-[0.825rem]"
           >
             {isPending ? "Sending Invitation..." : "Send Invitation"}
           </Button>
