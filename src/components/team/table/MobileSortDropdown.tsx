@@ -47,32 +47,32 @@ export const MobileSortDropdown = ({ sortConfig, onSort }: MobileSortDropdownPro
 
     // If not the current sort column
     if (!isCurrentSort) {
-      return <ArrowDownUp className={cn(baseClass, "text-primary/20 group-hover:text-primary/40")} />;
+      return <ArrowDownUp className={cn(baseClass, "text-black/60")} />;
     }
 
     // Text-based columns
     if (key === "email" || key === "role" || key === "status") {
       return isAsc ? (
-        <ArrowDownAZ className={cn(baseClass, "text-primary")} />
+        <ArrowDownAZ className={cn(baseClass, "text-black")} />
       ) : (
-        <ArrowDownZA className={cn(baseClass, "text-primary")} />
+        <ArrowDownZA className={cn(baseClass, "text-black")} />
       );
     }
 
     // Date-based columns
     if (key === "created_at") {
       return isAsc ? (
-        <CalendarArrowUp className={cn(baseClass, "text-primary")} />
+        <CalendarArrowUp className={cn(baseClass, "text-black")} />
       ) : (
-        <CalendarArrowDown className={cn(baseClass, "text-primary")} />
+        <CalendarArrowDown className={cn(baseClass, "text-black")} />
       );
     }
 
     // Numeric columns (if any in the future)
     return isAsc ? (
-      <ArrowDown01 className={cn(baseClass, "text-primary")} />
+      <ArrowDown01 className={cn(baseClass, "text-black")} />
     ) : (
-      <ArrowUp10 className={cn(baseClass, "text-primary")} />
+      <ArrowUp10 className={cn(baseClass, "text-black")} />
     );
   };
 

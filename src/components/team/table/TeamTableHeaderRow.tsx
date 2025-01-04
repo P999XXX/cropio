@@ -26,32 +26,32 @@ export const TeamTableHeaderRow = ({ sortConfig, onSort }: TeamTableHeaderRowPro
 
     // If not the current sort column
     if (!isCurrentSort) {
-      return <ArrowDownUp className="h-4 w-4 text-primary/40 group-hover:text-primary/60" />;
+      return <ArrowDownUp className="h-4 w-4 text-black/60 group-hover:text-black/80" />;
     }
 
     // Text-based columns
     if (key === "email" || key === "role" || key === "status") {
       return isAsc ? (
-        <ArrowDownAZ className="h-4 w-4 text-primary" />
+        <ArrowDownAZ className="h-4 w-4 text-black" />
       ) : (
-        <ArrowDownZA className="h-4 w-4 text-primary" />
+        <ArrowDownZA className="h-4 w-4 text-black" />
       );
     }
 
     // Date-based columns
     if (key === "created_at") {
       return isAsc ? (
-        <CalendarArrowUp className="h-4 w-4 text-primary" />
+        <CalendarArrowUp className="h-4 w-4 text-black" />
       ) : (
-        <CalendarArrowDown className="h-4 w-4 text-primary" />
+        <CalendarArrowDown className="h-4 w-4 text-black" />
       );
     }
 
     // Numeric columns (if any in the future)
     return isAsc ? (
-      <ArrowDown01 className="h-4 w-4 text-primary" />
+      <ArrowDown01 className="h-4 w-4 text-black" />
     ) : (
-      <ArrowUp10 className="h-4 w-4 text-primary" />
+      <ArrowUp10 className="h-4 w-4 text-black" />
     );
   };
 
