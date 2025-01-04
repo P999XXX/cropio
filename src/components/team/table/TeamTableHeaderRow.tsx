@@ -1,7 +1,15 @@
 import { TableHead, TableRow } from "@/components/ui/table";
 import { TeamMember } from "@/types/team";
 import { cn } from "@/lib/utils";
-import { ArrowUp, ArrowDown } from "lucide-react";
+import { 
+  ArrowDownUp,
+  ArrowDownAZ,
+  ArrowDownZA,
+  CalendarDown,
+  CalendarUp,
+  ArrowDown01,
+  ArrowUp10
+} from "lucide-react";
 
 interface TeamTableHeaderRowProps {
   sortConfig: {
@@ -12,6 +20,41 @@ interface TeamTableHeaderRowProps {
 }
 
 export const TeamTableHeaderRow = ({ sortConfig, onSort }: TeamTableHeaderRowProps) => {
+  const getSortIcon = (key: keyof TeamMember) => {
+    const isCurrentSort = sortConfig.key === key;
+    const isAsc = sortConfig.direction === "asc";
+
+    // If not the current sort column
+    if (!isCurrentSort) {
+      return <ArrowDownUp className="h-4 w-4 text-primary/40 group-hover:text-primary/60" />;
+    }
+
+    // Text-based columns
+    if (key === "email" || key === "role" || key === "status") {
+      return isAsc ? (
+        <ArrowDownAZ className="h-4 w-4 text-primary" />
+      ) : (
+        <ArrowDownZA className="h-4 w-4 text-primary" />
+      );
+    }
+
+    // Date-based columns
+    if (key === "created_at") {
+      return isAsc ? (
+        <CalendarUp className="h-4 w-4 text-primary" />
+      ) : (
+        <CalendarDown className="h-4 w-4 text-primary" />
+      );
+    }
+
+    // Numeric columns (if any in the future)
+    return isAsc ? (
+      <ArrowDown01 className="h-4 w-4 text-primary" />
+    ) : (
+      <ArrowUp10 className="h-4 w-4 text-primary" />
+    );
+  };
+
   const renderTableHeader = (
     label: string,
     key: keyof TeamMember,
@@ -26,24 +69,7 @@ export const TeamTableHeaderRow = ({ sortConfig, onSort }: TeamTableHeaderRowPro
     >
       <div className="flex items-center gap-[5px] justify-between">
         <span>{label}</span>
-        <div className="flex flex-col">
-          <ArrowUp 
-            className={cn(
-              "h-4 w-4 -mb-2",
-              sortConfig.key === key && sortConfig.direction === "asc" 
-                ? "text-primary" 
-                : "text-primary/40 group-hover:text-primary/60"
-            )} 
-          />
-          <ArrowDown 
-            className={cn(
-              "h-4 w-4",
-              sortConfig.key === key && sortConfig.direction === "desc" 
-                ? "text-primary" 
-                : "text-primary/40 group-hover:text-primary/60"
-            )} 
-          />
-        </div>
+        {getSortIcon(key)}
       </div>
     </TableHead>
   );

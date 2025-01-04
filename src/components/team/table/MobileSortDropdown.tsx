@@ -1,5 +1,13 @@
 import { Button } from "@/components/ui/button";
-import { ArrowUp, ArrowDown } from "lucide-react";
+import { 
+  ArrowDownUp,
+  ArrowDownAZ,
+  ArrowDownZA,
+  CalendarDown,
+  CalendarUp,
+  ArrowDown01,
+  ArrowUp10
+} from "lucide-react";
 import { TeamMember } from "@/types/team";
 import {
   Popover,
@@ -32,6 +40,42 @@ export const MobileSortDropdown = ({ sortConfig, onSort }: MobileSortDropdownPro
     }
   };
 
+  const getSortIcon = (key: keyof TeamMember) => {
+    const isCurrentSort = sortConfig.key === key;
+    const isAsc = sortConfig.direction === "asc";
+    const baseClass = "h-3 w-3";
+
+    // If not the current sort column
+    if (!isCurrentSort) {
+      return <ArrowDownUp className={cn(baseClass, "text-primary/20 group-hover:text-primary/40")} />;
+    }
+
+    // Text-based columns
+    if (key === "email" || key === "role" || key === "status") {
+      return isAsc ? (
+        <ArrowDownAZ className={cn(baseClass, "text-primary")} />
+      ) : (
+        <ArrowDownZA className={cn(baseClass, "text-primary")} />
+      );
+    }
+
+    // Date-based columns
+    if (key === "created_at") {
+      return isAsc ? (
+        <CalendarUp className={cn(baseClass, "text-primary")} />
+      ) : (
+        <CalendarDown className={cn(baseClass, "text-primary")} />
+      );
+    }
+
+    // Numeric columns (if any in the future)
+    return isAsc ? (
+      <ArrowDown01 className={cn(baseClass, "text-primary")} />
+    ) : (
+      <ArrowUp10 className={cn(baseClass, "text-primary")} />
+    );
+  };
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -41,10 +85,7 @@ export const MobileSortDropdown = ({ sortConfig, onSort }: MobileSortDropdownPro
           className="mobile-sort-dropdown w-full lg:w-[180px] flex items-center justify-between text-[0.775rem] bg-background border-primary/20 hover:border-primary/30 hover:bg-primary/5 hover:text-foreground"
         >
           <span>Sort by: {getSortLabel(sortConfig.key)}</span>
-          <div className="flex flex-col ml-[5px]">
-            <ArrowUp className="h-3 w-3 -mb-1 text-primary/20" />
-            <ArrowDown className="h-3 w-3 text-primary/20" />
-          </div>
+          {getSortIcon(sortConfig.key)}
         </Button>
       </PopoverTrigger>
       <PopoverContent align="end" className="w-[180px] p-0 bg-background">
@@ -62,24 +103,7 @@ export const MobileSortDropdown = ({ sortConfig, onSort }: MobileSortDropdownPro
               onClick={() => onSort(key as keyof TeamMember)}
             >
               <span>{label}</span>
-              <div className="flex flex-col">
-                <ArrowUp 
-                  className={cn(
-                    "h-3 w-3 -mb-1",
-                    sortConfig.key === key && sortConfig.direction === "asc" 
-                      ? "text-primary" 
-                      : "text-primary/20 group-hover:text-primary/40"
-                  )} 
-                />
-                <ArrowDown 
-                  className={cn(
-                    "h-3 w-3",
-                    sortConfig.key === key && sortConfig.direction === "desc" 
-                      ? "text-primary" 
-                      : "text-primary/20 group-hover:text-primary/40"
-                  )} 
-                />
-              </div>
+              {getSortIcon(key as keyof TeamMember)}
             </Button>
           ))}
         </div>
