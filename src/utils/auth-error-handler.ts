@@ -2,13 +2,13 @@ export const getErrorMessage = (error: any): string => {
   // First try to parse the error body if it exists
   let body;
   try {
-    body = error?.body ? JSON.parse(error.body) : {};
+    body = typeof error.body === 'string' ? JSON.parse(error.body) : error.body;
   } catch {
     body = {};
   }
   
   const message = error?.message?.toLowerCase() || '';
-  const code = body?.code || '';
+  const code = body?.code || error?.code || '';
   
   // Handle specific error cases
   if (code === 'invalid_credentials' || message.includes('invalid login credentials')) {
@@ -21,7 +21,10 @@ export const getErrorMessage = (error: any): string => {
     return 'The operation timed out. Please check your internet connection and try again.';
   } else if (message.includes('network')) {
     return 'Unable to connect. Please check your internet connection.';
+  } else if (message.includes('body stream already read')) {
+    return 'An error occurred while processing your request. Please try again.';
   }
   
+  // If no specific error is matched, return a generic message or the original error message
   return error.message || 'An unexpected error occurred. Please try again.';
 };

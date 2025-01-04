@@ -46,30 +46,28 @@ const SignIn = () => {
 
   const handleSignIn = async (values: SignInFormData) => {
     setLoading('isSigningIn', true);
+    
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { error } = await supabase.auth.signInWithPassword({
         email: values.email,
         password: values.password,
       });
 
       if (error) {
-        console.error("Sign in error:", error);
         const errorMessage = getErrorMessage(error);
-        
         toast.error(errorMessage, {
           ...errorToastStyle,
           icon: <AlertCircle className="h-5 w-5" />,
         });
-        throw new Error(errorMessage);
+        throw error;
       }
 
-      if (data.session) {
-        toast.success("Welcome back! You've successfully signed in.", {
-          ...successToastStyle,
-          icon: <CheckCircle2 className="h-5 w-5" />,
-        });
-        navigate('/dashboard');
-      }
+      toast.success("Welcome back! You've successfully signed in.", {
+        ...successToastStyle,
+        icon: <CheckCircle2 className="h-5 w-5" />,
+      });
+      
+      navigate('/dashboard');
     } catch (error: any) {
       console.error("Sign in error:", error);
       throw error;
@@ -86,9 +84,7 @@ const SignIn = () => {
       });
 
       if (error) {
-        console.error("Reset password error:", error);
         const errorMessage = getErrorMessage(error);
-        
         toast.error(errorMessage, {
           ...errorToastStyle,
           icon: <AlertCircle className="h-5 w-5" />,
@@ -102,7 +98,6 @@ const SignIn = () => {
         ...successToastStyle,
         icon: <Mail className="h-5 w-5" />,
       });
-      
     } catch (error: any) {
       console.error("Reset password error:", error);
       throw error;
