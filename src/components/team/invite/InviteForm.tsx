@@ -64,11 +64,11 @@ export const InviteForm = ({ onOpenChange }: InviteFormProps) => {
               name="firstName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[0.875rem]">First Name</FormLabel>
+                  <FormLabel className="text-[0.775rem]">First Name</FormLabel>
                   <FormControl>
                     <Input 
                       {...field} 
-                      className="h-10 text-[0.875rem] bg-background border-input" 
+                      className="h-10 text-[0.775rem] bg-background border-input" 
                       placeholder="John"
                     />
                   </FormControl>
@@ -81,11 +81,11 @@ export const InviteForm = ({ onOpenChange }: InviteFormProps) => {
               name="lastName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[0.875rem]">Last Name</FormLabel>
+                  <FormLabel className="text-[0.775rem]">Last Name</FormLabel>
                   <FormControl>
                     <Input 
                       {...field} 
-                      className="h-10 text-[0.875rem] bg-background border-input" 
+                      className="h-10 text-[0.775rem] bg-background border-input" 
                       placeholder="Doe"
                     />
                   </FormControl>
@@ -100,12 +100,12 @@ export const InviteForm = ({ onOpenChange }: InviteFormProps) => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-[0.875rem]">Email Address</FormLabel>
+                <FormLabel className="text-[0.775rem]">Email Address</FormLabel>
                 <FormControl>
                   <Input 
                     {...field} 
                     type="email"
-                    className="h-10 text-[0.875rem] bg-background border-input" 
+                    className="h-10 text-[0.775rem] bg-background border-input" 
                     placeholder="john.doe@example.com"
                   />
                 </FormControl>
@@ -119,17 +119,17 @@ export const InviteForm = ({ onOpenChange }: InviteFormProps) => {
             name="role"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-[0.875rem]">Role</FormLabel>
+                <FormLabel className="text-[0.775rem]">Role</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
-                    <SelectTrigger className="h-10 text-[0.875rem] bg-background border-input">
+                    <SelectTrigger className="h-10 text-[0.775rem] bg-background border-input">
                       <SelectValue placeholder="Select a role" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent className="z-[151] bg-background border border-border">
-                    <SelectItem value="administrator" className="text-[0.875rem]">Administrator</SelectItem>
-                    <SelectItem value="editor" className="text-[0.875rem]">Editor</SelectItem>
-                    <SelectItem value="readonly" className="text-[0.875rem]">Read Only</SelectItem>
+                    <SelectItem value="administrator" className="text-[0.775rem]">Administrator</SelectItem>
+                    <SelectItem value="editor" className="text-[0.775rem]">Editor</SelectItem>
+                    <SelectItem value="readonly" className="text-[0.775rem]">Read Only</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -143,7 +143,7 @@ export const InviteForm = ({ onOpenChange }: InviteFormProps) => {
             type="submit"
             disabled={isPending}
             variant="primary"
-            className="w-full h-10 text-[0.825rem]"
+            className="w-full h-10 text-[0.775rem]"
           >
             {isPending ? "Sending Invitation..." : "Send Invitation"}
           </Button>
