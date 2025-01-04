@@ -70,7 +70,7 @@ const SignInForm = ({ onSubmit, isLoading, onForgotPassword }: SignInFormProps) 
           </div>
         )}
 
-        <div className="mt-[25px]">
+        <div className="mt-[35px]">
           <Button 
             type="submit" 
             className="w-full text-[0.775rem]"
