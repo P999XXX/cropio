@@ -18,9 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+import { useInviteMember } from "./useInviteMember";
 
 const formSchema = z.object({
   firstName: z.string().min(2, "First name must be at least 2 characters"),
@@ -38,7 +36,9 @@ interface InviteFormProps {
 }
 
 export const InviteForm = ({ onOpenChange }: InviteFormProps) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const { mutate: inviteMember, isPending } = useInviteMember(() => {
+    onOpenChange(false);
+  });
 
   const form = useForm<InviteFormData>({
     resolver: zodResolver(formSchema),
@@ -50,55 +50,25 @@ export const InviteForm = ({ onOpenChange }: InviteFormProps) => {
     },
   });
 
-  const handleSubmit = async (values: InviteFormData) => {
-    setIsLoading(true);
-    try {
-      const { data: authData, error: authError } = await supabase.auth.getUser();
-      if (authError) throw new Error("Authentication error: " + authError.message);
-      if (!authData.user) throw new Error("No authenticated user found");
-
-      const { error: insertError } = await supabase.from("team_members").insert({
-        email: values.email,
-        role: values.role,
-        invited_by: authData.user.id,
-        profile_id: authData.user.id,
-        status: "pending",
-        first_name: values.firstName,
-        last_name: values.lastName,
-      });
-
-      if (insertError) {
-        if (insertError.code === "42501") {
-          throw new Error("You don't have permission to invite team members.");
-        }
-        throw new Error("Failed to create team member: " + insertError.message);
-      }
-
-      toast.success("Team member invited successfully");
-      onOpenChange(false);
-    } catch (error: any) {
-      console.error("Error inviting team member:", error);
-      toast.error(error.message);
-    } finally {
-      setIsLoading(false);
-    }
+  const onSubmit = (values: InviteFormData) => {
+    inviteMember(values);
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="flex flex-col h-full">
-        <div className="flex-grow space-y-2">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col h-full">
+        <div className="flex-grow space-y-4">
+          <div className="grid grid-cols-2 gap-4">
             <FormField
               control={form.control}
               name="firstName"
               render={({ field }) => (
-                <FormItem className="mt-0">
-                  <FormLabel className="text-[0.775rem]">First Name</FormLabel>
+                <FormItem>
+                  <FormLabel className="text-[0.875rem]">First Name</FormLabel>
                   <FormControl>
                     <Input 
                       {...field} 
-                      className="h-10 text-[0.925rem] bg-background border-input" 
+                      className="h-10 text-[0.875rem] bg-background border-input" 
                       placeholder="John"
                     />
                   </FormControl>
@@ -110,12 +80,12 @@ export const InviteForm = ({ onOpenChange }: InviteFormProps) => {
               control={form.control}
               name="lastName"
               render={({ field }) => (
-                <FormItem className="mt-0">
-                  <FormLabel className="text-[0.775rem]">Last Name</FormLabel>
+                <FormItem>
+                  <FormLabel className="text-[0.875rem]">Last Name</FormLabel>
                   <FormControl>
                     <Input 
                       {...field} 
-                      className="h-10 text-[0.925rem] bg-background border-input" 
+                      className="h-10 text-[0.875rem] bg-background border-input" 
                       placeholder="Doe"
                     />
                   </FormControl>
@@ -129,13 +99,13 @@ export const InviteForm = ({ onOpenChange }: InviteFormProps) => {
             control={form.control}
             name="email"
             render={({ field }) => (
-              <FormItem className="mt-0">
-                <FormLabel className="text-[0.775rem]">Email Address</FormLabel>
+              <FormItem>
+                <FormLabel className="text-[0.875rem]">Email Address</FormLabel>
                 <FormControl>
                   <Input 
                     {...field} 
                     type="email"
-                    className="h-10 text-[0.925rem] bg-background border-input" 
+                    className="h-10 text-[0.875rem] bg-background border-input" 
                     placeholder="john.doe@example.com"
                   />
                 </FormControl>
@@ -148,18 +118,18 @@ export const InviteForm = ({ onOpenChange }: InviteFormProps) => {
             control={form.control}
             name="role"
             render={({ field }) => (
-              <FormItem className="mt-0">
-                <FormLabel className="text-[0.775rem]">Role</FormLabel>
+              <FormItem>
+                <FormLabel className="text-[0.875rem]">Role</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
-                    <SelectTrigger className="h-10 text-[0.925rem] bg-background border-input">
+                    <SelectTrigger className="h-10 text-[0.875rem] bg-background border-input">
                       <SelectValue placeholder="Select a role" />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent className="bg-background border border-border">
-                    <SelectItem value="administrator" className="text-[0.925rem]">Administrator</SelectItem>
-                    <SelectItem value="editor" className="text-[0.925rem]">Editor</SelectItem>
-                    <SelectItem value="readonly" className="text-[0.925rem]">Read Only</SelectItem>
+                  <SelectContent className="z-[151] bg-background border border-border">
+                    <SelectItem value="administrator" className="text-[0.875rem]">Administrator</SelectItem>
+                    <SelectItem value="editor" className="text-[0.875rem]">Editor</SelectItem>
+                    <SelectItem value="readonly" className="text-[0.875rem]">Read Only</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -171,11 +141,11 @@ export const InviteForm = ({ onOpenChange }: InviteFormProps) => {
         <div className="sticky bottom-0 pt-4 mt-4 border-t border-border bg-background">
           <Button
             type="submit"
-            disabled={isLoading}
+            disabled={isPending}
             variant="primary"
-            className="w-full h-10 text-[0.925rem]"
+            className="w-full h-10 text-[0.875rem]"
           >
-            {isLoading ? "Inviting..." : "Send Invitation"}
+            {isPending ? "Sending Invitation..." : "Send Invitation"}
           </Button>
         </div>
       </form>

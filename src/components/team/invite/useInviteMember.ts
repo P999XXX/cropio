@@ -20,7 +20,7 @@ export const useInviteMember = (onSuccess: () => void) => {
 
       const isFirstMember = count === 0;
 
-      // Insert new team member with first and last name
+      // Insert new team member
       const { error: insertError } = await supabase
         .from("team_members")
         .insert({
