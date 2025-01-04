@@ -60,7 +60,7 @@ const SignInForm = ({ onSubmit, isLoading, onForgotPassword }: SignInFormProps) 
         />
 
         {form.formState.errors.root && (
-          <div className="flex items-start space-x-2 p-3 rounded-lg bg-destructive/10 text-destructive text-[0.775rem] mt-4 animate-in fade-in-50">
+          <div className="flex items-start space-x-2 p-3 rounded-lg bg-destructive text-destructive-foreground text-[0.775rem] mt-4 animate-in fade-in-50">
             <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
             <p>{form.formState.errors.root.message}</p>
           </div>
