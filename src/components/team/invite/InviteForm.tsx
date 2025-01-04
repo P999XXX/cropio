@@ -27,6 +27,9 @@ const formSchema = z.object({
   role: z.enum(["administrator", "editor", "readonly"], {
     required_error: "Please select a role",
   }),
+  department: z.enum(["Manager", "Sales", "Purchase", "Quality", "Logistics", "Finance", "Other"], {
+    required_error: "Please select a department",
+  }),
 });
 
 export type InviteFormData = z.infer<typeof formSchema>;
@@ -47,6 +50,7 @@ export const InviteForm = ({ onOpenChange }: InviteFormProps) => {
       lastName: "",
       email: "",
       role: "readonly",
+      department: "Other",
     },
   });
 
@@ -109,6 +113,33 @@ export const InviteForm = ({ onOpenChange }: InviteFormProps) => {
                     placeholder="Enter email address"
                   />
                 </FormControl>
+                <FormMessage className="text-[11px]" />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="department"
+            render={({ field }) => (
+              <FormItem className="space-y-1">
+                <FormLabel className="text-[0.775rem] text-foreground">Department</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger className="h-auto py-2 text-[0.875rem]">
+                      <SelectValue placeholder="Select a department" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent className="z-[151]">
+                    <SelectItem value="Manager" className="text-[0.875rem]">Manager</SelectItem>
+                    <SelectItem value="Sales" className="text-[0.875rem]">Sales</SelectItem>
+                    <SelectItem value="Purchase" className="text-[0.875rem]">Purchase</SelectItem>
+                    <SelectItem value="Quality" className="text-[0.875rem]">Quality</SelectItem>
+                    <SelectItem value="Logistics" className="text-[0.875rem]">Logistics</SelectItem>
+                    <SelectItem value="Finance" className="text-[0.875rem]">Finance</SelectItem>
+                    <SelectItem value="Other" className="text-[0.875rem]">Other</SelectItem>
+                  </SelectContent>
+                </Select>
                 <FormMessage className="text-[11px]" />
               </FormItem>
             )}

@@ -28,6 +28,7 @@ export const useInviteMember = (onSuccess: () => void) => {
           first_name: values.firstName,
           last_name: values.lastName,
           role: isFirstMember ? "administrator" : values.role,
+          department: values.department,
           invited_by: authData.user.id,
           profile_id: authData.user.id,
           status: isFirstMember ? "accepted" : "pending",
