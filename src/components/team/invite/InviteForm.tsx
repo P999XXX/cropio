@@ -58,17 +58,17 @@ export const InviteForm = ({ onOpenChange }: InviteFormProps) => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col h-full">
         <div className="flex-grow space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 w-full">
             <FormField
               control={form.control}
               name="firstName"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="w-full">
                   <FormLabel className="text-[0.775rem]">First Name</FormLabel>
                   <FormControl>
                     <Input 
                       {...field} 
-                      className="h-10 text-[0.775rem] bg-background border-input" 
+                      className="h-10 text-[0.775rem] bg-background border-input w-full" 
                       placeholder="John"
                     />
                   </FormControl>
@@ -80,12 +80,12 @@ export const InviteForm = ({ onOpenChange }: InviteFormProps) => {
               control={form.control}
               name="lastName"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="w-full">
                   <FormLabel className="text-[0.775rem]">Last Name</FormLabel>
                   <FormControl>
                     <Input 
                       {...field} 
-                      className="h-10 text-[0.775rem] bg-background border-input" 
+                      className="h-10 text-[0.775rem] bg-background border-input w-full" 
                       placeholder="Doe"
                     />
                   </FormControl>
@@ -99,13 +99,13 @@ export const InviteForm = ({ onOpenChange }: InviteFormProps) => {
             control={form.control}
             name="email"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel className="text-[0.775rem]">Email Address</FormLabel>
                 <FormControl>
                   <Input 
                     {...field} 
                     type="email"
-                    className="h-10 text-[0.775rem] bg-background border-input" 
+                    className="h-10 text-[0.775rem] bg-background border-input w-full" 
                     placeholder="john.doe@example.com"
                   />
                 </FormControl>
@@ -118,11 +118,11 @@ export const InviteForm = ({ onOpenChange }: InviteFormProps) => {
             control={form.control}
             name="role"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel className="text-[0.775rem]">Role</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
-                    <SelectTrigger className="h-10 text-[0.775rem] bg-background border-input">
+                    <SelectTrigger className="h-10 text-[0.775rem] bg-background border-input w-full">
                       <SelectValue placeholder="Select a role" />
                     </SelectTrigger>
                   </FormControl>
