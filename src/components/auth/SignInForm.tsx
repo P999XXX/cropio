@@ -72,7 +72,7 @@ const SignInForm = ({ onSubmit, isLoading, onForgotPassword }: SignInFormProps) 
 
         <Button 
           type="submit" 
-          className="w-full text-[0.775rem] mt-8 pt-[15px]" 
+          className="w-full text-[0.775rem] mt-8" 
           disabled={isLoading || !form.formState.isValid}
           variant="primary"
         >
