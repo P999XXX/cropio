@@ -43,10 +43,13 @@ export const TeamTableRow = ({ member }: TeamTableRowProps) => {
       <TableCell>
         <div className="flex flex-col space-y-1.5">
           <span className="font-medium">
-            {member.first_name || ''} {member.last_name || ''}
+            {member.status === "accepted" 
+              ? `${member.profile?.first_name || ''} ${member.profile?.last_name || ''}`
+              : `${member.first_name || ''} ${member.last_name || ''}`
+            }
           </span>
           <span className="text-sm text-muted-foreground">
-            {member.email}
+            {member.status === "accepted" ? member.profile?.email : member.email}
           </span>
         </div>
       </TableCell>
