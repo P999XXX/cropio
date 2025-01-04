@@ -41,7 +41,7 @@ export const TeamTableRow = ({ member }: TeamTableRowProps) => {
   return (
     <TableRow key={member.id}>
       <TableCell>
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-[3px]">
           {member.status === "accepted" ? (
             <>
               <span className="font-medium">
