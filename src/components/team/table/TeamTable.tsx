@@ -35,58 +35,50 @@ export const TeamTable = ({ members, sortConfig, onSort }: TeamTableProps) => {
           <TeamTableHeaderRow sortConfig={sortConfig} onSort={onSort} />
         </TableHeader>
         <TableBody>
-          {members.map((member) => (
-            <TableRow key={member.id} className="hover:bg-primary/5 border-primary/10">
-              <TableCell className="py-2">
-                <div className="flex items-center gap-3">
-                  <Avatar className="h-8 w-8 bg-secondary">
-                    <AvatarFallback className="text-[0.775rem] text-foreground">
-                      {member.status === "accepted" 
-                        ? getInitials(member.profile?.first_name, member.profile?.last_name)
-                        : '??'
-                      }
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="flex flex-col">
-                    {member.status === "accepted" ? (
-                      <>
-                        <span className="font-medium text-foreground">
-                          {member.profile?.first_name} {member.profile?.last_name}
-                        </span>
-                        <span className="text-xs text-muted-foreground">
-                          {member.profile?.email}
-                        </span>
-                      </>
-                    ) : (
-                      <>
-                        <span className="font-semibold text-foreground">Invited User</span>
-                        <span className="text-xs text-muted-foreground">
-                          {member.email}
-                        </span>
-                      </>
-                    )}
+          {members.map((member) => {
+            const firstName = member.status === "accepted" ? member.profile?.first_name : member.first_name;
+            const lastName = member.status === "accepted" ? member.profile?.last_name : member.last_name;
+            const email = member.status === "accepted" ? member.profile?.email : member.email;
+
+            return (
+              <TableRow key={member.id} className="hover:bg-primary/5 border-primary/10">
+                <TableCell className="py-2">
+                  <div className="flex items-center gap-3">
+                    <Avatar className="h-8 w-8 bg-secondary">
+                      <AvatarFallback className="text-[0.775rem] text-foreground">
+                        {getInitials(firstName, lastName)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex flex-col">
+                      <span className="font-medium text-foreground">
+                        {firstName && lastName ? `${firstName} ${lastName}` : "Unnamed User"}
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        {email}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              </TableCell>
-              <TableCell className="py-2">
-                <RoleBadge role={member.role} />
-              </TableCell>
-              <TableCell className="py-2">
-                <StatusBadge status={member.status} />
-              </TableCell>
-              <TableCell className="py-2 text-[0.75rem] text-foreground">
-                {formatDistanceToNow(new Date(member.created_at), {
-                  addSuffix: true,
-                })}
-              </TableCell>
-              <TableCell className="py-2 text-[0.75rem] text-foreground">
-                {member.inviter?.first_name} {member.inviter?.last_name}
-              </TableCell>
-              <TableCell className="py-2">
-                <TeamMemberActions />
-              </TableCell>
-            </TableRow>
-          ))}
+                </TableCell>
+                <TableCell className="py-2">
+                  <RoleBadge role={member.role} />
+                </TableCell>
+                <TableCell className="py-2">
+                  <StatusBadge status={member.status} />
+                </TableCell>
+                <TableCell className="py-2 text-[0.75rem] text-foreground">
+                  {formatDistanceToNow(new Date(member.created_at), {
+                    addSuffix: true,
+                  })}
+                </TableCell>
+                <TableCell className="py-2 text-[0.75rem] text-foreground">
+                  {member.inviter?.first_name} {member.inviter?.last_name}
+                </TableCell>
+                <TableCell className="py-2">
+                  <TeamMemberActions />
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </div>

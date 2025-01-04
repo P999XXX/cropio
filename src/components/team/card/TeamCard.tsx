@@ -29,25 +29,23 @@ export const TeamCard = ({ member, viewMode }: TeamCardProps) => {
     return `${(firstName?.[0] || '').toUpperCase()}${(lastName?.[0] || '').toUpperCase()}`;
   };
 
+  const firstName = member.status === "accepted" ? member.profile?.first_name : member.first_name;
+  const lastName = member.status === "accepted" ? member.profile?.last_name : member.last_name;
+  const email = member.status === "accepted" ? member.profile?.email : member.email;
+
   return (
     <Card className="team-member-card p-4 hover:bg-accent/5 transition-colors">
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-3 min-w-0">
           <Avatar className="h-8 w-8 bg-primary/10">
             <AvatarFallback className="text-[0.775rem]">
-              {member.status === "accepted" 
-                ? getInitials(member.profile?.first_name, member.profile?.last_name)
-                : '??'
-              }
+              {getInitials(firstName, lastName)}
             </AvatarFallback>
           </Avatar>
           <div className="min-w-0">
             <div className="flex items-center gap-2">
               <h3 className="font-medium truncate text-[0.775rem]">
-                {member.status === "accepted" 
-                  ? `${member.profile?.first_name} ${member.profile?.last_name}`
-                  : "Invited User"
-                }
+                {firstName && lastName ? `${firstName} ${lastName}` : "Unnamed User"}
               </h3>
               <div className="flex gap-1.5">
                 <RoleBadge role={member.role} />
@@ -55,7 +53,7 @@ export const TeamCard = ({ member, viewMode }: TeamCardProps) => {
               </div>
             </div>
             <p className="text-[0.775rem] text-muted-foreground truncate">
-              {member.status === "accepted" ? member.profile?.email : member.email}
+              {email}
             </p>
           </div>
         </div>
