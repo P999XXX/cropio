@@ -10,7 +10,9 @@ export interface TeamMember {
   status: TeamMemberStatus;
   created_at: string;
   updated_at: string;
-  profile: {
+  first_name: string | null;
+  last_name: string | null;
+  profile?: {
     first_name: string | null;
     last_name: string | null;
     email: string;
