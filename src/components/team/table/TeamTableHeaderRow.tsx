@@ -5,8 +5,8 @@ import {
   ArrowDownUp,
   ArrowDownAZ,
   ArrowDownZA,
-  CalendarDown,
-  CalendarUp,
+  CalendarArrowDown,
+  CalendarArrowUp,
   ArrowDown01,
   ArrowUp10
 } from "lucide-react";
@@ -41,9 +41,9 @@ export const TeamTableHeaderRow = ({ sortConfig, onSort }: TeamTableHeaderRowPro
     // Date-based columns
     if (key === "created_at") {
       return isAsc ? (
-        <CalendarUp className="h-4 w-4 text-primary" />
+        <CalendarArrowUp className="h-4 w-4 text-primary" />
       ) : (
-        <CalendarDown className="h-4 w-4 text-primary" />
+        <CalendarArrowDown className="h-4 w-4 text-primary" />
       );
     }
 

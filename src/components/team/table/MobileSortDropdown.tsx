@@ -3,8 +3,8 @@ import {
   ArrowDownUp,
   ArrowDownAZ,
   ArrowDownZA,
-  CalendarDown,
-  CalendarUp,
+  CalendarArrowDown,
+  CalendarArrowUp,
   ArrowDown01,
   ArrowUp10
 } from "lucide-react";
@@ -62,9 +62,9 @@ export const MobileSortDropdown = ({ sortConfig, onSort }: MobileSortDropdownPro
     // Date-based columns
     if (key === "created_at") {
       return isAsc ? (
-        <CalendarUp className={cn(baseClass, "text-primary")} />
+        <CalendarArrowUp className={cn(baseClass, "text-primary")} />
       ) : (
-        <CalendarDown className={cn(baseClass, "text-primary")} />
+        <CalendarArrowDown className={cn(baseClass, "text-primary")} />
       );
     }
 
