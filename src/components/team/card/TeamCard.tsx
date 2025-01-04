@@ -24,14 +24,21 @@ interface TeamCardProps {
 }
 
 export const TeamCard = ({ member, viewMode }: TeamCardProps) => {
-  const getInitials = (firstName?: string, lastName?: string) => {
+  const getInitials = (firstName?: string | null, lastName?: string | null) => {
     if (!firstName && !lastName) return '??';
     return `${(firstName?.[0] || '').toUpperCase()}${(lastName?.[0] || '').toUpperCase()}`;
   };
 
+  // Get the appropriate name based on status
   const firstName = member.status === "accepted" ? member.profile?.first_name : member.first_name;
   const lastName = member.status === "accepted" ? member.profile?.last_name : member.last_name;
   const email = member.status === "accepted" ? member.profile?.email : member.email;
+  
+  const displayName = firstName && lastName 
+    ? `${firstName} ${lastName}`
+    : member.first_name && member.last_name 
+    ? `${member.first_name} ${member.last_name}`
+    : "Unnamed User";
 
   return (
     <Card className="team-member-card p-4 hover:bg-accent/5 transition-colors">
@@ -39,13 +46,13 @@ export const TeamCard = ({ member, viewMode }: TeamCardProps) => {
         <div className="flex items-center gap-3 min-w-0">
           <Avatar className="h-8 w-8 bg-primary/10">
             <AvatarFallback className="text-[0.775rem]">
-              {getInitials(firstName, lastName)}
+              {getInitials(firstName || member.first_name, lastName || member.last_name)}
             </AvatarFallback>
           </Avatar>
           <div className="min-w-0">
             <div className="flex items-center gap-2">
               <h3 className="font-medium truncate text-[0.775rem]">
-                {firstName && lastName ? `${firstName} ${lastName}` : "Unnamed User"}
+                {displayName}
               </h3>
               <div className="flex gap-1.5">
                 <RoleBadge role={member.role} />

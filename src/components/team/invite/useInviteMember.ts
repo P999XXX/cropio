@@ -20,11 +20,13 @@ export const useInviteMember = (onSuccess: () => void) => {
 
       const isFirstMember = count === 0;
 
-      // Insert new team member
+      // Insert new team member with first and last name
       const { error: insertError } = await supabase
         .from("team_members")
         .insert({
           email: values.email,
+          first_name: values.firstName,
+          last_name: values.lastName,
           role: isFirstMember ? "administrator" : values.role,
           invited_by: authData.user.id,
           profile_id: authData.user.id,

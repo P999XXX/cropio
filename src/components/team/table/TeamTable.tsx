@@ -23,7 +23,7 @@ interface TeamTableProps {
 }
 
 export const TeamTable = ({ members, sortConfig, onSort }: TeamTableProps) => {
-  const getInitials = (firstName?: string, lastName?: string) => {
+  const getInitials = (firstName?: string | null, lastName?: string | null) => {
     if (!firstName && !lastName) return '??';
     return `${(firstName?.[0] || '').toUpperCase()}${(lastName?.[0] || '').toUpperCase()}`;
   };
@@ -39,6 +39,12 @@ export const TeamTable = ({ members, sortConfig, onSort }: TeamTableProps) => {
             const firstName = member.status === "accepted" ? member.profile?.first_name : member.first_name;
             const lastName = member.status === "accepted" ? member.profile?.last_name : member.last_name;
             const email = member.status === "accepted" ? member.profile?.email : member.email;
+            
+            const displayName = firstName && lastName 
+              ? `${firstName} ${lastName}`
+              : member.first_name && member.last_name 
+              ? `${member.first_name} ${member.last_name}`
+              : "Unnamed User";
 
             return (
               <TableRow key={member.id} className="hover:bg-primary/5 border-primary/10">
@@ -46,12 +52,12 @@ export const TeamTable = ({ members, sortConfig, onSort }: TeamTableProps) => {
                   <div className="flex items-center gap-3">
                     <Avatar className="h-8 w-8 bg-secondary">
                       <AvatarFallback className="text-[0.775rem] text-foreground">
-                        {getInitials(firstName, lastName)}
+                        {getInitials(firstName || member.first_name, lastName || member.last_name)}
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col">
                       <span className="font-medium text-foreground">
-                        {firstName && lastName ? `${firstName} ${lastName}` : "Unnamed User"}
+                        {displayName}
                       </span>
                       <span className="text-xs text-muted-foreground">
                         {email}
