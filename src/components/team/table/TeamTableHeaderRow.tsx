@@ -4,11 +4,9 @@ import { cn } from "@/lib/utils";
 import { 
   ArrowDownUp,
   ArrowDownAZ,
-  ArrowDownZA,
+  ArrowUpZA,
   CalendarArrowDown,
   CalendarArrowUp,
-  ArrowDown01,
-  ArrowUp10
 } from "lucide-react";
 
 interface TeamTableHeaderRowProps {
@@ -29,29 +27,29 @@ export const TeamTableHeaderRow = ({ sortConfig, onSort }: TeamTableHeaderRowPro
       return <ArrowDownUp className="h-4 w-4 text-foreground hover:text-foreground hover:bg-secondary/80 rounded-sm p-0.5 transition-colors" />;
     }
 
-    // Text-based columns
+    // Text-based columns (email, role, status)
     if (key === "email" || key === "role" || key === "status") {
       return isAsc ? (
-        <ArrowDownAZ className="h-4 w-4 text-black" />
+        <ArrowDownAZ className="h-4 w-4 text-black dark:text-white" />
       ) : (
-        <ArrowDownZA className="h-4 w-4 text-black" />
+        <ArrowUpZA className="h-4 w-4 text-black dark:text-white" />
       );
     }
 
     // Date-based columns
     if (key === "created_at") {
       return isAsc ? (
-        <CalendarArrowUp className="h-4 w-4 text-black" />
+        <CalendarArrowUp className="h-4 w-4 text-black dark:text-white" />
       ) : (
-        <CalendarArrowDown className="h-4 w-4 text-black" />
+        <CalendarArrowDown className="h-4 w-4 text-black dark:text-white" />
       );
     }
 
-    // Numeric columns (if any in the future)
+    // Default to text-based sorting icons
     return isAsc ? (
-      <ArrowDown01 className="h-4 w-4 text-black" />
+      <ArrowDownAZ className="h-4 w-4 text-black dark:text-white" />
     ) : (
-      <ArrowUp10 className="h-4 w-4 text-black" />
+      <ArrowUpZA className="h-4 w-4 text-black dark:text-white" />
     );
   };
 
@@ -62,7 +60,7 @@ export const TeamTableHeaderRow = ({ sortConfig, onSort }: TeamTableHeaderRowPro
   ) => (
     <TableHead
       className={cn(
-        "cursor-pointer hover:bg-primary/5 transition-colors py-3 text-[0.775rem] font-medium bg-secondary text-[#222222] dark:text-gray-200 group",
+        "cursor-pointer hover:bg-primary/5 transition-colors py-3 text-[0.775rem] font-medium bg-secondary text-foreground group",
         className
       )}
       onClick={() => onSort(key)}
