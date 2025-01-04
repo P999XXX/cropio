@@ -48,29 +48,31 @@ const SignInForm = ({ onSubmit, isLoading, onForgotPassword }: SignInFormProps) 
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-2">
-        <FormInput
-          form={form}
-          name="email"
-          label="Email"
-          type="email"
-          placeholder="Enter your email"
-        />
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+        <div className="space-y-4">
+          <FormInput
+            form={form}
+            name="email"
+            label="Email"
+            type="email"
+            placeholder="Enter your email"
+          />
 
-        <PasswordInput
-          form={form}
-          name="password"
-          label="Password"
-        />
+          <PasswordInput
+            form={form}
+            name="password"
+            label="Password"
+          />
+        </div>
 
         {form.formState.errors.root && (
-          <div className="flex items-start space-x-2 p-3 rounded-lg bg-destructive text-destructive-foreground text-[0.775rem] mt-4 animate-in fade-in-50">
+          <div className="flex items-start space-x-2 p-3 rounded-lg bg-destructive text-destructive-foreground text-[0.775rem] animate-in fade-in-50">
             <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
             <p>{form.formState.errors.root.message}</p>
           </div>
         )}
 
-        <div className="mt-[35px]">
+        <div className="pt-6">
           <Button 
             type="submit" 
             className="w-full text-[0.775rem]"
