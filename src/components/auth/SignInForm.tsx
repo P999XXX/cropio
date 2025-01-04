@@ -70,14 +70,16 @@ const SignInForm = ({ onSubmit, isLoading, onForgotPassword }: SignInFormProps) 
           </div>
         )}
 
-        <Button 
-          type="submit" 
-          className="w-full text-[0.775rem] mt-[25px]"
-          disabled={isLoading || !form.formState.isValid}
-          variant="primary"
-        >
-          {isLoading ? "Signing in..." : "Sign in"}
-        </Button>
+        <div className="mt-[25px]">
+          <Button 
+            type="submit" 
+            className="w-full text-[0.775rem]"
+            disabled={isLoading || !form.formState.isValid}
+            variant="primary"
+          >
+            {isLoading ? "Signing in..." : "Sign in"}
+          </Button>
+        </div>
 
         <button
           type="button"
