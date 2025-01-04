@@ -119,7 +119,7 @@ export const InviteForm = ({ onOpenChange }: InviteFormProps) => {
             name="role"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel className="text-[0.775rem]">Role</FormLabel>
+                <FormLabel className="text-[0.775rem]">Permission</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger className="h-10 text-[0.775rem] bg-background border-input w-full">
