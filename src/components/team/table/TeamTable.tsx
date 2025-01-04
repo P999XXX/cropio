@@ -29,7 +29,7 @@ export const TeamTable = ({ members, sortConfig, onSort }: TeamTableProps) => {
   };
 
   return (
-    <div className="rounded-lg border border-primary/20 bg-card w-full overflow-hidden team-table-container">
+    <div className="rounded-lg bg-card w-full overflow-hidden team-table-container">
       <Table>
         <TableHeader>
           <TeamTableHeaderRow sortConfig={sortConfig} onSort={onSort} />
