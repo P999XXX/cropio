@@ -13,42 +13,29 @@
   @apply fixed left-[50%] top-[50%] z-[150] grid w-[calc(100%-2rem)] max-w-lg translate-x-[-50%] translate-y-[-50%] gap-6 border bg-background p-6 shadow-lg duration-200 rounded-xl sm:rounded-xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%];
 }
 
-.dialog-title {
-  @apply text-xl font-semibold tracking-tight;
+/* Custom styles for invite member dialog */
+.invite-member-dialog {
+  transform: none !important;
+  max-height: 100vh !important;
+  height: 100vh !important;
+  margin: 0 !important;
+  padding: 1.5rem !important;
+  animation: slide-in-from-right 0.3s ease-out !important;
 }
 
-.dialog-description {
-  @apply text-sm text-muted-foreground pt-2;
+@keyframes slide-in-from-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }
 
-.dialog-button-primary {
-  @apply order-1 sm:order-2 w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90;
-}
-
-.dialog-button-secondary {
-  @apply order-2 sm:order-1 w-full sm:w-auto bg-secondary text-secondary-foreground hover:bg-secondary/80;
-}
-
-.dialog-input {
-  @apply h-10 px-3 py-2 text-sm rounded-md border border-input bg-background;
-}
-
-/* Dialog Component Styles */
-[role="dialog"],
-.popover-content,
-.hover-card-content,
-.dropdown-menu-content,
-.select-content {
-  @apply rounded-xl sm:rounded-xl;
-}
-
-.sheet-content {
-  @apply rounded-t-xl sm:rounded-xl;
-}
-
-/* Mobile-specific dialog adjustments */
 @media (max-width: 640px) {
-  .dialog-content {
-    @apply w-[calc(100%-1rem)] p-4;
+  .invite-member-dialog {
+    width: 100% !important;
+    right: 0 !important;
+    left: 0 !important;
   }
 }
