@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { InviteForm } from "./InviteForm";
 
 interface InviteMemberDialogProps {
@@ -14,8 +14,11 @@ export const InviteMemberDialog = ({ open, onOpenChange }: InviteMemberDialogPro
           <DialogTitle className="text-xl font-semibold">
             Invite Team Member
           </DialogTitle>
+          <DialogDescription className="text-[0.775rem] text-muted-foreground">
+            Send an invitation to join your team. They'll receive an email with instructions.
+          </DialogDescription>
         </DialogHeader>
-        <InviteForm />
+        <InviteForm onOpenChange={onOpenChange} />
       </DialogContent>
     </Dialog>
   );

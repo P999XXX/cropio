@@ -33,7 +33,11 @@ const formSchema = z.object({
 
 export type InviteFormData = z.infer<typeof formSchema>;
 
-export const InviteForm = () => {
+interface InviteFormProps {
+  onOpenChange: (open: boolean) => void;
+}
+
+export const InviteForm = ({ onOpenChange }: InviteFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<InviteFormData>({
@@ -71,6 +75,7 @@ export const InviteForm = () => {
       }
 
       toast.success("Team member invited successfully");
+      onOpenChange(false);
     } catch (error: any) {
       console.error("Error inviting team member:", error);
       toast.error(error.message);
@@ -81,91 +86,94 @@ export const InviteForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-2">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="flex flex-col h-full">
+        <div className="flex-grow space-y-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <FormField
+              control={form.control}
+              name="firstName"
+              render={({ field }) => (
+                <FormItem className="mt-0">
+                  <FormLabel className="text-[0.775rem]">First Name</FormLabel>
+                  <FormControl>
+                    <Input 
+                      {...field} 
+                      className="h-10 text-[0.925rem] bg-background border-input" 
+                      placeholder="John"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="lastName"
+              render={({ field }) => (
+                <FormItem className="mt-0">
+                  <FormLabel className="text-[0.775rem]">Last Name</FormLabel>
+                  <FormControl>
+                    <Input 
+                      {...field} 
+                      className="h-10 text-[0.925rem] bg-background border-input" 
+                      placeholder="Doe"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
           <FormField
             control={form.control}
-            name="firstName"
+            name="email"
             render={({ field }) => (
               <FormItem className="mt-0">
-                <FormLabel className="text-[0.775rem]">First Name</FormLabel>
+                <FormLabel className="text-[0.775rem]">Email Address</FormLabel>
                 <FormControl>
                   <Input 
                     {...field} 
+                    type="email"
                     className="h-10 text-[0.925rem] bg-background border-input" 
-                    placeholder="John"
+                    placeholder="john.doe@example.com"
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
-            name="lastName"
+            name="role"
             render={({ field }) => (
               <FormItem className="mt-0">
-                <FormLabel className="text-[0.775rem]">Last Name</FormLabel>
-                <FormControl>
-                  <Input 
-                    {...field} 
-                    className="h-10 text-[0.925rem] bg-background border-input" 
-                    placeholder="Doe"
-                  />
-                </FormControl>
+                <FormLabel className="text-[0.775rem]">Role</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger className="h-10 text-[0.925rem] bg-background border-input">
+                      <SelectValue placeholder="Select a role" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent className="bg-background border border-border">
+                    <SelectItem value="administrator" className="text-[0.925rem]">Administrator</SelectItem>
+                    <SelectItem value="editor" className="text-[0.925rem]">Editor</SelectItem>
+                    <SelectItem value="readonly" className="text-[0.925rem]">Read Only</SelectItem>
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}
           />
         </div>
 
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem className="mt-0">
-              <FormLabel className="text-[0.775rem]">Email Address</FormLabel>
-              <FormControl>
-                <Input 
-                  {...field} 
-                  type="email"
-                  className="h-10 text-[0.925rem] bg-background border-input" 
-                  placeholder="john.doe@example.com"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="role"
-          render={({ field }) => (
-            <FormItem className="mt-0">
-              <FormLabel className="text-[0.775rem]">Role</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger className="h-10 text-[0.925rem] bg-background border-input">
-                    <SelectValue placeholder="Select a role" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent className="bg-background border border-border">
-                  <SelectItem value="administrator" className="text-[0.925rem]">Administrator</SelectItem>
-                  <SelectItem value="editor" className="text-[0.925rem]">Editor</SelectItem>
-                  <SelectItem value="readonly" className="text-[0.925rem]">Read Only</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <div className="flex justify-end mt-4">
+        <div className="sticky bottom-0 pt-4 mt-4 border-t border-border bg-background">
           <Button
             type="submit"
             disabled={isLoading}
-            className="h-10 px-4 text-[0.925rem]"
+            variant="primary"
+            className="w-full h-10 text-[0.925rem]"
           >
             {isLoading ? "Inviting..." : "Send Invitation"}
           </Button>
